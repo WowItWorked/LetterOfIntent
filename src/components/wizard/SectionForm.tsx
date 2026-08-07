@@ -8,7 +8,7 @@ import {
   type UseFormReturn,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { FieldDef, RepeaterField, ScalarField, SectionDef } from "@/lib/content/types";
+import type { RepeaterField, ScalarField, SectionDef } from "@/lib/content/types";
 import type { SectionKey } from "@/lib/schema";
 import {
   defaultValuesForSection,

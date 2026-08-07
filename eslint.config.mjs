@@ -12,7 +12,17 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // This project's build dir (see next.config.ts: OneDrive workaround).
+    "node_modules/**",
   ]),
+  {
+    rules: {
+      // The UI copy is prose with contractions everywhere; apostrophes and
+      // quotes in JSX text are intentional. Keep the guard for characters
+      // that indicate real mistakes.
+      "react/no-unescaped-entities": ["error", { forbid: [">", "}"] }],
+    },
+  },
 ]);
 
 export default eslintConfig;

@@ -367,6 +367,9 @@ function SectionPage({
         <Text
           style={s.sectionEyebrow}
           render={({ pageNumber }) => {
+            // Deliberate side channel: pass 1 records where each section
+            // lands so pass 2 can print TOC page numbers (see generate.tsx).
+            // eslint-disable-next-line react-hooks/immutability
             if (registry) registry[def.key] = pageNumber;
             return `SECTION ${def.number}`;
           }}

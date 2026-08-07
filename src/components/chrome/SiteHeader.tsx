@@ -4,43 +4,50 @@ import { firm } from "@/config/firm";
 import { ContrastToggle, TextSizeControl } from "@/components/chrome/A11yControls";
 import { SaveIndicator } from "@/components/chrome/SaveIndicator";
 
+/**
+ * Navy masthead mirroring the marketing site's brand lockup: engraved Cinzel
+ * "TRUSTS & WEALTH" with the gold ampersand and tucked PLLC, then the product
+ * name as a letterspaced Mulish label beside a gold hairline.
+ */
 export function SiteHeader() {
   return (
-    <header className="print-hide sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2">
+    <header className="site-header print-hide sticky top-0 z-40 border-b border-[var(--header-line)] bg-[var(--header-bg)]">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-5 gap-y-0.5 px-4 py-2.5">
         <Link
           href="/"
-          className="flex min-h-11 items-center gap-2.5 rounded-md"
+          className="flex min-h-11 flex-wrap items-center gap-x-4 gap-y-0.5 rounded-md"
           aria-label={`${firm.name} — Letter of Intent Builder, home`}
         >
           {firm.logoPath ? (
             <Image
               src={firm.logoPath}
               alt=""
-              width={34}
-              height={34}
-              className="h-8 w-8 object-contain"
+              width={40}
+              height={40}
+              className="h-10 w-10 object-contain"
               priority
             />
           ) : null}
-          <span className="leading-tight">
-            <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted">
-              {firm.shortName}
-            </span>
-            <span className="block font-serif text-[1.05rem] text-ink">
-              Letter of Intent Builder
-            </span>
+          <span className="font-brand text-[1.08rem] font-medium leading-none tracking-[0.18em] text-[var(--header-fg)]">
+            TRUSTS{" "}
+            <span className="relative inline-block text-[var(--header-accent)]">
+              &amp;
+              <span
+                aria-hidden="true"
+                className="absolute left-1/2 top-full mt-[3px] -translate-x-1/2 font-sans text-[0.42rem] font-semibold tracking-[0.24em] text-[var(--header-muted)] max-sm:hidden"
+              >
+                PLLC
+              </span>
+            </span>{" "}
+            WEALTH
           </span>
-        </Link>
-
-        <Link
-          href="/privacy"
-          className="hidden min-h-11 items-center gap-1.5 rounded-md text-sm text-muted underline-offset-4 hover:text-ink hover:underline md:flex"
-        >
-          <svg aria-hidden="true" viewBox="0 0 16 16" className="size-3.5 fill-current">
-            <path d="M8 1a3.5 3.5 0 0 0-3.5 3.5V6H4a1.5 1.5 0 0 0-1.5 1.5v5A1.5 1.5 0 0 0 4 14h8a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 12 6h-.5V4.5A3.5 3.5 0 0 0 8 1Zm2 5H6V4.5a2 2 0 1 1 4 0V6Z" />
-          </svg>
-          Private — stays on this device
+          <span
+            aria-hidden="true"
+            className="hidden h-6 w-px bg-[var(--header-accent)] opacity-50 sm:block"
+          />
+          <span className="font-sans text-[0.68rem] font-semibold uppercase leading-none tracking-[0.22em] text-[var(--header-fg)]">
+            Letter of Intent Builder
+          </span>
         </Link>
 
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
@@ -49,7 +56,7 @@ export function SiteHeader() {
           <ContrastToggle />
           <Link
             href="/your-data"
-            className="flex min-h-11 items-center rounded-md px-2 text-sm font-medium text-muted hover:text-ink"
+            className="flex min-h-11 items-center rounded-md px-2 text-sm font-medium text-[var(--header-muted)] hover:text-[var(--header-fg)]"
           >
             Your data
           </Link>

@@ -3,6 +3,11 @@
 import { useSettingsStore, type TextSize } from "@/lib/settings-store";
 import { cn } from "@/lib/cn";
 
+/**
+ * Text-size and contrast controls. They live on the navy masthead, so they
+ * use the header palette tokens.
+ */
+
 const SIZES: Array<{ value: TextSize; label: string; className: string }> = [
   { value: 1, label: "Standard text size", className: "text-[0.8rem]" },
   { value: 2, label: "Large text size", className: "text-[0.95rem]" },
@@ -25,8 +30,8 @@ export function TextSizeControl() {
             "flex min-h-11 min-w-9 items-end justify-center rounded-md px-1 pb-2 font-serif leading-none",
             size.className,
             textSize === size.value
-              ? "bg-goldtint text-ink shadow-[inset_0_-2px_0_var(--gold)]"
-              : "text-muted hover:text-ink"
+              ? "text-[var(--header-fg)] shadow-[inset_0_-2px_0_var(--header-accent)]"
+              : "text-[var(--header-muted)] hover:text-[var(--header-fg)]"
           )}
         >
           <span aria-hidden="true">A</span>
@@ -47,7 +52,9 @@ export function ContrastToggle() {
       onClick={() => setContrast(on ? "default" : "high")}
       className={cn(
         "flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium",
-        on ? "bg-goldtint text-ink shadow-[inset_0_-2px_0_var(--gold)]" : "text-muted hover:text-ink"
+        on
+          ? "text-[var(--header-fg)] shadow-[inset_0_-2px_0_var(--header-accent)]"
+          : "text-[var(--header-muted)] hover:text-[var(--header-fg)]"
       )}
     >
       <span

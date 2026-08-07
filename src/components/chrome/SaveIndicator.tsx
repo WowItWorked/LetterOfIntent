@@ -24,14 +24,17 @@ export function SaveIndicator() {
   }, [status]);
 
   return (
-    <span className="min-w-[4.5rem] text-right text-sm text-muted" data-save-status={status}>
+    <span
+      className="min-w-[4.5rem] text-right text-sm text-[var(--header-muted)]"
+      data-save-status={status}
+    >
       <span aria-live="polite" className="sr-only">
         {announcement}
       </span>
       {status === "pending" ? (
         <span aria-hidden="true">Saving…</span>
       ) : status === "saved" ? (
-        <span aria-hidden="true" className="text-success">
+        <span aria-hidden="true" className="text-[var(--header-success)]">
           ✓ Saved
         </span>
       ) : null}

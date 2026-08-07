@@ -1,10 +1,38 @@
 import type { Metadata, Viewport } from "next";
+import { Cinzel, Cormorant_Garamond, Mulish } from "next/font/google";
 import "./globals.css";
 import { firm } from "@/config/firm";
 import { SETTINGS_BOOT_SCRIPT } from "@/lib/settings-store";
 import { ClientBoot } from "@/components/boot/ClientBoot";
 import { SiteHeader } from "@/components/chrome/SiteHeader";
+import { PrivacyStrip } from "@/components/chrome/PrivacyStrip";
 import { SiteFooter } from "@/components/chrome/SiteFooter";
+
+/**
+ * Brand fonts, matching the marketing site: Cinzel for the engraved wordmark,
+ * Cormorant Garamond for display serif, Mulish for body/UI. next/font bundles
+ * them at build time and serves them same-origin — no runtime font requests,
+ * so the "nothing leaves this device" promise and the CSP stay intact.
+ */
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-cinzel",
+  display: "swap",
+});
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+const mulish = Mulish({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-mulish",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -25,7 +53,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${cinzel.variable} ${cormorant.variable} ${mulish.variable} h-full`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Applies saved text-size / contrast before first paint. */}
         <script dangerouslySetInnerHTML={{ __html: SETTINGS_BOOT_SCRIPT }} />
@@ -39,6 +71,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <ClientBoot />
         <SiteHeader />
+        <PrivacyStrip />
         <main id="main" tabIndex={-1} className="flex w-full flex-1 flex-col outline-none">
           {children}
         </main>

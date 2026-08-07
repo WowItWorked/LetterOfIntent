@@ -42,6 +42,14 @@
 
   --ring: #253551;
   --ring-w: 2px;
+
+  /* Masthead — navy in every scheme, so it carries its own palette. */
+  --header-bg: #1d2c46;
+  --header-fg: #f3f1ea;
+  --header-muted: #aeb9cd;
+  --header-accent: #c9a063;
+  --header-success: #a8d5b0;
+  --header-line: #324465;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -83,6 +91,12 @@
 
 /* High contrast (user toggle, persisted) */
 html[data-contrast="high"] {
+  --header-bg: #000000;
+  --header-fg: #ffffff;
+  --header-muted: #e4e8f0;
+  --header-accent: #ffd88a;
+  --header-success: #b8f0c0;
+  --header-line: #ffffff;
   --paper: #ffffff;
   --paper-2: #ffffff;
   --surface: #ffffff;
@@ -166,10 +180,11 @@ html[data-textsize="3"] {
   --color-dangerbg: var(--danger-bg);
   --color-success: var(--success);
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  --font-serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia,
-    "Times New Roman", serif;
+  --font-sans: var(--font-mulish), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--font-cormorant), Charter, "Bitstream Charter",
+    "Sitka Text", Cambria, Georgia, "Times New Roman", serif;
+  --font-brand: var(--font-cinzel), "Trajan Pro", "Times New Roman", serif;
 }
 
 /* ============================================================== base styles */
@@ -208,6 +223,19 @@ h4 {
   outline: var(--ring-w) solid var(--ring);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* On the navy masthead the navy ring would vanish — use gold there. */
+.site-header :focus-visible {
+  outline-color: var(--header-accent);
+}
+
+/* Cormorant renders light at body-ish sizes; give headings a touch more weight. */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
 }
 
 /* Native date inputs: keep comfortable touch height. */

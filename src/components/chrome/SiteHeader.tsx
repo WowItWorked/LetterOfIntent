@@ -1,13 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
 import { firm } from "@/config/firm";
 import { ContrastToggle, TextSizeControl } from "@/components/chrome/A11yControls";
 import { SaveIndicator } from "@/components/chrome/SaveIndicator";
 
 /**
- * Navy masthead mirroring the marketing site's brand lockup: engraved Cinzel
- * "TRUSTS & WEALTH" with the gold ampersand and tucked PLLC, then the product
- * name as a letterspaced Mulish label beside a gold hairline.
+ * Navy masthead: the engraved Cinzel "TRUSTS & WEALTH" wordmark with its gold
+ * ampersand and tucked PLLC, then the product name as a letterspaced Mulish
+ * label beside a gold hairline. The monogram lives in the footer instead —
+ * this is a free public tool, so the product name leads.
  */
 export function SiteHeader() {
   return (
@@ -18,17 +18,6 @@ export function SiteHeader() {
           className="flex min-h-11 flex-wrap items-center gap-x-4 gap-y-0.5 rounded-md"
           aria-label={`${firm.name} — Letter of Intent Builder, home`}
         >
-          {firm.logoPath ? (
-            // The monogram is a tall mark (395×578) — width follows height.
-            <Image
-              src={firm.logoPath}
-              alt=""
-              width={28}
-              height={41}
-              className="h-10 w-auto object-contain"
-              priority
-            />
-          ) : null}
           <span className="font-brand text-[1.08rem] font-medium leading-none tracking-[0.18em] text-[var(--header-fg)]">
             TRUSTS{" "}
             <span className="relative inline-block text-[var(--header-accent)]">

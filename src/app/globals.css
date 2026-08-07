@@ -1,26 +1,249 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ===========================================================================
+   Design tokens — Trusts & Wealth palette (navy / champagne gold / warm ivory)
+   Components reach ONLY for semantic tokens, so dark mode and the
+   high-contrast setting are pure token swaps.
+   ========================================================================= */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  color-scheme: light dark;
+
+  --paper: #fbfaf6;
+  --paper-2: #f4efe6;
+  --surface: #ffffff;
+
+  --ink: #1a2233;
+  --ink-body: #3a4456;
+  --ink-muted: #5e6878;
+  --ink-faint: #79828f;
+
+  --line: #e4decf;
+  --line-strong: #b9bec8;
+  --control-border: #6e7889;
+
+  --navy: #253551;
+  --navy-deep: #16223a;
+
+  --gold: #c9a063;
+  --gold-deep: #a87e45;
+  --gold-tint: #f7eedf;
+  --gold-line: #d9b97f;
+  --accent-text: #8a6a38;
+
+  --hint: #8a6a38;
+  --danger: #a64545;
+  --danger-bg: #f6e9e7;
+  --success: #4e7a57;
+
+  --btn-bg: #253551;
+  --btn-bg-hover: #16223a;
+  --btn-fg: #f3f1ea;
+
+  --ring: #253551;
+  --ring-w: 2px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #121826;
+    --paper-2: #182134;
+    --surface: #1c2638;
+
+    --ink: #efede4;
+    --ink-body: #cbd1dc;
+    --ink-muted: #a3aec2;
+    --ink-faint: #8291ac;
+
+    --line: #2b3a55;
+    --line-strong: #45597e;
+    --control-border: #64779c;
+
+    --navy: #32456a;
+    --navy-deep: #445a85;
+
+    --gold: #d9b97f;
+    --gold-deep: #c9a063;
+    --gold-tint: #2a2919;
+    --gold-line: #8a6a38;
+    --accent-text: #d9b97f;
+
+    --hint: #d9b97f;
+    --danger: #e39a9a;
+    --danger-bg: #3a2426;
+    --success: #8fbc98;
+
+    --btn-bg: #32456a;
+    --btn-bg-hover: #3d5480;
+    --btn-fg: #f3f1ea;
+
+    --ring: #d9b97f;
   }
 }
 
+/* High contrast (user toggle, persisted) */
+html[data-contrast="high"] {
+  --paper: #ffffff;
+  --paper-2: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --ink-body: #000000;
+  --ink-muted: #1a2233;
+  --ink-faint: #253551;
+  --line: #000000;
+  --line-strong: #000000;
+  --control-border: #000000;
+  --navy: #16223a;
+  --navy-deep: #000000;
+  --gold-tint: #ffffff;
+  --gold-line: #5c4522;
+  --accent-text: #5c4522;
+  --hint: #5c4522;
+  --danger: #7a1f1f;
+  --danger-bg: #ffffff;
+  --btn-bg: #000000;
+  --btn-bg-hover: #16223a;
+  --btn-fg: #ffffff;
+  --ring: #000000;
+  --ring-w: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-contrast="high"] {
+    --paper: #000000;
+    --paper-2: #000000;
+    --surface: #000000;
+    --ink: #ffffff;
+    --ink-body: #ffffff;
+    --ink-muted: #e4e8f0;
+    --ink-faint: #cbd1dc;
+    --line: #ffffff;
+    --line-strong: #ffffff;
+    --control-border: #ffffff;
+    --navy: #ffffff;
+    --navy-deep: #ffffff;
+    --gold-tint: #000000;
+    --gold-line: #ffd88a;
+    --accent-text: #ffd88a;
+    --hint: #ffd88a;
+    --danger: #ffb3b3;
+    --danger-bg: #000000;
+    --btn-bg: #ffffff;
+    --btn-bg-hover: #e4e8f0;
+    --btn-fg: #000000;
+    --ring: #ffffff;
+  }
+}
+
+/* User text-size steps (persisted). Everything is rem-based, so this scales all UI. */
+html[data-textsize="2"] {
+  font-size: 112.5%;
+}
+html[data-textsize="3"] {
+  font-size: 125%;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper2: var(--paper-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-body: var(--ink-body);
+  --color-muted: var(--ink-muted);
+  --color-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line2: var(--line-strong);
+  --color-control: var(--control-border);
+  --color-navy: var(--navy);
+  --color-navydeep: var(--navy-deep);
+  --color-gold: var(--gold);
+  --color-golddeep: var(--gold-deep);
+  --color-goldtint: var(--gold-tint);
+  --color-goldline: var(--gold-line);
+  --color-accent: var(--accent-text);
+  --color-hint: var(--hint);
+  --color-danger: var(--danger);
+  --color-dangerbg: var(--danger-bg);
+  --color-success: var(--success);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia,
+    "Times New Roman", serif;
+}
+
+/* ============================================================== base styles */
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink-body);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--gold-tint);
+  color: var(--ink);
+}
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background: var(--gold-deep);
+    color: #10141d;
+  }
+}
+
+/* One visible focus style everywhere. */
+:focus-visible {
+  outline: var(--ring-w) solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Native date inputs: keep comfortable touch height. */
+input[type="date"] {
+  min-height: 2.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==================================================================== print */
+
+@media print {
+  .print-hide {
+    display: none !important;
+  }
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+  main {
+    max-width: none !important;
+  }
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+  .print-section {
+    break-inside: avoid-page;
+  }
 }

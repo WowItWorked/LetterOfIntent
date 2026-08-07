@@ -144,8 +144,8 @@ const s = StyleSheet.create({
 
 export interface LoiDocumentProps {
   data: LetterData;
-  /** Data-URL for the firm logo, if it loaded. */
-  logo?: string;
+  /** Firm logo with its measured aspect ratio, if it loaded. */
+  logo?: { dataUrl: string; aspect: number };
   /** Pass 1: section key → first page number gets recorded here. */
   registry: Record<string, number> | null;
   /** Pass 2: the recorded map, used to print TOC page numbers. */
@@ -173,7 +173,11 @@ export function LoiDocument({ data, logo, registry, toc }: LoiDocumentProps) {
       <Page size="LETTER" style={s.coverPage}>
         <View style={{ alignItems: "center" }}>
           {logo ? (
-            <Image src={logo} style={{ width: 52, height: 52, marginBottom: 12 }} />
+            // Height-led sizing at the mark's true aspect — never stretched.
+            <Image
+              src={logo.dataUrl}
+              style={{ height: 56, width: 56 * logo.aspect, marginBottom: 12 }}
+            />
           ) : null}
           <Text
             style={{

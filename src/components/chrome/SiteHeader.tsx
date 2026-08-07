@@ -19,12 +19,13 @@ export function SiteHeader() {
           aria-label={`${firm.name} — Letter of Intent Builder, home`}
         >
           {firm.logoPath ? (
+            // The monogram is a tall mark (395×578) — width follows height.
             <Image
               src={firm.logoPath}
               alt=""
-              width={40}
-              height={40}
-              className="h-10 w-10 object-contain"
+              width={28}
+              height={41}
+              className="h-10 w-auto object-contain"
               priority
             />
           ) : null}

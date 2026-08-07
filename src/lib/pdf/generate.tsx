@@ -11,18 +11,33 @@ import { EmergencyDocument } from "./emergency-document";
  * imports it dynamically so @react-pdf/renderer stays out of the main bundle).
  */
 
-async function loadLogoDataUrl(): Promise<string | undefined> {
+export interface LoadedLogo {
+  dataUrl: string;
+  /** Intrinsic width / height — measured, so the mark is never stretched. */
+  aspect: number;
+}
+
+async function loadLogo(): Promise<LoadedLogo | undefined> {
   if (!firm.logoPath || typeof window === "undefined") return undefined;
   try {
     const res = await fetch(firm.logoPath);
     if (!res.ok) return undefined;
     const blob = await res.blob();
-    return await new Promise<string | undefined>((resolve) => {
+    const dataUrl = await new Promise<string | undefined>((resolve) => {
       const reader = new FileReader();
       reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : undefined);
       reader.onerror = () => resolve(undefined);
       reader.readAsDataURL(blob);
     });
+    if (!dataUrl) return undefined;
+    const aspect = await new Promise<number>((resolve) => {
+      const img = document.createElement("img");
+      img.onload = () =>
+        resolve(img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1);
+      img.onerror = () => resolve(1);
+      img.src = dataUrl;
+    });
+    return { dataUrl, aspect: Math.min(5, Math.max(0.2, aspect)) };
   } catch {
     return undefined;
   }
@@ -34,7 +49,7 @@ async function loadLogoDataUrl(): Promise<string | undefined> {
  * table of contents. Layout is identical between passes, so numbers hold.
  */
 export async function generateLetterPdfBlob(data: LetterData): Promise<Blob> {
-  const logo = await loadLogoDataUrl();
+  const logo = await loadLogo();
   const registry: Record<string, number> = {};
   await pdf(
     <LoiDocument data={data} logo={logo} registry={registry} toc={null} />

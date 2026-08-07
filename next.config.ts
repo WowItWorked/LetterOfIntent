@@ -28,11 +28,17 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
 
+/**
+ * Local dev on a OneDrive-synced folder hits intermittent EPERM lock errors in
+ * the build directory. OneDrive never syncs anything under a folder named
+ * node_modules, so locally the output goes there. Hosted builders (Vercel, CI)
+ * expect the standard .next and cache node_modules separately — they must keep
+ * the default.
+ */
+const isHostedBuild = Boolean(process.env.VERCEL || process.env.CI);
+
 const nextConfig: NextConfig = {
-  // OneDrive syncs this project folder and intermittently locks files in the
-  // build directory (EPERM). OneDrive never syncs anything under a folder
-  // named node_modules, so the build output lives there. Harmless elsewhere.
-  distDir: "node_modules/.cache/next-build",
+  ...(isHostedBuild ? {} : { distDir: "node_modules/.cache/next-build" }),
   async headers() {
     if (process.env.NODE_ENV !== "production") return [];
     return [{ source: "/:path*", headers: securityHeaders }];

@@ -95,13 +95,32 @@ table of contents. Fonts are the built-in Times family — zero font fetches.
 
 ## Deploying to Vercel
 
-1. Push this repo to GitHub (CI runs lint, unit, build, e2e + axe).
-2. In Vercel: **New Project → import the repo.** Framework auto-detects Next.js.
-   No environment variables are needed — there is no backend.
-3. Suggested domain: `letter.trustsandwealth.com`.
-4. After the first deploy, verify in the browser devtools network tab that a
-   full wizard + PDF journey makes no third-party requests (the e2e suite
-   asserts the same thing on every commit).
+The repo is public at
+[WowItWorked/LetterOfIntent](https://github.com/WowItWorked/LetterOfIntent) and
+every push runs the full CI gate (lint, unit, build, e2e + axe).
+
+1. Sign in at [vercel.com](https://vercel.com) with the GitHub account that owns
+   the repo.
+2. **Add New… → Project → Import** `LetterOfIntent`.
+3. Accept every default. Framework auto-detects as Next.js, root directory is
+   the repo root, and **no environment variables are needed** — there is no
+   backend, no API keys, no database.
+4. **Deploy.** First build takes 1–2 minutes and yields a live
+   `*.vercel.app` URL. Every later push to `main` redeploys automatically;
+   pull requests get their own preview URLs.
+5. Optional custom domain: **Project → Settings → Domains**, e.g.
+   `letter.trustsandwealth.com`, then add the CNAME Vercel shows you at your DNS
+   host. HTTPS is automatic.
+
+After the first deploy, confirm the privacy promise in the wild: open devtools →
+Network, fill in a section, download the PDF, and watch for third-party
+requests. There should be none (the e2e suite asserts this on every commit), and
+the response headers should carry the `Content-Security-Policy` from
+`next.config.ts`.
+
+**Build directory note:** local builds write to `node_modules/.cache/next-build`
+to dodge OneDrive file locks; hosted builds (`VERCEL` or `CI` set) use the
+standard `.next`, which is what Vercel expects. See `next.config.ts`.
 
 ## White-labeling
 

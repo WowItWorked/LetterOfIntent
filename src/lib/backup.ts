@@ -19,7 +19,7 @@ export function serializeBackup(data: LetterData, meta: LetterMeta): string {
   return JSON.stringify(backup, null, 2);
 }
 
-function sanitizeForFilename(v: string): string {
+export function sanitizeForFilename(v: string): string {
   return v
     .normalize("NFKD")
     .replace(/[^\w\s-]/g, "")

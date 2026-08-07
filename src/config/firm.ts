@@ -27,6 +27,12 @@ export interface FirmConfig {
   email: string;
   website: string;
   websiteLabel: string;
+  /**
+   * Where this tool itself lives. Used for canonical URLs, link previews,
+   * and the sitemap — so it must be the public production address.
+   */
+  appUrl: string;
+  appUrlLabel: string;
   /** Where the single post-download call to action points. */
   consultUrl: string;
   licensedStates: string[];
@@ -53,6 +59,8 @@ export const firm: FirmConfig = {
   email: "contact@trustsandwealth.com",
   website: "https://trustsandwealth.com",
   websiteLabel: "trustsandwealth.com",
+  appUrl: "https://myletterofintent.com",
+  appUrlLabel: "myletterofintent.com",
   consultUrl: "https://calendly.com/trustsandwealth/consultation",
   licensedStates: ["Virginia"],
   logoPath: "/monogram-gold.png",

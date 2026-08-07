@@ -34,15 +34,33 @@ const mulish = Mulish({
   display: "swap",
 });
 
+const DESCRIPTION =
+  "A free, private tool that guides parents of a person with disabilities through " +
+  "writing a Letter of Intent — and turns it into a polished PDF plus a one-page " +
+  "emergency sheet. Everything stays on your device.";
+
 export const metadata: Metadata = {
+  // Canonical home of the tool (config/firm.ts) — resolves relative URLs in
+  // canonical tags and link previews.
+  metadataBase: new URL(firm.appUrl),
   title: {
     default: `Letter of Intent Builder — ${firm.name}`,
     template: `%s — Letter of Intent Builder`,
   },
-  description:
-    "A free, private tool that guides parents of a person with disabilities through " +
-    "writing a Letter of Intent — and turns it into a polished PDF plus a one-page " +
-    "emergency sheet. Everything stays on your device.",
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Letter of Intent Builder",
+    title: "Write down what only you know about caring for them.",
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: "Letter of Intent Builder",
+    description: DESCRIPTION,
+  },
   icons: firm.logoPath ? { icon: firm.logoPath } : undefined,
 };
 

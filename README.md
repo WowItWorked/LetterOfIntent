@@ -108,9 +108,25 @@ every push runs the full CI gate (lint, unit, build, e2e + axe).
 4. **Deploy.** First build takes 1–2 minutes and yields a live
    `*.vercel.app` URL. Every later push to `main` redeploys automatically;
    pull requests get their own preview URLs.
-5. Optional custom domain: **Project → Settings → Domains**, e.g.
-   `letter.trustsandwealth.com`, then add the CNAME Vercel shows you at your DNS
-   host. HTTPS is automatic.
+### Custom domain
+
+The tool's canonical home is **myletterofintent.com** (set in
+`src/config/firm.ts` as `appUrl` — canonical tags, link previews, the sitemap,
+and the PDF footer credit all read from it).
+
+1. **Vercel → Project → Settings → Domains → Add**: add both
+   `myletterofintent.com` and `www.myletterofintent.com`, and mark one as
+   primary (the other 308-redirects to it).
+2. Vercel displays the exact DNS records. Add them at **Cloudflare**, which
+   holds this domain's nameservers.
+3. **Set each record to DNS only (grey cloud), not proxied (orange cloud).**
+   Proxying breaks Vercel's certificate issuance and, with Cloudflare's
+   Flexible SSL mode, causes redirect loops. Vercel terminates TLS itself.
+4. Wait for Vercel to show **Valid Configuration**; certificates issue
+   automatically, usually within minutes.
+
+If the domain ever changes, update `appUrl` / `appUrlLabel` in
+`src/config/firm.ts` — nothing else hardcodes it.
 
 After the first deploy, confirm the privacy promise in the wild: open devtools →
 Network, fill in a section, download the PDF, and watch for third-party

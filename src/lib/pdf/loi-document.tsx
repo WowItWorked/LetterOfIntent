@@ -263,7 +263,7 @@ export function LoiDocument({ data, logo, registry, toc }: LoiDocumentProps) {
               marginTop: 8,
             }}
           >
-            Created with the free Letter of Intent Builder · {firm.websiteLabel}
+            Created with the free Letter of Intent Builder · {firm.appUrlLabel}
           </Text>
         </View>
       </Page>

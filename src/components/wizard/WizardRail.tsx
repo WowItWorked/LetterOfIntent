@@ -64,14 +64,14 @@ export function SectionNav() {
                   aria-hidden="true"
                   className={cn(
                     "w-5 shrink-0 text-right font-serif text-sm tabular-nums",
-                    current ? "text-golddeep" : "text-faint"
+                    current ? "text-accent" : "text-faint"
                   )}
                 >
                   {def.number}
                 </span>
                 <span className="min-w-0 flex-1">
                   {fillName(def.navTitle, name)}
-                  {def.optionalTag ? <span className="text-faint"> (optional)</span> : null}
+                  {def.optionalTag ? <span className="text-muted"> (optional)</span> : null}
                 </span>
                 {started ? (
                   <>

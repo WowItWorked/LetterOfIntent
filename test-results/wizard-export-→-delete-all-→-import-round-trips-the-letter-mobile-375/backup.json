@@ -1,0 +1,19 @@
+{
+  "app": "twl-letter-of-intent",
+  "version": 1,
+  "exportedAt": "2026-08-07T05:27:34.366Z",
+  "data": {
+    "gettingStarted": {
+      "authorName": "",
+      "authorRelationship": "",
+      "subjectFullName": "",
+      "subjectPreferredName": "Alex",
+      "letterDate": ""
+    }
+  },
+  "meta": {
+    "lastVisitedSlug": "getting-started",
+    "updatedAt": "2026-08-07T05:27:33.821Z",
+    "startedAt": "2026-08-07T05:27:33.821Z"
+  }
+}

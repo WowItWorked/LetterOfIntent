@@ -10,7 +10,8 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      // wasm-unsafe-eval: @react-pdf's yoga layout engine is WebAssembly.
+      "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self' data:",
@@ -28,6 +29,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // OneDrive syncs this project folder and intermittently locks files in the
+  // build directory (EPERM). OneDrive never syncs anything under a folder
+  // named node_modules, so the build output lives there. Harmless elsewhere.
+  distDir: "node_modules/.cache/next-build",
   async headers() {
     if (process.env.NODE_ENV !== "production") return [];
     return [{ source: "/:path*", headers: securityHeaders }];

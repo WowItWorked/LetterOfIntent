@@ -138,10 +138,14 @@ export function DataControls() {
           on another device.
         </p>
         <div className="mt-4">
+          {/* Proxy input, driven by the visible button below — kept out of the
+              a11y tree so there's exactly one "choose a file" control. */}
           <input
             ref={fileRef}
             type="file"
             accept="application/json,.json"
+            aria-hidden="true"
+            tabIndex={-1}
             className="sr-only"
             onChange={(e) => {
               const f = e.target.files?.[0];

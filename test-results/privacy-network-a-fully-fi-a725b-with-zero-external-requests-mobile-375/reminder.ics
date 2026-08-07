@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Letter of Intent Builder//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:loi-review-20270807-82k8efv1@local
+DTSTAMP:20260807T052734Z
+DTSTART;VALUE=DATE:20270807
+DTEND;VALUE=DATE:20270808
+SUMMARY:Review Alex's Letter of Intent
+DESCRIPTION:A yearly check-in: open the Letter of Intent\, update anything
+  that changed (medications\, contacts\, routines\, benefits)\, change the
+  date\, and print or share the new version. Fifteen minutes now saves a f
+ uture caregiver from outdated information.
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

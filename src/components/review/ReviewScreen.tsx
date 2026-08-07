@@ -287,7 +287,7 @@ function ReadingSection({
   return (
     <section className="print-section mt-10">
       <h3 className="flex items-baseline gap-3 border-b border-line pb-2 text-2xl text-navydeep">
-        <span aria-hidden="true" className="text-base text-golddeep">
+        <span aria-hidden="true" className="text-base text-accent">
           {def.number}.
         </span>
         {fillName(def.title, name)}

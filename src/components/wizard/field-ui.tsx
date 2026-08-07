@@ -75,7 +75,7 @@ export function FieldShell({
         <Disclosure label="See an example" className="mt-0.5">
           <blockquote className="max-w-prose rounded-md border-l-2 border-goldline bg-paper2 px-3.5 py-3 text-sm text-body">
             <p className="italic">“{example}”</p>
-            <footer className="mt-1.5 not-italic text-faint">
+            <footer className="mt-1.5 not-italic text-muted">
               — a sample answer, to show the level of detail. Yours can be shorter.
             </footer>
           </blockquote>

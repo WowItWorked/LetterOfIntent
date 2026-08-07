@@ -83,7 +83,7 @@ export default function HomePage() {
             },
           ].map((step, i) => (
             <li key={step.title} className="rounded-xl border border-line bg-surface p-5">
-              <span aria-hidden="true" className="font-serif text-2xl text-golddeep">
+              <span aria-hidden="true" className="font-serif text-2xl text-accent">
                 {i + 1}.
               </span>
               <h3 className="mt-1 text-lg">{step.title}</h3>
@@ -108,7 +108,7 @@ export default function HomePage() {
               key={def.slug}
               className="flex min-h-11 items-baseline gap-2.5 rounded-lg border border-line bg-surface px-3.5 py-2.5"
             >
-              <span aria-hidden="true" className="font-serif text-sm text-golddeep">
+              <span aria-hidden="true" className="font-serif text-sm text-accent">
                 {def.number}
               </span>
               <span className="flex-1 text-[0.95rem] text-ink">

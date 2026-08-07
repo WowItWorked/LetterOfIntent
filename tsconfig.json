@@ -22,13 +22,19 @@
       "@/*": ["./src/*"]
     }
   },
+  // The build dir lives under node_modules/.cache (OneDrive skips node_modules,
+  // which stops EPERM build flakes). Its generated route types must be included,
+  // so includes are explicit — no broad **/* glob that would need a node_modules
+  // exclude (exclude always beats include in TypeScript).
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "*.ts",
+    "*.mts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "e2e/**/*.ts",
+    "node_modules/.cache/next-build/types/**/*.ts",
+    "node_modules/.cache/next-build/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules/.cache/next-build/cache"]
 }

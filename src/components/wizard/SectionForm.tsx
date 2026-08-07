@@ -45,11 +45,12 @@ export function SectionForm({ def }: { def: SectionDef }) {
   );
   const hintSchema = useMemo(() => buildHintSchema(def), [def]);
 
+  // "onTouched": hints first appear when leaving a field, then clear live
+  // while the user fixes them — gentle in both directions.
   const form = useForm<FieldValues>({
     defaultValues: defaults,
     resolver: zodResolver(hintSchema),
-    mode: "onBlur",
-    reValidateMode: "onChange",
+    mode: "onTouched",
   });
 
   const save = setSection as (key: SectionKey, values: unknown) => void;

@@ -36,8 +36,13 @@ export interface FirmConfig {
   /** Where the single post-download call to action points. */
   consultUrl: string;
   licensedStates: string[];
-  /** Path under /public, or null to hide the logo. */
+  /** The firm's monogram. Path under /public, or null to hide it. */
   logoPath: string | null;
+  /**
+   * The tool's own lockup, used on the documents families keep. Path under
+   * /public, or null to fall back to the firm monogram.
+   */
+  appLogoPath: string | null;
   brand: FirmBrand;
   attorneyBioBlurb: string;
   /** One-line privacy promise shown in the header and on the first screen. */
@@ -64,6 +69,7 @@ export const firm: FirmConfig = {
   consultUrl: "https://calendly.com/trustsandwealth/consultation",
   licensedStates: ["Virginia"],
   logoPath: "/monogram-gold.png",
+  appLogoPath: "/mloi-logo.png",
   brand: {
     navy: "#253551",
     navyDeep: "#16223A",

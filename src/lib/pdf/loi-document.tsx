@@ -144,15 +144,17 @@ const s = StyleSheet.create({
 
 export interface LoiDocumentProps {
   data: LetterData;
-  /** Firm logo with its measured aspect ratio, if it loaded. */
+  /** Firm monogram with its measured aspect ratio, if it loaded. */
   logo?: { dataUrl: string; aspect: number };
+  /** The tool's own lockup, shown on the cover. */
+  appLogo?: { dataUrl: string; aspect: number };
   /** Pass 1: section key → first page number gets recorded here. */
   registry: Record<string, number> | null;
   /** Pass 2: the recorded map, used to print TOC page numbers. */
   toc: Record<string, number> | null;
 }
 
-export function LoiDocument({ data, logo, registry, toc }: LoiDocumentProps) {
+export function LoiDocument({ data, logo, appLogo, registry, toc }: LoiDocumentProps) {
   const name = readerName(data);
   const fullName = data.gettingStarted?.subjectFullName?.trim() || name;
   const author = data.gettingStarted?.authorName?.trim();
@@ -171,24 +173,26 @@ export function LoiDocument({ data, logo, registry, toc }: LoiDocumentProps) {
     >
       {/* ------------------------------------------------------------ cover */}
       <Page size="LETTER" style={s.coverPage}>
+        {/* The tool's lockup leads the cover; the firm signs the bottom. */}
         <View style={{ alignItems: "center" }}>
-          {logo ? (
-            // Height-led sizing at the mark's true aspect — never stretched.
+          {appLogo ? (
+            // Width-led at the lockup's true aspect — never stretched.
             <Image
-              src={logo.dataUrl}
-              style={{ height: 56, width: 56 * logo.aspect, marginBottom: 12 }}
+              src={appLogo.dataUrl}
+              style={{ width: 230, height: 230 / appLogo.aspect }}
             />
-          ) : null}
-          <Text
-            style={{
-              fontFamily: "Helvetica",
-              fontSize: 9,
-              letterSpacing: 2.2,
-              color: GRAY,
-            }}
-          >
-            {firm.name.toUpperCase()}
-          </Text>
+          ) : (
+            <Text
+              style={{
+                fontFamily: "Helvetica-Bold",
+                fontSize: 11,
+                letterSpacing: 3.2,
+                color: GOLD_DEEP,
+              }}
+            >
+              MY LETTER OF INTENT
+            </Text>
+          )}
         </View>
 
         <View style={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
@@ -200,7 +204,7 @@ export function LoiDocument({ data, logo, registry, toc }: LoiDocumentProps) {
               color: GOLD_DEEP,
             }}
           >
-            LETTER OF INTENT
+            A LETTER OF INTENT FOR
           </Text>
           <Text
             style={{
@@ -243,6 +247,30 @@ export function LoiDocument({ data, logo, registry, toc }: LoiDocumentProps) {
         </View>
 
         <View style={{ alignItems: "center" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
+            {logo ? (
+              <Image
+                src={logo.dataUrl}
+                style={{ height: 22, width: 22 * logo.aspect, marginRight: 7 }}
+              />
+            ) : null}
+            <Text
+              style={{
+                fontFamily: "Helvetica",
+                fontSize: 8.5,
+                letterSpacing: 1.8,
+                color: GRAY,
+              }}
+            >
+              {firm.name.toUpperCase()}
+            </Text>
+          </View>
           <Text
             style={{
               fontFamily: "Helvetica",

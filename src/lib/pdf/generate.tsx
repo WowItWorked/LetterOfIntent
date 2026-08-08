@@ -17,10 +17,10 @@ export interface LoadedLogo {
   aspect: number;
 }
 
-async function loadLogo(): Promise<LoadedLogo | undefined> {
-  if (!firm.logoPath || typeof window === "undefined") return undefined;
+async function loadLogo(path: string | null): Promise<LoadedLogo | undefined> {
+  if (!path || typeof window === "undefined") return undefined;
   try {
-    const res = await fetch(firm.logoPath);
+    const res = await fetch(path);
     if (!res.ok) return undefined;
     const blob = await res.blob();
     const dataUrl = await new Promise<string | undefined>((resolve) => {
@@ -49,18 +49,24 @@ async function loadLogo(): Promise<LoadedLogo | undefined> {
  * table of contents. Layout is identical between passes, so numbers hold.
  */
 export async function generateLetterPdfBlob(data: LetterData): Promise<Blob> {
-  const logo = await loadLogo();
+  const [logo, appLogo] = await Promise.all([
+    loadLogo(firm.logoPath),
+    loadLogo(firm.appLogoPath),
+  ]);
   const registry: Record<string, number> = {};
   await pdf(
-    <LoiDocument data={data} logo={logo} registry={registry} toc={null} />
+    <LoiDocument data={data} logo={logo} appLogo={appLogo} registry={registry} toc={null} />
   ).toBlob();
   return pdf(
-    <LoiDocument data={data} logo={logo} registry={null} toc={registry} />
+    <LoiDocument data={data} logo={logo} appLogo={appLogo} registry={null} toc={registry} />
   ).toBlob();
 }
 
 export async function generateEmergencyPdfBlob(data: LetterData): Promise<Blob> {
-  return pdf(<EmergencyDocument info={emergencyInfo(data)} />).toBlob();
+  const appLogo = await loadLogo(firm.appLogoPath);
+  return pdf(
+    <EmergencyDocument info={emergencyInfo(data)} appLogo={appLogo} />
+  ).toBlob();
 }
 
 function nameSlug(data: LetterData): string {

@@ -1,4 +1,5 @@
-import { Document, Font, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+/* eslint-disable jsx-a11y/alt-text */
+import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
 import { firm } from "@/config/firm";
 import { formatDateLong, type EmergencyInfo } from "@/lib/derive";
@@ -124,7 +125,14 @@ function Box({
   );
 }
 
-export function EmergencyDocument({ info }: { info: EmergencyInfo }) {
+export function EmergencyDocument({
+  info,
+  appLogo,
+}: {
+  info: EmergencyInfo;
+  /** The tool's lockup, with its measured aspect ratio. */
+  appLogo?: { dataUrl: string; aspect: number };
+}) {
   const displayCaps = (info.preferred ?? info.fullName ?? "—").toUpperCase();
   const updated = formatDateLong(info.updatedIso) ?? info.updatedIso;
   const meds = info.medications.slice(0, 8);
@@ -138,6 +146,18 @@ export function EmergencyDocument({ info }: { info: EmergencyInfo }) {
       producer={firm.name}
     >
       <Page size="LETTER" style={s.page} wrap={false}>
+        {/* Brand row sits above the navy bar so the sheet still reads
+            "EMERGENCY INFORMATION" at a glance. */}
+        {appLogo ? (
+          <View style={{ marginBottom: 10 }}>
+            {/* Sized so the wordmark and tagline stay legible in print; the
+                sheet has the vertical room even when every box is full. */}
+            <Image
+              src={appLogo.dataUrl}
+              style={{ width: 158, height: 158 / appLogo.aspect }}
+            />
+          </View>
+        ) : null}
         <View style={s.header}>
           <Text style={s.headerTitle}>EMERGENCY INFORMATION — {displayCaps}</Text>
           <View>

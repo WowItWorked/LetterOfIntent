@@ -1,0 +1,226 @@
+{
+  "base": "http://localhost:3000",
+  "capturedAt": "2026-08-09T20:55:48.660Z",
+  "fullCompletion": {
+    "sections": 15,
+    "controlsFilled": 95,
+    "charsTyped": 12860,
+    "navigationClicks": 16,
+    "repeaterAddClicks": 3,
+    "emotionalGateClicks": 1,
+    "mechanicalWallMs": 22551,
+    "perSection": [
+      {
+        "slug": "getting-started",
+        "controls": 5,
+        "repeaterAddClicks": 0,
+        "charsTyped": 62,
+        "mechanicalMs": 1327,
+        "pageHeightPx": 2041
+      },
+      {
+        "slug": "about",
+        "controls": 5,
+        "repeaterAddClicks": 0,
+        "charsTyped": 674,
+        "mechanicalMs": 1316,
+        "pageHeightPx": 3340
+      },
+      {
+        "slug": "family-and-support",
+        "controls": 9,
+        "repeaterAddClicks": 1,
+        "charsTyped": 413,
+        "mechanicalMs": 1452,
+        "pageHeightPx": 2241
+      },
+      {
+        "slug": "a-typical-day",
+        "controls": 9,
+        "repeaterAddClicks": 0,
+        "charsTyped": 1494,
+        "mechanicalMs": 1369,
+        "pageHeightPx": 3225
+      },
+      {
+        "slug": "communication",
+        "controls": 6,
+        "repeaterAddClicks": 0,
+        "charsTyped": 996,
+        "mechanicalMs": 1323,
+        "pageHeightPx": 2508
+      },
+      {
+        "slug": "medical",
+        "controls": 14,
+        "repeaterAddClicks": 2,
+        "charsTyped": 1253,
+        "mechanicalMs": 1491,
+        "pageHeightPx": 3596
+      },
+      {
+        "slug": "behavioral-support",
+        "controls": 6,
+        "repeaterAddClicks": 0,
+        "charsTyped": 996,
+        "mechanicalMs": 1317,
+        "pageHeightPx": 3020
+      },
+      {
+        "slug": "school-and-work",
+        "controls": 6,
+        "repeaterAddClicks": 0,
+        "charsTyped": 996,
+        "mechanicalMs": 1318,
+        "pageHeightPx": 2445
+      },
+      {
+        "slug": "housing",
+        "controls": 5,
+        "repeaterAddClicks": 0,
+        "charsTyped": 830,
+        "mechanicalMs": 1338,
+        "pageHeightPx": 2385
+      },
+      {
+        "slug": "benefits-and-finances",
+        "controls": 6,
+        "repeaterAddClicks": 0,
+        "charsTyped": 996,
+        "mechanicalMs": 1353,
+        "pageHeightPx": 2815
+      },
+      {
+        "slug": "friends-joy-and-faith",
+        "controls": 6,
+        "repeaterAddClicks": 0,
+        "charsTyped": 996,
+        "mechanicalMs": 1319,
+        "pageHeightPx": 2369
+      },
+      {
+        "slug": "legal-and-advocacy",
+        "controls": 4,
+        "repeaterAddClicks": 0,
+        "charsTyped": 664,
+        "mechanicalMs": 1275,
+        "pageHeightPx": 2067
+      },
+      {
+        "slug": "guidance-for-the-trustee",
+        "controls": 6,
+        "repeaterAddClicks": 0,
+        "charsTyped": 996,
+        "mechanicalMs": 1313,
+        "pageHeightPx": 2830
+      },
+      {
+        "slug": "final-wishes",
+        "controls": 6,
+        "repeaterAddClicks": 0,
+        "charsTyped": 996,
+        "mechanicalMs": 1707,
+        "pageHeightPx": 2179
+      },
+      {
+        "slug": "a-personal-message",
+        "controls": 3,
+        "repeaterAddClicks": 0,
+        "charsTyped": 498,
+        "mechanicalMs": 1276,
+        "pageHeightPx": 2300
+      }
+    ],
+    "railAtEnd": {
+      "railText": "FOR A LOVED ONE WITH DISABILITIES You've added notes to 15 of 15 sections. Every section has notes. A yearly review keeps it trustworthy. 01 Getting started , has notes 02 About Maria Alvarez , has notes 03 Family & supp",
+      "barWidthPct": "100%"
+    },
+    "reviewLeadAtEnd": "Every section has notes. All three files are created right here on your device: nothing is uploaded.",
+    "downloadAllThreeMs": 5581,
+    "filesDownloaded": [
+      "Letter-of-Intent-Disabilities-2026-08-09.pdf",
+      "Emergency-Information-Sheet-2026-08-09.pdf",
+      "Letter-of-Intent-Disabilities-Backup-2026-08-09.json"
+    ],
+    "storedBytes": 15014,
+    "storedSectionKeys": [
+      "gettingStarted",
+      "about",
+      "familySupport",
+      "typicalDay",
+      "communication",
+      "medical",
+      "behavior",
+      "educationWork",
+      "housing",
+      "benefitsFinances",
+      "socialFaith",
+      "legalAdvocacy",
+      "trustee",
+      "finalWishes",
+      "personalMessage"
+    ],
+    "humanTimeModelINFERRED": {
+      "assumption": "33 wpm typing, 45s of thinking per question",
+      "typingMinutes": 78,
+      "thinkingMinutes": 71,
+      "totalMinutes": 149,
+      "siteClaim": "45–90 minutes (chooser header, getting-started intro)",
+      "sumOfPerSectionBadges": 165
+    }
+  },
+  "errorStates": {
+    "badEmail": {
+      "hintShown": true,
+      "hintText": "This doesn't look like a full email address yet — worth a quick check.",
+      "blocksNavigation": true,
+      "valueKeptAfterNav": "dana@"
+    },
+    "badDate": {
+      "nativeInputRejectedIt": true,
+      "hintShown": false,
+      "note": "type=date is a native picker; Chromium refuses an impossible value outright, so the app's own soft hint is never reached from the picker."
+    },
+    "removeRepeaterItem": {
+      "confirmDialogShown": true,
+      "dialogMessage": "Remove this provider? What you typed here will be removed. (The rest of the letter is untouched.)",
+      "dialogType": "native window.confirm",
+      "cancelKeptTheItem": true
+    },
+    "unknownSlug": {
+      "status": 404,
+      "bodyMentions404": true,
+      "offersWayBack": true
+    }
+  },
+  "storageFailure": {
+    "FAILED": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('form input').first()\u001b[22m\n"
+  },
+  "backupRoundTrip": {
+    "steps": [
+      "typed two answers",
+      "downloaded the backup",
+      "deleted everything",
+      "restored = true"
+    ],
+    "backupFile": {
+      "name": "Letter-of-Intent-Disabilities-Backup-2026-08-09.json",
+      "bytes": 503
+    },
+    "backupNoticeText": "Backup downloaded. Keep it somewhere safe — a cloud drive, an email to yourself, a USB stick.",
+    "deleteDialog": "Which letter is this?That backup was written before this tool had two sets of questions, and the sections in it are ones both sets share — so we cannot tell which letter it belongs to. Pick the one you were writing and everything in the file will be loaded into it.Disability & special needs — 15 sectionsAging & general",
+    "afterDeleteNotice": "Deleted. We checked: this device now holds nothing from this tool.",
+    "storeAfterDelete": null,
+    "fileInputPresent": true,
+    "restoreScreen": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How it works YOUR DATA Everything you have written is on this device Nothing is ever transmitted, uploaded, or shared back to this site. From here you can back your letter up, move it to another device, download the documents, or erase it completely. Read the privacy policy → Backup loaded — 1 of 15 sections have notes. Everything is saved on this device now. KEEP A COPY Download a backup One file holds your whole letter (1 of 15 sections have notes),",
+    "restoreClicks": 3,
+    "storeAfterRestore": {
+      "authorName": "Maria Alvarez",
+      "authorRelationship": "",
+      "subjectFullName": "Alexander James Alvarez",
+      "subjectPreferredName": "",
+      "letterDate": ""
+    },
+    "restored": true
+  }
+}

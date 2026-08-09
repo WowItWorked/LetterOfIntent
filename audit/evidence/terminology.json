@@ -1,0 +1,601 @@
+{
+  "generatedAt": "2026-08-09T20:45:23.764Z",
+  "filesScanned": 90,
+  "note": "Counts are over extracted COPY only (string literals + JSX text), not identifiers. A high variant count is not automatically a defect — register shifts are sometimes deliberate — but every concept with 3+ competing names in user-facing copy is listed so the deliberate ones can be separated from the accidental.",
+  "concepts": {
+    "The document itself": {
+      "distinctVariantsInUse": 8,
+      "total": 212,
+      "variants": [
+        {
+          "variant": "letter (bare)",
+          "count": 87,
+          "files": 35,
+          "topFiles": [
+            "src/components/review/ReviewScreen.tsx (10)",
+            "src/components/data/RestoreFlow.tsx (6)",
+            "src/lib/content/paths.ts (6)",
+            "src/app/page.tsx (5)",
+            "src/app/privacy/page.tsx (5)"
+          ]
+        },
+        {
+          "variant": "Letter of Intent",
+          "count": 48,
+          "files": 18,
+          "topFiles": [
+            "src/lib/content/samples.ts (7)",
+            "src/app/page.tsx (6)",
+            "src/lib/ics.ts (5)",
+            "src/app/layout.tsx (4)",
+            "src/components/chrome/SiteHeader.tsx (4)"
+          ]
+        },
+        {
+          "variant": "document",
+          "count": 29,
+          "files": 18,
+          "topFiles": [
+            "src/components/data/DataControls.tsx (3)",
+            "src/lib/content/preview-prompts.ts (3)",
+            "src/lib/content/sections/general/08-money-documents.ts (3)",
+            "src/lib/content/sections/general/11-legal-decisions.ts (3)",
+            "src/components/review/ReviewScreen.tsx (2)"
+          ]
+        },
+        {
+          "variant": "notes",
+          "count": 20,
+          "files": 12,
+          "topFiles": [
+            "src/components/review/ReviewScreen.tsx (4)",
+            "src/components/data/RestoreFlow.tsx (3)",
+            "src/components/data/DataControls.tsx (2)",
+            "src/components/wizard/WizardRail.tsx (2)",
+            "src/lib/pdf/loi-document.tsx (2)"
+          ]
+        },
+        {
+          "variant": "emergency sheet",
+          "count": 18,
+          "files": 11,
+          "topFiles": [
+            "src/lib/content/samples.ts (7)",
+            "src/lib/content/sections/03-family-support.ts (2)",
+            "src/app/layout.tsx (1)",
+            "src/app/page.tsx (1)",
+            "src/components/data/DataControls.tsx (1)"
+          ]
+        },
+        {
+          "variant": "guide",
+          "count": 7,
+          "files": 5,
+          "topFiles": [
+            "src/lib/content/samples.ts (2)",
+            "src/lib/content/sections/01-getting-started.ts (2)",
+            "src/app/page.tsx (1)",
+            "src/lib/content/sections/14-final-wishes.ts (1)",
+            "src/lib/content/sections/general/index.ts (1)"
+          ]
+        },
+        {
+          "variant": "companion",
+          "count": 2,
+          "files": 2,
+          "topFiles": [
+            "src/app/page.tsx (1)",
+            "src/lib/content/paths.ts (1)"
+          ]
+        },
+        {
+          "variant": "LOI",
+          "count": 1,
+          "files": 1,
+          "topFiles": [
+            "src/lib/ics.ts (1)"
+          ]
+        }
+      ]
+    },
+    "The person being written about": {
+      "distinctVariantsInUse": 4,
+      "total": 170,
+      "variants": [
+        {
+          "variant": "them / they",
+          "count": 155,
+          "files": 37,
+          "topFiles": [
+            "src/lib/content/preview-prompts.ts (26)",
+            "src/lib/content/sections/general/02-about-them.ts (15)",
+            "src/lib/content/sections/05-communication.ts (10)",
+            "src/lib/content/sections/general/05-communication.ts (10)",
+            "src/lib/content/sections/11-social-faith.ts (7)"
+          ]
+        },
+        {
+          "variant": "loved one",
+          "count": 11,
+          "files": 9,
+          "topFiles": [
+            "src/lib/content/paths.ts (2)",
+            "src/lib/content/samples.ts (2)",
+            "src/app/letter/page.tsx (1)",
+            "src/app/letter/[slug]/page.tsx (1)",
+            "src/components/chrome/SiteFooter.tsx (1)"
+          ]
+        },
+        {
+          "variant": "child",
+          "count": 3,
+          "files": 1,
+          "topFiles": [
+            "src/lib/content/paths.ts (3)"
+          ]
+        },
+        {
+          "variant": "the person this letter is about",
+          "count": 1,
+          "files": 1,
+          "topFiles": [
+            "src/lib/content/sections/01-getting-started.ts (1)"
+          ]
+        }
+      ]
+    },
+    "The future reader / who takes over": {
+      "distinctVariantsInUse": 9,
+      "total": 69,
+      "variants": [
+        {
+          "variant": "trustee",
+          "count": 22,
+          "files": 8,
+          "topFiles": [
+            "src/lib/content/sections/13-trustee.ts (8)",
+            "src/lib/content/paths.ts (6)",
+            "src/lib/content/preview-prompts.ts (2)",
+            "src/lib/content/sections/10-benefits-finances.ts (2)",
+            "src/app/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "caregiver",
+          "count": 20,
+          "files": 16,
+          "topFiles": [
+            "src/lib/content/sections/03-family-support.ts (3)",
+            "src/lib/content/sections/02-about.ts (2)",
+            "src/lib/share.ts (2)",
+            "src/app/page.tsx (1)",
+            "src/app/privacy/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "sibling",
+          "count": 8,
+          "files": 5,
+          "topFiles": [
+            "src/lib/content/paths.ts (4)",
+            "src/app/page.tsx (1)",
+            "src/components/review/ReviewScreen.tsx (1)",
+            "src/lib/content/sections/15-personal-message.ts (1)",
+            "src/lib/content/sections/general/12-stepping-in.ts (1)"
+          ]
+        },
+        {
+          "variant": "a new doctor",
+          "count": 5,
+          "files": 4,
+          "topFiles": [
+            "src/lib/content/sections/06-medical.ts (2)",
+            "src/lib/content/sections/02-about.ts (1)",
+            "src/lib/content/sections/04-typical-day.ts (1)",
+            "src/lib/content/sections/05-communication.ts (1)"
+          ]
+        },
+        {
+          "variant": "whoever steps in",
+          "count": 4,
+          "files": 3,
+          "topFiles": [
+            "src/lib/content/sections/general/12-stepping-in.ts (2)",
+            "src/lib/content/sections/general/02-about-them.ts (1)",
+            "src/lib/content/sections/general/07-home-living.ts (1)"
+          ]
+        },
+        {
+          "variant": "guardian",
+          "count": 3,
+          "files": 3,
+          "topFiles": [
+            "src/app/page.tsx (1)",
+            "src/lib/content/paths.ts (1)",
+            "src/lib/content/sections/01-getting-started.ts (1)"
+          ]
+        },
+        {
+          "variant": "helper",
+          "count": 3,
+          "files": 3,
+          "topFiles": [
+            "src/lib/content/sections/12-legal-advocacy.ts (1)",
+            "src/lib/content/sections/general/04-typical-week.ts (1)",
+            "src/lib/content/types.ts (1)"
+          ]
+        },
+        {
+          "variant": "sitter",
+          "count": 3,
+          "files": 3,
+          "topFiles": [
+            "src/app/page.tsx (1)",
+            "src/components/review/ReviewScreen.tsx (1)",
+            "src/lib/content/samples.ts (1)"
+          ]
+        },
+        {
+          "variant": "the next team",
+          "count": 1,
+          "files": 1,
+          "topFiles": [
+            "src/lib/content/sections/06-medical.ts (1)"
+          ]
+        }
+      ]
+    },
+    "Saving / persistence": {
+      "distinctVariantsInUse": 6,
+      "total": 90,
+      "variants": [
+        {
+          "variant": "save(s/d)",
+          "count": 22,
+          "files": 14,
+          "topFiles": [
+            "src/components/home/VideoPlayer.tsx (4)",
+            "src/app/page.tsx (3)",
+            "src/app/letter/page.tsx (2)",
+            "src/components/chrome/SaveIndicator.tsx (2)",
+            "src/components/data/RestoreFlow.tsx (2)"
+          ]
+        },
+        {
+          "variant": "keep(s)",
+          "count": 22,
+          "files": 19,
+          "topFiles": [
+            "src/components/data/DataControls.tsx (2)",
+            "src/components/home/VideoPlayer.tsx (2)",
+            "src/lib/content/sections/13-trustee.ts (2)",
+            "src/app/page.tsx (1)",
+            "src/app/privacy/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "store(s/d) / storage",
+          "count": 17,
+          "files": 7,
+          "topFiles": [
+            "src/lib/derive.ts (5)",
+            "src/lib/photos.ts (5)",
+            "src/app/privacy/page.tsx (2)",
+            "src/components/wizard/PhotoFields.tsx (2)",
+            "src/app/your-data/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "lives / live",
+          "count": 16,
+          "files": 13,
+          "topFiles": [
+            "src/lib/content/sections/09-housing.ts (3)",
+            "src/app/privacy/page.tsx (2)",
+            "src/components/data/DataControls.tsx (1)",
+            "src/lib/content/paths.ts (1)",
+            "src/lib/content/preview-prompts.ts (1)"
+          ]
+        },
+        {
+          "variant": "stays / remains",
+          "count": 12,
+          "files": 9,
+          "topFiles": [
+            "src/app/privacy/page.tsx (3)",
+            "src/lib/share.ts (2)",
+            "src/app/layout.tsx (1)",
+            "src/app/page.tsx (1)",
+            "src/components/chrome/PrivacyStrip.tsx (1)"
+          ]
+        },
+        {
+          "variant": "written to",
+          "count": 1,
+          "files": 1,
+          "topFiles": [
+            "src/app/privacy/page.tsx (1)"
+          ]
+        }
+      ]
+    },
+    "Backup / moving it": {
+      "distinctVariantsInUse": 6,
+      "total": 96,
+      "variants": [
+        {
+          "variant": "download",
+          "count": 29,
+          "files": 15,
+          "topFiles": [
+            "src/components/review/ReviewScreen.tsx (8)",
+            "src/components/data/DataControls.tsx (7)",
+            "src/components/samples/SampleViewer.tsx (2)",
+            "src/app/letter/page.tsx (1)",
+            "src/app/letter/review/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "backup (bare)",
+          "count": 24,
+          "files": 9,
+          "topFiles": [
+            "src/components/data/RestoreFlow.tsx (12)",
+            "src/components/data/DataControls.tsx (4)",
+            "src/lib/schema.ts (2)",
+            "src/app/privacy/page.tsx (1)",
+            "src/app/your-data/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "export",
+          "count": 19,
+          "files": 9,
+          "topFiles": [
+            "src/lib/content/types.ts (5)",
+            "src/lib/derive.ts (5)",
+            "src/lib/ics.ts (2)",
+            "src/lib/photos.ts (2)",
+            "src/components/home/VideoPlayer.tsx (1)"
+          ]
+        },
+        {
+          "variant": "backup file",
+          "count": 11,
+          "files": 7,
+          "topFiles": [
+            "src/components/review/ReviewScreen.tsx (3)",
+            "src/app/page.tsx (2)",
+            "src/components/data/DataControls.tsx (2)",
+            "src/app/letter/page.tsx (1)",
+            "src/components/data/RestoreFlow.tsx (1)"
+          ]
+        },
+        {
+          "variant": "load a backup",
+          "count": 9,
+          "files": 7,
+          "topFiles": [
+            "src/components/data/DataControls.tsx (3)",
+            "src/app/letter/page.tsx (1)",
+            "src/app/privacy/page.tsx (1)",
+            "src/app/your-data/page.tsx (1)",
+            "src/components/data/RestoreFlow.tsx (1)"
+          ]
+        },
+        {
+          "variant": "back up (verb)",
+          "count": 4,
+          "files": 3,
+          "topFiles": [
+            "src/app/your-data/page.tsx (2)",
+            "src/components/chrome/SiteFooter.tsx (1)",
+            "src/components/wizard/WizardRail.tsx (1)"
+          ]
+        }
+      ]
+    },
+    "Deletion": {
+      "distinctVariantsInUse": 5,
+      "total": 27,
+      "variants": [
+        {
+          "variant": "delete",
+          "count": 10,
+          "files": 6,
+          "topFiles": [
+            "src/components/data/DataControls.tsx (5)",
+            "src/app/privacy/page.tsx (1)",
+            "src/app/your-data/page.tsx (1)",
+            "src/components/chrome/SiteFooter.tsx (1)",
+            "src/components/wizard/WizardRail.tsx (1)"
+          ]
+        },
+        {
+          "variant": "clear",
+          "count": 7,
+          "files": 5,
+          "topFiles": [
+            "src/app/privacy/page.tsx (2)",
+            "src/components/data/DataControls.tsx (2)",
+            "src/components/review/ReviewScreen.tsx (1)",
+            "src/components/wizard/PhotoFields.tsx (1)",
+            "src/lib/photos.ts (1)"
+          ]
+        },
+        {
+          "variant": "remove",
+          "count": 5,
+          "files": 2,
+          "topFiles": [
+            "src/components/wizard/SectionForm.tsx (3)",
+            "src/components/wizard/PhotoFields.tsx (2)"
+          ]
+        },
+        {
+          "variant": "erase",
+          "count": 4,
+          "files": 3,
+          "topFiles": [
+            "src/components/data/DataControls.tsx (2)",
+            "src/app/privacy/page.tsx (1)",
+            "src/app/your-data/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "gone",
+          "count": 1,
+          "files": 1,
+          "topFiles": [
+            "src/app/privacy/page.tsx (1)"
+          ]
+        }
+      ]
+    },
+    "Where the data is": {
+      "distinctVariantsInUse": 5,
+      "total": 40,
+      "variants": [
+        {
+          "variant": "this device",
+          "count": 22,
+          "files": 12,
+          "topFiles": [
+            "src/components/data/DataControls.tsx (5)",
+            "src/components/data/RestoreFlow.tsx (4)",
+            "src/app/letter/page.tsx (2)",
+            "src/app/your-data/page.tsx (2)",
+            "src/components/review/ReviewScreen.tsx (2)"
+          ]
+        },
+        {
+          "variant": "your device",
+          "count": 9,
+          "files": 6,
+          "topFiles": [
+            "src/components/review/ReviewScreen.tsx (3)",
+            "src/app/privacy/page.tsx (2)",
+            "src/app/layout.tsx (1)",
+            "src/app/page.tsx (1)",
+            "src/components/chrome/PrivacyStrip.tsx (1)"
+          ]
+        },
+        {
+          "variant": "this browser",
+          "count": 4,
+          "files": 3,
+          "topFiles": [
+            "src/components/wizard/PhotoFields.tsx (2)",
+            "src/app/privacy/page.tsx (1)",
+            "src/components/samples/SampleViewer.tsx (1)"
+          ]
+        },
+        {
+          "variant": "your browser",
+          "count": 4,
+          "files": 3,
+          "topFiles": [
+            "src/app/privacy/page.tsx (2)",
+            "src/components/data/DataControls.tsx (1)",
+            "src/components/review/ReviewScreen.tsx (1)"
+          ]
+        },
+        {
+          "variant": "IndexedDB",
+          "count": 1,
+          "files": 1,
+          "topFiles": [
+            "src/lib/photos.ts (1)"
+          ]
+        }
+      ]
+    },
+    "The act of writing it": {
+      "distinctVariantsInUse": 7,
+      "total": 133,
+      "variants": [
+        {
+          "variant": "write / writing",
+          "count": 57,
+          "files": 30,
+          "topFiles": [
+            "src/app/page.tsx (6)",
+            "src/lib/content/paths.ts (5)",
+            "src/lib/share.ts (5)",
+            "src/components/review/ReviewScreen.tsx (4)",
+            "src/lib/content/sections/01-getting-started.ts (3)"
+          ]
+        },
+        {
+          "variant": "record",
+          "count": 29,
+          "files": 9,
+          "topFiles": [
+            "src/lib/derive.ts (9)",
+            "src/lib/pdf/loi-document.tsx (6)",
+            "src/lib/photos.ts (5)",
+            "src/lib/content/sections/general/06-health-medical.ts (3)",
+            "src/lib/content/preview-prompts.ts (2)"
+          ]
+        },
+        {
+          "variant": "build",
+          "count": 18,
+          "files": 13,
+          "topFiles": [
+            "src/app/layout.tsx (3)",
+            "src/app/privacy/page.tsx (2)",
+            "src/components/home/VideoPlayer.tsx (2)",
+            "src/lib/content/samples.ts (2)",
+            "src/app/page.tsx (1)"
+          ]
+        },
+        {
+          "variant": "answer",
+          "count": 12,
+          "files": 9,
+          "topFiles": [
+            "src/app/page.tsx (2)",
+            "src/app/privacy/page.tsx (2)",
+            "src/lib/pdf/loi-document.tsx (2)",
+            "src/components/data/RestoreFlow.tsx (1)",
+            "src/lib/content/samples.ts (1)"
+          ]
+        },
+        {
+          "variant": "create",
+          "count": 9,
+          "files": 5,
+          "topFiles": [
+            "src/app/letter/page.tsx (3)",
+            "src/components/review/ReviewScreen.tsx (2)",
+            "src/lib/content/sections/10-benefits-finances.ts (2)",
+            "src/app/page.tsx (1)",
+            "src/lib/pdf/loi-document.tsx (1)"
+          ]
+        },
+        {
+          "variant": "note down / write down",
+          "count": 6,
+          "files": 6,
+          "topFiles": [
+            "src/app/layout.tsx (1)",
+            "src/app/page.tsx (1)",
+            "src/lib/content/sections/general/06-health-medical.ts (1)",
+            "src/lib/content/sections/general/07-home-living.ts (1)",
+            "src/lib/content/sections/general/08-money-documents.ts (1)"
+          ]
+        },
+        {
+          "variant": "fill in / fill out",
+          "count": 2,
+          "files": 2,
+          "topFiles": [
+            "src/components/data/RestoreFlow.tsx (1)",
+            "src/components/review/ReviewScreen.tsx (1)"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "method": "localStorage.setItem throws QuotaExceededError for the app's key",
+  "routes": {
+    "/letter/getting-started": {
+      "screenshot": "audit/evidence/a2/storage-failure/wizard-getting-started.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": false,
+      "mainVisibleText": "",
+      "mainVisibleTextLength": 0,
+      "formInputs": 0,
+      "anyExplanationShown": false
+    },
+    "/letter": {
+      "screenshot": "audit/evidence/a2/storage-failure/chooser.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": true,
+      "mainVisibleText": "CREATE YOUR LETTER Create your Letter of Intent Two sets of questions, because two situations are not the same. Pick the one that fits the person you care for, read exactly what it will ask, and begin. Nothing is required, and you can start the other set at any time. It saves as you go, on this device only. About 45–90 minutes in total, in as many sittings as you need. START Pick the letter that fits your family. Who you care for decides which letter you write. Option 1 adds what a trustee and a",
+      "mainVisibleTextLength": 3220,
+      "formInputs": 0,
+      "anyExplanationShown": false
+    },
+    "/letter/review": {
+      "screenshot": "audit/evidence/a2/storage-failure/review.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": true,
+      "mainVisibleText": "THE LAST STEP Review & download Nothing to review yet — your letter doesn't have any notes so far. Even one section makes a real, useful document. Start anywhere. A letter with three sections filled in is already worth more to a future caregiver than the perfect letter that never got written. START WITH THE FIRST SECTION",
+      "mainVisibleTextLength": 326,
+      "formInputs": 0,
+      "anyExplanationShown": false
+    },
+    "/": {
+      "screenshot": "audit/evidence/a2/storage-failure/home.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": true,
+      "mainVisibleText": "A FREE, PRIVATE LETTER OF INTENT BUILDER FROM TRUSTS & WEALTH, PLLC Write down what only you know, so they’ll be cared for the way that only you have. A Letter of Intent is the guide a future caregiver, trustee, or guardian will rely on to care well for the person you love: the routines, the warning signs, the joys, the hard-won lessons. Everyone tells you to write one. This is the tool that helps you finish it, one small question at a time, saved as you go, until it becomes a document you can p",
+      "mainVisibleTextLength": 4708,
+      "formInputs": 0,
+      "anyExplanationShown": true
+    },
+    "/your-data": {
+      "screenshot": "audit/evidence/a2/storage-failure/your-data.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": true,
+      "mainVisibleText": "YOUR DATA Everything you have written is on this device Nothing is ever transmitted, uploaded, or shared back to this site. From here you can back your letter up, move it to another device, download the documents, or erase it completely. Read the privacy policy → KEEP A COPY Download a backup One file holds your whole letter, photographs included. Keep it in a safe place, move it to another device, or email it to yourself. If this browser’s data is ever cleared, the backup is how you get everyth",
+      "mainVisibleTextLength": 2072,
+      "formInputs": 0,
+      "anyExplanationShown": false
+    }
+  }
+}

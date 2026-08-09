@@ -17,6 +17,10 @@ const eslintConfig = defineConfig([
     // Static assets, not source. Includes the pre-built pdf.js worker, which
     // is a megabyte of vendored minified output.
     "public/**",
+    // Audit artifacts and their one-off capture scripts. Analysis tooling, not
+    // shipped source — linting it turns throwaway scripts into noise that
+    // hides real warnings in the app itself.
+    "audit/**",
   ]),
   {
     rules: {

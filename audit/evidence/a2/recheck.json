@@ -1,0 +1,29 @@
+{
+  "base": "http://localhost:3000",
+  "capturedAt": "2026-08-09T20:57:51.660Z",
+  "hintBlocking": {
+    "hintShown": true,
+    "pathBefore": "/letter/family-and-support",
+    "pathAfter": "/letter/a-typical-day",
+    "blockedNavigation": false,
+    "valueKeptAfterLeavingAndReturning": "dana@",
+    "hintIsSoftAndNonBlocking": true
+  },
+  "storageFailure": {
+    "method": "localStorage.setItem patched to throw QuotaExceededError for this app's key only. This is the behaviour of Safari private browsing, 'block all cookies'/'prevent cross-site tracking' in some configurations, and a genuinely full storage quota.",
+    "onFirstLoad": {
+      "formPresent": true,
+      "inputCount": 0,
+      "skeletonPresent": false,
+      "whatIsOnScreen": "",
+      "saveIndicatorStatus": null,
+      "anyErrorCopy": false,
+      "consoleErrors": []
+    },
+    "afterTyping": null,
+    "uncaughtPageErrors": [
+      "QuotaExceededError: The quota has been exceeded.",
+      "QuotaExceededError: The quota has been exceeded."
+    ]
+  }
+}

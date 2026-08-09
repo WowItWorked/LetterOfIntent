@@ -1,0 +1,91 @@
+{
+  "unnamedImages": [
+    {
+      "tag": "IMG",
+      "cls": "block h-12 w-auto flex-none",
+      "ariaHidden": null,
+      "role": null,
+      "parent": "DIV.flex items-center gap-4",
+      "rect": {
+        "w": 33,
+        "h": 48
+      }
+    }
+  ],
+  "telField": [
+    {
+      "name": "Phone",
+      "value": "12",
+      "props": {
+        "invalid": "false",
+        "required": false
+      }
+    }
+  ],
+  "telHintVisible": {
+    "type": "text",
+    "ariaInvalidAttr": null,
+    "nativeValid": true,
+    "describedby": null,
+    "hintText": null
+  },
+  "textareaInvalid": [
+    {
+      "id": "f-contacts-0-notes",
+      "ariaInvalid": null,
+      "describedby": null
+    },
+    {
+      "id": "f-doNotInvolve",
+      "ariaInvalid": null,
+      "describedby": "f-doNotInvolve-help"
+    }
+  ],
+  "shareBefore": {
+    "hasNativeShare": false,
+    "buttonText": "WATCH"
+  },
+  "share": {
+    "hasNativeShare": false,
+    "textBefore": "SHARE TO HELP ANOTHER FAMILY",
+    "textAfter": "SHARE TO HELP ANOTHER FAMILY",
+    "labelChanged": false,
+    "liveBefore": "",
+    "liveAfter": "",
+    "liveChanged": false
+  },
+  "samplesAxe": [
+    {
+      "name": "sample_letter-of-intent-disabilities",
+      "url": "http://localhost:3000/samples/letter-of-intent-disabilities",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 6
+        }
+      ]
+    },
+    {
+      "name": "sample_emergency-sheet-disabilities",
+      "url": "http://localhost:3000/samples/emergency-sheet-disabilities",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 7
+        }
+      ]
+    }
+  ],
+  "skipToFirstField": {
+    "n": 18,
+    "tag": "BUTTON",
+    "inForm": true,
+    "text": "+ Add a provider"
+  },
+  "skipLinkTarget": {
+    "mainTabindex": "-1",
+    "railInsideMain": true
+  }
+}

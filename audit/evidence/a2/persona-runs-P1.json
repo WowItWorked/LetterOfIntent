@@ -1,0 +1,366 @@
+{
+  "base": "http://localhost:3000",
+  "capturedAt": "2026-08-09T20:49:18.314Z",
+  "notes": [
+    "Dev server (next dev) — load timings are unminified per-module and are NOT production numbers."
+  ],
+  "phases": {
+    "P1": {
+      "persona": "P1 exhausted parent, iPhone 390x844, Slow 3G",
+      "tasks": {
+        "task1_home_slow3g": {
+          "ok": true,
+          "wallMsToLoadEvent": 32027,
+          "responseEnd": 2467,
+          "domContentLoaded": 5875,
+          "load": 32024,
+          "fcp": 5896,
+          "lcp": 5896,
+          "transferBytes": 1184296,
+          "requests": 28,
+          "fold": {
+            "viewport": {
+              "w": 390,
+              "h": 844
+            },
+            "documentHeight": 8093,
+            "screensOfScroll": 9.6,
+            "horizontalOverflow": false,
+            "scrollWidth": 390,
+            "ctas": [
+              {
+                "label": "START YOUR LETTER · IT’S FREE",
+                "y": 782,
+                "inFirstViewport": true,
+                "w": 350,
+                "h": 52
+              },
+              {
+                "label": "CREATE YOUR LETTER",
+                "y": 2672,
+                "inFirstViewport": false,
+                "w": 243,
+                "h": 52
+              },
+              {
+                "label": "BEGIN YOUR LETTER OF INTENT",
+                "y": 6857,
+                "inFirstViewport": false,
+                "w": 345,
+                "h": 52
+              },
+              {
+                "label": "Start your letter",
+                "y": 7235,
+                "inFirstViewport": false,
+                "w": 350,
+                "h": 24
+              }
+            ],
+            "firstCtaY": 782,
+            "anyCtaInFirstViewport": true,
+            "privacyPromise": {
+              "text": "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "y": 91,
+              "inFirstViewport": true
+            },
+            "wordsInFirstViewport": 118,
+            "firstViewportText": [
+              "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "How it works",
+              "Write down what only you know, so they’ll be cared for the way that only you have.",
+              "A Letter of Intent is the guide a future caregiver, trustee, or guardian will rely on to care well for the person you love: the routines, the warning signs, the joys, the hard-won lessons. Everyone tells you to write one. This is the tool that helps you finish it, one small question at a time, saved as you go, until it becomes a document you can print and hand to the person who takes over.",
+              "START YOUR LETTER · IT’S FREE"
+            ]
+          }
+        },
+        "task1_home_fast3g": {
+          "ok": true,
+          "wallMsToLoadEvent": 8032,
+          "responseEnd": 679,
+          "domContentLoaded": 1696,
+          "load": 8030,
+          "fcp": 1716,
+          "lcp": 1716,
+          "transferBytes": 1184298,
+          "requests": 29,
+          "fold": {
+            "viewport": {
+              "w": 390,
+              "h": 844
+            },
+            "documentHeight": 8093,
+            "screensOfScroll": 9.6,
+            "horizontalOverflow": false,
+            "scrollWidth": 390,
+            "ctas": [
+              {
+                "label": "START YOUR LETTER · IT’S FREE",
+                "y": 782,
+                "inFirstViewport": true,
+                "w": 350,
+                "h": 52
+              },
+              {
+                "label": "CREATE YOUR LETTER",
+                "y": 2672,
+                "inFirstViewport": false,
+                "w": 243,
+                "h": 52
+              },
+              {
+                "label": "BEGIN YOUR LETTER OF INTENT",
+                "y": 6857,
+                "inFirstViewport": false,
+                "w": 345,
+                "h": 52
+              },
+              {
+                "label": "Start your letter",
+                "y": 7235,
+                "inFirstViewport": false,
+                "w": 350,
+                "h": 24
+              }
+            ],
+            "firstCtaY": 782,
+            "anyCtaInFirstViewport": true,
+            "privacyPromise": {
+              "text": "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "y": 91,
+              "inFirstViewport": true
+            },
+            "wordsInFirstViewport": 118,
+            "firstViewportText": [
+              "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "How it works",
+              "Write down what only you know, so they’ll be cared for the way that only you have.",
+              "A Letter of Intent is the guide a future caregiver, trustee, or guardian will rely on to care well for the person you love: the routines, the warning signs, the joys, the hard-won lessons. Everyone tells you to write one. This is the tool that helps you finish it, one small question at a time, saved as you go, until it becomes a document you can print and hand to the person who takes over.",
+              "START YOUR LETTER · IT’S FREE"
+            ]
+          }
+        },
+        "task1_home_unthrottled": {
+          "ok": true,
+          "wallMsToLoadEvent": 208,
+          "responseEnd": 54,
+          "domContentLoaded": 97,
+          "load": 206,
+          "fcp": 136,
+          "lcp": 136,
+          "transferBytes": 1184298,
+          "requests": 29,
+          "fold": {
+            "viewport": {
+              "w": 390,
+              "h": 844
+            },
+            "documentHeight": 8093,
+            "screensOfScroll": 9.6,
+            "horizontalOverflow": false,
+            "scrollWidth": 390,
+            "ctas": [
+              {
+                "label": "START YOUR LETTER · IT’S FREE",
+                "y": 782,
+                "inFirstViewport": true,
+                "w": 350,
+                "h": 52
+              },
+              {
+                "label": "CREATE YOUR LETTER",
+                "y": 2672,
+                "inFirstViewport": false,
+                "w": 243,
+                "h": 52
+              },
+              {
+                "label": "BEGIN YOUR LETTER OF INTENT",
+                "y": 6857,
+                "inFirstViewport": false,
+                "w": 345,
+                "h": 52
+              },
+              {
+                "label": "Start your letter",
+                "y": 7235,
+                "inFirstViewport": false,
+                "w": 350,
+                "h": 24
+              }
+            ],
+            "firstCtaY": 782,
+            "anyCtaInFirstViewport": true,
+            "privacyPromise": {
+              "text": "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "y": 91,
+              "inFirstViewport": true
+            },
+            "wordsInFirstViewport": 118,
+            "firstViewportText": [
+              "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "How it works",
+              "Write down what only you know, so they’ll be cared for the way that only you have.",
+              "A Letter of Intent is the guide a future caregiver, trustee, or guardian will rely on to care well for the person you love: the routines, the warning signs, the joys, the hard-won lessons. Everyone tells you to write one. This is the tool that helps you finish it, one small question at a time, saved as you go, until it becomes a document you can print and hand to the person who takes over.",
+              "START YOUR LETTER · IT’S FREE"
+            ]
+          }
+        },
+        "pathChooserCardNames": [
+          {
+            "chars": 535,
+            "words": 94,
+            "name": "OPTION 1 FOR A LOVED ONE WITH DISABILITIES The letter a trustee will read. If your plan includes a special needs trust, "
+          },
+          {
+            "chars": 556,
+            "words": 101,
+            "name": "OPTION 2 FOR ANYONE YOU CARE FOR The letter only you can write. An aging parent, a spouse, a sibling you look after, a c"
+          }
+        ],
+        "task2_begin": {
+          "taps": 2,
+          "trail": [
+            "header Start visible without opening the menu: false",
+            "hero CTA 'Start your letter · it's free'",
+            "-> /letter",
+            "PathChooser option cards are buttons with these accessible-name sizes: [{\"chars\":535,\"words\":94},{\"chars\":556,\"words\":101}]",
+            "'Start the special needs letter' sits at y=4445 on /letter",
+            "Start the special needs letter",
+            "-> /letter/getting-started"
+          ],
+          "landedOn": "/letter/getting-started",
+          "pxToScrollToFirstField": 1014,
+          "screensToFirstField": 1.2,
+          "fold": {
+            "viewport": {
+              "w": 390,
+              "h": 844
+            },
+            "documentHeight": 2994,
+            "screensOfScroll": 3.5,
+            "horizontalOverflow": false,
+            "scrollWidth": 390,
+            "ctas": [
+              {
+                "label": "01Getting started",
+                "y": 322,
+                "inFirstViewport": true,
+                "w": 324,
+                "h": 44
+              },
+              {
+                "label": "01Getting started",
+                "y": 0,
+                "inFirstViewport": false,
+                "w": 0,
+                "h": 0
+              },
+              {
+                "label": "Start your letter",
+                "y": 2137,
+                "inFirstViewport": false,
+                "w": 350,
+                "h": 24
+              }
+            ],
+            "firstCtaY": 0,
+            "anyCtaInFirstViewport": true,
+            "privacyPromise": {
+              "text": "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "y": 91,
+              "inFirstViewport": true
+            },
+            "wordsInFirstViewport": 180,
+            "firstViewportText": [
+              "Private by design. Everything you type stays on your device and is never sent anywhere. How it works",
+              "How it works",
+              "For a loved one with disabilities",
+              "Start anywhere. Every question is optional.",
+              "01Getting started",
+              "01Getting started",
+              "02About your loved one",
+              "02About your loved one",
+              "03Family & support",
+              "03Family & support",
+              "04A typical day",
+              "04A typical day",
+              "05Communication",
+              "05Communication",
+              "06Medical",
+              "06Medical",
+              "07Behavior support",
+              "07Behavior support",
+              "08School & work",
+              "08School & work",
+              "09Housing",
+              "09Housing",
+              "10Benefits & money",
+              "10Benefits & money",
+              "11Joy & faith",
+              "11Joy & faith",
+              "12Legal & advocacy",
+              "12Legal & advocacy",
+              "SECTION 01 OF 15 · ABOUT 5 MINUTES",
+              "Getting started"
+            ]
+          }
+        },
+        "task3_one_section": {
+          "section": "getting-started",
+          "fields": 5,
+          "keystrokes": 54,
+          "typingMs": 1141,
+          "taps": 5,
+          "savedAfter900ms": true,
+          "storedSection": {
+            "authorName": "Maria Alvarez",
+            "authorRelationship": "Mother",
+            "subjectFullName": "Alexander James Alvarez",
+            "subjectPreferredName": "Alex",
+            "letterDate": "2026-08-09"
+          },
+          "hasVisibleSaveIndicator": true,
+          "saveIndicatorText": "Your work is saved on this device."
+        },
+        "task4_leave_and_return": {
+          "a_reload_immediately": {
+            "method": "typed 13 chars then reload() with zero delay (inside the 600ms autosave debounce)",
+            "valueAfter": "",
+            "preserved": false
+          },
+          "b_reload_after_debounce": {
+            "method": "typed then waited 900ms then reload()",
+            "valueAfter": "Maria Alvarez",
+            "preserved": true
+          },
+          "c_in_app_nav_immediately": {
+            "method": "typed then clicked Next with no pause (component unmount flush)",
+            "valueAfter": "Maria Alvarez",
+            "preserved": true
+          },
+          "d_hard_close_immediately": {
+            "method": "typed 13 chars, read localStorage with zero delay (what a killed tab keeps), then read again 800ms later",
+            "storedValueAtZeroDelay": null,
+            "storedValueAfter800ms": "Maria Alvarez",
+            "preserved": false,
+            "autosaveDebounceMs": 600,
+            "unloadFlushHandlerNote": "grep of src/ finds no beforeunload / pagehide / visibilitychange listener; the only flush is SectionForm's React unmount cleanup."
+          },
+          "e_new_browser_session": {
+            "method": "brand-new browser context seeded with the same localStorage (a browser restart)",
+            "valueAfter": "Maria Alvarez",
+            "preserved": true,
+            "resumeAffordanceOnHome": null
+          },
+          "f_thirty_minute_idle_simulated": {
+            "method": "SIMULATED: meta.startedAt/updatedAt rewritten to 30 minutes ago, then the app opened cold. No real 30-minute wait was performed.",
+            "valueAfter": "Maria Alvarez",
+            "preserved": true,
+            "anyExpiryOrTimeoutCopy": false
+          }
+        }
+      }
+    }
+  }
+}

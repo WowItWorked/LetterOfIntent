@@ -1,0 +1,220 @@
+{
+  "generatedAt": "2026-08-09T20:48:52.123Z",
+  "targets": {
+    "local": "http://localhost:3000",
+    "production": "https://myletterofintent.com"
+  },
+  "problems": [
+    "/: meta description 206 chars (>160, will truncate in search)",
+    "/privacy: meta description reads as broken -> \"Everything you type stays on your device. No account, and nothing you write is ever captured — we count page visits and nothing else. of any kind. Here is exactly how that works, in plain words.\"",
+    "/privacy: meta description 194 chars (>160, will truncate in search)",
+    "/letter/review: meta description 206 chars (>160, will truncate in search)",
+    "/letter/getting-started: meta description 206 chars (>160, will truncate in search)",
+    "/letter/medical: meta description 206 chars (>160, will truncate in search)",
+    "/samples/letter-of-intent-disabilities: meta description 171 chars (>160, will truncate in search)"
+  ],
+  "pages": {
+    "local": {
+      "/": {
+        "httpStatus": 200,
+        "title": "Letter of Intent Builder — Trusts & Wealth, PLLC",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Write down what only you know, so they’ll be cared for the way that only you have."
+        ],
+        "status404": false
+      },
+      "/letter": {
+        "httpStatus": 200,
+        "title": "Create your letter — Letter of Intent Builder",
+        "description": "Two sets of questions — one for a loved one with disabilities, one for anyone you care for. Read every question before you write a word.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Create your Letter of Intent"
+        ],
+        "status404": false
+      },
+      "/privacy": {
+        "httpStatus": 200,
+        "title": "Privacy & how your data works — Letter of Intent Builder",
+        "description": "Everything you type stays on your device. No account, and nothing you write is ever captured — we count page visits and nothing else. of any kind. Here is exactly how that works, in plain words.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Your privacy, in plain words"
+        ],
+        "status404": false
+      },
+      "/your-data": {
+        "httpStatus": 200,
+        "title": "Your data — back up, move, or delete — Letter of Intent Builder",
+        "description": "Back up your letter, load a backup, download the documents, or erase everything this tool has stored on this device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Everything you have written is on this device"
+        ],
+        "status404": false
+      },
+      "/letter/review": {
+        "httpStatus": 200,
+        "title": "Review & download — Letter of Intent Builder",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Review & download"
+        ],
+        "status404": false
+      },
+      "/letter/getting-started": {
+        "httpStatus": 200,
+        "title": "Getting started — Letter of Intent Builder",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Getting started"
+        ],
+        "status404": false
+      },
+      "/letter/medical": {
+        "httpStatus": 200,
+        "title": "Medical — Letter of Intent Builder",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Medical"
+        ],
+        "status404": false
+      },
+      "/samples/letter-of-intent-disabilities": {
+        "httpStatus": 200,
+        "title": "Sample — Letter of Intent — for a loved one with disabilities — Letter of Intent Builder",
+        "description": "A part-finished letter, printed exactly as the builder would produce it: the cover, a guide for whoever reads it, the contents, key points at a glance, and seven sections.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Letter of Intent — for a loved one with disabilities"
+        ],
+        "status404": false
+      },
+      "/samples/emergency-sheet-disabilities": {
+        "httpStatus": 200,
+        "title": "Sample — Emergency information sheet — for a loved one with disabilities — Letter of Intent Builder",
+        "description": "One page for the fridge, the school office, the sitter, and the ER: diagnoses, medications, allergies, how they communicate, and who to call first.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Emergency information sheet — for a loved one with disabilities"
+        ],
+        "status404": false
+      }
+    },
+    "production": {
+      "/": {
+        "httpStatus": 200,
+        "title": "Letter of Intent Builder — Trusts & Wealth, PLLC",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Write down what only you know, so they’ll be cared for the way that only you have."
+        ],
+        "status404": false
+      },
+      "/letter": {
+        "httpStatus": 200,
+        "title": "Create your letter — Letter of Intent Builder",
+        "description": "Two sets of questions — one for a loved one with disabilities, one for anyone you care for. Read every question before you write a word.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Create your Letter of Intent"
+        ],
+        "status404": false
+      },
+      "/privacy": {
+        "httpStatus": 200,
+        "title": "Privacy & how your data works — Letter of Intent Builder",
+        "description": "Everything you type stays on your device. No account, and nothing you write is ever captured — we count page visits and nothing else. of any kind. Here is exactly how that works, in plain words.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Your privacy, in plain words"
+        ],
+        "status404": false
+      },
+      "/your-data": {
+        "httpStatus": 200,
+        "title": "Your data — back up, move, or delete — Letter of Intent Builder",
+        "description": "Back up your letter, load a backup, download the documents, or erase everything this tool has stored on this device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Everything you have written is on this device"
+        ],
+        "status404": false
+      },
+      "/letter/review": {
+        "httpStatus": 200,
+        "title": "Review & download — Letter of Intent Builder",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Review & download"
+        ],
+        "status404": false
+      },
+      "/letter/getting-started": {
+        "httpStatus": 200,
+        "title": "Getting started — Letter of Intent Builder",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Getting started"
+        ],
+        "status404": false
+      },
+      "/letter/medical": {
+        "httpStatus": 200,
+        "title": "Medical — Letter of Intent Builder",
+        "description": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Medical"
+        ],
+        "status404": false
+      },
+      "/samples/letter-of-intent-disabilities": {
+        "httpStatus": 200,
+        "title": "Sample — Letter of Intent — for a loved one with disabilities — Letter of Intent Builder",
+        "description": "A part-finished letter, printed exactly as the builder would produce it: the cover, a guide for whoever reads it, the contents, key points at a glance, and seven sections.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Letter of Intent — for a loved one with disabilities"
+        ],
+        "status404": false
+      },
+      "/samples/emergency-sheet-disabilities": {
+        "httpStatus": 200,
+        "title": "Sample — Emergency information sheet — for a loved one with disabilities — Letter of Intent Builder",
+        "description": "One page for the fridge, the school office, the sitter, and the ER: diagnoses, medications, allergies, how they communicate, and who to call first.",
+        "ogTitle": "Write down what only you know, so they’ll be cared for the way that only you have.",
+        "ogDescription": "A free, private tool that guides parents of a person with disabilities through writing a Letter of Intent — and turns it into a polished PDF plus a one-page emergency sheet. Everything stays on your device.",
+        "h1": [
+          "Emergency information sheet — for a loved one with disabilities"
+        ],
+        "status404": false
+      }
+    }
+  }
+}

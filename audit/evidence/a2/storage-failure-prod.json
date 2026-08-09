@@ -1,0 +1,66 @@
+{
+  "site": "https://myletterofintent.com",
+  "capturedAt": "2026-08-09T20:59:39.300Z",
+  "routes": {
+    "/letter/getting-started": {
+      "controlRun": {
+        "inputs": 5,
+        "mainChars": 1405
+      },
+      "screenshot": "audit/evidence/a2/storage-failure-prod/wizard-getting-started.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": false,
+      "formInputs": 0,
+      "mainVisibleChars": 0,
+      "mainVisibleText": "",
+      "anyExplanationShown": false
+    },
+    "/letter/medical": {
+      "controlRun": {
+        "inputs": 8,
+        "mainChars": 1809
+      },
+      "screenshot": "audit/evidence/a2/storage-failure-prod/wizard-medical.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": false,
+      "formInputs": 0,
+      "mainVisibleChars": 0,
+      "mainVisibleText": "",
+      "anyExplanationShown": false
+    },
+    "/letter/review": {
+      "controlRun": {
+        "inputs": 0,
+        "mainChars": 326
+      },
+      "screenshot": "audit/evidence/a2/storage-failure-prod/review.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": true,
+      "formInputs": 0,
+      "mainVisibleChars": 326,
+      "mainVisibleText": "THE LAST STEP Review & download Nothing to review yet — your letter doesn't have any notes so far. Even one section makes a real, useful document. Start anywhere. A letter with three sections filled in is already worth more to a future caregiver than the perfect letter that never got written. START WITH THE FIRST SECTION",
+      "anyExplanationShown": false
+    },
+    "/letter": {
+      "controlRun": {
+        "inputs": 0,
+        "mainChars": 3220
+      },
+      "screenshot": "audit/evidence/a2/storage-failure-prod/chooser.png",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ],
+      "headerRendered": true,
+      "formInputs": 0,
+      "mainVisibleChars": 3220,
+      "mainVisibleText": "CREATE YOUR LETTER Create your Letter of Intent Two sets of questions, because two situations are not the same. Pick the one that fits the person you care for, read exactly what it will ask, and begin. Nothing is required, and you can start the other set at any time. It saves as you go, on this device only. About 45–90 minutes in total, in as many sittings as you need. START Pick the letter that f",
+      "anyExplanationShown": false
+    }
+  }
+}

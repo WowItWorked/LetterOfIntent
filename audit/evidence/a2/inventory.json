@@ -1,0 +1,1139 @@
+{
+  "base": "http://localhost:3000",
+  "capturedAt": "2026-08-09T20:37:23.122Z",
+  "summary": {
+    "specialNeeds": {
+      "sections": 15,
+      "declaredMinutesSum": 165,
+      "controlsNoRepeaterItems": 83,
+      "controlsOneItemPerRepeater": 96,
+      "topLevelQuestions": 83,
+      "introWords": 609,
+      "helpWords": 1121,
+      "totalReadableWords": 6753
+    },
+    "general": {
+      "sections": 14,
+      "declaredMinutesSum": 145,
+      "controlsNoRepeaterItems": 71,
+      "controlsOneItemPerRepeater": 84,
+      "topLevelQuestions": 71,
+      "introWords": 668,
+      "helpWords": 1009,
+      "totalReadableWords": 6459
+    }
+  },
+  "specialNeeds": [
+    {
+      "slug": "getting-started",
+      "gated": false,
+      "eyebrow": "Section 01 of 15 · about 5 minutes",
+      "h1": "Getting started",
+      "introWordCount": 90,
+      "introParagraphs": 2,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 5,
+      "controlsByType": {
+        "text": 4,
+        "date": 1
+      },
+      "topLevelQuestionCount": 5,
+      "topLabels": [
+        "Your name",
+        "Your relationship to them",
+        "Their full name",
+        "What they like to be called",
+        "Today's date"
+      ],
+      "helpWordCount": 55,
+      "repeaters": [],
+      "exampleDisclosures": 0,
+      "scrollHeight": 2041,
+      "bodyWordCount": 448,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 5,
+      "declaredMinutes": 5,
+      "sectionOfTotal": [
+        "01",
+        "15"
+      ]
+    },
+    {
+      "slug": "about",
+      "gated": false,
+      "eyebrow": "Section 02 of 15 · about 10 minutes",
+      "h1": "About your loved one",
+      "introWordCount": 29,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 5,
+      "controlsByType": {
+        "date": 1,
+        "textarea": 4
+      },
+      "topLevelQuestionCount": 5,
+      "topLabels": [
+        "Date of birth",
+        "Diagnoses and conditions",
+        "Their life so far, in your own words",
+        "What should a stranger know in the first five minutes?",
+        "Anything else that makes them who they are"
+      ],
+      "helpWordCount": 77,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 3340,
+      "bodyWordCount": 552,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 5,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "02",
+        "15"
+      ]
+    },
+    {
+      "slug": "family-and-support",
+      "gated": false,
+      "eyebrow": "Section 03 of 15 · about 10 minutes",
+      "h1": "Family and support network",
+      "introWordCount": 35,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 2,
+      "controlsByType": {
+        "text": 1,
+        "textarea": 1
+      },
+      "topLevelQuestionCount": 2,
+      "topLabels": [
+        "Who would you call first in an emergency?",
+        "Is there anyone who should not be given a role?"
+      ],
+      "helpWordCount": 21,
+      "repeaters": [
+        {
+          "legend": "People in your loved one's life",
+          "help": "Add as many as you like. Check the emergency box for the few people who belong on the one-page emergency sheet.",
+          "addLabel": "+ Add a person",
+          "itemFieldCount": 0
+        }
+      ],
+      "exampleDisclosures": 1,
+      "scrollHeight": 1761,
+      "bodyWordCount": 408,
+      "repeaterDetail": [
+        {
+          "legend": "People in your loved one's life",
+          "itemFieldCount": 7,
+          "itemLabels": [
+            "Name",
+            "Relationship",
+            "Phone",
+            "Email",
+            "Their role",
+            "Emergency contact — include on the emergency sheet",
+            "Notes"
+          ]
+        }
+      ],
+      "controlsWithOneItemPerRepeater": 9,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "03",
+        "15"
+      ]
+    },
+    {
+      "slug": "a-typical-day",
+      "gated": false,
+      "eyebrow": "Section 04 of 15 · about 15 minutes",
+      "h1": "A typical day",
+      "introWordCount": 35,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 9,
+      "controlsByType": {
+        "textarea": 9
+      },
+      "topLevelQuestionCount": 9,
+      "topLabels": [
+        "Morning routine",
+        "Evening and bedtime routine",
+        "Sleep",
+        "Food — favorites, dislikes, and rules",
+        "Clothing preferences",
+        "Sensory sensitivities",
+        "Comfort objects and favorites",
+        "Describe a good day",
+        "Describe a hard day"
+      ],
+      "helpWordCount": 67,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 3225,
+      "bodyWordCount": 422,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 9,
+      "declaredMinutes": 15,
+      "sectionOfTotal": [
+        "04",
+        "15"
+      ]
+    },
+    {
+      "slug": "communication",
+      "gated": false,
+      "eyebrow": "Section 05 of 15 · about 10 minutes",
+      "h1": "Communication",
+      "introWordCount": 19,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "How they communicate",
+        "How they say yes and no",
+        "How they show pain, or that they feel sick",
+        "How they show they're becoming overwhelmed",
+        "What to say — words and approaches that work",
+        "What not to say"
+      ],
+      "helpWordCount": 74,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 2508,
+      "bodyWordCount": 420,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "05",
+        "15"
+      ]
+    },
+    {
+      "slug": "medical",
+      "gated": false,
+      "eyebrow": "Section 06 of 15 · about 15 minutes",
+      "h1": "Medical",
+      "introWordCount": 42,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 8,
+      "controlsByType": {
+        "textarea": 7,
+        "text": 1
+      },
+      "topLevelQuestionCount": 8,
+      "topLabels": [
+        "Allergies and reactions",
+        "Seizure or emergency protocol",
+        "Therapies and schedules",
+        "Equipment they use",
+        "Insurance and Medicaid — plan names only",
+        "Preferred hospital or ER",
+        "Treatments that have worked",
+        "Treatments that didn't work — or made things worse"
+      ],
+      "helpWordCount": 79,
+      "repeaters": [
+        {
+          "legend": "Doctors and specialists",
+          "help": "",
+          "addLabel": "+ Add a provider",
+          "itemFieldCount": 0
+        },
+        {
+          "legend": "Current medications",
+          "help": "These print on the emergency sheet, so keep them current. Include supplements if they matter.",
+          "addLabel": "+ Add a medication",
+          "itemFieldCount": 0
+        }
+      ],
+      "exampleDisclosures": 1,
+      "scrollHeight": 3152,
+      "bodyWordCount": 489,
+      "repeaterDetail": [
+        {
+          "legend": "Doctors and specialists",
+          "itemFieldCount": 3,
+          "itemLabels": [
+            "Name",
+            "Specialty",
+            "Phone"
+          ]
+        },
+        {
+          "legend": "Current medications",
+          "itemFieldCount": 3,
+          "itemLabels": [
+            "Medication",
+            "Dose and timing",
+            "What it's for"
+          ]
+        }
+      ],
+      "controlsWithOneItemPerRepeater": 14,
+      "declaredMinutes": 15,
+      "sectionOfTotal": [
+        "06",
+        "15"
+      ]
+    },
+    {
+      "slug": "behavioral-support",
+      "gated": false,
+      "eyebrow": "Section 07 of 15 · about 15 minutes",
+      "h1": "Behavioral support",
+      "introWordCount": 78,
+      "introParagraphs": 2,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Known triggers",
+        "Early warning signs",
+        "What helps most when things escalate",
+        "What makes things worse",
+        "If there's a full crisis, what should happen — step by step",
+        "Guidance for police and first responders"
+      ],
+      "helpWordCount": 142,
+      "repeaters": [],
+      "exampleDisclosures": 3,
+      "scrollHeight": 3020,
+      "bodyWordCount": 546,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 15,
+      "sectionOfTotal": [
+        "07",
+        "15"
+      ]
+    },
+    {
+      "slug": "school-and-work",
+      "gated": false,
+      "eyebrow": "Section 08 of 15 · about 10 minutes",
+      "h1": "School, work, and meaningful days",
+      "introWordCount": 21,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Current school or day program",
+        "School and IEP history — what has worked",
+        "How they learn best",
+        "Work history",
+        "Job coaches and employment supports",
+        "Your hopes for meaningful activity"
+      ],
+      "helpWordCount": 78,
+      "repeaters": [],
+      "exampleDisclosures": 0,
+      "scrollHeight": 2445,
+      "bodyWordCount": 415,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "08",
+        "15"
+      ]
+    },
+    {
+      "slug": "housing",
+      "gated": false,
+      "eyebrow": "Section 09 of 15 · about 10 minutes",
+      "h1": "Housing and daily living",
+      "introWordCount": 29,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 5,
+      "controlsByType": {
+        "textarea": 5
+      },
+      "topLevelQuestionCount": 5,
+      "topLabels": [
+        "Current living situation",
+        "The support they need to live safely",
+        "Waiver and waitlist status",
+        "Your hopes for their future home",
+        "What kind of living situation would you not want for them?"
+      ],
+      "helpWordCount": 93,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2385,
+      "bodyWordCount": 444,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 5,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "09",
+        "15"
+      ]
+    },
+    {
+      "slug": "benefits-and-finances",
+      "gated": false,
+      "eyebrow": "Section 10 of 15 · about 10 minutes",
+      "h1": "Benefits and finances",
+      "introWordCount": 29,
+      "introParagraphs": 1,
+      "noteWordCount": 62,
+      "note": "Why no account or Social Security numbers? This letter is meant to be copied and handed to schools, hospitals, and caregivers. A map of your loved one's benefits helps all of them. The numbers themselves help only the one or two people who manage things — and are dangerous in the wrong hands. The letter will print where the numbers are kept instead.",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Benefits they receive today",
+        "Representative payee",
+        "ABLE account",
+        "Existing trusts and who runs them",
+        "Anything pending",
+        "Where the official numbers and papers live"
+      ],
+      "helpWordCount": 131,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 2815,
+      "bodyWordCount": 537,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "10",
+        "15"
+      ]
+    },
+    {
+      "slug": "friends-joy-and-faith",
+      "gated": false,
+      "eyebrow": "Section 11 of 15 · about 10 minutes",
+      "h1": "Friends, joy, and faith",
+      "introWordCount": 26,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Friendships to protect",
+        "Activities and hobbies",
+        "Faith community and practices",
+        "Holidays and family traditions",
+        "Travel",
+        "What brings them joy"
+      ],
+      "helpWordCount": 40,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2369,
+      "bodyWordCount": 376,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "11",
+        "15"
+      ]
+    },
+    {
+      "slug": "legal-and-advocacy",
+      "gated": false,
+      "eyebrow": "Section 12 of 15 · about 10 minutes",
+      "h1": "Legal and advocacy",
+      "introWordCount": 26,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 4,
+      "controlsByType": {
+        "textarea": 4
+      },
+      "topLevelQuestionCount": 4,
+      "topLabels": [
+        "Decision-making status",
+        "Case managers and advocates",
+        "Attorney",
+        "What you've had to fight for — and how you won"
+      ],
+      "helpWordCount": 53,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2067,
+      "bodyWordCount": 387,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 4,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "12",
+        "15"
+      ]
+    },
+    {
+      "slug": "guidance-for-the-trustee",
+      "gated": false,
+      "eyebrow": "Section 13 of 15 · about 10 minutes",
+      "h1": "Guidance for the trustee",
+      "introWordCount": 57,
+      "introParagraphs": 2,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "When you picture the trust doing its job, what is it paying for?",
+        "What should be an easy yes?",
+        "Spending now versus preserving for later",
+        "What deserves extra scrutiny?",
+        "When your loved one's wishes and their safety disagree",
+        "Who should the trustee talk with before big decisions?"
+      ],
+      "helpWordCount": 116,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 2830,
+      "bodyWordCount": 514,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "13",
+        "15"
+      ]
+    },
+    {
+      "slug": "final-wishes",
+      "gated": true,
+      "eyebrow": "Section 14 of 15 · about 10 minutes",
+      "h1": "Final wishes",
+      "introWordCount": 38,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Funeral or memorial preferences",
+        "Burial or cremation",
+        "Religious observances",
+        "Organ donation",
+        "End-of-life care wishes",
+        "Where the papers are"
+      ],
+      "helpWordCount": 20,
+      "repeaters": [],
+      "exampleDisclosures": 0,
+      "scrollHeight": 2179,
+      "bodyWordCount": 363,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "14",
+        "15"
+      ]
+    },
+    {
+      "slug": "a-personal-message",
+      "gated": false,
+      "eyebrow": "Section 15 of 15 · about 15 minutes",
+      "h1": "A personal message",
+      "introWordCount": 55,
+      "introParagraphs": 2,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 3,
+      "controlsByType": {
+        "textarea": 3
+      },
+      "topLevelQuestionCount": 3,
+      "topLabels": [
+        "To your loved one's future caregivers",
+        "To their siblings",
+        "To your loved one"
+      ],
+      "helpWordCount": 75,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2300,
+      "bodyWordCount": 432,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 3,
+      "declaredMinutes": 15,
+      "sectionOfTotal": [
+        "15",
+        "15"
+      ]
+    }
+  ],
+  "general": [
+    {
+      "slug": "getting-started",
+      "gated": false,
+      "eyebrow": "Section 01 of 14 · about 5 minutes",
+      "h1": "Getting started",
+      "introWordCount": 87,
+      "introParagraphs": 2,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 5,
+      "controlsByType": {
+        "text": 4,
+        "date": 1
+      },
+      "topLevelQuestionCount": 5,
+      "topLabels": [
+        "Your name",
+        "Your relationship to them",
+        "Their full name",
+        "What they like to be called",
+        "Today's date"
+      ],
+      "helpWordCount": 55,
+      "repeaters": [],
+      "exampleDisclosures": 0,
+      "scrollHeight": 2041,
+      "bodyWordCount": 447,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 5,
+      "declaredMinutes": 5,
+      "sectionOfTotal": [
+        "01",
+        "14"
+      ]
+    },
+    {
+      "slug": "about-them",
+      "gated": false,
+      "eyebrow": "Section 02 of 14 · about 10 minutes",
+      "h1": "About your loved one",
+      "introWordCount": 47,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "date": 1,
+        "textarea": 5
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Date of birth",
+        "Who they are, in your words",
+        "The history that shaped them",
+        "Temperament, humor, and pride",
+        "What they cannot abide",
+        "What strangers most often get wrong about them"
+      ],
+      "helpWordCount": 85,
+      "repeaters": [],
+      "exampleDisclosures": 3,
+      "scrollHeight": 3494,
+      "bodyWordCount": 581,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "02",
+        "14"
+      ]
+    },
+    {
+      "slug": "family-and-support",
+      "gated": false,
+      "eyebrow": "Section 03 of 14 · about 10 minutes",
+      "h1": "Family and support network",
+      "introWordCount": 35,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 2,
+      "controlsByType": {
+        "text": 1,
+        "textarea": 1
+      },
+      "topLevelQuestionCount": 2,
+      "topLabels": [
+        "Who would you call first in an emergency?",
+        "Is there anyone who should not be given a role?"
+      ],
+      "helpWordCount": 21,
+      "repeaters": [
+        {
+          "legend": "People in your loved one's life",
+          "help": "Add as many as you like. Check the emergency box for the few people who belong on the one-page emergency sheet.",
+          "addLabel": "+ Add a person",
+          "itemFieldCount": 0
+        }
+      ],
+      "exampleDisclosures": 1,
+      "scrollHeight": 1761,
+      "bodyWordCount": 410,
+      "repeaterDetail": [
+        {
+          "legend": "People in your loved one's life",
+          "itemFieldCount": 7,
+          "itemLabels": [
+            "Name",
+            "Relationship",
+            "Phone",
+            "Email",
+            "Their role",
+            "Emergency contact — include on the emergency sheet",
+            "Notes"
+          ]
+        }
+      ],
+      "controlsWithOneItemPerRepeater": 9,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "03",
+        "14"
+      ]
+    },
+    {
+      "slug": "a-typical-week",
+      "gated": false,
+      "eyebrow": "Section 04 of 14 · about 15 minutes",
+      "h1": "A typical week",
+      "introWordCount": 47,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 7,
+      "controlsByType": {
+        "textarea": 7
+      },
+      "topLevelQuestionCount": 7,
+      "topLabels": [
+        "How a morning goes",
+        "How an evening goes",
+        "The fixed points of the week",
+        "Getting around",
+        "Food, appetite, and mealtimes",
+        "What a good day looks like",
+        "What a hard day needs"
+      ],
+      "helpWordCount": 80,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 2962,
+      "bodyWordCount": 452,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 7,
+      "declaredMinutes": 15,
+      "sectionOfTotal": [
+        "04",
+        "14"
+      ]
+    },
+    {
+      "slug": "talking-with-them",
+      "gated": false,
+      "eyebrow": "Section 05 of 14 · about 10 minutes",
+      "h1": "Talking with your loved one",
+      "introWordCount": 58,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "How they prefer to be spoken to, and by whom",
+        "Hearing, vision, and memory, as they are now",
+        "What they will not admit to needing",
+        "The conversations that are still unfinished",
+        "What helps a conversation go well",
+        "What to avoid saying"
+      ],
+      "helpWordCount": 98,
+      "repeaters": [],
+      "exampleDisclosures": 3,
+      "scrollHeight": 2756,
+      "bodyWordCount": 498,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "05",
+        "14"
+      ]
+    },
+    {
+      "slug": "health-and-medical",
+      "gated": false,
+      "eyebrow": "Section 06 of 14 · about 10 minutes",
+      "h1": "Health and medical",
+      "introWordCount": 37,
+      "introParagraphs": 1,
+      "noteWordCount": 38,
+      "note": "Write down where the cards and records are kept — never the numbers themselves. This tool never asks for a Social Security number, an account number, or a policy number, and you should not add one anywhere in it.",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 5,
+        "text": 1
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Conditions and diagnoses",
+        "Allergies and bad reactions",
+        "Pharmacy",
+        "Preferred hospital",
+        "How appointments actually work",
+        "Where the cards, records, and directives are kept"
+      ],
+      "helpWordCount": 63,
+      "repeaters": [
+        {
+          "legend": "Medications",
+          "help": "Everything taken regularly, including over-the-counter and supplements. Doses change — update this page when they do.",
+          "addLabel": "+ Add a medication",
+          "itemFieldCount": 0
+        },
+        {
+          "legend": "Doctors and other providers",
+          "help": "The primary care doctor first, then specialists, dentist, and anyone else seen regularly.",
+          "addLabel": "+ Add a provider",
+          "itemFieldCount": 0
+        }
+      ],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2900,
+      "bodyWordCount": 511,
+      "repeaterDetail": [
+        {
+          "legend": "Medications",
+          "itemFieldCount": 3,
+          "itemLabels": [
+            "Medication",
+            "Dose and timing",
+            "What it is for"
+          ]
+        },
+        {
+          "legend": "Doctors and other providers",
+          "itemFieldCount": 3,
+          "itemLabels": [
+            "Name",
+            "Specialty or role",
+            "Phone"
+          ]
+        }
+      ],
+      "controlsWithOneItemPerRepeater": 12,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "06",
+        "14"
+      ]
+    },
+    {
+      "slug": "home-and-daily-living",
+      "gated": false,
+      "eyebrow": "Section 07 of 14 · about 10 minutes",
+      "h1": "Home and daily living",
+      "introWordCount": 43,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "The home itself",
+        "What is deferred, and what is urgent",
+        "Help with cooking, cleaning, laundry, and shopping",
+        "Personal care",
+        "Pets, plants, and the things that depend on them",
+        "Safety around the house"
+      ],
+      "helpWordCount": 112,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2681,
+      "bodyWordCount": 480,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "07",
+        "14"
+      ]
+    },
+    {
+      "slug": "money-and-documents",
+      "gated": false,
+      "eyebrow": "Section 08 of 14 · about 10 minutes",
+      "h1": "Money and documents",
+      "introWordCount": 39,
+      "introParagraphs": 1,
+      "noteWordCount": 43,
+      "note": "Write down where things are kept, never the numbers themselves. This tool has no field for an account number, a Social Security number, or a policy number, and you should not put one in any box here. A letter is not a safe.",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Who handles the bills today",
+        "How the bills actually get paid",
+        "Where the money comes in",
+        "Where the documents are kept",
+        "Scams and pressure they are vulnerable to",
+        "Accountant, banker, and anyone else who helps"
+      ],
+      "helpWordCount": 101,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 2802,
+      "bodyWordCount": 514,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "08",
+        "14"
+      ]
+    },
+    {
+      "slug": "work-and-obligations",
+      "gated": false,
+      "eyebrow": "Section 09 of 14 · about 10 minutes",
+      "h1": "Work and obligations",
+      "introWordCount": 51,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 4,
+      "controlsByType": {
+        "textarea": 4
+      },
+      "topLevelQuestionCount": 4,
+      "topLabels": [
+        "Work, business, or volunteering",
+        "Commitments other people are depending on",
+        "Who to tell, and how to reach them",
+        "What should be wound down, and by whom"
+      ],
+      "helpWordCount": 44,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2164,
+      "bodyWordCount": 414,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 4,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "09",
+        "14"
+      ]
+    },
+    {
+      "slug": "faith-joy-and-community",
+      "gated": false,
+      "eyebrow": "Section 10 of 14 · about 10 minutes",
+      "h1": "Faith, joy, and community",
+      "introWordCount": 42,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 5,
+      "controlsByType": {
+        "textarea": 5
+      },
+      "topLevelQuestionCount": 5,
+      "topLabels": [
+        "Faith and observance",
+        "Congregation, club, or group",
+        "Friends and neighbors who should be kept close",
+        "Traditions and holidays",
+        "What still brings genuine pleasure"
+      ],
+      "helpWordCount": 87,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2439,
+      "bodyWordCount": 445,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 5,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "10",
+        "14"
+      ]
+    },
+    {
+      "slug": "legal-and-decisions",
+      "gated": false,
+      "eyebrow": "Section 11 of 14 · about 10 minutes",
+      "h1": "Legal and decisions",
+      "introWordCount": 43,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 5,
+      "controlsByType": {
+        "textarea": 5
+      },
+      "topLevelQuestionCount": 5,
+      "topLabels": [
+        "Powers of attorney",
+        "Advance directive or living will",
+        "Guardianship or conservatorship, if any",
+        "Who decides what, and where the limits are",
+        "Attorney, accountant, and advisors"
+      ],
+      "helpWordCount": 76,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 2441,
+      "bodyWordCount": 442,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 5,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "11",
+        "14"
+      ]
+    },
+    {
+      "slug": "for-whoever-steps-in",
+      "gated": false,
+      "eyebrow": "Section 12 of 14 · about 10 minutes",
+      "h1": "For whoever steps in",
+      "introWordCount": 46,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 4,
+      "controlsByType": {
+        "textarea": 4
+      },
+      "topLevelQuestionCount": 4,
+      "topLabels": [
+        "What the first week should look like",
+        "What you would do differently, in hindsight",
+        "What you would ask never to be changed",
+        "Who to consult before anything irreversible"
+      ],
+      "helpWordCount": 85,
+      "repeaters": [],
+      "exampleDisclosures": 2,
+      "scrollHeight": 2293,
+      "bodyWordCount": 455,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 4,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "12",
+        "14"
+      ]
+    },
+    {
+      "slug": "final-wishes",
+      "gated": true,
+      "eyebrow": "Section 13 of 14 · about 10 minutes",
+      "h1": "Final wishes",
+      "introWordCount": 38,
+      "introParagraphs": 1,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 6,
+      "controlsByType": {
+        "textarea": 6
+      },
+      "topLevelQuestionCount": 6,
+      "topLabels": [
+        "Funeral or memorial preferences",
+        "Burial or cremation",
+        "Religious observances",
+        "Organ donation",
+        "End-of-life care wishes",
+        "Where the papers are"
+      ],
+      "helpWordCount": 20,
+      "repeaters": [],
+      "exampleDisclosures": 0,
+      "scrollHeight": 2179,
+      "bodyWordCount": 366,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 6,
+      "declaredMinutes": 10,
+      "sectionOfTotal": [
+        "13",
+        "14"
+      ]
+    },
+    {
+      "slug": "a-personal-message",
+      "gated": false,
+      "eyebrow": "Section 14 of 14 · about 15 minutes",
+      "h1": "A personal message",
+      "introWordCount": 55,
+      "introParagraphs": 2,
+      "noteWordCount": 0,
+      "note": "",
+      "controlCount": 3,
+      "controlsByType": {
+        "textarea": 3
+      },
+      "topLevelQuestionCount": 3,
+      "topLabels": [
+        "To your loved one's future caregivers",
+        "To the rest of the family",
+        "To your loved one"
+      ],
+      "helpWordCount": 82,
+      "repeaters": [],
+      "exampleDisclosures": 1,
+      "scrollHeight": 2300,
+      "bodyWordCount": 444,
+      "repeaterDetail": [],
+      "controlsWithOneItemPerRepeater": 3,
+      "declaredMinutes": 15,
+      "sectionOfTotal": [
+        "14",
+        "14"
+      ]
+    }
+  ]
+}

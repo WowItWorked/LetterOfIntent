@@ -1,0 +1,1069 @@
+{
+  "base": "http://localhost:3000",
+  "capturedAt": "2026-08-09T20:53:05.599Z",
+  "sections": [
+    {
+      "slug": "getting-started",
+      "h1": "Getting started",
+      "headingsInMain": [
+        "H1 Getting started"
+      ],
+      "intro": {
+        "words": 88,
+        "sentences": 8,
+        "wordsPerSentence": 11,
+        "fleschReadingEase": 65.9,
+        "fleschKincaidGrade": 6.8,
+        "longSentences": [
+          "A Letter of Intent is a plain-language guide to caring for your loved one — everything a future caregiver, trustee, or guardian would need to know but could never guess."
+        ],
+        "longestSentenceWords": 29
+      },
+      "helpText": {
+        "words": 55,
+        "sentences": 6,
+        "wordsPerSentence": 9.2,
+        "fleschReadingEase": 86.8,
+        "fleschKincaidGrade": 3.4,
+        "longSentences": [],
+        "longestSentenceWords": 15
+      },
+      "labelsOnly": {
+        "words": 17,
+        "sentences": 5,
+        "wordsPerSentence": 3.4,
+        "fleschReadingEase": 98.9,
+        "fleschKincaidGrade": 0.3,
+        "longSentences": [],
+        "longestSentenceWords": 6
+      },
+      "whole": {
+        "words": 160,
+        "sentences": 18,
+        "wordsPerSentence": 8.9,
+        "fleschReadingEase": 77.3,
+        "fleschKincaidGrade": 4.7,
+        "longSentences": [
+          "A Letter of Intent is a plain-language guide to caring for your loved one — everything a future caregiver, trustee, or guardian would need to know but could never guess."
+        ],
+        "longestSentenceWords": 29
+      },
+      "jargon": [
+        "letter of intent",
+        "trustee",
+        "guardian"
+      ],
+      "labelSamples": [
+        "Your name",
+        "Your relationship to them",
+        "Their full name",
+        "What they like to be called",
+        "Today's date"
+      ],
+      "longestLabelWords": 6,
+      "placeholderCount": 4
+    },
+    {
+      "slug": "about",
+      "h1": "About your loved one",
+      "headingsInMain": [
+        "H1 About your loved one"
+      ],
+      "intro": {
+        "words": 29,
+        "sentences": 3,
+        "wordsPerSentence": 9.7,
+        "fleschReadingEase": 80.3,
+        "fleschKincaidGrade": 4.5,
+        "longSentences": [],
+        "longestSentenceWords": 11
+      },
+      "helpText": {
+        "words": 77,
+        "sentences": 8,
+        "wordsPerSentence": 9.6,
+        "fleschReadingEase": 82.8,
+        "fleschKincaidGrade": 4.1,
+        "longSentences": [],
+        "longestSentenceWords": 19
+      },
+      "labelsOnly": {
+        "words": 32,
+        "sentences": 5,
+        "wordsPerSentence": 6.4,
+        "fleschReadingEase": 97.2,
+        "fleschKincaidGrade": 1.3,
+        "longSentences": [],
+        "longestSentenceWords": 10
+      },
+      "whole": {
+        "words": 138,
+        "sentences": 15,
+        "wordsPerSentence": 9.2,
+        "fleschReadingEase": 85.3,
+        "fleschKincaidGrade": 3.6,
+        "longSentences": [],
+        "longestSentenceWords": 19
+      },
+      "jargon": [],
+      "labelSamples": [
+        "Date of birth",
+        "Diagnoses and conditions",
+        "Their life so far, in your own words",
+        "What should a stranger know in the first five minutes?",
+        "Anything else that makes them who they are"
+      ],
+      "longestLabelWords": 10,
+      "placeholderCount": 1
+    },
+    {
+      "slug": "family-and-support",
+      "h1": "Family and support network",
+      "headingsInMain": [
+        "H1 Family and support network"
+      ],
+      "intro": {
+        "words": 35,
+        "sentences": 2,
+        "wordsPerSentence": 17.5,
+        "fleschReadingEase": 68.2,
+        "fleschKincaidGrade": 8.1,
+        "longSentences": [],
+        "longestSentenceWords": 20
+      },
+      "helpText": {
+        "words": 52,
+        "sentences": 5,
+        "wordsPerSentence": 10.4,
+        "fleschReadingEase": 79.1,
+        "fleschKincaidGrade": 4.8,
+        "longSentences": [],
+        "longestSentenceWords": 15
+      },
+      "labelsOnly": {
+        "words": 24,
+        "sentences": 3,
+        "wordsPerSentence": 8,
+        "fleschReadingEase": 89.4,
+        "fleschKincaidGrade": 2.8,
+        "longSentences": [],
+        "longestSentenceWords": 10
+      },
+      "whole": {
+        "words": 111,
+        "sentences": 10,
+        "wordsPerSentence": 11.1,
+        "fleschReadingEase": 79,
+        "fleschKincaidGrade": 5,
+        "longSentences": [],
+        "longestSentenceWords": 20
+      },
+      "jargon": [],
+      "labelSamples": [
+        "People in your loved one's life",
+        "Who would you call first in an emergency?",
+        "Is there anyone who should not be given a role?"
+      ],
+      "longestLabelWords": 10,
+      "placeholderCount": 1
+    },
+    {
+      "slug": "a-typical-day",
+      "h1": "A typical day",
+      "headingsInMain": [
+        "H1 A typical day"
+      ],
+      "intro": {
+        "words": 35,
+        "sentences": 3,
+        "wordsPerSentence": 11.7,
+        "fleschReadingEase": 69.3,
+        "fleschKincaidGrade": 6.5,
+        "longSentences": [],
+        "longestSentenceWords": 18
+      },
+      "helpText": {
+        "words": 67,
+        "sentences": 10,
+        "wordsPerSentence": 6.7,
+        "fleschReadingEase": 96.5,
+        "fleschKincaidGrade": 1.5,
+        "longSentences": [],
+        "longestSentenceWords": 15
+      },
+      "labelsOnly": {
+        "words": 28,
+        "sentences": 9,
+        "wordsPerSentence": 3.1,
+        "fleschReadingEase": 43.5,
+        "fleschKincaidGrade": 8,
+        "longSentences": [],
+        "longestSentenceWords": 5
+      },
+      "whole": {
+        "words": 130,
+        "sentences": 21,
+        "wordsPerSentence": 6.2,
+        "fleschReadingEase": 78.9,
+        "fleschKincaidGrade": 3.8,
+        "longSentences": [],
+        "longestSentenceWords": 19
+      },
+      "jargon": [
+        "sensory"
+      ],
+      "labelSamples": [
+        "Morning routine",
+        "Evening and bedtime routine",
+        "Sleep",
+        "Food — favorites, dislikes, and rules",
+        "Clothing preferences",
+        "Sensory sensitivities",
+        "Comfort objects and favorites",
+        "Describe a good day",
+        "Describe a hard day"
+      ],
+      "longestLabelWords": 6,
+      "placeholderCount": 5
+    },
+    {
+      "slug": "communication",
+      "h1": "Communication",
+      "headingsInMain": [
+        "H1 Communication"
+      ],
+      "intro": {
+        "words": 19,
+        "sentences": 3,
+        "wordsPerSentence": 6.3,
+        "fleschReadingEase": 57.9,
+        "fleschKincaidGrade": 6.8,
+        "longSentences": [],
+        "longestSentenceWords": 7
+      },
+      "helpText": {
+        "words": 74,
+        "sentences": 5,
+        "wordsPerSentence": 14.8,
+        "fleschReadingEase": 84.3,
+        "fleschKincaidGrade": 5.2,
+        "longSentences": [],
+        "longestSentenceWords": 24
+      },
+      "labelsOnly": {
+        "words": 36,
+        "sentences": 6,
+        "wordsPerSentence": 6,
+        "fleschReadingEase": 97.3,
+        "fleschKincaidGrade": 1.2,
+        "longSentences": [],
+        "longestSentenceWords": 9
+      },
+      "whole": {
+        "words": 129,
+        "sentences": 13,
+        "wordsPerSentence": 9.9,
+        "fleschReadingEase": 85.3,
+        "fleschKincaidGrade": 3.8,
+        "longSentences": [
+          "What not to say Speech, an AAC device or app (a tablet or device that speaks for them), sign language, gestures, sounds, behavior — and when they use each."
+        ],
+        "longestSentenceWords": 28
+      },
+      "jargon": [
+        "AAC"
+      ],
+      "labelSamples": [
+        "How they communicate",
+        "How they say yes and no",
+        "How they show pain, or that they feel sick",
+        "How they show they're becoming overwhelmed",
+        "What to say — words and approaches that work",
+        "What not to say"
+      ],
+      "longestLabelWords": 9,
+      "placeholderCount": 2
+    },
+    {
+      "slug": "medical",
+      "h1": "Medical",
+      "headingsInMain": [
+        "H1 Medical"
+      ],
+      "intro": {
+        "words": 42,
+        "sentences": 3,
+        "wordsPerSentence": 14,
+        "fleschReadingEase": 81.8,
+        "fleschKincaidGrade": 5.3,
+        "longSentences": [],
+        "longestSentenceWords": 19
+      },
+      "helpText": {
+        "words": 113,
+        "sentences": 9,
+        "wordsPerSentence": 12.6,
+        "fleschReadingEase": 60.1,
+        "fleschKincaidGrade": 8,
+        "longSentences": [
+          "Name the plans, like \"Anthem through Dad's employer\" or \"Virginia Medicaid — CCC Plus waiver.\" No ID numbers here — you'll note where cards are kept in the Benefits section."
+        ],
+        "longestSentenceWords": 28
+      },
+      "labelsOnly": {
+        "words": 40,
+        "sentences": 10,
+        "wordsPerSentence": 4,
+        "fleschReadingEase": 50.5,
+        "fleschKincaidGrade": 7.2,
+        "longSentences": [],
+        "longestSentenceWords": 8
+      },
+      "whole": {
+        "words": 195,
+        "sentences": 21,
+        "wordsPerSentence": 9.3,
+        "fleschReadingEase": 64.7,
+        "fleschKincaidGrade": 6.5,
+        "longSentences": [
+          "Name the plans, like \"Anthem through Dad's employer\" or \"Virginia Medicaid — CCC Plus waiver.\" No ID numbers here — you'll note where cards are kept in the Benefits section."
+        ],
+        "longestSentenceWords": 28
+      },
+      "jargon": [
+        "Medicaid",
+        "waiver",
+        "protocol"
+      ],
+      "labelSamples": [
+        "Doctors and specialists",
+        "Current medications",
+        "Allergies and reactions",
+        "Seizure or emergency protocol",
+        "Therapies and schedules",
+        "Equipment they use",
+        "Insurance and Medicaid — plan names only",
+        "Preferred hospital or ER",
+        "Treatments that have worked",
+        "Treatments that didn't work — or made things worse"
+      ],
+      "longestLabelWords": 9,
+      "placeholderCount": 3
+    },
+    {
+      "slug": "behavioral-support",
+      "h1": "Behavioral support",
+      "headingsInMain": [
+        "H1 Behavioral support"
+      ],
+      "intro": {
+        "words": 78,
+        "sentences": 7,
+        "wordsPerSentence": 11.1,
+        "fleschReadingEase": 94.7,
+        "fleschKincaidGrade": 2.8,
+        "longSentences": [],
+        "longestSentenceWords": 25
+      },
+      "helpText": {
+        "words": 142,
+        "sentences": 10,
+        "wordsPerSentence": 14.2,
+        "fleschReadingEase": 69.7,
+        "fleschKincaidGrade": 7.1,
+        "longSentences": [],
+        "longestSentenceWords": 24
+      },
+      "labelsOnly": {
+        "words": 32,
+        "sentences": 6,
+        "wordsPerSentence": 5.3,
+        "fleschReadingEase": 87.7,
+        "fleschKincaidGrade": 2.3,
+        "longSentences": [],
+        "longestSentenceWords": 11
+      },
+      "whole": {
+        "words": 252,
+        "sentences": 22,
+        "wordsPerSentence": 11.5,
+        "fleschReadingEase": 80.4,
+        "fleschKincaidGrade": 4.9,
+        "longSentences": [],
+        "longestSentenceWords": 25
+      },
+      "jargon": [],
+      "labelSamples": [
+        "Known triggers",
+        "Early warning signs",
+        "What helps most when things escalate",
+        "What makes things worse",
+        "If there's a full crisis, what should happen — step by step",
+        "Guidance for police and first responders"
+      ],
+      "longestLabelWords": 12,
+      "placeholderCount": 0
+    },
+    {
+      "slug": "school-and-work",
+      "h1": "School, work, and meaningful days",
+      "headingsInMain": [
+        "H1 School, work, and meaningful days"
+      ],
+      "intro": {
+        "words": 21,
+        "sentences": 1,
+        "wordsPerSentence": 21,
+        "fleschReadingEase": 92.9,
+        "fleschKincaidGrade": 5.5,
+        "longSentences": [],
+        "longestSentenceWords": 21
+      },
+      "helpText": {
+        "words": 78,
+        "sentences": 7,
+        "wordsPerSentence": 11.1,
+        "fleschReadingEase": 77.3,
+        "fleschKincaidGrade": 5.2,
+        "longSentences": [],
+        "longestSentenceWords": 18
+      },
+      "labelsOnly": {
+        "words": 28,
+        "sentences": 6,
+        "wordsPerSentence": 4.7,
+        "fleschReadingEase": 75.2,
+        "fleschKincaidGrade": 3.9,
+        "longSentences": [],
+        "longestSentenceWords": 7
+      },
+      "whole": {
+        "words": 127,
+        "sentences": 13,
+        "wordsPerSentence": 9.8,
+        "fleschReadingEase": 81,
+        "fleschKincaidGrade": 4.4,
+        "longSentences": [],
+        "longestSentenceWords": 23
+      },
+      "jargon": [
+        "IEP",
+        "day program"
+      ],
+      "labelSamples": [
+        "Current school or day program",
+        "School and IEP history — what has worked",
+        "How they learn best",
+        "Work history",
+        "Job coaches and employment supports",
+        "Your hopes for meaningful activity"
+      ],
+      "longestLabelWords": 8,
+      "placeholderCount": 4
+    },
+    {
+      "slug": "housing",
+      "h1": "Housing and daily living",
+      "headingsInMain": [
+        "H1 Housing and daily living"
+      ],
+      "intro": {
+        "words": 29,
+        "sentences": 2,
+        "wordsPerSentence": 14.5,
+        "fleschReadingEase": 75.4,
+        "fleschKincaidGrade": 6.3,
+        "longSentences": [],
+        "longestSentenceWords": 17
+      },
+      "helpText": {
+        "words": 93,
+        "sentences": 10,
+        "wordsPerSentence": 9.3,
+        "fleschReadingEase": 71.9,
+        "fleschKincaidGrade": 5.5,
+        "longSentences": [],
+        "longestSentenceWords": 16
+      },
+      "labelsOnly": {
+        "words": 31,
+        "sentences": 5,
+        "wordsPerSentence": 6.2,
+        "fleschReadingEase": 77.7,
+        "fleschKincaidGrade": 4,
+        "longSentences": [],
+        "longestSentenceWords": 11
+      },
+      "whole": {
+        "words": 153,
+        "sentences": 17,
+        "wordsPerSentence": 9,
+        "fleschReadingEase": 74.4,
+        "fleschKincaidGrade": 5.1,
+        "longSentences": [],
+        "longestSentenceWords": 17
+      },
+      "jargon": [
+        "Medicaid",
+        "waiver"
+      ],
+      "labelSamples": [
+        "Current living situation",
+        "The support they need to live safely",
+        "Waiver and waitlist status",
+        "Your hopes for their future home",
+        "What kind of living situation would you not want for them?"
+      ],
+      "longestLabelWords": 11,
+      "placeholderCount": 1
+    },
+    {
+      "slug": "benefits-and-finances",
+      "h1": "Benefits and finances",
+      "headingsInMain": [
+        "H1 Benefits and finances"
+      ],
+      "intro": {
+        "words": 29,
+        "sentences": 2,
+        "wordsPerSentence": 14.5,
+        "fleschReadingEase": 66.7,
+        "fleschKincaidGrade": 7.6,
+        "longSentences": [],
+        "longestSentenceWords": 21
+      },
+      "helpText": {
+        "words": 131,
+        "sentences": 11,
+        "wordsPerSentence": 11.9,
+        "fleschReadingEase": 66.9,
+        "fleschKincaidGrade": 6.9,
+        "longSentences": [],
+        "longestSentenceWords": 17
+      },
+      "labelsOnly": {
+        "words": 23,
+        "sentences": 6,
+        "wordsPerSentence": 3.8,
+        "fleschReadingEase": 44.8,
+        "fleschKincaidGrade": 8,
+        "longSentences": [],
+        "longestSentenceWords": 7
+      },
+      "whole": {
+        "words": 245,
+        "sentences": 23,
+        "wordsPerSentence": 10.7,
+        "fleschReadingEase": 67.9,
+        "fleschKincaidGrade": 6.4,
+        "longSentences": [],
+        "longestSentenceWords": 21
+      },
+      "jargon": [
+        "special needs trust",
+        "trustee",
+        "trust",
+        "representative payee",
+        "ABLE account",
+        "SSI",
+        "SSDI",
+        "Medicaid",
+        "Medicare",
+        "waiver"
+      ],
+      "labelSamples": [
+        "Benefits they receive today",
+        "Representative payee",
+        "ABLE account",
+        "Existing trusts and who runs them",
+        "Anything pending",
+        "Where the official numbers and papers live"
+      ],
+      "longestLabelWords": 7,
+      "placeholderCount": 2
+    },
+    {
+      "slug": "friends-joy-and-faith",
+      "h1": "Friends, joy, and faith",
+      "headingsInMain": [
+        "H1 Friends, joy, and faith"
+      ],
+      "intro": {
+        "words": 26,
+        "sentences": 2,
+        "wordsPerSentence": 13,
+        "fleschReadingEase": 99.3,
+        "fleschKincaidGrade": 2.6,
+        "longSentences": [],
+        "longestSentenceWords": 15
+      },
+      "helpText": {
+        "words": 40,
+        "sentences": 4,
+        "wordsPerSentence": 10,
+        "fleschReadingEase": 61.3,
+        "fleschKincaidGrade": 7.2,
+        "longSentences": [],
+        "longestSentenceWords": 16
+      },
+      "labelsOnly": {
+        "words": 19,
+        "sentences": 6,
+        "wordsPerSentence": 3.2,
+        "fleschReadingEase": 43.3,
+        "fleschKincaidGrade": 8,
+        "longSentences": [],
+        "longestSentenceWords": 4
+      },
+      "whole": {
+        "words": 85,
+        "sentences": 11,
+        "wordsPerSentence": 7.7,
+        "fleschReadingEase": 70.6,
+        "fleschKincaidGrade": 5.3,
+        "longSentences": [],
+        "longestSentenceWords": 20
+      },
+      "jargon": [],
+      "labelSamples": [
+        "Friendships to protect",
+        "Activities and hobbies",
+        "Faith community and practices",
+        "Holidays and family traditions",
+        "Travel",
+        "What brings them joy"
+      ],
+      "longestLabelWords": 4,
+      "placeholderCount": 3
+    },
+    {
+      "slug": "legal-and-advocacy",
+      "h1": "Legal and advocacy",
+      "headingsInMain": [
+        "H1 Legal and advocacy"
+      ],
+      "intro": {
+        "words": 26,
+        "sentences": 1,
+        "wordsPerSentence": 26,
+        "fleschReadingEase": 60.1,
+        "fleschKincaidGrade": 11.3,
+        "longSentences": [
+          "Who holds legal authority in your loved one's life, who advocates for them, and the battles you've already won — so nobody has to fight them twice."
+        ],
+        "longestSentenceWords": 26
+      },
+      "helpText": {
+        "words": 53,
+        "sentences": 7,
+        "wordsPerSentence": 7.6,
+        "fleschReadingEase": 61.9,
+        "fleschKincaidGrade": 6.5,
+        "longSentences": [],
+        "longestSentenceWords": 12
+      },
+      "labelsOnly": {
+        "words": 17,
+        "sentences": 4,
+        "wordsPerSentence": 4.3,
+        "fleschReadingEase": 63.2,
+        "fleschKincaidGrade": 5.5,
+        "longSentences": [],
+        "longestSentenceWords": 10
+      },
+      "whole": {
+        "words": 96,
+        "sentences": 11,
+        "wordsPerSentence": 8.7,
+        "fleschReadingEase": 64.9,
+        "fleschKincaidGrade": 6.4,
+        "longSentences": [
+          "Who holds legal authority in your loved one's life, who advocates for them, and the battles you've already won — so nobody has to fight them twice."
+        ],
+        "longestSentenceWords": 26
+      },
+      "jargon": [
+        "guardianship",
+        "conservatorship",
+        "power of attorney",
+        "supported decision-making"
+      ],
+      "labelSamples": [
+        "Decision-making status",
+        "Case managers and advocates",
+        "Attorney",
+        "What you've had to fight for — and how you won"
+      ],
+      "longestLabelWords": 11,
+      "placeholderCount": 2
+    },
+    {
+      "slug": "guidance-for-the-trustee",
+      "h1": "Guidance for the trustee",
+      "headingsInMain": [
+        "H1 Guidance for the trustee"
+      ],
+      "intro": {
+        "words": 57,
+        "sentences": 5,
+        "wordsPerSentence": 11.4,
+        "fleschReadingEase": 86.9,
+        "fleschKincaidGrade": 4,
+        "longSentences": [],
+        "longestSentenceWords": 21
+      },
+      "helpText": {
+        "words": 116,
+        "sentences": 10,
+        "wordsPerSentence": 11.6,
+        "fleschReadingEase": 73.3,
+        "fleschKincaidGrade": 5.9,
+        "longSentences": [],
+        "longestSentenceWords": 20
+      },
+      "labelsOnly": {
+        "words": 47,
+        "sentences": 6,
+        "wordsPerSentence": 7.8,
+        "fleschReadingEase": 78.3,
+        "fleschKincaidGrade": 4.3,
+        "longSentences": [],
+        "longestSentenceWords": 13
+      },
+      "whole": {
+        "words": 220,
+        "sentences": 21,
+        "wordsPerSentence": 10.5,
+        "fleschReadingEase": 78.1,
+        "fleschKincaidGrade": 5,
+        "longSentences": [],
+        "longestSentenceWords": 21
+      },
+      "jargon": [
+        "trustee",
+        "trust"
+      ],
+      "labelSamples": [
+        "When you picture the trust doing its job, what is it paying for?",
+        "What should be an easy yes?",
+        "Spending now versus preserving for later",
+        "What deserves extra scrutiny?",
+        "When your loved one's wishes and their safety disagree",
+        "Who should the trustee talk with before big decisions?"
+      ],
+      "longestLabelWords": 13,
+      "placeholderCount": 0
+    },
+    {
+      "slug": "final-wishes",
+      "h1": "Final wishes",
+      "headingsInMain": [
+        "H1 Final wishes"
+      ],
+      "intro": {
+        "words": 38,
+        "sentences": 2,
+        "wordsPerSentence": 19,
+        "fleschReadingEase": 85.1,
+        "fleschKincaidGrade": 6.1,
+        "longSentences": [],
+        "longestSentenceWords": 22
+      },
+      "helpText": {
+        "words": 20,
+        "sentences": 2,
+        "wordsPerSentence": 10,
+        "fleschReadingEase": 82.5,
+        "fleschKincaidGrade": 4.2,
+        "longSentences": [],
+        "longestSentenceWords": 12
+      },
+      "labelsOnly": {
+        "words": 18,
+        "sentences": 6,
+        "wordsPerSentence": 3,
+        "fleschReadingEase": 25.2,
+        "fleschKincaidGrade": 10.5,
+        "longSentences": [],
+        "longestSentenceWords": 4
+      },
+      "whole": {
+        "words": 76,
+        "sentences": 9,
+        "wordsPerSentence": 8.4,
+        "fleschReadingEase": 74.7,
+        "fleschKincaidGrade": 4.9,
+        "longSentences": [],
+        "longestSentenceWords": 22
+      },
+      "jargon": [
+        "advance directive",
+        "living will"
+      ],
+      "labelSamples": [
+        "Funeral or memorial preferences",
+        "Burial or cremation",
+        "Religious observances",
+        "Organ donation",
+        "End-of-life care wishes",
+        "Where the papers are"
+      ],
+      "longestLabelWords": 4,
+      "placeholderCount": 5
+    },
+    {
+      "slug": "a-personal-message",
+      "h1": "A personal message",
+      "headingsInMain": [
+        "H1 A personal message"
+      ],
+      "intro": {
+        "words": 55,
+        "sentences": 6,
+        "wordsPerSentence": 9.2,
+        "fleschReadingEase": 88.3,
+        "fleschKincaidGrade": 3.2,
+        "longSentences": [],
+        "longestSentenceWords": 21
+      },
+      "helpText": {
+        "words": 75,
+        "sentences": 5,
+        "wordsPerSentence": 15,
+        "fleschReadingEase": 89,
+        "fleschKincaidGrade": 4.6,
+        "longSentences": [],
+        "longestSentenceWords": 21
+      },
+      "labelsOnly": {
+        "words": 13,
+        "sentences": 3,
+        "wordsPerSentence": 4.3,
+        "fleschReadingEase": 85.3,
+        "fleschKincaidGrade": 2.4,
+        "longSentences": [],
+        "longestSentenceWords": 6
+      },
+      "whole": {
+        "words": 143,
+        "sentences": 13,
+        "wordsPerSentence": 11,
+        "fleschReadingEase": 89.2,
+        "fleschKincaidGrade": 3.6,
+        "longSentences": [],
+        "longestSentenceWords": 24
+      },
+      "jargon": [],
+      "labelSamples": [
+        "To your loved one's future caregivers",
+        "To their siblings",
+        "To your loved one"
+      ],
+      "longestLabelWords": 6,
+      "placeholderCount": 0
+    }
+  ],
+  "pages": {
+    "home": {
+      "route": "/",
+      "words": 858,
+      "sentences": 53,
+      "wordsPerSentence": 16.2,
+      "fleschReadingEase": 75.2,
+      "fleschKincaidGrade": 6.8,
+      "longSentences": [
+        "A FREE, PRIVATE LETTER OF INTENT BUILDER FROM TRUSTS & WEALTH, PLLC Write down what only you know, so they’ll be cared for the way that only you have.",
+        "A Letter of Intent is the guide a future caregiver, trustee, or guardian will rely on to care well for the person you love: the routines, the warning signs, the joys, the hard-won ",
+        "This is the tool that helps you finish it, one small question at a time, saved as you go, until it becomes a document you can print and hand to the person who takes over.",
+        "It carries what no attorney can draft for you: how your child communicates, what calms them, which doctor to call, and what the trustee needs to know.",
+        "The week as it really runs, the help that is welcome, who to call, and the hundred small things it would take a stranger years to learn.",
+        "It’s everything a future caregiver would need to know but could never guess: how your loved one communicates, what calms them, which doctor to call, what a good day looks like.",
+        "This tool replaces the blank page with small, answerable questions, and turns your answers into a document you can hand to a trustee, a sibling, a school, or an ER nurse.",
+        "III Download the documents and your backup file A polished, printable Letter of Intent and a one-page emergency sheet for sitters, school, and the ER, plus the backup file that let",
+        "WHO TENDS TO NEED IT A parent in your support group who keeps meaning to start The sibling who will one day take over, and knows it A teacher, a case manager, or a support group th",
+        "My Letter of Intent is a free tool for writing down what a future caregiver would need to know about someone you love: routines, medical details, what calms them, who to call."
+      ],
+      "longestSentenceWords": 67,
+      "jargon": [
+        "letter of intent",
+        "special needs trust",
+        "trustee",
+        "trust",
+        "guardian",
+        "case manager",
+        "estate plan"
+      ]
+    },
+    "chooser": {
+      "route": "/letter",
+      "words": 551,
+      "sentences": 32,
+      "wordsPerSentence": 17.2,
+      "fleschReadingEase": 68.1,
+      "fleschKincaidGrade": 8,
+      "longSentences": [
+        "If your plan includes a special needs trust, this is the companion no attorney can draft for you: how your child communicates, what calms them, which doctor to call, what a good da",
+        "Its own set of questions: the week as it really runs, the help that is welcome and the help that offends, the people to call, the hundred small things it would take a stranger year",
+        "Disability & special needs 15 SECTIONS Aging & general care 14 SECTIONS WHAT THIS SET ASKS It assumes daily support, and maybe a trust Written on the assumption that a trust or pub",
+        "It goes further into medical detail, communication, behavior, and what a trustee needs to know: the things a paid caregiver or a sibling taking over would otherwise learn the hard ",
+        "See the other set → 01 Getting started 5 min 02 About them 10 min 03 Family & support 10 min 04 A typical day 15 min 05 Communication 10 min 06 Medical 15 min 07 Behavior support 1"
+      ],
+      "longestSentenceWords": 68,
+      "jargon": [
+        "letter of intent",
+        "special needs trust",
+        "trustee",
+        "trust",
+        "guardian",
+        "public benefits"
+      ]
+    },
+    "review": {
+      "route": "/letter/review",
+      "words": 55,
+      "sentences": 5,
+      "wordsPerSentence": 11,
+      "fleschReadingEase": 71.1,
+      "fleschKincaidGrade": 6.1,
+      "longSentences": [],
+      "longestSentenceWords": 23,
+      "jargon": []
+    },
+    "yourData": {
+      "route": "/your-data",
+      "words": 364,
+      "sentences": 23,
+      "wordsPerSentence": 15.8,
+      "fleschReadingEase": 67.1,
+      "fleschKincaidGrade": 7.8,
+      "longSentences": [
+        "DOWNLOAD BACKUP FILE FOR THE PEOPLE WHO HELP Download the documents The same two documents the review page produces: the full Letter of Intent, and the one-page emergency sheet.",
+        "THE LETTER (PDF) EMERGENCY SHEET (PDF) CONTINUE ELSEWHERE Load a backup Continue on this device from a backup file you downloaded earlier — here or on another device.",
+        "If the file was written before this tool had two sets of questions, we work out which letter it belongs to from the sections inside it — and ask you if it genuinely cannot be told "
+      ],
+      "longestSentenceWords": 36,
+      "jargon": [
+        "letter of intent"
+      ]
+    },
+    "privacy": {
+      "route": "/privacy",
+      "words": 975,
+      "sentences": 52,
+      "wordsPerSentence": 18.8,
+      "fleschReadingEase": 68.8,
+      "fleschKincaidGrade": 8.3,
+      "longSentences": [
+        "We count visits with Google Analytics to see how the tool is used and improve it, but nothing you type into the letter is ever captured.",
+        "ON THIS PAGE 01 Where your answers live 02 What that means in practice 03 Why we never ask for numbers 04 What we do and do not measure 05 The yearly reminder 06 The legal fine pri",
+        "You will see the analytics request that counts the page when it first loads — and after that, silence, no matter how much you write. 02 What that means in practice Your work stays ",
+        "On a shared computer At a library or on a family machine, use Delete all my data when you finish, or work in a private window and export a backup first. 03 Why we never ask for Soc",
+        "Instead, the letter records where your family keeps those, so the right person can find them and nobody else can. 04 What we do and do not measure We use Google Analytics for one p",
+        "Knowing which pages families open, which ones they never find, and where they stop is what tells us what to fix next — a question we have no other way to answer, because we never s",
+        "It reports the ordinary things a web server sees: which pages were opened, roughly which region the visit came from, the browser and device, and the link that brought you here.",
+        "If you would rather not be counted at all, Google’s own opt-out add-on turns it off across every site, and most ad and tracker blockers do the same.",
+        "Our host also keeps ordinary web server logs — the sort every website receives, including the address a request came from — and those are used only to keep the site up and secure. ",
+        "When it does run, this page will say so first, and the only thing sent will be your email address and the date — never a word of your letter.",
+        "The same is true of the share buttons: they open another service with a message already written, and nothing from your letter goes with it. 06 The legal fine print, plainly This to"
+      ],
+      "longestSentenceWords": 59,
+      "jargon": [
+        "letter of intent",
+        "special needs trust",
+        "trustee",
+        "trust",
+        "estate plan"
+      ]
+    }
+  },
+  "keyboard": {
+    "desktop-1280": {
+      "route": "/letter/medical",
+      "tabsFromTopOfPageToFirstQuestion": 25,
+      "sequence": [
+        "a \"Skip to main content\"",
+        "a \"My Letter of Intent, home\"",
+        "a \"START YOUR LETTER · IT’S FREE\"",
+        "a \"SHARE\"",
+        "a \"How it works\"",
+        "a \"01 Getting started\"",
+        "a \"02 About your loved one\"",
+        "a \"03 Family & support\"",
+        "a \"04 A typical day\"",
+        "a \"05 Communication\"",
+        "a \"06 Medical\"",
+        "a \"07 Behavior support\"",
+        "a \"08 School & work\"",
+        "a \"09 Housing\"",
+        "a \"10 Benefits & money\"",
+        "a \"11 Joy & faith\"",
+        "a \"12 Legal & advocacy\"",
+        "a \"13 For the trustee\"",
+        "a \"14 Final wishes (optional)\"",
+        "a \"15 Your message\"",
+        "a \"Review & download →\"",
+        "a \"Back up or delete your data\"",
+        "button \"+ Add a provider\"",
+        "button \"+ Add a medication\"",
+        "textarea \"\""
+      ],
+      "railVisible": true,
+      "mobileSectionsVisible": false,
+      "headingsInMain": [
+        "H1 Medical"
+      ]
+    },
+    "phone-390": {
+      "route": "/letter/medical",
+      "tabsFromTopOfPageToFirstQuestion": 8,
+      "sequence": [
+        "a \"Skip to main content\"",
+        "a \"My Letter of Intent, home\"",
+        "button \"Menu\"",
+        "a \"How it works\"",
+        "summary \"Sections ▾\"",
+        "button \"+ Add a provider\"",
+        "button \"+ Add a medication\"",
+        "textarea \"\""
+      ],
+      "railVisible": false,
+      "mobileSectionsVisible": true,
+      "headingsInMain": [
+        "H1 Medical"
+      ]
+    }
+  },
+  "summary": {
+    "sectionGradeMin": 3.6,
+    "sectionGradeMax": 6.5,
+    "sectionGradeMean": 4.9,
+    "sectionsAtOrBelowGrade8": 15,
+    "sectionsAboveGrade10": 0,
+    "totalSections": 15,
+    "jargonAcrossWizard": [
+      "AAC",
+      "ABLE account",
+      "IEP",
+      "Medicaid",
+      "Medicare",
+      "SSDI",
+      "SSI",
+      "advance directive",
+      "conservatorship",
+      "day program",
+      "guardian",
+      "guardianship",
+      "letter of intent",
+      "living will",
+      "power of attorney",
+      "protocol",
+      "representative payee",
+      "sensory",
+      "special needs trust",
+      "supported decision-making",
+      "trust",
+      "trustee",
+      "waiver"
+    ]
+  }
+}

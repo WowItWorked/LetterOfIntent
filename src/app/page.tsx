@@ -164,8 +164,8 @@ export default function HomePage() {
             <PadlockIcon className="mt-1 size-[15px] fill-gold400" />
             <p className="text-[0.9375rem] leading-[1.65] text-[#D6DDE9]">
               <strong className="font-semibold text-white">
-                No account. No email. About 45–90 minutes, in as many sittings as you
-                need.
+                No account. No email required. About 45–90 minutes, in as many sittings
+                as you need.
               </strong>{" "}
               Your data remains on your device and is never shared.{" "}
               <Link
@@ -182,7 +182,7 @@ export default function HomePage() {
       {/* ------------------------------------------------------- get started */}
       <section
         id="who-this-is-for"
-        className="border-b border-line bg-paper2"
+        className="bg-paper2"
         style={{ padding: SECTION_PAD, scrollMarginTop: ANCHOR_OFFSET }}
       >
         <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
@@ -254,6 +254,7 @@ export default function HomePage() {
       {/* ------------------------------------------------ what it is + video */}
       <section
         id="what-it-is"
+        className="tw-panel-navy"
         style={{ padding: SECTION_PAD, scrollMarginTop: ANCHOR_OFFSET }}
       >
         <div
@@ -264,25 +265,25 @@ export default function HomePage() {
           }}
         >
           <div>
-            <Eyebrow>Plain language</Eyebrow>
-            <h2 className="mt-3.5 font-serif text-[clamp(1.7rem,4.6vw,2.5rem)] font-semibold tracking-[-0.01em] text-ink">
+            <Eyebrow tone="light">Plain language</Eyebrow>
+            <h2 className="mt-3.5 font-serif text-[clamp(1.7rem,4.6vw,2.5rem)] font-semibold tracking-[-0.01em] text-onink">
               What is a Letter of Intent?
             </h2>
-            <p className="mt-5 max-w-[60ch] leading-[1.75] text-body">
+            <p className="mt-5 max-w-[60ch] leading-[1.75] text-oninkbody">
               It&rsquo;s a plain-language companion to a special needs trust and estate
               plan. It is not a legal document, and that is the point. No lawyer is
               needed. It&rsquo;s everything a future caregiver would need to know but
               could never guess: how your loved one communicates, what calms them, which
               doctor to call, what a good day looks like.
             </p>
-            <p className="mt-4 max-w-[60ch] leading-[1.75] text-body">
+            <p className="mt-4 max-w-[60ch] leading-[1.75] text-oninkbody">
               Most families are told to write one and never do, because a blank page is
               paralyzing. This tool replaces the blank page with small, answerable
               questions, and turns your answers into a document you can hand to a trustee,
               a sibling, a school, or an ER nurse.
             </p>
             <hr className="tw-rule mt-[30px] max-w-[120px]" />
-            <p className="mt-[22px] max-w-[54ch] text-[0.9375rem] text-muted">
+            <p className="mt-[22px] max-w-[54ch] text-[0.9375rem] text-navy300">
               Not a will. Not a trust. Not legally binding, and not a substitute for
               either. It works alongside the plan your attorney prepares.
             </p>
@@ -294,7 +295,7 @@ export default function HomePage() {
 
       {/* ------------------------------------------------------ how it works */}
       <section
-        className="border-y border-line bg-paper2"
+        className="border-b border-line bg-paper2"
         style={{ padding: SECTION_PAD }}
       >
         <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>

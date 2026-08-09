@@ -1,0 +1,1067 @@
+[
+  {
+    "name": "route_",
+    "url": "http://localhost:3000/",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 23,
+        "nodes": [
+          {
+            "target": [
+              ".max-w-\\[1040px\\] > .text-gold300.font-medium.tracking-\\[0\\.26em\\]"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-gold300 justify-center\">A free, private Letter of Intent Builder from <!-- -->Trusts &amp; Wealth, PL"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mx-auto mt-[22px] max-w-[24ch] font-serif text-[clamp(2rem,6.4vw,4rem)] font-semibold leading-[1.1] tracking-[-0.015em] text-onink\" style=\"text-wrap:pretty\">Write down what only you know, s"
+          },
+          {
+            "target": [
+              ".max-w-\\[68ch\\]"
+            ],
+            "html": "<p class=\"mx-auto mt-[26px] max-w-[68ch] text-lg leading-[1.7] text-oninkbody\" style=\"text-wrap:pretty\">"
+          },
+          {
+            "target": [
+              "a[href$=\"#who-this-is-for\"]"
+            ],
+            "html": "<a class=\"inline-flex max-w-fu...\" href=\"#who-this-is-for\">"
+          }
+        ]
+      }
+    ],
+    "passCount": 25
+  },
+  {
+    "name": "route_letter",
+    "url": "http://localhost:3000/letter",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 10,
+        "nodes": [
+          {
+            "target": [
+              ".text-gold400.tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">Create your letter</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink\">Create your Letter of Intent</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[72ch\\]"
+            ],
+            "html": "<p class=\"mt-4 max-w-[72ch] text-lg leading-[1.7] text-oninkbody\">Two sets of questions, because two situations are not the same. Pick the one that fits the person you care for, read exactly what it w"
+          },
+          {
+            "target": [
+              ".mt-5"
+            ],
+            "html": "<p class=\"mt-5 border-t border-navy500 pt-[18px] text-[0.9375rem] text-oninkbody\">It saves as you go, on this device only. About 45–90 minutes in total, in as many sittings as you need.</p>"
+          }
+        ]
+      }
+    ],
+    "passCount": 28
+  },
+  {
+    "name": "route_privacy",
+    "url": "http://localhost:3000/privacy",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 11,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">How your data works</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink\">Your privacy, in plain words</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[62ch\\]"
+            ],
+            "html": "<p class=\"mt-4 max-w-[62ch] text-lg leading-[1.7] text-oninkbody\">Everything you type stays on your device. We never see it, and it is never sent anywhere. One page, no legalese. Here is exactly how t"
+          },
+          {
+            "target": [
+              ".tw-card:nth-child(1) > .pb-\\[22px\\].pt-5.px-\\[22px\\] > .tracking-\\[0\\.2em\\].text-\\[0\\.6875rem\\].tw-engraved"
+            ],
+            "html": "<p class=\"tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent\">Nothing is uploaded</p>"
+          }
+        ]
+      }
+    ],
+    "passCount": 24
+  },
+  {
+    "name": "route_your-data",
+    "url": "http://localhost:3000/your-data",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 11,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">Your data</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink\">Everything you have written is on this device</h1>"
+          },
+          {
+            "target": [
+              ".text-lg"
+            ],
+            "html": "<p class=\"mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody\">Nothing is ever transmitted, uploaded, or shared back to this site. From here you can back your letter up, move it to another device, "
+          },
+          {
+            "target": [
+              ".text-gold400.underline[href$=\"privacy\"]"
+            ],
+            "html": "<a class=\"font-semibold text-gold400 underline underline-offset-[3px]\" href=\"/privacy\">Read the privacy policy →</a>"
+          }
+        ]
+      }
+    ],
+    "passCount": 24
+  },
+  {
+    "name": "route_letter_review",
+    "url": "http://localhost:3000/letter/review",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 4,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">The last step</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Review &amp; download</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[66ch\\]"
+            ],
+            "html": "<p class=\"mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody\">Nothing to review yet — your letter doesn't have any notes so far. Even one section makes a real, useful document.</p>"
+          },
+          {
+            "target": [
+              ".max-w-full"
+            ],
+            "html": "<a class=\"inline-flex max-w-fu...\" href=\"/letter/getting-star...\">"
+          }
+        ]
+      }
+    ],
+    "passCount": 22
+  },
+  {
+    "name": "state_mobile-menu-open-390",
+    "url": "http://localhost:3000/",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 22,
+        "nodes": [
+          {
+            "target": [
+              ".max-w-\\[1040px\\] > .text-gold300.font-medium.tracking-\\[0\\.26em\\]"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-gold300 justify-center\">A free, private Letter of Intent Builder from <!-- -->Trusts &amp; Wealth, PL"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mx-auto mt-[22px] max-w-[24ch] font-serif text-[clamp(2rem,6.4vw,4rem)] font-semibold leading-[1.1] tracking-[-0.015em] text-onink\" style=\"text-wrap:pretty\">Write down what only you know, s"
+          },
+          {
+            "target": [
+              ".max-w-\\[68ch\\]"
+            ],
+            "html": "<p class=\"mx-auto mt-[26px] max-w-[68ch] text-lg leading-[1.7] text-oninkbody\" style=\"text-wrap:pretty\">"
+          },
+          {
+            "target": [
+              "a[href$=\"#who-this-is-for\"]"
+            ],
+            "html": "<a class=\"inline-flex max-w-fu...\" href=\"#who-this-is-for\">"
+          }
+        ]
+      }
+    ],
+    "passCount": 26
+  },
+  {
+    "name": "state_delete-dialog-open",
+    "url": "http://localhost:3000/your-data",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 1,
+        "nodes": [
+          {
+            "target": [
+              "dialog[aria-labelledby=\"_R_7klritllb_\"] > .p-6 > .max-w-\\[66ch\\].text-body"
+            ],
+            "html": "<p class=\"max-w-[66ch] text-body\">Your whole letter<!-- --> — including the 15 sections with notes — will be permanently erased from this device, along with any photographs. There is no undo.</p>"
+          }
+        ]
+      }
+    ],
+    "passCount": 14
+  },
+  {
+    "name": "state_video-playing",
+    "url": "http://localhost:3000/",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 23,
+        "nodes": [
+          {
+            "target": [
+              ".max-w-\\[1040px\\] > .text-gold300.font-medium.tracking-\\[0\\.26em\\]"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-gold300 justify-center\">A free, private Letter of Intent Builder from <!-- -->Trusts &amp; Wealth, PL"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mx-auto mt-[22px] max-w-[24ch] font-serif text-[clamp(2rem,6.4vw,4rem)] font-semibold leading-[1.1] tracking-[-0.015em] text-onink\" style=\"text-wrap:pretty\">Write down what only you know, s"
+          },
+          {
+            "target": [
+              ".max-w-\\[68ch\\]"
+            ],
+            "html": "<p class=\"mx-auto mt-[26px] max-w-[68ch] text-lg leading-[1.7] text-oninkbody\" style=\"text-wrap:pretty\">"
+          },
+          {
+            "target": [
+              "a[href$=\"#who-this-is-for\"]"
+            ],
+            "html": "<a class=\"inline-flex max-w-fu...\" href=\"#who-this-is-for\">"
+          }
+        ]
+      },
+      {
+        "id": "video-caption",
+        "impact": "critical",
+        "help": "<video> elements must have captions",
+        "nodeCount": 1,
+        "nodes": [
+          {
+            "target": [
+              "video"
+            ],
+            "html": "<video src=\"/what-is-a-letter-of-intent.mp4\" poster=\"/video-poster-lockup.png\" controls=\"\" playsinline=\"\" preload=\"auto\" tabindex=\"0\" class=\"absolute inset-0 size-full bg-navy900 object-contain outlin"
+          }
+        ]
+      }
+    ],
+    "passCount": 25
+  },
+  {
+    "name": "state_many-validation-errors",
+    "url": "http://localhost:3000/letter/family-and-support",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 6,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">Section <!-- -->03<!-- --> of <!-- -->15<!-- --> · about <!-- -->10<!-- --> <!-- -->minutes</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Family and support network</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[62ch\\]"
+            ],
+            "html": "<p class=\"mt-[18px] max-w-[62ch] text-lg leading-[1.7] text-oninkbody\">List the people in your loved one's life — family, friends, current caregivers, and paid supports. A future caregiver should be a"
+          },
+          {
+            "target": [
+              "#f-contacts-0-email-hint > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">✻</span>"
+          }
+        ]
+      }
+    ],
+    "passCount": 29
+  },
+  {
+    "name": "state_section-about-photofields",
+    "url": "http://localhost:3000/letter/about",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 3,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">Section <!-- -->02<!-- --> of <!-- -->15<!-- --> · about <!-- -->10<!-- --> <!-- -->minutes</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">About your loved one</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[62ch\\]"
+            ],
+            "html": "<p class=\"mt-[18px] max-w-[62ch] text-lg leading-[1.7] text-oninkbody\">Start with who they are — not the paperwork version, the person. The facts help a future caregiver get things right. The stories "
+          }
+        ]
+      }
+    ],
+    "passCount": 29
+  },
+  {
+    "name": "state_final-wishes-gate",
+    "url": "http://localhost:3000/letter/final-wishes",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 5,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">Section <!-- -->14<!-- --> of <!-- -->15<!-- --> · about <!-- -->10<!-- --> <!-- -->minutes</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Final wishes</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[62ch\\]"
+            ],
+            "html": "<p class=\"mt-[18px] max-w-[62ch] text-lg leading-[1.7] text-oninkbody\">Writing this down spares the people who love your loved one from having to guess during the hardest week of their lives. Answer a"
+          },
+          {
+            "target": [
+              ".tracking-\\[0\\.04em\\]"
+            ],
+            "html": "<button type=\"button\" class=\"inline-flex max-w-fu...\">"
+          }
+        ]
+      }
+    ],
+    "passCount": 26
+  },
+  {
+    "name": "state_final-wishes-after-ack",
+    "url": "http://localhost:3000/letter/final-wishes",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 3,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">Section <!-- -->14<!-- --> of <!-- -->15<!-- --> · about <!-- -->10<!-- --> <!-- -->minutes</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Final wishes</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[62ch\\]"
+            ],
+            "html": "<p class=\"mt-[18px] max-w-[62ch] text-lg leading-[1.7] text-oninkbody\">Writing this down spares the people who love your loved one from having to guess during the hardest week of their lives. Answer a"
+          }
+        ]
+      }
+    ],
+    "passCount": 28
+  },
+  {
+    "name": "state_review-full-letter",
+    "url": "http://localhost:3000/letter/review",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 24,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\].text-gold400.tw-engraved"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">The last step</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Review &amp; download</h1>"
+          },
+          {
+            "target": [
+              ".text-lg"
+            ],
+            "html": "<p class=\"mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody\">Every section has notes. All three files are created right here on your device: nothing is uploaded.</p>"
+          },
+          {
+            "target": [
+              ".tw-card.mt-\\[22px\\]:nth-child(4) > div > .font-medium.tracking-\\[0\\.26em\\].justify-start"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-start\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>One year from"
+          }
+        ]
+      }
+    ],
+    "passCount": 31
+  },
+  {
+    "name": "state_review-generating-busy",
+    "url": "http://localhost:3000/letter/review",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 24,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\].text-gold400.tw-engraved"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">The last step</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Review &amp; download</h1>"
+          },
+          {
+            "target": [
+              ".text-lg"
+            ],
+            "html": "<p class=\"mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody\">Every section has notes. All three files are created right here on your device: nothing is uploaded.</p>"
+          },
+          {
+            "target": [
+              ".tw-card.mt-\\[22px\\]:nth-child(4) > div > .font-medium.tracking-\\[0\\.26em\\].justify-start"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-start\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>One year from"
+          }
+        ]
+      }
+    ],
+    "passCount": 31
+  },
+  {
+    "name": "reflow320_letter_medical",
+    "url": "http://localhost:3000/letter/medical",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 4,
+        "nodes": [
+          {
+            "target": [
+              ".text-muted[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\" class=\"text-muted\">▾</span>"
+          },
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">Section <!-- -->06<!-- --> of <!-- -->15<!-- --> · about <!-- -->15<!-- --> <!-- -->minutes</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Medical</h1>"
+          },
+          {
+            "target": [
+              ".max-w-\\[62ch\\]"
+            ],
+            "html": "<p class=\"mt-[18px] max-w-[62ch] text-lg leading-[1.7] text-oninkbody\">The medical facts a new caregiver — or a new doctor — needs, all in one place. Plan names and doctor names are useful here. ID nu"
+          }
+        ]
+      }
+    ],
+    "passCount": 27
+  },
+  {
+    "name": "reflow320_letter_review",
+    "url": "http://localhost:3000/letter/review",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodeCount": 21,
+        "nodes": [
+          {
+            "target": [
+              ".tracking-\\[0\\.22em\\].text-gold400.tw-engraved"
+            ],
+            "html": "<p class=\"tw-engraved text-xs tracking-[0.22em] text-gold400\">The last step</p>"
+          },
+          {
+            "target": [
+              "h1"
+            ],
+            "html": "<h1 class=\"mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink\">Review &amp; download</h1>"
+          },
+          {
+            "target": [
+              ".text-lg"
+            ],
+            "html": "<p class=\"mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody\">Every section has notes. All three files are created right here on your device: nothing is uploaded.</p>"
+          },
+          {
+            "target": [
+              ".tw-card.mt-\\[22px\\]:nth-child(4) > div > .font-medium.tracking-\\[0\\.26em\\].justify-start"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-start\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>One year from"
+          }
+        ]
+      }
+    ],
+    "passCount": 31
+  },
+  {
+    "name": "aaa_",
+    "url": "http://localhost:3000/",
+    "tags": [
+      "wcag2aaa",
+      "wcag21aaa",
+      "wcag22aaa"
+    ],
+    "violations": [
+      {
+        "id": "color-contrast-enhanced",
+        "impact": "serious",
+        "help": "Elements must meet enhanced color contrast ratio thresholds",
+        "tags": [
+          "cat.color",
+          "wcag2aaa",
+          "wcag146",
+          "ACT"
+        ],
+        "nodes": [
+          {
+            "target": [
+              ".px-3"
+            ],
+            "html": "<a class=\"inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] px-3 text-xs font-semibold uppercase tracking-[0.09em] text-muted transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none\" href=\"/#pass-it-along\">",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.39 (foreground color: #5e6878, background color: #fbfaf6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".leading-\\[1\\.5\\] > .min-w-0"
+            ],
+            "html": "<span class=\"min-w-0\">Private by design. Everything you type stays on your device and is never sent anywhere.<!-- --> <a class=\"whitespace-nowrap font-semibold text-accent underline underline-offset-[3px]\" href=\"/privacy\">How it works</a></span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.91 (foreground color: #5e6878, background color: #f4efe6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".min-w-0 > .underline.underline-offset-\\[3px\\][href$=\"privacy\"]"
+            ],
+            "html": "<a class=\"whitespace-nowrap font-semibold text-accent underline underline-offset-[3px]\" href=\"/privacy\">How it works</a>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.16 (foreground color: #7d5f31, background color: #f4efe6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".mb-3\\.5.justify-center.flex > .font-medium.tracking-\\[0\\.26em\\].text-xs"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-center\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>Get started<span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span></span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.16 (foreground color: #7d5f31, background color: #f4efe6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".max-w-\\[860px\\]"
+            ],
+            "html": "<p class=\"mx-auto mt-4 max-w-[860px] text-center text-lg leading-[1.7] text-muted\">Who you care for decides which letter you write. Both are free, both save on your device, and you can start the other at any time.</p>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.91 (foreground color: #5e6878, background color: #f4efe6, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".bg-surface.rounded-\\[var\\(--radius-md\\)\\].overflow-hidden:nth-child(1) > .flex-1.flex-col.flex > .tracking-\\[0\\.22em\\].mb-3\\.5.text-\\[0\\.6875rem\\]"
+            ],
+            "html": "<p class=\"tw-engraved mb-3.5 flex items-center gap-3 text-[0.6875rem] tracking-[0.22em] text-accent\">Option <!-- -->1<span aria-hidden=\"true\" class=\"h-px flex-1 opacity-45\" style=\"background:var(--gradient-gold)\"></span></p>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.91 (foreground color: #7d5f31, background color: #ffffff, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".bg-surface.rounded-\\[var\\(--radius-md\\)\\].overflow-hidden:nth-child(1) > .flex-1.flex-col.flex > .justify-start.font-medium.tracking-\\[0\\.26em\\]"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-start\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>For a loved one with disabilities</span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.91 (foreground color: #7d5f31, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".bg-surface.rounded-\\[var\\(--radius-md\\)\\].overflow-hidden:nth-child(1) > .flex-1.flex-col.flex > .mt-6.pt-5.border-t > .tracking-\\[0\\.2em\\].text-\\[0\\.6875rem\\].text-accent"
+            ],
+            "html": "<p class=\"tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent\">See a sample</p>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.91 (foreground color: #7d5f31, background color: #ffffff, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 7:1"
+          }
+        ],
+        "nodeCount": 28
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast-enhanced",
+        "impact": "serious",
+        "help": "Elements must meet enhanced color contrast ratio thresholds",
+        "nodeCount": 3,
+        "nodes": [
+          {
+            "target": [
+              ".bg-surface.rounded-\\[var\\(--radius-md\\)\\].overflow-hidden:nth-child(1) > .px-\\[30px\\].pb-8.pt-7 > .text-\\[30px\\].text-gold600.tracking-\\[0\\.06em\\]"
+            ],
+            "html": "<span aria-hidden=\"true\" class=\"tw-engraved block text-[30px] tracking-[0.06em] text-gold600\">I</span>"
+          },
+          {
+            "target": [
+              ".tracking-\\[0\\.24em\\]"
+            ],
+            "html": "<p class=\"tw-engraved text-[0.6875rem] tracking-[0.24em] text-accent\">Post it where families gather</p>"
+          },
+          {
+            "target": [
+              ".px-\\[18px\\] > .tracking-\\[0\\.2em\\].text-\\[0\\.6875rem\\].text-accent"
+            ],
+            "html": "<p class=\"tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent\">A message comes written for you</p>"
+          }
+        ]
+      },
+      {
+        "id": "identical-links-same-purpose",
+        "impact": "minor",
+        "help": "Links with the same name must have a similar purpose",
+        "nodeCount": 2,
+        "nodes": [
+          {
+            "target": [
+              ".bg-surface.rounded-\\[var\\(--radius-md\\)\\].overflow-hidden:nth-child(1) > .flex-1.flex-col.flex > .mt-6.pt-5.border-t > .grid-cols-2 > li:nth-child(1) > .group.focus-visible\\:outline-offset-4.block"
+            ],
+            "html": "<a class=\"group block rounded-[var(--radius-sm)] focus-visible:outline-offset-4\" href=\"/samples/letter-of-intent-disabilities\">"
+          },
+          {
+            "target": [
+              ".bg-surface.rounded-\\[var\\(--radius-md\\)\\].overflow-hidden:nth-child(1) > .flex-1.flex-col.flex > .mt-6.pt-5.border-t > .grid-cols-2 > li:nth-child(2) > .group.focus-visible\\:outline-offset-4.block"
+            ],
+            "html": "<a class=\"group block rounded-[var(--radius-sm)] focus-visible:outline-offset-4\" href=\"/samples/emergency-sheet-disabilities\">"
+          }
+        ]
+      }
+    ],
+    "passCount": 2
+  },
+  {
+    "name": "aaa_letter_medical",
+    "url": "http://localhost:3000/letter/medical",
+    "tags": [
+      "wcag2aaa",
+      "wcag21aaa",
+      "wcag22aaa"
+    ],
+    "violations": [
+      {
+        "id": "color-contrast-enhanced",
+        "impact": "serious",
+        "help": "Elements must meet enhanced color contrast ratio thresholds",
+        "tags": [
+          "cat.color",
+          "wcag2aaa",
+          "wcag146",
+          "ACT"
+        ],
+        "nodes": [
+          {
+            "target": [
+              ".px-3"
+            ],
+            "html": "<a class=\"inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] px-3 text-xs font-semibold uppercase tracking-[0.09em] text-muted transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none\" href=\"/#pass-it-along\">",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.39 (foreground color: #5e6878, background color: #fbfaf6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".leading-\\[1\\.5\\] > .min-w-0"
+            ],
+            "html": "<span class=\"min-w-0\">Private by design. Everything you type stays on your device and is never sent anywhere.<!-- --> <a class=\"whitespace-nowrap font-semibold text-accent underline underline-offset-[3px]\" href=\"/privacy\">How it works</a></span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.91 (foreground color: #5e6878, background color: #f4efe6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".underline"
+            ],
+            "html": "<a class=\"whitespace-nowrap font-semibold text-accent underline underline-offset-[3px]\" href=\"/privacy\">How it works</a>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.16 (foreground color: #7d5f31, background color: #f4efe6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".top-\\[122px\\] > div:nth-child(1) > .mb-2\\.5.tracking-\\[0\\.2em\\]"
+            ],
+            "html": "<p class=\"tw-engraved mb-2.5 text-xs tracking-[0.2em] text-faint\">For a loved one with disabilities</p>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5 (foreground color: #646d7b, background color: #fbfaf6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".top-\\[122px\\] > div:nth-child(1) > .text-muted"
+            ],
+            "html": "<p class=\"text-[0.9375rem] text-muted\">You've added notes to 15 of 15 sections.</p>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.39 (foreground color: #5e6878, background color: #fbfaf6, font size: 11.3pt (15px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".top-\\[122px\\] > div:nth-child(1) > .mt-2.text-success"
+            ],
+            "html": "<p class=\"mt-2 text-[0.9375rem] text-success\">Every section has notes. A yearly review keeps it trustworthy.</p>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.73 (foreground color: #4e7a57, background color: #fbfaf6, font size: 11.3pt (15px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".top-\\[122px\\] > .mt-\\[22px\\][aria-label=\"Letter sections\"] > ol > li:nth-child(1) > .border-transparent.border-l-2[href$=\"getting-started\"] > .w-\\[2\\.4ch\\].tabular-nums.text-faint"
+            ],
+            "html": "<span aria-hidden=\"true\" class=\"tw-engraved w-[2.4ch] shrink-0 text-xs tabular-nums text-faint\">01</span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5 (foreground color: #646d7b, background color: #fbfaf6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".top-\\[122px\\] > .mt-\\[22px\\][aria-label=\"Letter sections\"] > ol > li:nth-child(2) > .border-transparent.border-l-2[href$=\"about\"] > .w-\\[2\\.4ch\\].tabular-nums.text-faint"
+            ],
+            "html": "<span aria-hidden=\"true\" class=\"tw-engraved w-[2.4ch] shrink-0 text-xs tabular-nums text-faint\">02</span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5 (foreground color: #646d7b, background color: #fbfaf6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          }
+        ],
+        "nodeCount": 44
+      }
+    ],
+    "incomplete": [],
+    "passCount": 2
+  },
+  {
+    "name": "aaa_letter_review",
+    "url": "http://localhost:3000/letter/review",
+    "tags": [
+      "wcag2aaa",
+      "wcag21aaa",
+      "wcag22aaa"
+    ],
+    "violations": [
+      {
+        "id": "color-contrast-enhanced",
+        "impact": "serious",
+        "help": "Elements must meet enhanced color contrast ratio thresholds",
+        "tags": [
+          "cat.color",
+          "wcag2aaa",
+          "wcag146",
+          "ACT"
+        ],
+        "nodes": [
+          {
+            "target": [
+              ".px-3"
+            ],
+            "html": "<a class=\"inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] px-3 text-xs font-semibold uppercase tracking-[0.09em] text-muted transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none\" href=\"/#pass-it-along\">",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.39 (foreground color: #5e6878, background color: #fbfaf6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".leading-\\[1\\.5\\] > .min-w-0"
+            ],
+            "html": "<span class=\"min-w-0\">Private by design. Everything you type stays on your device and is never sent anywhere.<!-- --> <a class=\"whitespace-nowrap font-semibold text-accent underline underline-offset-[3px]\" href=\"/privacy\">How it works</a></span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.91 (foreground color: #5e6878, background color: #f4efe6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".whitespace-nowrap.underline[href$=\"privacy\"]"
+            ],
+            "html": "<a class=\"whitespace-nowrap font-semibold text-accent underline underline-offset-[3px]\" href=\"/privacy\">How it works</a>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.16 (foreground color: #7d5f31, background color: #f4efe6, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              "div:nth-child(2) > .font-medium.tracking-\\[0\\.26em\\].justify-start"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-start\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>Start here</span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.91 (foreground color: #7d5f31, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".mt-6.gap-4.flex-wrap > .text-\\[0\\.9375rem\\]"
+            ],
+            "html": "<span class=\"text-[0.9375rem] text-muted\">Two PDFs and one backup file. Nothing is uploaded.</span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.63 (foreground color: #5e6878, background color: #ffffff, font size: 11.3pt (15px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".pt-\\[18px\\]"
+            ],
+            "html": "<p class=\"mt-[22px] border-t border-line pt-[18px] text-[0.9375rem] leading-[1.7] text-muted\">",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.63 (foreground color: #5e6878, background color: #ffffff, font size: 11.3pt (15px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".tw-card.mt-\\[22px\\]:nth-child(5) > div > .text-\\[0\\.6875rem\\].tracking-\\[0\\.2em\\].tw-engraved"
+            ],
+            "html": "<p class=\"tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent\">Pass it along</p>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.91 (foreground color: #7d5f31, background color: #ffffff, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 7:1"
+          },
+          {
+            "target": [
+              ".bg-gold100 > .font-medium.tracking-\\[0\\.26em\\].justify-start"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-start\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>One more thing worth knowing</span>",
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 5.13 (foreground color: #7d5f31, background color: #f7eedf, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 7:1"
+          }
+        ],
+        "nodeCount": 122
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast-enhanced",
+        "impact": "serious",
+        "help": "Elements must meet enhanced color contrast ratio thresholds",
+        "nodeCount": 18,
+        "nodes": [
+          {
+            "target": [
+              ".tw-card.mt-\\[22px\\]:nth-child(4) > div > .font-medium.tracking-\\[0\\.26em\\].justify-start"
+            ],
+            "html": "<span class=\"tw-engraved inline-flex items-center gap-3 text-xs font-medium tracking-[0.26em] text-accent justify-start\"><span class=\"tw-diamond tw-diamond--sm\" aria-hidden=\"true\"></span>One year from"
+          },
+          {
+            "target": [
+              ".sm\\:px-6 > .text-\\[0\\.6875rem\\].tracking-\\[0\\.2em\\].tw-engraved"
+            ],
+            "html": "<p class=\"tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent\">Option one</p>"
+          },
+          {
+            "target": [
+              ".sm\\:px-6 > .text-\\[1\\.375rem\\].mt-2.font-serif"
+            ],
+            "html": "<h3 class=\"mt-2 font-serif text-[1.375rem] font-semibold text-ink\">Put it in your own calendar</h3>"
+          },
+          {
+            "target": [
+              ".text-\\[13px\\].px-4.gap-2:nth-child(1)"
+            ],
+            "html": "<button type=\"button\" class=\"inline-flex max-w-fu...\">"
+          }
+        ]
+      }
+    ],
+    "passCount": 2
+  }
+]

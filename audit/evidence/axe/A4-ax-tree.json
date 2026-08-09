@@ -1,0 +1,2188 @@
+{
+  "/letter/about": [
+    {
+      "role": "link",
+      "name": "Skip to main content",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "banner",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "How it works",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "main",
+      "name": "",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "contentinfo",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "My Letter of Intent, home",
+      "nameFrom": "attribute",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "Main",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "navigation",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "(703) 745-5565",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "contact@trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "WAYS TO SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "alert",
+      "name": "",
+      "props": {
+        "live": "assertive",
+        "atomic": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "My Letter of Intent",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "START YOUR LETTER · IT’S FREE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "About your loved one",
+      "nameFrom": "contents",
+      "props": {
+        "level": 1
+      }
+    },
+    {
+      "role": "form",
+      "name": "About your loved one",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "group",
+      "name": "Photographs",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false"
+      }
+    },
+    {
+      "role": "link",
+      "name": "← GETTING STARTED",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "NEXT: FAMILY & SUPPORT →",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Start your letter",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Privacy & your data",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Back up or delete",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "Letter sections",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "Review & download →",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Back up or delete your data",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "textbox",
+      "name": "Caption for the second photo",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Diagnoses and conditions",
+      "nameFrom": "relatedElement",
+      "desc": "Plain words are fine. List what a new doctor or caregiver should know first. This also prints on the emergency sheet.",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false,
+        "describedby": "f-diagnoses-help"
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Their life so far, in your own words",
+      "nameFrom": "relatedElement",
+      "desc": "A short history: where they were born, the big chapters, moves, milestones, the people and places that shaped them. Write it the way you would tell it.",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false,
+        "describedby": "f-lifeHistory-help"
+      }
+    },
+    {
+      "role": "button",
+      "name": "See an example",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "What should a stranger know in the first five minutes?",
+      "nameFrom": "relatedElement",
+      "desc": "Imagine a kind stranger meeting your loved one for the first time. What would make those minutes go well?",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false,
+        "describedby": "f-firstFiveMinutes-help"
+      }
+    },
+    {
+      "role": "button",
+      "name": "See an example",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Anything else that makes them who they are",
+      "nameFrom": "relatedElement",
+      "desc": "Habits, quirks, talents, history — whatever didn't fit above but matters.",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false,
+        "describedby": "f-importantToKnow-help"
+      }
+    },
+    {
+      "role": "link",
+      "name": "download a backup file",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "Open Next.js Dev Tools",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Show date picker",
+      "nameFrom": "attribute",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "Getting started",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "About your loved one",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Family & support",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "A typical day",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Communication",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Medical",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Behavior support",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "School & work",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Housing",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Benefits & money",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Joy & faith",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Legal & advocacy",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "For the trustee",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Final wishes (optional)",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Your message",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "Add a recent photo of your loved one",
+      "nameFrom": "relatedElement",
+      "value": "No file chosen",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "Add a family photo",
+      "nameFrom": "relatedElement",
+      "value": "No file chosen",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    }
+  ],
+  "/letter": [
+    {
+      "role": "link",
+      "name": "Skip to main content",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "banner",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "How it works",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "main",
+      "name": "",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "contentinfo",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "My Letter of Intent, home",
+      "nameFrom": "attribute",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "Main",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "heading",
+      "name": "Create your Letter of Intent",
+      "nameFrom": "contents",
+      "props": {
+        "level": 1
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "(703) 745-5565",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "contact@trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "WAYS TO SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "alert",
+      "name": "",
+      "props": {
+        "live": "assertive",
+        "atomic": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "My Letter of Intent",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "START YOUR LETTER · IT’S FREE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Pick the letter that fits your family.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "button",
+      "name": "OPTION 1 FOR A LOVED ONE WITH DISABILITIES The letter a trustee will read. If your plan includes a special needs trust, this is the companion no attorney can draft for you: how your child communicates, what calms them, which doctor to call, what a good day looks like. Written for the sibling, trustee, or guardian who will one day take over. What this one adds:behavior support, benefits & money, legal & advocacy, and a section written directly to the trustee. Fifteen sections · about 45–90 minutes Start the special needs letter →",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "OPTION 2 FOR ANYONE YOU CARE FOR The letter only you can write. An aging parent, a spouse, a sibling you look after, a child still finding their footing. Its own set of questions: the week as it really runs, the help that is welcome and the help that offends, the people to call, the hundred small things it would take a stranger years to learn. What this one covers instead:home & daily living, work & obligations, money & documents, and whoever steps in. No trust or benefits questions. Fourteen sections · about 40–80 minutes Start the general letter →",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Every question, before you start.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "tablist",
+      "name": "Which set of questions",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "heading",
+      "name": "Start with ten minutes.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "button",
+      "name": "START THE SPECIAL NEEDS LETTER",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "START THE GENERAL LETTER",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Start your letter",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Privacy & your data",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Back up or delete",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "tab",
+      "name": "Disability & special needs 15 SECTIONS",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "selected": true,
+        "controls": "question-set"
+      }
+    },
+    {
+      "role": "tab",
+      "name": "Aging & general care 14 SECTIONS",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "selected": false,
+        "controls": "question-set"
+      }
+    },
+    {
+      "role": "link",
+      "name": "download a backup file",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "See the other set →",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "Open Next.js Dev Tools",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Getting started 5 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "About them 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Family & support 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "A typical day 15 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Communication 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Medical 15 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Behavior support 15 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "School & work 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Housing 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Benefits & money 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Joy & faith 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Legal & advocacy 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "For the trustee 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Final wishes 10 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Your message 15 min",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "image",
+      "name": "",
+      "props": {}
+    }
+  ],
+  "/your-data-dialog": [
+    {
+      "role": "dialog",
+      "name": "Delete everything on this device?",
+      "nameFrom": "relatedElement",
+      "props": {
+        "focusable": true,
+        "modal": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Delete everything on this device?",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "button",
+      "name": "Yes, delete it all",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "focused": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "DOWNLOAD A BACKUP FIRST",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "Cancel",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    }
+  ],
+  "/letter/family-and-support-error": [
+    {
+      "role": "link",
+      "name": "Skip to main content",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "banner",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "How it works",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "main",
+      "name": "",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "contentinfo",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "My Letter of Intent, home",
+      "nameFrom": "attribute",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "Main",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "navigation",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "(703) 745-5565",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "contact@trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "WAYS TO SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "alert",
+      "name": "",
+      "props": {
+        "live": "assertive",
+        "atomic": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "My Letter of Intent",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "START YOUR LETTER · IT’S FREE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Family and support network",
+      "nameFrom": "contents",
+      "props": {
+        "level": 1
+      }
+    },
+    {
+      "role": "form",
+      "name": "Family and support network",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "← ABOUT YOUR LOVED ONE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "NEXT: A TYPICAL DAY →",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Start your letter",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Privacy & your data",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Back up or delete",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "Letter sections",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "Review & download →",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Back up or delete your data",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "group",
+      "name": "People in your loved one's life",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false"
+      }
+    },
+    {
+      "role": "button",
+      "name": "Remove person 1",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "checkbox",
+      "name": "Emergency contact — include on the emergency sheet",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "checked": "false"
+      }
+    },
+    {
+      "role": "button",
+      "name": "+ Add a person",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Who would you call first in an emergency?",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Is there anyone who should not be given a role?",
+      "nameFrom": "relatedElement",
+      "desc": "This stays between you and whoever reads this letter. You don't have to explain why — but you can, and it helps.",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false,
+        "describedby": "f-doNotInvolve-help"
+      }
+    },
+    {
+      "role": "button",
+      "name": "See an example",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "button",
+      "name": "Open Next.js Dev Tools",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Name",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Relationship",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Phone",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Email",
+      "nameFrom": "relatedElement",
+      "desc": "This doesn't look like a full email address yet — worth a quick check.",
+      "value": "nope",
+      "props": {
+        "invalid": "true",
+        "focusable": true,
+        "readonly": false,
+        "required": false,
+        "describedby": "f-contacts-0-email-hint"
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Their role",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false
+      }
+    },
+    {
+      "role": "textbox",
+      "name": "Notes",
+      "nameFrom": "relatedElement",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "readonly": false,
+        "required": false
+      }
+    },
+    {
+      "role": "image",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "Getting started",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "About your loved one",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Family & support , has notes",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "A typical day",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Communication",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Medical",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Behavior support",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "School & work",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Housing",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Benefits & money",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Joy & faith",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Legal & advocacy",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "For the trustee",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Final wishes (optional)",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Your message",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    }
+  ],
+  "/samples": [
+    {
+      "role": "link",
+      "name": "Skip to main content",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "banner",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "How it works",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "main",
+      "name": "",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "contentinfo",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "My Letter of Intent, home",
+      "nameFrom": "attribute",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "Main",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "heading",
+      "name": "Letter of Intent — for a loved one with disabilities",
+      "nameFrom": "contents",
+      "props": {
+        "level": 1
+      }
+    },
+    {
+      "role": "link",
+      "name": "DOWNLOAD THIS PDF",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "START YOUR OWN LETTER",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "navigation",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "(703) 745-5565",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "contact@trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "WAYS TO SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "alert",
+      "name": "",
+      "props": {
+        "live": "assertive",
+        "atomic": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "My Letter of Intent",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "START YOUR LETTER · IT’S FREE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 1 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 2 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 3 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 4 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 5 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 6 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 7 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 8 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 9 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 10 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "Letter of Intent — for a loved one with disabilities, page 11 of 11",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "Start your letter",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Privacy & your data",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Back up or delete",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "Open Next.js Dev Tools",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "image",
+      "name": "",
+      "props": {}
+    }
+  ],
+  "/home-video": [
+    {
+      "role": "link",
+      "name": "Skip to main content",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "banner",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "How it works",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "main",
+      "name": "",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "contentinfo",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "My Letter of Intent, home",
+      "nameFrom": "attribute",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "navigation",
+      "name": "Main",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "navigation",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "(703) 745-5565",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "contact@trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "trustsandwealth.com",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "WAYS TO SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "alert",
+      "name": "",
+      "props": {
+        "live": "assertive",
+        "atomic": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "My Letter of Intent",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "link",
+      "name": "START YOUR LETTER · IT’S FREE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "SHARE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Write down what only you know, so they’ll be cared for the way that only you have.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 1
+      }
+    },
+    {
+      "role": "link",
+      "name": "START YOUR LETTER · IT’S FREE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "SEE A SAMPLE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "WATCH & LEARN MORE",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Pick your letter and get started.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "heading",
+      "name": "The letter a trustee will read.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 3
+      }
+    },
+    {
+      "role": "heading",
+      "name": "The letter only you can write.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 3
+      }
+    },
+    {
+      "role": "link",
+      "name": "CREATE YOUR LETTER",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "What is a Letter of Intent?",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "figure",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "heading",
+      "name": "Three steps, at your pace.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Someone you know needs this too.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Start with ten minutes.",
+      "nameFrom": "contents",
+      "props": {
+        "level": 2
+      }
+    },
+    {
+      "role": "link",
+      "name": "Start your letter",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Privacy & your data",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Back up or delete",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Learn more.",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Share on Facebook",
+      "nameFrom": "attribute",
+      "desc": "Share on Facebook",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Post on Nextdoor",
+      "nameFrom": "attribute",
+      "desc": "Post on Nextdoor",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Post to Reddit",
+      "nameFrom": "attribute",
+      "desc": "Post to Reddit",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Share on X",
+      "nameFrom": "attribute",
+      "desc": "Share on X",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Share on LinkedIn",
+      "nameFrom": "attribute",
+      "desc": "Share on LinkedIn",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Send on WhatsApp",
+      "nameFrom": "attribute",
+      "desc": "Send on WhatsApp",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Write an email",
+      "nameFrom": "attribute",
+      "desc": "Write an email",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "Send a text message",
+      "nameFrom": "attribute",
+      "desc": "Send a text message",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "SHARE TO HELP ANOTHER FAMILY",
+      "nameFrom": "contents",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "BEGIN YOUR LETTER OF INTENT",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "First page of the sample Letter of Intent: the cover, marked SAMPLE The Letter of Intent",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "The sample one-page emergency information sheet, marked SAMPLE Emergency sheet",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "First page of the sample Letter of Intent: the cover, marked SAMPLE The Letter of Intent",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "link",
+      "name": "The sample one-page emergency information sheet, marked SAMPLE Emergency sheet",
+      "nameFrom": "contents",
+      "props": {
+        "focusable": true
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Answer what you can",
+      "nameFrom": "contents",
+      "props": {
+        "level": 3
+      }
+    },
+    {
+      "role": "heading",
+      "name": "It saves only on your device",
+      "nameFrom": "contents",
+      "props": {
+        "level": 3
+      }
+    },
+    {
+      "role": "heading",
+      "name": "Download the documents and your backup file",
+      "nameFrom": "contents",
+      "props": {
+        "level": 3
+      }
+    },
+    {
+      "role": "button",
+      "name": "Open Next.js Dev Tools",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true,
+        "expanded": false
+      }
+    },
+    {
+      "role": "image",
+      "name": "First page of the sample Letter of Intent: the cover, marked SAMPLE",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "The sample one-page emergency information sheet, marked SAMPLE",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "First page of the sample Letter of Intent: the cover, marked SAMPLE",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "image",
+      "name": "The sample one-page emergency information sheet, marked SAMPLE",
+      "nameFrom": "attribute",
+      "props": {}
+    },
+    {
+      "role": "slider",
+      "name": "video time scrubber",
+      "nameFrom": "attribute",
+      "desc": "total time: 4:37",
+      "value": 2.75750994682312,
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "image",
+      "name": "",
+      "props": {}
+    },
+    {
+      "role": "button",
+      "name": "pause",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "enter full screen",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "show more media controls",
+      "nameFrom": "attribute",
+      "desc": "more options",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "slider",
+      "name": "volume",
+      "nameFrom": "attribute",
+      "value": 100,
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    },
+    {
+      "role": "button",
+      "name": "mute",
+      "nameFrom": "attribute",
+      "props": {
+        "invalid": "false",
+        "focusable": true
+      }
+    }
+  ]
+}

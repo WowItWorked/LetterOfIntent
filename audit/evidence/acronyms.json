@@ -1,0 +1,653 @@
+{
+  "generatedAt": "2026-08-09T20:47:12.395Z",
+  "note": "Reading order = section number within each path. 'definedAtFirstUse' is the test that matters: a definition that arrives in a later section does not help the reader who hit the term first. Detection is heuristic (parenthetical or 'X is ...' gloss) and can miss a definition phrased another way, so every flagged term was read by hand before being reported.",
+  "termsFound": 22,
+  "undefinedAtFirstUse": 19,
+  "results": [
+    {
+      "term": "SSI",
+      "totalOccurrences": 2,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "benefits-and-finances",
+        "num": 10,
+        "kind": "help",
+        "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+      },
+      "definedAtFirstUse": "'X is ...' gloss",
+      "definedAnywhere": "'X is ...' gloss",
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "help",
+          "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "placeholder",
+          "text": "e.g., SSI since age 18; Virginia Medicaid; on the DD waiver waitlist since 2021"
+        }
+      ]
+    },
+    {
+      "term": "SSDI",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "benefits-and-finances",
+        "num": 10,
+        "kind": "help",
+        "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+      },
+      "definedAtFirstUse": "'X is ...' gloss",
+      "definedAnywhere": "'X is ...' gloss",
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "help",
+          "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+        }
+      ]
+    },
+    {
+      "term": "ABLE",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "benefits-and-finances",
+        "num": 10,
+        "kind": "label",
+        "text": "ABLE account"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "label",
+          "text": "ABLE account"
+        }
+      ]
+    },
+    {
+      "term": "IEP",
+      "totalOccurrences": 2,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "school-and-work",
+        "num": 8,
+        "kind": "label",
+        "text": "School and IEP history — what has worked"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": "parenthetical after term",
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "school-and-work",
+          "num": 8,
+          "kind": "label",
+          "text": "School and IEP history — what has worked"
+        },
+        {
+          "path": "special-needs",
+          "section": "school-and-work",
+          "num": 8,
+          "kind": "help",
+          "text": "An IEP (Individualized Education Program) is the written plan a school builds for a student with a disability. Which supports, settings, and people actually helped? What failed?"
+        }
+      ]
+    },
+    {
+      "term": "OT",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "medical",
+        "num": 6,
+        "kind": "placeholder",
+        "text": "e.g., Speech on Tuesdays at 4 with Ms. Kim; OT every other Friday"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "medical",
+          "num": 6,
+          "kind": "placeholder",
+          "text": "e.g., Speech on Tuesdays at 4 with Ms. Kim; OT every other Friday"
+        }
+      ]
+    },
+    {
+      "term": "AAC",
+      "totalOccurrences": 2,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "communication",
+        "num": 5,
+        "kind": "help",
+        "text": "Speech, an AAC device or app (a tablet or device that speaks for them), sign language, gestures, sounds, behavior — and when they use each."
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "communication",
+          "num": 5,
+          "kind": "help",
+          "text": "Speech, an AAC device or app (a tablet or device that speaks for them), sign language, gestures, sounds, behavior — and when they use each."
+        },
+        {
+          "path": "special-needs",
+          "section": "communication",
+          "num": 5,
+          "kind": "example",
+          "text": "Nia uses an AAC app on her iPad (Proloquo2Go) for most requests, plus about twenty signs. When the iPad is charging she gets frustrated fast — the backup charger lives in her go-bag, front pocket."
+        }
+      ]
+    },
+    {
+      "term": "ER",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "medical",
+        "num": 6,
+        "kind": "label",
+        "text": "Preferred hospital or ER"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "medical",
+          "num": 6,
+          "kind": "label",
+          "text": "Preferred hospital or ER"
+        }
+      ]
+    },
+    {
+      "term": "CPAP",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "medical",
+        "num": 6,
+        "kind": "placeholder",
+        "text": "e.g., Wheelchair, hearing aids, CPAP, communication device — plus chargers, suppliers, and quirks"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "medical",
+          "num": 6,
+          "kind": "placeholder",
+          "text": "e.g., Wheelchair, hearing aids, CPAP, communication device — plus chargers, suppliers, and quirks"
+        }
+      ]
+    },
+    {
+      "term": "DD waiver",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "benefits-and-finances",
+        "num": 10,
+        "kind": "placeholder",
+        "text": "e.g., SSI since age 18; Virginia Medicaid; on the DD waiver waitlist since 2021"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "placeholder",
+          "text": "e.g., SSI since age 18; Virginia Medicaid; on the DD waiver waitlist since 2021"
+        }
+      ]
+    },
+    {
+      "term": "CCC Plus",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "medical",
+        "num": 6,
+        "kind": "help",
+        "text": "Name the plans, like \"Anthem through Dad's employer\" or \"Virginia Medicaid — CCC Plus waiver.\" No ID numbers here — you'll note where cards are kept in the Benefits section."
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "medical",
+          "num": 6,
+          "kind": "help",
+          "text": "Name the plans, like \"Anthem through Dad's employer\" or \"Virginia Medicaid — CCC Plus waiver.\" No ID numbers here — you'll note where cards are kept in the Benefits section."
+        }
+      ]
+    },
+    {
+      "term": "waiver",
+      "totalOccurrences": 6,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "medical",
+        "num": 6,
+        "kind": "help",
+        "text": "Name the plans, like \"Anthem through Dad's employer\" or \"Virginia Medicaid — CCC Plus waiver.\" No ID numbers here — you'll note where cards are kept in the Benefits section."
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "medical",
+          "num": 6,
+          "kind": "help",
+          "text": "Name the plans, like \"Anthem through Dad's employer\" or \"Virginia Medicaid — CCC Plus waiver.\" No ID numbers here — you'll note where cards are kept in the Benefits section."
+        },
+        {
+          "path": "special-needs",
+          "section": "housing",
+          "num": 9,
+          "kind": "label",
+          "text": "Waiver and waitlist status"
+        },
+        {
+          "path": "special-needs",
+          "section": "housing",
+          "num": 9,
+          "kind": "help",
+          "text": "A Medicaid waiver pays for long-term support at home or in the community. In Virginia these are the DD waivers, and the waitlist runs years. Where is {name} on it? Who manages the paperwork and the yearly updates?"
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "help",
+          "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "placeholder",
+          "text": "e.g., SSI since age 18; Virginia Medicaid; on the DD waiver waitlist since 2021"
+        },
+        {
+          "path": "special-needs",
+          "section": "legal-and-advocacy",
+          "num": 12,
+          "kind": "example",
+          "text": "The county denied his waiver slot in 2021. We appealed with a letter from his neurologist and won in four months — the phrase that mattered was \"institutional level of care.\" Get every denial in writing. Never accept a no by phone."
+        }
+      ]
+    },
+    {
+      "term": "POA",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "general",
+        "section": "legal-and-decisions",
+        "num": 11,
+        "kind": "example",
+        "text": "Financial POA names my brother, effective now. Medical POA names me, with him as the alternate. Both signed in 2021 and the originals are in the grey file box; the lawyer has copies."
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "general",
+          "section": "legal-and-decisions",
+          "num": 11,
+          "kind": "example",
+          "text": "Financial POA names my brother, effective now. Medical POA names me, with him as the alternate. Both signed in 2021 and the originals are in the grey file box; the lawyer has copies."
+        }
+      ]
+    },
+    {
+      "term": "power of attorney",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "legal-and-advocacy",
+        "num": 12,
+        "kind": "help",
+        "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "legal-and-advocacy",
+          "num": 12,
+          "kind": "help",
+          "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+        }
+      ]
+    },
+    {
+      "term": "guardianship",
+      "totalOccurrences": 2,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "legal-and-advocacy",
+        "num": 12,
+        "kind": "help",
+        "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "legal-and-advocacy",
+          "num": 12,
+          "kind": "help",
+          "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+        },
+        {
+          "path": "general",
+          "section": "legal-and-decisions",
+          "num": 11,
+          "kind": "label",
+          "text": "Guardianship or conservatorship, if any"
+        }
+      ]
+    },
+    {
+      "term": "conservatorship",
+      "totalOccurrences": 2,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "legal-and-advocacy",
+        "num": 12,
+        "kind": "help",
+        "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+      },
+      "definedAtFirstUse": "parenthetical after term",
+      "definedAnywhere": "parenthetical after term",
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "legal-and-advocacy",
+          "num": 12,
+          "kind": "help",
+          "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+        },
+        {
+          "path": "general",
+          "section": "legal-and-decisions",
+          "num": 11,
+          "kind": "label",
+          "text": "Guardianship or conservatorship, if any"
+        }
+      ]
+    },
+    {
+      "term": "supported decision-making",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "legal-and-advocacy",
+        "num": 12,
+        "kind": "help",
+        "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "legal-and-advocacy",
+          "num": 12,
+          "kind": "help",
+          "text": "Is there a guardianship or conservatorship (a court gave someone authority)? A power of attorney? A supported decision-making agreement ({name} keeps authority, with named helpers)? Who holds each role — and where are the papers?"
+        }
+      ]
+    },
+    {
+      "term": "representative payee",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "benefits-and-finances",
+        "num": 10,
+        "kind": "label",
+        "text": "Representative payee"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "label",
+          "text": "Representative payee"
+        }
+      ]
+    },
+    {
+      "term": "special needs trust",
+      "totalOccurrences": 2,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "benefits-and-finances",
+        "num": 10,
+        "kind": "help",
+        "text": "A special needs trust holds money for {name} without breaking their benefits. If one exists: when it was created, who the trustee is, and which attorney drafted it."
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "help",
+          "text": "A special needs trust holds money for {name} without breaking their benefits. If one exists: when it was created, who the trustee is, and which attorney drafted it."
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "example",
+          "text": "A special needs trust created in 2022. His aunt Dana Alvarez is trustee; Claire Kelly at Trusts & Wealth drafted it and has the original."
+        }
+      ]
+    },
+    {
+      "term": "trustee",
+      "totalOccurrences": 9,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "getting-started",
+        "num": 1,
+        "kind": "intro",
+        "text": "A Letter of Intent is a plain-language guide to caring for your loved one — everything a future caregiver, trustee, or guardian would need to know but could never guess. It is not a legal document, and that is its strength: no forms, no sig"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": "'X is ...' gloss",
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "getting-started",
+          "num": 1,
+          "kind": "intro",
+          "text": "A Letter of Intent is a plain-language guide to caring for your loved one — everything a future caregiver, trustee, or guardian would need to know but could never guess. It is not a legal document, and that is its strength: no forms, no sig"
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "help",
+          "text": "A special needs trust holds money for {name} without breaking their benefits. If one exists: when it was created, who the trustee is, and which attorney drafted it."
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "example",
+          "text": "A special needs trust created in 2022. His aunt Dana Alvarez is trustee; Claire Kelly at Trusts & Wealth drafted it and has the original."
+        },
+        {
+          "path": "special-needs",
+          "section": "guidance-for-the-trustee",
+          "num": 13,
+          "kind": "intro",
+          "text": "A trust says what the money is. This section says what the money is for.  One day a trustee — maybe a relative, maybe a professional who never met you — will make judgment calls in your place. These notes hand them your judgment. They are n"
+        },
+        {
+          "path": "special-needs",
+          "section": "guidance-for-the-trustee",
+          "num": 13,
+          "kind": "label",
+          "text": "Who should the trustee talk with before big decisions?"
+        },
+        {
+          "path": "special-needs",
+          "section": "guidance-for-the-trustee",
+          "num": 13,
+          "kind": "help",
+          "text": "The requests a trustee should approve generously, without a second thought."
+        },
+        {
+          "path": "special-needs",
+          "section": "guidance-for-the-trustee",
+          "num": 13,
+          "kind": "help",
+          "text": "There's no formula — but you have instincts. Should the trustee lean toward making today better, or stretching the fund across a lifetime? What would change the balance?"
+        },
+        {
+          "path": "special-needs",
+          "section": "guidance-for-the-trustee",
+          "num": 13,
+          "kind": "help",
+          "text": "Requests, spending patterns, or people that should make the trustee slow down and ask questions."
+        },
+        {
+          "path": "special-needs",
+          "section": "guidance-for-the-trustee",
+          "num": 13,
+          "kind": "help",
+          "text": "How should the trustee weigh what {name} wants against what keeps them safe? Where would you take a risk — and where would you never?"
+        }
+      ]
+    },
+    {
+      "term": "day program",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "school-and-work",
+        "num": 8,
+        "kind": "label",
+        "text": "Current school or day program"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "school-and-work",
+          "num": 8,
+          "kind": "label",
+          "text": "Current school or day program"
+        }
+      ]
+    },
+    {
+      "term": "Medicaid",
+      "totalOccurrences": 5,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "medical",
+        "num": 6,
+        "kind": "label",
+        "text": "Insurance and Medicaid — plan names only"
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "medical",
+          "num": 6,
+          "kind": "label",
+          "text": "Insurance and Medicaid — plan names only"
+        },
+        {
+          "path": "special-needs",
+          "section": "medical",
+          "num": 6,
+          "kind": "help",
+          "text": "Name the plans, like \"Anthem through Dad's employer\" or \"Virginia Medicaid — CCC Plus waiver.\" No ID numbers here — you'll note where cards are kept in the Benefits section."
+        },
+        {
+          "path": "special-needs",
+          "section": "housing",
+          "num": 9,
+          "kind": "help",
+          "text": "A Medicaid waiver pays for long-term support at home or in the community. In Virginia these are the DD waivers, and the waitlist runs years. Where is {name} on it? Who manages the paperwork and the yearly updates?"
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "help",
+          "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+        },
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "placeholder",
+          "text": "e.g., SSI since age 18; Virginia Medicaid; on the DD waiver waitlist since 2021"
+        }
+      ]
+    },
+    {
+      "term": "Medicare",
+      "totalOccurrences": 1,
+      "firstUse": {
+        "path": "special-needs",
+        "section": "benefits-and-finances",
+        "num": 10,
+        "kind": "help",
+        "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+      },
+      "definedAtFirstUse": null,
+      "definedAnywhere": null,
+      "allUses": [
+        {
+          "path": "special-needs",
+          "section": "benefits-and-finances",
+          "num": 10,
+          "kind": "help",
+          "text": "SSI is a monthly check for people with disabilities and limited income. SSDI is based on a parent's work record. Add Medicaid, Medicare, and any waiver programs. Name what {name} gets, and roughly since when."
+        }
+      ]
+    }
+  ]
+}

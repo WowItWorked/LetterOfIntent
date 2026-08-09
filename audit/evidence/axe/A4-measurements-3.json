@@ -1,0 +1,582 @@
+{
+  "focusDelta_active": {
+    "input": {
+      "before": {
+        "outline": "none 3px rgb(0, 0, 0)",
+        "boxShadow": "none",
+        "borderColor": "rgb(0, 0, 0)",
+        "bg": "rgb(255, 255, 255)"
+      },
+      "after": {
+        "outline": "none 3px rgb(55, 0, 110)",
+        "boxShadow": "none",
+        "borderColor": "rgb(55, 0, 110)",
+        "bg": "rgb(255, 255, 255)"
+      },
+      "identical": false
+    },
+    "link": {
+      "before": {
+        "outline": "none 3px rgb(0, 0, 159)",
+        "boxShadow": "none",
+        "borderColor": "rgb(0, 0, 159)",
+        "bg": "rgba(255, 255, 255, 0)"
+      },
+      "after": {
+        "outline": "solid 3px rgb(55, 0, 110)",
+        "boxShadow": "none",
+        "borderColor": "rgb(0, 0, 159)",
+        "bg": "rgb(255, 255, 255)"
+      },
+      "identical": false
+    }
+  },
+  "focusDelta_none": {
+    "input": {
+      "before": {
+        "outline": "none 3px rgb(26, 34, 51)",
+        "boxShadow": "none",
+        "borderColor": "rgb(110, 120, 137)",
+        "bg": "rgb(255, 255, 255)"
+      },
+      "after": {
+        "outline": "none 3px oklab(0.85155 0.0119952 0.0494828)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.85155 0.0119952 0.0494828) 0px 0px 0px 3px",
+        "borderColor": "rgb(217, 185, 127)",
+        "bg": "rgb(255, 255, 255)"
+      },
+      "identical": false
+    },
+    "link": {
+      "before": {
+        "outline": "none 3px rgb(58, 68, 86)",
+        "boxShadow": "none",
+        "borderColor": "rgb(58, 68, 86)",
+        "bg": "rgba(0, 0, 0, 0)"
+      },
+      "after": {
+        "outline": "solid 3px oklab(0.85155 0.0119952 0.0494828)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px",
+        "borderColor": "rgb(26, 34, 51)",
+        "bg": "rgb(255, 255, 255)"
+      },
+      "identical": false
+    }
+  },
+  "orientation_portrait": {
+    "h1": "Medical",
+    "formFields": 8,
+    "horizontalScroll": false,
+    "anyRotateTransform": 0,
+    "blockingMessage": false
+  },
+  "orientation_landscape": {
+    "h1": "Medical",
+    "formFields": 8,
+    "horizontalScroll": false,
+    "anyRotateTransform": 0,
+    "blockingMessage": false
+  },
+  "consistentHelp": {
+    "/": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "",
+          "href": "mailto:?subject=A%20free%20tool%20for%20writing%20a%20Letter%20of%20Intent&body=I%20thought%20you%20might%20find%20this%20helpful.%0A%0AMy%20Letter%20of%20Intent%20is%20a%20free%20tool%20for%20writing%20down%20what%20a%20future%20caregiver%20would%20need%20to%20know%20about%20someone%20you%20love%3A%20routines%2C%20medical%20details%2C%20what%20calms%20them%2C%20who%20to%20call.%20One%20small%20question%20at%20a%20time%2C%20and%20it%20finishes%20as%20a%20document%20you%20can%20print.%20Everything%20you%20write%20stays%20private%20on%20your%20own%20device.%0A%0Ahttps%3A%2F%2Fmyletterofintent.com%0A",
+          "inFooter": false,
+          "inMain": true
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    },
+    "/letter": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    },
+    "/letter/getting-started": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    },
+    "/letter/medical": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    },
+    "/letter/review": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    },
+    "/privacy": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": false,
+          "inMain": true
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": false,
+          "inMain": true
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    },
+    "/your-data": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": false,
+          "inMain": true
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": false,
+          "inMain": true
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    },
+    "/samples/emergency-sheet-disabilities": {
+      "footerLinks": [
+        {
+          "text": "Start your letter",
+          "href": "/letter"
+        },
+        {
+          "text": "Privacy & your data",
+          "href": "/privacy"
+        },
+        {
+          "text": "Back up or delete",
+          "href": "/your-data"
+        },
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565"
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com"
+        },
+        {
+          "text": "trustsandwealth.com",
+          "href": "https://trustsandwealth.com"
+        },
+        {
+          "text": "WAYS TO SHARE",
+          "href": "/#pass-it-along"
+        }
+      ],
+      "contactMechanisms": [
+        {
+          "text": "(703) 745-5565",
+          "href": "tel:+17037455565",
+          "inFooter": true,
+          "inMain": false
+        },
+        {
+          "text": "contact@trustsandwealth.com",
+          "href": "mailto:contact@trustsandwealth.com",
+          "inFooter": true,
+          "inMain": false
+        }
+      ],
+      "headerHasHelp": false
+    }
+  },
+  "readingLevel": {
+    "/": {
+      "words": 858,
+      "sentences": 51,
+      "avgWordsPerSentence": 16.8,
+      "fleschKincaidGrade": 7,
+      "fleschReadingEase": 74.6
+    },
+    "/letter": {
+      "words": 542,
+      "sentences": 31,
+      "avgWordsPerSentence": 17.5,
+      "fleschKincaidGrade": 8,
+      "fleschReadingEase": 68.6
+    },
+    "/letter/getting-started": {
+      "words": 223,
+      "sentences": 16,
+      "avgWordsPerSentence": 13.9,
+      "fleschKincaidGrade": 7.8,
+      "fleschReadingEase": 63.7
+    },
+    "/letter/medical": {
+      "words": 265,
+      "sentences": 15,
+      "avgWordsPerSentence": 17.7,
+      "fleschKincaidGrade": 10.8,
+      "fleschReadingEase": 48.8
+    },
+    "/letter/behavioral-support": {
+      "words": 323,
+      "sentences": 20,
+      "avgWordsPerSentence": 16.1,
+      "fleschKincaidGrade": 8,
+      "fleschReadingEase": 66.8
+    },
+    "/letter/final-wishes": {
+      "words": 164,
+      "sentences": 11,
+      "avgWordsPerSentence": 14.9,
+      "fleschKincaidGrade": 7.7,
+      "fleschReadingEase": 66.3
+    },
+    "/letter/review": {
+      "words": 55,
+      "sentences": 4,
+      "avgWordsPerSentence": 13.8,
+      "fleschKincaidGrade": 7.2,
+      "fleschReadingEase": 68.3
+    },
+    "/privacy": {
+      "words": 972,
+      "sentences": 55,
+      "avgWordsPerSentence": 17.7,
+      "fleschKincaidGrade": 8,
+      "fleschReadingEase": 69.5
+    }
+  },
+  "currentMarker": {
+    "current": {
+      "bg": "rgb(247, 238, 223)",
+      "color": "rgb(26, 34, 51)",
+      "borderLeftColor": "rgb(201, 160, 99)",
+      "borderLeftWidth": "2px",
+      "fontWeight": "400",
+      "textDecoration": "none",
+      "text": "06Medical"
+    },
+    "other": {
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(58, 68, 86)",
+      "borderLeftColor": "rgba(0, 0, 0, 0)",
+      "borderLeftWidth": "2px",
+      "fontWeight": "400",
+      "textDecoration": "none",
+      "text": "01Getting started"
+    },
+    "hasAriaCurrent": true,
+    "differsOnlyByColour": true
+  },
+  "sampleCanvas_320": {
+    "cssWidth": 280,
+    "intrinsicWidth": 1100,
+    "scale": 0.255,
+    "effectiveBodyTextCssPx": 4.58,
+    "canZoomText": false
+  },
+  "sampleCanvas_768": {
+    "cssWidth": 707,
+    "intrinsicWidth": 1100,
+    "scale": 0.642,
+    "effectiveBodyTextCssPx": 11.55,
+    "canZoomText": false
+  }
+}

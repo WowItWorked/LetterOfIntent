@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-08-09T20:50:26.379Z",
+  "note": "CANDIDATES, not findings. Every rule here has legitimate uses (a privacy page must say 'cookie'; 'e.g.' is a deliberate example marker). Each hit was read in context before anything was reported.",
+  "totalHits": 5,
+  "byRule": {
+    "undefined tech term": [
+      {
+        "rule": "undefined tech term",
+        "why": "must be explained or avoided for a reader who does not know what it means",
+        "file": "src/app/privacy/page.tsx",
+        "line": 147,
+        "match": "IndexedDB",
+        "text": "called local storage and IndexedDB. It is never uploaded, transmitted, or"
+      },
+      {
+        "rule": "undefined tech term",
+        "why": "must be explained or avoided for a reader who does not know what it means",
+        "file": "src/components/home/VideoPlayer.tsx",
+        "line": 113,
+        "match": "localStorage",
+        "text": "localStorage.setItem(POSITION_KEY, String(Math.floor(v.currentTime)));"
+      },
+      {
+        "rule": "undefined tech term",
+        "why": "must be explained or avoided for a reader who does not know what it means",
+        "file": "src/lib/store.ts",
+        "line": 51,
+        "match": "localStorage",
+        "text": "localStorage),"
+      }
+    ],
+    "non-US register": [
+      {
+        "rule": "non-US register",
+        "why": "US audience (a Virginia firm); a non-US word is a stumble and is inconsistent with the surrounding copy",
+        "file": "src/lib/content/sections/general/12-stepping-in.ts",
+        "line": 20,
+        "match": "fortnight",
+        "text": "In order. What to do on day one, who to call, and what can safely wait a fortnight."
+      },
+      {
+        "rule": "non-US register",
+        "why": "US audience (a Virginia firm); a non-US word is a stumble and is inconsistent with the surrounding copy",
+        "file": "src/lib/content/sections/general/12-stepping-in.ts",
+        "line": 20,
+        "match": "fortnight",
+        "text": "help: \"In order. What to do on day one, who to call, and what can safely wait a fortnight.\","
+      }
+    ]
+  }
+}

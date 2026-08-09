@@ -49,3 +49,10 @@ next-env.d.ts
 # is not.
 /review-pack/
 
+# Audit binaries: ~27MB of screenshots and generated PDFs, reproducible from
+# audit/tools. The analyses, the tools, and the textual captures ARE tracked —
+# they are the evidence a finding is cited against.
+/audit/evidence/screenshots/
+/audit/evidence/pdfs/
+/audit/evidence/og-options/
+

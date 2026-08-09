@@ -5,9 +5,11 @@ import type { FieldErrors } from "react-hook-form";
 import { Disclosure } from "@/components/ui/Disclosure";
 
 export const inputClasses =
-  "w-full min-h-11 rounded-md border border-control bg-surface px-3 py-2.5 text-ink placeholder:text-faint";
+  "w-full min-h-11 rounded-[var(--radius-sm)] border border-control bg-surface px-3.5 py-2.5 " +
+  "text-base text-ink placeholder:text-faint focus:border-gold400 focus:outline-none " +
+  "focus:shadow-[0_0_0_3px_var(--focus-ring)]";
 
-export const textareaClasses = `${inputClasses} leading-relaxed`;
+export const textareaClasses = `${inputClasses} resize-y leading-[1.7]`;
 
 /** Digs a message out of RHF's (possibly nested) error object. */
 export function errMessage(
@@ -54,28 +56,33 @@ export function FieldShell({
 }: FieldShellProps) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="block font-medium text-ink">
+      <label htmlFor={htmlFor} className="block font-semibold text-ink">
         {label}
       </label>
       {help ? (
-        <p id={helpId} className="mt-1 max-w-prose text-sm text-muted">
+        <p id={helpId} className="mt-1.5 max-w-[66ch] text-[0.9375rem] text-muted">
           {help}
         </p>
       ) : null}
-      <div className="mt-1.5">{children}</div>
+      <div className="mt-2.5">{children}</div>
       <div aria-live="polite">
         {hint ? (
-          <p id={hintId} className="mt-1.5 flex max-w-prose gap-1.5 text-sm text-hint">
+          <p
+            id={hintId}
+            className="mt-1.5 flex max-w-[66ch] gap-1.5 text-[0.9375rem] text-hint"
+          >
             <span aria-hidden="true">✻</span>
             {hint}
           </p>
         ) : null}
       </div>
       {example ? (
-        <Disclosure label="See an example" className="mt-0.5">
-          <blockquote className="max-w-prose rounded-md border-l-2 border-goldline bg-paper2 px-3.5 py-3 text-sm text-body">
-            <p className="italic">“{example}”</p>
-            <footer className="mt-1.5 not-italic text-muted">
+        <Disclosure label="See an example" className="mt-2.5">
+          <blockquote className="max-w-[66ch] rounded-r-[var(--radius-sm)] border-l-2 border-gold400 bg-paper2 px-[18px] py-3.5">
+            <p className="font-serif text-lg italic leading-[1.6] text-ink">
+              &ldquo;{example}&rdquo;
+            </p>
+            <footer className="mt-2.5 text-xs not-italic text-muted">
               — a sample answer, to show the level of detail. Yours can be shorter.
             </footer>
           </blockquote>

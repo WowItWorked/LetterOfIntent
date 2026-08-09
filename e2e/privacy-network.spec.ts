@@ -32,7 +32,13 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
   const external = trackExternal(page);
 
   await page.goto("/");
-  await page.getByRole("link", { name: /start your letter/i }).click();
+  // The footer carries the same words, so take the hero's.
+  await page.getByRole("link", { name: /start your letter · it/i }).click();
+  await expect(page).toHaveURL(/\/letter$/);
+  await page
+    .getByRole("button", { name: /start the special needs letter/i })
+    .first()
+    .click();
   await expect(page).toHaveURL(/getting-started/);
 
   await page.getByLabel("Your name").fill("Maria Alvarez");
@@ -42,8 +48,12 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
 
   // One section filled → the PDF must still render correctly.
   await page.goto("/letter/review");
+  const rows = page.getByRole("listitem");
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: /download the letter/i }).click();
+  await rows
+    .filter({ hasText: "The Letter of Intent (PDF)" })
+    .getByRole("button", { name: "Download" })
+    .click();
   const download = await downloadPromise;
   const file = testInfo.outputPath("letter-one-section.pdf");
   await download.saveAs(file);
@@ -63,33 +73,37 @@ test("a fully filled letter renders both PDFs, still with zero external requests
   await seedLetter(page, FULL_LETTER);
 
   await page.goto("/letter/review");
-  // Scoped to the review article — the same phrase also sits in the (possibly
-  // hidden) sidebar progress note.
-  await expect(
-    page.locator("article").getByText(/every section has notes/i)
-  ).toBeVisible();
+  await expect(page.getByText(/every section has notes/i).first()).toBeVisible();
+
+  const rows = page.getByRole("listitem");
 
   const letterDl = page.waitForEvent("download");
-  await page.getByRole("button", { name: /download the letter/i }).click();
+  await rows
+    .filter({ hasText: "The Letter of Intent (PDF)" })
+    .getByRole("button", { name: "Download" })
+    .click();
   const letter = await letterDl;
   const letterPath = testInfo.outputPath("letter-full.pdf");
   await letter.saveAs(letterPath);
   const letterBuf = fs.readFileSync(letterPath);
   expect(letterBuf.subarray(0, 5).toString()).toBe("%PDF-");
-  // 15 sections + cover + how-to + TOC — a real multi-page document.
+  // 15 sections + cover + how-to + TOC + key points — a real document.
   expect(letterBuf.length).toBeGreaterThan(20_000);
 
   const emergencyDl = page.waitForEvent("download");
-  await page.getByRole("button", { name: /download the emergency sheet/i }).click();
+  await rows
+    .filter({ hasText: "The emergency sheet (PDF)" })
+    .getByRole("button", { name: "Download" })
+    .click();
   const emergency = await emergencyDl;
   const emergencyPath = testInfo.outputPath("emergency.pdf");
   await emergency.saveAs(emergencyPath);
   const emergencyBuf = fs.readFileSync(emergencyPath);
   expect(emergencyBuf.subarray(0, 5).toString()).toBe("%PDF-");
 
-  // The post-download follow-ups appear: yearly reminder + a single CTA.
+  // The calendar reminder is built here on the device.
   const icsDl = page.waitForEvent("download");
-  await page.getByRole("button", { name: /yearly reminder/i }).click();
+  await page.getByRole("button", { name: /^Apple$/ }).click();
   const ics = await icsDl;
   const icsPath = testInfo.outputPath("reminder.ics");
   await ics.saveAs(icsPath);
@@ -98,4 +112,34 @@ test("a fully filled letter renders both PDFs, still with zero external requests
   expect(icsText).toContain("Review Alex's Letter of Intent");
 
   expect(external, `external requests seen: ${external.join(", ")}`).toEqual([]);
+});
+
+test("the reminder email panel sends nothing, and says so", async ({ page }) => {
+  const external = trackExternal(page);
+  await seedLetter(page, FULL_LETTER);
+  await page.goto("/letter/review");
+
+  await page.getByLabel("Your email address").fill("someone@example.com");
+  await page.getByRole("button", { name: /send me the reminder/i }).click();
+  await expect(page.getByText(/switched on yet, so nothing was sent/i)).toBeVisible();
+
+  expect(external, `external requests seen: ${external.join(", ")}`).toEqual([]);
+});
+
+test("downloading all three produces two PDFs and a backup", async ({ page }, testInfo) => {
+  await seedLetter(page, FULL_LETTER);
+  await page.goto("/letter/review");
+
+  const downloads: string[] = [];
+  page.on("download", (d) => downloads.push(d.suggestedFilename()));
+
+  await page.getByRole("button", { name: /download all three together/i }).click();
+  await expect
+    .poll(() => downloads.length, { timeout: 60_000 })
+    .toBeGreaterThanOrEqual(3);
+
+  expect(downloads.some((f) => /^Letter-of-Intent.*\.pdf$/.test(f))).toBe(true);
+  expect(downloads.some((f) => /^Emergency-Sheet.*\.pdf$/.test(f))).toBe(true);
+  expect(downloads.some((f) => /\.json$/.test(f))).toBe(true);
+  testInfo.attach("downloads", { body: downloads.join("\n") });
 });

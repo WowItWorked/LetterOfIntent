@@ -176,6 +176,102 @@ export const personalMessageSchema = z.object({
   toPerson: s,
 });
 
+/* ------------------------------------------------- the general path's sections
+ *
+ * The second letter — for an aging parent, a spouse, a sibling you look after —
+ * asks genuinely different questions, so it gets its own keys rather than
+ * reusing the special-needs ones with different labels. Getting started,
+ * family & support, final wishes, and the personal message are shared: they
+ * ask the same thing either way, and a family that switches paths keeps them.
+ */
+
+export const aboutThemSchema = z.object({
+  dateOfBirth: s,
+  whoTheyAre: s,
+  history: s,
+  temperament: s,
+  cannotAbide: s,
+  strangersGetWrong: s,
+});
+
+export const typicalWeekSchema = z.object({
+  mornings: s,
+  evenings: s,
+  fixedPoints: s,
+  gettingAround: s,
+  food: s,
+  goodDay: s,
+  hardDay: s,
+});
+
+export const dailyCommunicationSchema = z.object({
+  howToSpeak: s,
+  hearingVisionMemory: s,
+  wontAdmit: s,
+  hardConversations: s,
+  whatHelps: s,
+  whatToAvoid: s,
+});
+
+export const healthMedicalSchema = z.object({
+  providers: z.array(providerSchema).optional(),
+  medications: z.array(medicationSchema).optional(),
+  conditions: s,
+  allergies: s,
+  pharmacy: s,
+  preferredHospital: s,
+  appointmentHelp: s,
+  recordsLocation: s,
+});
+
+export const homeLivingSchema = z.object({
+  theHome: s,
+  deferred: s,
+  householdHelp: s,
+  personalCare: s,
+  petsAndPlants: s,
+  safety: s,
+});
+
+export const moneyDocumentsSchema = z.object({
+  whoHandlesBills: s,
+  howBillsArePaid: s,
+  incomeSources: s,
+  whereDocumentsKept: s,
+  vulnerabilities: s,
+  advisors: s,
+});
+
+export const workObligationsSchema = z.object({
+  currentWork: s,
+  commitments: s,
+  keyContacts: s,
+  windDown: s,
+});
+
+export const faithCommunitySchema = z.object({
+  faith: s,
+  congregation: s,
+  friendsAndNeighbors: s,
+  traditions: s,
+  pleasures: s,
+});
+
+export const legalDecisionsSchema = z.object({
+  powersOfAttorney: s,
+  advanceDirectives: s,
+  guardianship: s,
+  whoDecidesWhat: s,
+  professionals: s,
+});
+
+export const steppingInSchema = z.object({
+  firstWeek: s,
+  hindsight: s,
+  neverChange: s,
+  consultFirst: s,
+});
+
 /* -------------------------------------------------------------- whole letter */
 
 export const letterDataSchema = z.object({
@@ -194,13 +290,42 @@ export const letterDataSchema = z.object({
   trustee: trusteeSchema.optional(),
   finalWishes: finalWishesSchema.optional(),
   personalMessage: personalMessageSchema.optional(),
+
+  aboutThem: aboutThemSchema.optional(),
+  typicalWeek: typicalWeekSchema.optional(),
+  dailyCommunication: dailyCommunicationSchema.optional(),
+  healthMedical: healthMedicalSchema.optional(),
+  homeLiving: homeLivingSchema.optional(),
+  moneyDocuments: moneyDocumentsSchema.optional(),
+  workObligations: workObligationsSchema.optional(),
+  faithCommunity: faithCommunitySchema.optional(),
+  legalDecisions: legalDecisionsSchema.optional(),
+  steppingIn: steppingInSchema.optional(),
 });
+
+export const letterPathSchema = z.enum(["special-needs", "general"]);
 
 export const letterMetaSchema = z.object({
   startedAt: s,
   updatedAt: s,
   lastVisitedSlug: s,
   finalWishesAck: b,
+  /** Which set of questions this letter is being written from. */
+  letterPath: letterPathSchema.optional(),
+});
+
+/**
+ * Photographs travel in the backup as data URLs. They live in IndexedDB on
+ * the device rather than in the letter data, but a backup that dropped them
+ * would quietly lose the one thing a family cannot retype.
+ */
+export const backupPhotoSchema = z.object({
+  slot: z.enum(["recent", "family"]),
+  dataUrl: z.string(),
+  name: s,
+  type: s,
+  addedAt: s,
+  caption: s,
 });
 
 /** Envelope written by "Export a backup" and read by "Import a backup". */
@@ -210,6 +335,7 @@ export const backupSchema = z.object({
   exportedAt: s,
   data: letterDataSchema,
   meta: letterMetaSchema.optional(),
+  photos: z.array(backupPhotoSchema).optional(),
 });
 
 export type Contact = z.infer<typeof contactSchema>;
@@ -217,6 +343,8 @@ export type Provider = z.infer<typeof providerSchema>;
 export type Medication = z.infer<typeof medicationSchema>;
 export type LetterData = z.infer<typeof letterDataSchema>;
 export type LetterMeta = z.infer<typeof letterMetaSchema>;
+export type LetterPath = z.infer<typeof letterPathSchema>;
+export type BackupPhoto = z.infer<typeof backupPhotoSchema>;
 export type Backup = z.infer<typeof backupSchema>;
 
 export type SectionKey = keyof LetterData;
@@ -240,6 +368,17 @@ export const sectionSchemas = {
   trustee: trusteeSchema,
   finalWishes: finalWishesSchema,
   personalMessage: personalMessageSchema,
+
+  aboutThem: aboutThemSchema,
+  typicalWeek: typicalWeekSchema,
+  dailyCommunication: dailyCommunicationSchema,
+  healthMedical: healthMedicalSchema,
+  homeLiving: homeLivingSchema,
+  moneyDocuments: moneyDocumentsSchema,
+  workObligations: workObligationsSchema,
+  faithCommunity: faithCommunitySchema,
+  legalDecisions: legalDecisionsSchema,
+  steppingIn: steppingInSchema,
 } as const;
 
 export const BACKUP_APP_ID = "twl-letter-of-intent" as const;

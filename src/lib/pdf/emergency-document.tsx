@@ -1,22 +1,27 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
 import { firm } from "@/config/firm";
 import { formatDateLong, type EmergencyInfo } from "@/lib/derive";
+import {
+  ENGRAVED,
+  GOLD_DEEP,
+  GRAY,
+  INK,
+  NAVY,
+  SANS,
+  registerBrandFonts,
+} from "./theme";
 
-Font.registerHyphenationCallback((word) => [word]);
+registerBrandFonts();
 
-const NAVY = firm.brand.navy;
-const GOLD_DEEP = firm.brand.goldDeep;
-const INK = "#1f2735";
-const GRAY = "#5e6878";
 const LINE = "#cfc9bb";
 const RED = "#a64545";
 
 const s = StyleSheet.create({
   page: {
     padding: 28,
-    fontFamily: "Helvetica",
+    fontFamily: SANS,
     fontSize: 9,
     color: INK,
     lineHeight: 1.4,
@@ -29,7 +34,14 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  headerTitle: { fontFamily: "Helvetica-Bold", fontSize: 15, color: "#ffffff" },
+  // Cinzel is allowed here: 15pt, well clear of the 9pt floor.
+  headerTitle: {
+    fontFamily: ENGRAVED,
+    fontWeight: 600,
+    fontSize: 15,
+    letterSpacing: 0.6,
+    color: "#ffffff",
+  },
   headerRight: { fontSize: 8, color: "#e8e4d8", textAlign: "right" },
 
   identityRow: { flexDirection: "row", marginTop: 10, gap: 10 },
@@ -44,7 +56,7 @@ const s = StyleSheet.create({
   },
   photoText: { fontSize: 7, color: GRAY, textAlign: "center", lineHeight: 1.5 },
   identity: { flex: 1 },
-  fullName: { fontFamily: "Helvetica-Bold", fontSize: 13.5 },
+  fullName: { fontFamily: SANS, fontWeight: 700, fontSize: 13.5 },
 
   cols: { flexDirection: "row", marginTop: 10, gap: 10 },
   col: { flex: 1 },
@@ -57,7 +69,7 @@ const s = StyleSheet.create({
     marginBottom: 8,
   },
   boxTitle: {
-    fontFamily: "Helvetica-Bold",
+    fontFamily: SANS, fontWeight: 700,
     fontSize: 7.5,
     letterSpacing: 0.9,
     color: GRAY,
@@ -65,7 +77,7 @@ const s = StyleSheet.create({
   },
   body: { fontSize: 9, lineHeight: 1.45 },
   subLabel: {
-    fontFamily: "Helvetica-Bold",
+    fontFamily: SANS, fontWeight: 700,
     fontSize: 7,
     letterSpacing: 0.7,
     color: GRAY,
@@ -73,11 +85,11 @@ const s = StyleSheet.create({
     marginBottom: 1,
   },
   medRow: { marginBottom: 3 },
-  medName: { fontFamily: "Helvetica-Bold", fontSize: 9 },
+  medName: { fontFamily: SANS, fontWeight: 700, fontSize: 9 },
   medDetail: { fontSize: 8.5, color: "#39424f" },
 
   idLine: { fontSize: 9, marginTop: 2.5 },
-  idLabel: { fontFamily: "Helvetica-Bold", fontSize: 7.5, color: GRAY },
+  idLabel: { fontFamily: SANS, fontWeight: 700, fontSize: 7.5, color: GRAY },
 
   footNote: {
     marginTop: 4,
@@ -128,10 +140,13 @@ function Box({
 export function EmergencyDocument({
   info,
   appLogo,
+  photo,
 }: {
   info: EmergencyInfo;
   /** The tool's lockup, with its measured aspect ratio. */
   appLogo?: { dataUrl: string; aspect: number };
+  /** The recent photograph, so a stranger recognizes them straight away. */
+  photo?: { dataUrl: string; aspect: number };
 }) {
   const displayCaps = (info.preferred ?? info.fullName ?? "—").toUpperCase();
   const updated = formatDateLong(info.updatedIso) ?? info.updatedIso;
@@ -167,9 +182,16 @@ export function EmergencyDocument({
         </View>
 
         <View style={s.identityRow}>
-          <View style={s.photoBox}>
-            <Text style={s.photoText}>ATTACH{"\n"}RECENT{"\n"}PHOTO</Text>
-          </View>
+          {photo ? (
+            <Image
+              src={photo.dataUrl}
+              style={{ width: 84, height: 100, objectFit: "cover" }}
+            />
+          ) : (
+            <View style={s.photoBox}>
+              <Text style={s.photoText}>ATTACH{"\n"}RECENT{"\n"}PHOTO</Text>
+            </View>
+          )}
           <View style={s.identity}>
             {info.fullName ? <Text style={s.fullName}>{info.fullName}</Text> : null}
             {info.preferred && info.preferred !== info.fullName ? (
@@ -295,7 +317,7 @@ export function EmergencyDocument({
             {info.firstCall || contacts.length > 0 ? (
               <Box title="EMERGENCY CONTACTS" borderColor={NAVY}>
                 {info.firstCall ? (
-                  <Text style={{ ...s.body, fontFamily: "Helvetica-Bold" }}>
+                  <Text style={{ ...s.body, fontFamily: SANS, fontWeight: 700 }}>
                     CALL FIRST: {clamp(info.firstCall, 110)}
                   </Text>
                 ) : null}

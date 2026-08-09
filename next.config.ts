@@ -14,6 +14,9 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
+      // blob: is the explainer video's fallback source on hosts that do not
+      // answer range requests — the file is fetched once and re-served locally.
+      "media-src 'self' blob:",
       "font-src 'self' data:",
       "connect-src 'self'",
       "worker-src 'self' blob:",

@@ -4,17 +4,23 @@ import {
   backupSchema,
   letterDataSchema,
   type Backup,
+  type BackupPhoto,
   type LetterData,
   type LetterMeta,
 } from "@/lib/schema";
 
-export function serializeBackup(data: LetterData, meta: LetterMeta): string {
+export function serializeBackup(
+  data: LetterData,
+  meta: LetterMeta,
+  photos?: BackupPhoto[]
+): string {
   const backup: Backup = {
     app: BACKUP_APP_ID,
     version: BACKUP_VERSION,
     exportedAt: new Date().toISOString(),
     data,
     meta,
+    ...(photos && photos.length ? { photos } : {}),
   };
   return JSON.stringify(backup, null, 2);
 }
@@ -35,7 +41,7 @@ export function backupFilename(personLabel: string | undefined, now: Date): stri
 }
 
 export type ParseBackupResult =
-  | { ok: true; data: LetterData; meta: LetterMeta }
+  | { ok: true; data: LetterData; meta: LetterMeta; photos?: BackupPhoto[] }
   | { ok: false; reason: "not-json" | "not-a-backup" | "invalid" };
 
 /**
@@ -53,7 +59,12 @@ export function parseBackup(text: string): ParseBackupResult {
 
   const asBackup = backupSchema.safeParse(parsed);
   if (asBackup.success) {
-    return { ok: true, data: asBackup.data.data, meta: asBackup.data.meta ?? {} };
+    return {
+      ok: true,
+      data: asBackup.data.data,
+      meta: asBackup.data.meta ?? {},
+      photos: asBackup.data.photos,
+    };
   }
 
   if (parsed && typeof parsed === "object" && "app" in (parsed as object)) {

@@ -1,165 +1,178 @@
 @import "tailwindcss";
 
 /* ===========================================================================
-   Design tokens — Trusts & Wealth palette (navy / champagne gold / warm ivory)
-   Components reach ONLY for semantic tokens, so dark mode and the
-   high-contrast setting are pure token swaps.
+   Trusts & Wealth design tokens — ported verbatim from the brand system
+   (design/_ds/tokens/*.css). Values are copied, never re-derived.
+
+   Deep heritage navy + metallic champagne gold on warm ivory paper. Only two
+   grounds exist across the site — --paper and --paper-2 — with navy panels
+   for emphasis. Never introduce a third.
    ========================================================================= */
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
+
+  /* ---- Brand navy scale (primary) ------------------------------------- */
+  --navy-900: #16223a;
+  --navy-800: #1d2c46;
+  --navy-700: #253551; /* brand primary */
+  --navy-600: #324465;
+  --navy-500: #45597e;
+  --navy-400: #6b7c9c;
+  --navy-300: #9aa7be;
+
+  /* ---- Champagne gold scale (accent / metallic) ----------------------- */
+  --gold-700: #8a6a38;
+  --gold-600: #a87e45;
+  --gold-500: #c9a063; /* primary gold */
+  --gold-400: #d9b97f;
+  --gold-300: #e3c89b;
+  --gold-200: #efe0c9;
+  --gold-100: #f7eedf;
+
+  --gradient-gold: linear-gradient(
+    150deg,
+    #e3c89b 0%,
+    #c9a063 42%,
+    #a87e45 78%,
+    #c9a063 100%
+  );
+  --gradient-gold-soft: linear-gradient(120deg, #e8d2ac 0%, #cca468 100%);
+
+  /* ---- Warm neutrals (paper & ink) ------------------------------------ */
+  --ink-900: #1a2233;
+  --ink-700: #3a4456;
+  --ink-500: #5e6878;
+  --ink-400: #8a92a0;
+  --ink-300: #b9bec8;
 
   --paper: #fbfaf6;
   --paper-2: #f4efe6;
-  --surface: #ffffff;
-
-  --ink: #1a2233;
-  --ink-body: #3a4456;
-  --ink-muted: #5e6878;
-  --ink-faint: #646d7b;
-
+  --paper-3: #ece5d8;
+  --white: #ffffff;
   --line: #e4decf;
-  --line-strong: #b9bec8;
-  --control-border: #6e7889;
+  --line-cool: #e3e6ec;
 
-  --navy: #253551;
-  --navy-deep: #16223a;
-
-  --gold: #c9a063;
-  --gold-deep: #a87e45;
-  --gold-tint: #f7eedf;
-  --gold-line: #d9b97f;
-  --accent-text: #7d5f31;
-
-  --hint: #7d5f31;
+  /* ---- Semantic status ------------------------------------------------ */
+  --success: #4e7a57;
+  --success-bg: #eaf1eb;
+  --warning: #b7892f;
+  --warning-bg: #f8efd8;
   --danger: #a64545;
   --danger-bg: #f6e9e7;
-  --success: #4e7a57;
+  --info: #3e5c84;
+  --info-bg: #eaeff6;
 
-  --btn-bg: #253551;
-  --btn-bg-hover: #16223a;
+  /* ---- Text on navy panels -------------------------------------------- */
+  --on-ink-heading: #f6f4ee;
+  --on-ink-body: #c3ccdd;
+  --on-ink-secondary: #a9b5c9;
+  --on-ink-accent: var(--gold-400);
+
+  /* ---- Semantic aliases — components reach for these ------------------ */
+  --surface: var(--white);
+  --ink: var(--ink-900);
+  --ink-body: var(--ink-700);
+  --ink-muted: var(--ink-500);
+  /* The brand's --ink-400 is a 2.9:1 grey — fine as a hairline or an icon,
+     but it fails WCAG AA wherever the design uses it for meta text. The
+     semantic "faint" is that same cool grey, darkened just far enough to
+     clear 4.5:1 on both grounds. The audience is older caregivers. */
+  --ink-faint: #646d7b;
+  --line-strong: var(--ink-300);
+  --control-border: #6e7889; /* meets 3:1 against white for input borders */
+
+  --navy: var(--navy-700);
+  --navy-deep: var(--navy-900);
+  --gold: var(--gold-500);
+  --gold-deep: var(--gold-600);
+  --gold-tint: var(--gold-100);
+  --gold-line: var(--gold-400);
+  --accent-text: #7d5f31; /* gold dark enough for text on ivory (4.5:1) */
+  --hint: #7d5f31;
+
+  --btn-bg: var(--navy-700);
+  --btn-bg-hover: var(--navy-800);
   --btn-fg: #f3f1ea;
 
-  --ring: #253551;
+  --focus-ring: color-mix(in oklab, var(--gold-500) 55%, white);
+  --ring: var(--navy-700);
   --ring-w: 2px;
 
-  /* Masthead — navy in every scheme, so it carries its own palette. */
-  --header-bg: #1d2c46;
-  --header-fg: #f3f1ea;
-  --header-muted: #aeb9cd;
-  --header-accent: #c9a063;
-  --header-success: #a8d5b0;
-  --header-line: #324465;
+  /* ---- Typography ------------------------------------------------------ */
+  --fs-3xs: 0.6875rem; /* 11px legal fine print */
+  --fs-2xs: 0.75rem; /* 12px eyebrows / labels */
+  --fs-xs: 0.8125rem; /* 13px captions, meta */
+  --fs-sm: 0.9375rem; /* 15px UI small */
+  --fs-md: 1rem; /* 16px base body */
+  --fs-lg: 1.125rem; /* 18px lead body */
+  --fs-xl: 1.375rem; /* 22px card title */
+  --fs-2xl: 1.75rem; /* 28px subhead */
+  --fs-3xl: 2.25rem; /* 36px section heading */
+  --fs-4xl: 3rem; /* 48px page heading */
+  --fs-5xl: 4rem; /* 64px hero */
+  --fs-6xl: 5.25rem; /* 84px display hero */
+
+  --lh-tight: 1.08;
+  --lh-snug: 1.22;
+  --lh-heading: 1.18;
+  --lh-body: 1.62;
+  --lh-relaxed: 1.78;
+
+  --ls-engraved: 0.18em;
+  --ls-eyebrow: 0.26em;
+  --ls-caps: 0.08em;
+  --ls-display: -0.01em;
+  --ls-tight: -0.02em;
+
+  /* ---- Space, layout, radius, shadow, motion --------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  --measure: 66ch;
+  --container: 1200px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
+  --radius-pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(22, 34, 58, 0.06);
+  --shadow-sm: 0 2px 8px rgba(22, 34, 58, 0.07);
+  --shadow-md: 0 10px 28px -10px rgba(22, 34, 58, 0.16);
+  --shadow-lg: 0 24px 56px -18px rgba(22, 34, 58, 0.22);
+  --shadow-gold: 0 10px 30px -12px rgba(168, 126, 69, 0.4);
+
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 460ms;
+
+  --z-sticky: 100;
+  --z-overlay: 1000;
+  --z-modal: 1100;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #121826;
-    --paper-2: #182134;
-    --surface: #1c2638;
-
-    --ink: #efede4;
-    --ink-body: #cbd1dc;
-    --ink-muted: #a3aec2;
-    --ink-faint: #8291ac;
-
-    --line: #2b3a55;
-    --line-strong: #45597e;
-    --control-border: #64779c;
-
-    --navy: #32456a;
-    --navy-deep: #445a85;
-
-    --gold: #d9b97f;
-    --gold-deep: #c9a063;
-    --gold-tint: #2a2919;
-    --gold-line: #8a6a38;
-    --accent-text: #d9b97f;
-
-    --hint: #d9b97f;
-    --danger: #e39a9a;
-    --danger-bg: #3a2426;
-    --success: #8fbc98;
-
-    --btn-bg: #32456a;
-    --btn-bg-hover: #3d5480;
-    --btn-fg: #f3f1ea;
-
-    --ring: #d9b97f;
-  }
-}
-
-/* High contrast (user toggle, persisted) */
-html[data-contrast="high"] {
-  --header-bg: #000000;
-  --header-fg: #ffffff;
-  --header-muted: #e4e8f0;
-  --header-accent: #ffd88a;
-  --header-success: #b8f0c0;
-  --header-line: #ffffff;
-  --paper: #ffffff;
-  --paper-2: #ffffff;
-  --surface: #ffffff;
-  --ink: #000000;
-  --ink-body: #000000;
-  --ink-muted: #1a2233;
-  --ink-faint: #253551;
-  --line: #000000;
-  --line-strong: #000000;
-  --control-border: #000000;
-  --navy: #16223a;
-  --navy-deep: #000000;
-  --gold-tint: #ffffff;
-  --gold-line: #5c4522;
-  --accent-text: #5c4522;
-  --hint: #5c4522;
-  --danger: #7a1f1f;
-  --danger-bg: #ffffff;
-  --btn-bg: #000000;
-  --btn-bg-hover: #16223a;
-  --btn-fg: #ffffff;
-  --ring: #000000;
-  --ring-w: 3px;
-}
-
-@media (prefers-color-scheme: dark) {
-  html[data-contrast="high"] {
-    --paper: #000000;
-    --paper-2: #000000;
-    --surface: #000000;
-    --ink: #ffffff;
-    --ink-body: #ffffff;
-    --ink-muted: #e4e8f0;
-    --ink-faint: #cbd1dc;
-    --line: #ffffff;
-    --line-strong: #ffffff;
-    --control-border: #ffffff;
-    --navy: #ffffff;
-    --navy-deep: #ffffff;
-    --gold-tint: #000000;
-    --gold-line: #ffd88a;
-    --accent-text: #ffd88a;
-    --hint: #ffd88a;
-    --danger: #ffb3b3;
-    --danger-bg: #000000;
-    --btn-bg: #ffffff;
-    --btn-bg-hover: #e4e8f0;
-    --btn-fg: #000000;
-    --ring: #ffffff;
-  }
-}
-
-/* User text-size steps (persisted). Everything is rem-based, so this scales all UI. */
-html[data-textsize="2"] {
-  font-size: 112.5%;
-}
-html[data-textsize="3"] {
-  font-size: 125%;
-}
+/* ============================================================ tailwind theme
+   Utility names the components use. Semantic only — swapping a token here
+   restyles the whole site.
+   ========================================================================= */
 
 @theme inline {
   --color-paper: var(--paper);
   --color-paper2: var(--paper-2);
+  --color-paper3: var(--paper-3);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
   --color-body: var(--ink-body);
@@ -168,79 +181,103 @@ html[data-textsize="3"] {
   --color-line: var(--line);
   --color-line2: var(--line-strong);
   --color-control: var(--control-border);
+
   --color-navy: var(--navy);
+  --color-navy900: var(--navy-900);
+  --color-navy800: var(--navy-800);
+  --color-navy700: var(--navy-700);
+  --color-navy600: var(--navy-600);
+  --color-navy500: var(--navy-500);
+  --color-navy400: var(--navy-400);
+  --color-navy300: var(--navy-300);
   --color-navydeep: var(--navy-deep);
+
   --color-gold: var(--gold);
+  --color-gold700: var(--gold-700);
+  --color-gold600: var(--gold-600);
+  --color-gold500: var(--gold-500);
+  --color-gold400: var(--gold-400);
+  --color-gold300: var(--gold-300);
+  --color-gold200: var(--gold-200);
+  --color-gold100: var(--gold-100);
   --color-golddeep: var(--gold-deep);
   --color-goldtint: var(--gold-tint);
   --color-goldline: var(--gold-line);
   --color-accent: var(--accent-text);
+
   --color-hint: var(--hint);
+  --color-warning: var(--warning);
+  --color-warningbg: var(--warning-bg);
   --color-danger: var(--danger);
   --color-dangerbg: var(--danger-bg);
   --color-success: var(--success);
+  --color-successbg: var(--success-bg);
+  --color-info: var(--info);
+  --color-infobg: var(--info-bg);
+
+  /* Text on navy grounds. */
+  --color-onink: var(--on-ink-heading);
+  --color-oninkbody: var(--on-ink-body);
+  --color-oninkmuted: var(--on-ink-secondary);
 
   --font-sans: var(--font-mulish), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: var(--font-cormorant), Charter, "Bitstream Charter",
-    "Sitka Text", Cambria, Georgia, "Times New Roman", serif;
-  --font-brand: var(--font-cinzel), "Trajan Pro", "Times New Roman", serif;
+  --font-serif: var(--font-cormorant), "EB Garamond", Charter, Cambria, Georgia,
+    "Times New Roman", serif;
+  --font-brand: var(--font-cinzel), "Trajan Pro", Georgia, serif;
 }
 
-/* ============================================================== base styles */
+/* ============================================================== base styles
+   In @layer base on purpose: unlayered rules outrank every layered one, so
+   element defaults written outside a layer would beat the Tailwind utilities
+   meant to override them (a navy panel's text-onink would lose to h1's ink).
+   ========================================================================= */
 
-body {
-  background: var(--paper);
-  color: var(--ink-body);
-  font-family: var(--font-sans);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-serif);
-  color: var(--ink);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
-
-::selection {
-  background: var(--gold-tint);
-  color: var(--ink);
-}
-@media (prefers-color-scheme: dark) {
-  ::selection {
-    background: var(--gold-deep);
-    color: #10141d;
+@layer base {
+  body {
+    background: var(--paper);
+    color: var(--ink-body);
+    font-family: var(--font-sans);
+    font-size: var(--fs-md);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-}
 
-/* One visible focus style everywhere. */
-:focus-visible {
-  outline: var(--ring-w) solid var(--ring);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    color: var(--ink);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-display);
+    /* Cormorant renders light at heading sizes; 600 holds the page together. */
+    font-weight: 600;
+  }
 
-/* On the navy masthead the navy ring would vanish — use gold there. */
-.site-header :focus-visible {
-  outline-color: var(--header-accent);
-}
+  ::selection {
+    background: var(--gold-tint);
+    color: var(--ink);
+  }
 
-/* Cormorant renders light at body-ish sizes; give headings a touch more weight. */
-h1,
-h2,
-h3,
-h4 {
-  font-weight: 600;
-}
+  /* One visible focus style everywhere — a 3px soft gold ring. */
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 
-/* Native date inputs: keep comfortable touch height. */
-input[type="date"] {
-  min-height: 2.75rem;
+  /* Anchor targets have to clear the sticky header. */
+  :target,
+  [id] {
+    scroll-margin-top: 120px;
+  }
+
+  /* Native date inputs: keep comfortable touch height. */
+  input[type="date"] {
+    min-height: 2.75rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -251,6 +288,137 @@ input[type="date"] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ======================================================== brand primitives
+   The house flourishes, straight from the brand guide: engraved caps, the
+   gold diamond bullet, the 3px gold top-rule on cards.
+   ========================================================================= */
+
+/* Engraved all-caps lockup, à la the wordmark. Never below 12px. */
+.tw-engraved {
+  font-family: var(--font-brand);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-engraved);
+  font-weight: 400;
+  line-height: var(--lh-snug);
+}
+
+/* Small gold eyebrow label that precedes section titles. */
+.tw-eyebrow {
+  font-family: var(--font-brand);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-eyebrow);
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  color: var(--accent-text);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  line-height: var(--lh-snug);
+}
+
+/* On navy the eyebrow takes the warm gold, which reads at 12px there. */
+.tw-eyebrow--on-ink {
+  color: var(--gold-400);
+}
+
+/* The signature gold hairline rule. */
+.tw-rule {
+  border: 0;
+  height: 1px;
+  background: var(--gradient-gold);
+  opacity: 0.85;
+  width: 100%;
+}
+
+/* Centered rule with room for a diamond between the two halves. */
+.tw-rule--center {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  border: 0;
+  height: auto;
+  opacity: 1;
+  background: none;
+  color: var(--gold-500);
+}
+.tw-rule--center::before,
+.tw-rule--center::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, var(--gold-400));
+}
+.tw-rule--center::after {
+  background: linear-gradient(90deg, var(--gold-400), transparent);
+}
+
+/* Diamond bullet echoing the monogram geometry. The house glyph — never a
+   dot, never an emoji. */
+.tw-diamond {
+  width: 7px;
+  height: 7px;
+  background: var(--gradient-gold);
+  transform: rotate(45deg);
+  display: inline-block;
+  flex: none;
+}
+.tw-diamond--sm {
+  width: 5px;
+  height: 5px;
+}
+
+/* The 3px gold top-rule that sits on nearly every card. */
+.tw-card {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.tw-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--gradient-gold);
+}
+
+/* Cards that lift on hover. */
+.tw-card--lift {
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+.tw-card--lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Navy panel — the emphasis ground. */
+.tw-panel-navy {
+  background: linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 78%);
+  color: var(--on-ink-body);
+}
+.tw-panel-navy h1,
+.tw-panel-navy h2,
+.tw-panel-navy h3,
+.tw-panel-navy h4 {
+  color: var(--on-ink-heading);
+}
+
+/* The "Preparing to scrub" chip's indeterminate bar. */
+@keyframes mloi-load {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(360%);
   }
 }
 

@@ -7,6 +7,7 @@ export const about: SectionDef = {
   title: "About {name}",
   navTitle: "About {name}",
   minutes: 10,
+  photoSlot: true,
   intro:
     "Start with who they are — not the paperwork version, the person. The facts " +
     "help a future caregiver get things right. The stories help them actually " +

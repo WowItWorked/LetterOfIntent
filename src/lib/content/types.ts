@@ -61,5 +61,10 @@ export interface SectionDef {
   emotional?: boolean;
   /** True → mark as "(optional)" in navigation. */
   optionalTag?: boolean;
+  /**
+   * True → render the photograph drop targets after the form. Photos live in
+   * IndexedDB rather than the letter data, so they are not schema fields.
+   */
+  photoSlot?: boolean;
   fields: FieldDef[];
 }

@@ -23,6 +23,29 @@ export const SECTION_SLUGS = [
   "a-personal-message",
 ] as const;
 
+/** The general path — four sections are shared with the list above. */
+export const GENERAL_SECTION_SLUGS = [
+  "getting-started",
+  "about-them",
+  "family-and-support",
+  "a-typical-week",
+  "talking-with-them",
+  "health-and-medical",
+  "home-and-daily-living",
+  "money-and-documents",
+  "work-and-obligations",
+  "faith-joy-and-community",
+  "legal-and-decisions",
+  "for-whoever-steps-in",
+  "final-wishes",
+  "a-personal-message",
+] as const;
+
+/** Every distinct section route across both paths. */
+export const ALL_SECTION_SLUGS = [
+  ...new Set([...SECTION_SLUGS, ...GENERAL_SECTION_SLUGS]),
+] as const;
+
 /** A letter with content in all 15 sections, including repeaters. */
 export const FULL_LETTER: LetterData = {
   gettingStarted: {

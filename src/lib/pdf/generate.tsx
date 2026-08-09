@@ -1,8 +1,10 @@
 import { pdf } from "@react-pdf/renderer";
 import { firm } from "@/config/firm";
 import { sanitizeForFilename } from "@/lib/backup";
+import { DEFAULT_PATH } from "@/lib/content/paths";
 import { emergencyInfo, letterDateIso, preferredName } from "@/lib/derive";
-import type { LetterData } from "@/lib/schema";
+import { blobToDataUrl, getPhoto } from "@/lib/photos";
+import type { LetterData, LetterPath } from "@/lib/schema";
 import { LoiDocument } from "./loi-document";
 import { EmergencyDocument } from "./emergency-document";
 
@@ -11,33 +13,49 @@ import { EmergencyDocument } from "./emergency-document";
  * imports it dynamically so @react-pdf/renderer stays out of the main bundle).
  */
 
-export interface LoadedLogo {
+export interface LoadedImage {
   dataUrl: string;
-  /** Intrinsic width / height — measured, so the mark is never stretched. */
+  /** Intrinsic width / height — measured, so nothing is stretched. */
   aspect: number;
 }
 
-async function loadLogo(path: string | null): Promise<LoadedLogo | undefined> {
+/** Measures an image without drawing it, so aspect ratios are never guessed. */
+function measure(dataUrl: string): Promise<number> {
+  return new Promise((resolve) => {
+    const img = document.createElement("img");
+    img.onload = () => resolve(img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1);
+    img.onerror = () => resolve(1);
+    img.src = dataUrl;
+  });
+}
+
+async function loadLogo(path: string | null): Promise<LoadedImage | undefined> {
   if (!path || typeof window === "undefined") return undefined;
   try {
     const res = await fetch(path);
     if (!res.ok) return undefined;
     const blob = await res.blob();
-    const dataUrl = await new Promise<string | undefined>((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : undefined);
-      reader.onerror = () => resolve(undefined);
-      reader.readAsDataURL(blob);
-    });
-    if (!dataUrl) return undefined;
-    const aspect = await new Promise<number>((resolve) => {
-      const img = document.createElement("img");
-      img.onload = () =>
-        resolve(img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1);
-      img.onerror = () => resolve(1);
-      img.src = dataUrl;
-    });
+    const dataUrl = await blobToDataUrl(blob);
+    const aspect = await measure(dataUrl);
     return { dataUrl, aspect: Math.min(5, Math.max(0.2, aspect)) };
+  } catch {
+    return undefined;
+  }
+}
+
+async function loadPhoto(
+  slot: "recent" | "family"
+): Promise<(LoadedImage & { caption?: string }) | undefined> {
+  try {
+    const record = await getPhoto(slot);
+    if (!record) return undefined;
+    const dataUrl = await blobToDataUrl(record.blob);
+    const aspect = await measure(dataUrl);
+    return {
+      dataUrl,
+      aspect: Math.min(5, Math.max(0.2, aspect)),
+      caption: record.caption?.trim() || undefined,
+    };
   } catch {
     return undefined;
   }
@@ -48,24 +66,50 @@ async function loadLogo(path: string | null): Promise<LoadedLogo | undefined> {
  * render-prop side effects during layout), pass 2 prints those numbers in the
  * table of contents. Layout is identical between passes, so numbers hold.
  */
-export async function generateLetterPdfBlob(data: LetterData): Promise<Blob> {
-  const [logo, appLogo] = await Promise.all([
+export async function generateLetterPdfBlob(
+  data: LetterData,
+  path: LetterPath = DEFAULT_PATH
+): Promise<Blob> {
+  const [logo, appLogo, familyPhoto] = await Promise.all([
     loadLogo(firm.logoPath),
     loadLogo(firm.appLogoPath),
+    loadPhoto("family"),
   ]);
   const registry: Record<string, number> = {};
   await pdf(
-    <LoiDocument data={data} logo={logo} appLogo={appLogo} registry={registry} toc={null} />
+    <LoiDocument
+      data={data}
+      path={path}
+      logo={logo}
+      appLogo={appLogo}
+      familyPhoto={familyPhoto}
+      registry={registry}
+      toc={null}
+    />
   ).toBlob();
   return pdf(
-    <LoiDocument data={data} logo={logo} appLogo={appLogo} registry={null} toc={registry} />
+    <LoiDocument
+      data={data}
+      path={path}
+      logo={logo}
+      appLogo={appLogo}
+      familyPhoto={familyPhoto}
+      registry={null}
+      toc={registry}
+    />
   ).toBlob();
 }
 
-export async function generateEmergencyPdfBlob(data: LetterData): Promise<Blob> {
-  const appLogo = await loadLogo(firm.appLogoPath);
+export async function generateEmergencyPdfBlob(
+  data: LetterData,
+  path: LetterPath = DEFAULT_PATH
+): Promise<Blob> {
+  const [appLogo, photo] = await Promise.all([
+    loadLogo(firm.appLogoPath),
+    loadPhoto("recent"),
+  ]);
   return pdf(
-    <EmergencyDocument info={emergencyInfo(data)} appLogo={appLogo} />
+    <EmergencyDocument info={emergencyInfo(data, path)} appLogo={appLogo} photo={photo} />
   ).toBlob();
 }
 

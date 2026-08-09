@@ -59,6 +59,13 @@ test("start the letter, answer a question, and move on — keyboard only", async
     /start your letter/i.test(await focusedText(page))
   );
   await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/letter$/);
+
+  // The chooser: pick a path, still without touching the mouse.
+  await tabUntil(page, async () =>
+    /start the special needs letter/i.test(await focusedText(page))
+  );
+  await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/getting-started/);
 
   await tabUntil(page, async () => /your name/i.test(await focusedLabel(page)));

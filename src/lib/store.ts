@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { LetterData, LetterMeta, SectionKey } from "@/lib/schema";
+import type { LetterData, LetterMeta, LetterPath, SectionKey } from "@/lib/schema";
 
 export const LETTER_STORAGE_KEY = "twl-loi-letter-v1";
 
@@ -11,6 +11,8 @@ interface LetterState {
   hasHydrated: boolean;
   setSection: <K extends SectionKey>(key: K, values: NonNullable<LetterData[K]>) => void;
   setLastVisited: (slug: string) => void;
+  /** Chosen on /letter; decides which section set the wizard and PDFs use. */
+  setLetterPath: (path: LetterPath) => void;
   ackFinalWishes: () => void;
   /** Used by backup import. Replaces everything. */
   replaceAll: (data: LetterData, meta?: LetterMeta) => void;
@@ -36,6 +38,8 @@ export const useLetterStore = create<LetterState>()(
         set((s) =>
           s.meta.lastVisitedSlug === slug ? s : { meta: { ...s.meta, lastVisitedSlug: slug } }
         ),
+      setLetterPath: (path) =>
+        set((s) => (s.meta.letterPath === path ? s : { meta: { ...s.meta, letterPath: path } })),
       ackFinalWishes: () => set((s) => ({ meta: { ...s.meta, finalWishesAck: true } })),
       replaceAll: (data, meta) =>
         set({ data, meta: { ...(meta ?? {}), updatedAt: new Date().toISOString() } }),

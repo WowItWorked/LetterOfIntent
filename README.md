@@ -1,21 +1,34 @@
-# Letter of Intent Builder
+# My Letter of Intent
 
-A free, public, guided web tool that helps a parent or guardian of a person with
-disabilities write a comprehensive **Letter of Intent** and download it as a
-polished PDF — plus a one-page **emergency sheet** for sitters, schools, and the
-ER. Built as a public-service tool for [Trusts & Wealth, PLLC](https://trustsandwealth.com).
+A free, public, guided web tool that helps a family write a **Letter of Intent**
+and download it as a polished PDF — plus a one-page **emergency sheet** for
+sitters, schools, and the ER. Built as a public-service tool for
+[Trusts & Wealth, PLLC](https://trustsandwealth.com) and published at
+[myletterofintent.com](https://myletterofintent.com).
+
+**Two letters, one builder.** A chooser at `/letter` picks the path:
+
+| Path            | Sections | For                                                    |
+| --------------- | -------- | ------------------------------------------------------ |
+| `special-needs` | 15       | A loved one with disabilities — trustee, benefits, behavior support |
+| `general`       | 14       | An aging parent, a spouse, a sibling you look after    |
+
+Four sections (getting started, family & support, final wishes, the personal
+message) are shared, so a family that switches paths keeps them.
 
 **The two non-negotiables, enforced in code and CI:**
 
 1. **Privacy** — every keystroke stays in the browser. There is no backend, no
-   database, no analytics, and a production Content-Security-Policy pins
-   `connect-src` to `'self'`. An e2e test records every network request across a
-   full journey (including PDF generation) and fails if any request leaves
-   localhost. The tool never asks for SSNs or account numbers — by schema design.
-2. **Accessibility** — WCAG 2.1 AA. axe runs in CI against every wizard step and
-   must report zero violations. Full keyboard journey is tested. User-facing text
-   size (3 steps) and high-contrast toggles persist. Dark mode and
-   `prefers-reduced-motion` are respected. Touch targets are ≥ 44px.
+   database, no analytics of any kind, and a production Content-Security-Policy
+   pins `connect-src` to `'self'`. An e2e test records every network request
+   across a full journey (including PDF generation) and fails if any request
+   leaves localhost. The tool never asks for SSNs or account numbers — by schema
+   design.
+2. **Accessibility** — WCAG 2.1 AA. axe runs in CI against every wizard step in
+   both paths and must report zero violations. The full keyboard journey is
+   tested. `prefers-reduced-motion` is respected and touch targets are ≥ 44px.
+   Where a brand token failed contrast as text (`--ink-400` at 2.9:1), the
+   semantic alias is darkened rather than the usage sprinkled with exceptions.
 
 ## Quick start
 
@@ -41,33 +54,44 @@ npm run dev          # http://localhost:3000
 src/
   config/firm.ts              ← every firm-specific value (white-label here)
   lib/
-    schema.ts                 ← zod persistence schema, all 15 sections, all optional
-    content/sections/*.ts     ← the product: 15 declarative section defs with all copy
+    schema.ts                 ← zod persistence schema, every section, all optional
+    content/sections/*.ts     ← the special-needs path: 15 declarative section defs
+    content/sections/general/ ← the general path: 14, four of them shared
+    content/paths.ts          ← the two paths + slug → path resolution
+    content/preview-prompts.ts← the chooser's "be ready to write about" lines
     content/types.ts          ← FieldDef / SectionDef types
     store.ts                  ← zustand + persist (letter data, localStorage)
-    settings-store.ts         ← text size / contrast (applied pre-paint)
+    photos.ts                 ← the two photographs, in IndexedDB
+    share.ts                  ← the pre-written message and its eight targets
     validation.ts             ← gentle UI-only format hints (never blocking)
-    derive.ts                 ← names, progress, emergency-sheet extraction
+    derive.ts                 ← names, progress, emergency sheet, key points
     backup.ts / ics.ts        ← export/import envelope, RFC 5545 reminder
+    pdf/theme.ts              ← brand fonts + palette for both documents
     pdf/loi-document.tsx      ← full letter (two-pass render for TOC page numbers)
     pdf/emergency-document.tsx← one-page emergency sheet
   components/
-    wizard/                   ← rail nav, generic SectionForm renderer, autosave
-    review/                   ← downloads, yearly reminder, single CTA, print view
-    data/                     ← export / import / delete-all
+    chrome/                   ← masthead, privacy strip, footer
+    letter/                   ← the chooser and its start buttons
+    home/                     ← the explainer video player, resume card
+    share/                    ← the share card and copy-link behaviour
+    wizard/                   ← rail nav, generic SectionForm renderer, photos
+    review/                   ← downloads, yearly reminder, print view
+    data/                     ← export / import / documents / delete-all
 ```
 
-**One renderer, fifteen sections.** Sections are data, not components: each file
-in `lib/content/sections/` declares its fields, helper text, and examples, and
-the generic `SectionForm` renders any of them. The PDF and the review screen
-walk the same definitions. A unit test asserts the definitions and the zod
-schema can never drift apart.
+**One renderer, twenty-nine section definitions.** Sections are data, not
+components: each file in `lib/content/sections/` declares its fields, helper
+text, and examples, and the generic `SectionForm` renders any of them. The PDFs
+and the review screen walk the same definitions. Unit tests assert that the
+definitions, the zod schema, and the chooser's prompts can never drift apart —
+including that a slug shared between the two paths always means the same
+section key.
 
 **Adding or changing a question** = edit the section def + the matching schema
 object (the sync test tells you if you miss one). Copy changes are pure content
 edits — no component work.
 
-**Why Zustand over Context:** form state spans 15 routes and updates on every
+**Why Zustand over Context:** form state spans 25 routes and updates on every
 debounced keystroke; Context would re-render the whole tree or demand heavy
 memoization. Zustand gives selector-level subscriptions, a built-in
 localStorage persist middleware, ~1 kB, and no provider nesting. Hydration is
@@ -79,16 +103,35 @@ work is never clobbered.
 loaded on demand (dynamic import) so it never weighs down the wizard. The
 letter renders twice: pass 1 records which page each section starts on (via
 render-prop side effects during layout), pass 2 prints those numbers in the
-table of contents. Fonts are the built-in Times family — zero font fetches.
+table of contents. **Page four is "Key points at a glance"** — the call order,
+how to talk with them, the medical facts that cannot wait, what helps, and a
+danger-bordered what-makes-it-worse, each citing the section it came from.
+
+Fonts are Cinzel, Cormorant Garamond, and Mulish, served from `public/fonts/`
+so they are same-origin and the CSP holds. Cinzel appears only at 9pt and above;
+every smaller label is Mulish bold caps.
+
+## The explainer video
+
+`public/what-is-a-letter-of-intent.mp4` (4:38, ~19 MB, faststart). The poster is
+a `<button>`; the whole frame starts playback. Position persists to
+`localStorage` under `mloi.video.whatIsALetterOfIntent.position` and resumes on
+return. With the video focused, ←/→ seek 5s (Shift for 30s) and 1–9 jump to
+that tenth. If a host does not answer range requests the timeline is not
+seekable, so the player fetches the file once and replays it from a blob URL —
+Vercel does answer them, so that path should never fire in production, and
+`media-src 'self' blob:` in the CSP is what allows the fallback when it does.
 
 ## Privacy architecture
 
-- All data lives in `localStorage` under two keys (`twl-loi-letter-v1`,
-  `twl-loi-settings-v1`).
+- Letter text lives in `localStorage` under one key (`twl-loi-letter-v1`);
+  photographs live in IndexedDB (`twl-loi-photos`), which localStorage's ~5 MB
+  origin cap could not hold without risking the written letter.
 - Export/Import: versioned JSON envelope (`lib/backup.ts`), tolerant of
-  future fields; import never rejects a letter over a typo.
-- **Delete all my data** clears both stores, then *verifies* the keys are gone
-  and says so.
+  future fields; import never rejects a letter over a typo. Photographs travel
+  inside the backup as data URLs.
+- **Delete all my data** clears the store and the photo database, then
+  *verifies* the key is gone and says so.
 - No SSN / account-number fields exist anywhere in the schema; the letter
   records *where* the family keeps those instead. A unit test enforces the ban.
 - `next telemetry` is disabled for this project.
@@ -149,7 +192,19 @@ set `logoPath: null` to hide it). No other file names the firm.
 
 - Every field optional; sections skippable; progress is encouragement, not a
   requirement. Format hints (email/date) are soft, amber, and never block.
-- Section 14 (Final wishes) sits behind a gentle interstitial and is marked
-  optional in navigation.
+- Final wishes sits behind a gentle interstitial and is marked optional in
+  navigation, in both paths.
 - Reading level target for UI copy: ~8th grade. Terms of art (waiver, IEP,
   ABLE, SSI/SSDI, supported decision-making) are defined inline where used.
+
+## Known gaps
+
+- **The emailed yearly reminder is not switched on.** The panel on the review
+  page is built and clearly labelled as unavailable; submitting it stores and
+  sends nothing, and points the visitor at the calendar buttons, which do work.
+  Turning it on needs a send endpoint, somewhere to hold addresses, and a
+  scheduler — plus a rewrite of privacy §05, which currently states plainly that
+  nothing is transmitted.
+- **No contact form.** By decision, the site links out to
+  `trustsandwealth.com/contact` and offers `mailto:` and `tel:` links; there is
+  no server here to accept a form post.

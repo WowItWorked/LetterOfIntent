@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { FULL_LETTER, SECTION_SLUGS, seedLetter } from "./fixture";
+import { ALL_SECTION_SLUGS, FULL_LETTER, seedLetter } from "./fixture";
 
 /** Acceptance: axe reports zero WCAG 2.1 A/AA violations on every step. */
 
@@ -17,7 +17,7 @@ async function expectNoViolations(page: import("@playwright/test").Page) {
   ).toEqual([]);
 }
 
-for (const path of ["/", "/privacy", "/your-data", "/letter/review"]) {
+for (const path of ["/", "/letter", "/privacy", "/your-data", "/letter/review"]) {
   test(`axe clean: ${path}`, async ({ page }) => {
     await page.goto(path);
     await page.waitForSelector("h1");
@@ -25,13 +25,21 @@ for (const path of ["/", "/privacy", "/your-data", "/letter/review"]) {
   });
 }
 
-for (const slug of SECTION_SLUGS) {
+test("axe clean: the chooser with a section row open", async ({ page }) => {
+  await page.goto("/letter");
+  await page.getByRole("tab", { name: /aging & general care/i }).click();
+  await page.getByRole("button", { name: /a typical week/i }).click();
+  await page.getByText(/be ready to write about/i).waitFor();
+  await expectNoViolations(page);
+});
+
+for (const slug of ALL_SECTION_SLUGS) {
   test(`axe clean: /letter/${slug}`, async ({ page }) => {
     await page.goto(`/letter/${slug}`);
     await page.waitForSelector("h1");
     // Wait for the hydrated form (or the final-wishes gate) to be on screen.
     await page
-      .locator("form, [class*=rounded-xl]:has-text('gentle note')")
+      .locator("form, :text('A gentle note before this section')")
       .first()
       .waitFor({ timeout: 15_000 });
     await expectNoViolations(page);

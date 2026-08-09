@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { firm } from "@/config/firm";
-import { sectionDefs } from "@/lib/content/sections";
+import { DEFAULT_PATH, pathDef } from "@/lib/content/paths";
 import type { FieldDef, SectionDef } from "@/lib/content/types";
 import {
   displayName,
@@ -12,45 +12,74 @@ import {
   formatDateLong,
   itemHasContent,
   letterDateIso,
+  preferredName,
   readerName,
   sectionHasContent,
   startedCount,
 } from "@/lib/derive";
-import { buildReviewReminderIcs } from "@/lib/ics";
+import { backupFilename, serializeBackup } from "@/lib/backup";
+import { buildReviewReminderIcs, calendarLinks } from "@/lib/ics";
 import { triggerDownload } from "@/lib/download";
+import { photosForBackup } from "@/lib/photos";
 import { useLetterStore } from "@/lib/store";
-import type { LetterData } from "@/lib/schema";
+import type { LetterData, LetterPath } from "@/lib/schema";
 import { Button, buttonClasses } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { ReminderPanel } from "@/components/review/ReminderPanel";
 
-type Busy = null | "letter" | "emergency";
+type FileKind = "letter" | "emergency" | "backup";
+
+const CARD_GAP = "mt-[22px]";
 
 export function ReviewScreen() {
   const hydrated = useLetterStore((s) => s.hasHydrated);
   const data = useLetterStore((s) => s.data);
-  const [busy, setBusy] = useState<Busy>(null);
-  const [downloaded, setDownloaded] = useState(false);
+  const meta = useLetterStore((s) => s.meta);
+
+  const [busy, setBusy] = useState<FileKind | "all" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const count = hydrated ? startedCount(data) : 0;
+  const path = meta.letterPath ?? DEFAULT_PATH;
+  const def = pathDef(path);
+  const total = def.sections.length;
+  const count = hydrated ? startedCount(data, path) : 0;
   const name = displayName(data);
 
-  const download = async (kind: Exclude<Busy, null>) => {
+  /* ------------------------------------------------------------ downloads */
+  const downloadBackup = async () => {
+    const photos = await photosForBackup();
+    triggerDownload(
+      backupFilename(preferredName(data), new Date()),
+      serializeBackup(data, meta, photos),
+      "application/json"
+    );
+  };
+
+  const downloadPdf = async (kind: "letter" | "emergency") => {
+    const mod = await import("@/lib/pdf/generate");
+    if (kind === "letter") {
+      const blob = await mod.generateLetterPdfBlob(data, path);
+      triggerDownload(mod.letterPdfFilename(data), blob, "application/pdf");
+    } else {
+      const blob = await mod.generateEmergencyPdfBlob(data, path);
+      triggerDownload(mod.emergencyPdfFilename(data), blob, "application/pdf");
+    }
+  };
+
+  const run = async (kind: FileKind | "all") => {
     setBusy(kind);
     setError(null);
     try {
-      const mod = await import("@/lib/pdf/generate");
-      if (kind === "letter") {
-        const blob = await mod.generateLetterPdfBlob(data);
-        triggerDownload(mod.letterPdfFilename(data), blob, "application/pdf");
-      } else {
-        const blob = await mod.generateEmergencyPdfBlob(data);
-        triggerDownload(mod.emergencyPdfFilename(data), blob, "application/pdf");
-      }
-      setDownloaded(true);
+      if (kind === "backup") await downloadBackup();
+      else if (kind === "all") {
+        await downloadPdf("letter");
+        await downloadPdf("emergency");
+        await downloadBackup();
+      } else await downloadPdf(kind);
     } catch (e) {
       console.error(e);
       setError(
-        "The PDF couldn't be prepared on this device. The reading view below still " +
+        "The files couldn't be prepared on this device. The reading view below still " +
           "prints cleanly — use your browser's Print button as a fallback."
       );
     } finally {
@@ -58,211 +87,427 @@ export function ReviewScreen() {
     }
   };
 
-  const downloadIcs = () => {
-    const reminder = buildReviewReminderIcs(readerName(data), new Date());
-    triggerDownload(reminder.filename, reminder.content, "text/calendar");
-  };
-
+  /* ---------------------------------------------------------- empty state */
   if (hydrated && count === 0) {
     return (
-      <article>
-        <h1 className="text-3xl sm:text-4xl">Review &amp; download</h1>
-        <div className="mt-6 max-w-prose rounded-xl border border-line bg-surface p-6">
+      <>
+        <HeaderPanel lead="Nothing to review yet — your letter doesn't have any notes so far. Even one section makes a real, useful document." />
+        <section className={`tw-card ${CARD_GAP} p-8`}>
           <p className="text-body">
-            Nothing to review yet — your letter doesn't have any notes so far. Even one
-            section makes a real, useful document.
+            Start anywhere. A letter with three sections filled in is already worth more
+            to a future caregiver than the perfect letter that never got written.
           </p>
           <Link
-            href="/letter/getting-started"
+            href={`/letter/${def.sections[0].slug}`}
             className={buttonClasses("primary", "mt-4")}
           >
             Start with the first section
           </Link>
-        </div>
-      </article>
+        </section>
+      </>
     );
   }
 
+  const busyLabel = busy ? "Preparing…" : null;
+
   return (
-    <article>
-      <h1 className="text-3xl sm:text-4xl">Review &amp; download</h1>
-      <p className="mt-3 max-w-prose text-body">
-        {count === sectionDefs.length
-          ? "Every section has notes. "
-          : `${count} of ${sectionDefs.length} sections have notes so far — that's already worth printing. `}
-        Both documents are created right here on your device: nothing is uploaded.
-      </p>
+    <>
+      <HeaderPanel
+        lead={
+          count === total
+            ? `Every section has notes. All three files are created right here on your device: nothing is uploaded.`
+            : `${count} of ${total} sections have notes so far, which is already worth printing. All three files are created right here on your device: nothing is uploaded.`
+        }
+      />
 
       <div aria-live="assertive">
         {error ? (
-          <p className="mt-4 max-w-prose rounded-lg border border-danger bg-dangerbg p-4 text-danger">
+          <p className="mt-4 rounded-[var(--radius-sm)] border border-danger bg-dangerbg p-4 text-danger">
             {error}
           </p>
         ) : null}
       </div>
 
-      {/* ------------------------------------------------------ downloads */}
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        <section className="rounded-xl border border-line bg-surface p-6">
-          <h2 className="text-xl">The Letter of Intent</h2>
-          <p className="mt-2 text-sm text-body">
-            The full document: cover page, a guide for the reader, a table of
-            contents, every section you've written, and ruled note lines for
-            handwritten updates. Made to be printed and put in a binder.
+      {/* -------------------------------------------------------- downloads */}
+      <section
+        className={`${CARD_GAP} overflow-hidden rounded-[var(--radius-md)] border border-gold400 bg-surface`}
+        style={{ boxShadow: "var(--shadow-md)" }}
+      >
+        <div className="h-[3px]" style={{ background: "var(--gradient-gold)" }} />
+        <div style={{ padding: "30px clamp(24px, 3vw, 34px) 32px" }}>
+          <Eyebrow>Start here</Eyebrow>
+          <h2 className="mt-3 font-serif text-[clamp(1.6rem,3.4vw,2rem)] font-semibold text-ink">
+            Download all three
+          </h2>
+          <p className="mt-3 max-w-[68ch] leading-[1.7]">
+            Two documents for the people who will care for {name}, and one file for you.
+            Take all three now, because the set only works together.
           </p>
-          <Button
-            className="mt-4"
-            onClick={() => download("letter")}
-            disabled={!hydrated || busy !== null}
-          >
-            {busy === "letter" ? "Preparing your PDF…" : "Download the letter (PDF)"}
-          </Button>
-        </section>
 
-        <section className="rounded-xl border border-goldline bg-surface p-6">
-          <h2 className="text-xl">The emergency one-pager</h2>
-          <p className="mt-2 text-sm text-body">
-            One page for the fridge, the school office, the sitter, the ER:
-            diagnoses, meds, allergies, how {name === "your loved one" ? "they" : name}{" "}
-            communicate{name === "your loved one" ? "" : "s"}, what helps in a crisis,
-            and who to call. Families use this one weekly.
-          </p>
-          <Button
-            variant="secondary"
-            className="mt-4"
-            onClick={() => download("emergency")}
-            disabled={!hydrated || busy !== null}
-          >
-            {busy === "emergency" ? "Preparing your PDF…" : "Download the emergency sheet (PDF)"}
-          </Button>
-        </section>
-      </div>
-      <p aria-live="polite" className="sr-only">
-        {busy ? "Preparing your PDF. This stays on your device." : ""}
-      </p>
+          <ul className="mt-[22px] list-none p-0">
+            <FileRow
+              onClick={() => void run("letter")}
+              disabled={!hydrated || busy !== null}
+              label={busy === "letter" ? busyLabel : "Download"}
+              title="The Letter of Intent (PDF)"
+              blurb="to print, put in a binder, and hand to a trustee or sibling."
+            />
+            <FileRow
+              onClick={() => void run("emergency")}
+              disabled={!hydrated || busy !== null}
+              label={busy === "emergency" ? busyLabel : "Download"}
+              title="The emergency sheet (PDF)"
+              blurb="one page for the fridge, the school office, the sitter, the ER."
+            />
+            <FileRow
+              last
+              onClick={() => void run("backup")}
+              disabled={!hydrated || busy !== null}
+              label={busy === "backup" ? busyLabel : "Download"}
+              title="Your backup file (.json)"
+              blurb="the working copy, in a machine-readable format the builder reads rather than a person. Load it back in to pick the letter up again, here or on another computer. Without it, a cleared browser takes the letter with it."
+            />
+          </ul>
 
-      {/* ---------------------------------------------- after the download */}
-      {downloaded ? (
-        <div className="mt-8 space-y-4">
-          <section className="rounded-xl border border-line bg-surface p-6">
-            <h2 className="text-xl">Keep it alive: a yearly review</h2>
-            <p className="mt-2 max-w-prose text-sm text-body">
-              A Letter of Intent is trustworthy only while it's current. Add a reminder
-              to your calendar — one year from today — to reread it, update what
-              changed, and print a fresh copy. The file works with Google Calendar,
-              Outlook, and Apple Calendar. No email address needed.
-            </p>
-            <Button variant="secondary" className="mt-4" onClick={downloadIcs}>
-              Add a yearly reminder (.ics file)
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <Button
+              size="lg"
+              onClick={() => void run("all")}
+              disabled={!hydrated || busy !== null}
+            >
+              {busy === "all" ? "Preparing your files…" : "Download all three together"}
             </Button>
-          </section>
+            <span className="text-[0.9375rem] text-muted">
+              Two PDFs and one backup file. Nothing is uploaded.
+            </span>
+          </div>
+          <p aria-live="polite" className="sr-only">
+            {busy ? "Preparing your files. This stays on your device." : ""}
+          </p>
+        </div>
+      </section>
 
-          <section
-            aria-labelledby="trust-cta"
-            className="rounded-xl border border-goldline bg-goldtint p-6"
-          >
-            <h2 id="trust-cta" className="text-xl">
-              The letter guides people. A trust protects the money.
-            </h2>
-            <p className="mt-2 max-w-prose text-sm text-body">
-              Your letter tells future caregivers <em>how</em> — but it can't hold
-              money, protect {name}'s public benefits, or legally bind anyone. That's
-              the job of a special needs trust and an estate plan. If you'd like to
-              talk through how the two fit together, {firm.attorneyName} works with
-              families across {firm.licensedStates.join(" and ")}.
+      {/* --------------------------------------------------- come back in a year */}
+      <YearlyReview data={data} />
+
+      {/* ----------------------------------------------------- pass it along */}
+      <section className={`tw-card ${CARD_GAP}`}>
+        <div
+          className="flex flex-wrap items-center gap-[clamp(18px,3vw,44px)]"
+          style={{ padding: "28px clamp(24px, 2.6vw, 36px) 30px" }}
+        >
+          <div className="min-w-0 flex-[3_1_360px]">
+            <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+              Pass it along
             </p>
-            <div className="mt-4 flex flex-wrap items-center gap-4">
+            <h2 className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
+              You know how hard this was to start.
+            </h2>
+            <p className="mt-3 max-w-[68ch] leading-[1.75]">
+              Someone in your circle has been meaning to write one of these for years: a
+              parent in your support group, a sibling, the family at the next table at
+              clinic. The tool is free and always will be, and nothing they write ever
+              leaves their own device. Sending the link takes ten seconds and saves
+              someone else the blank page.
+            </p>
+          </div>
+          <div className="ml-auto flex min-w-0 flex-[0_1_340px] flex-col items-end text-right">
+            <Link
+              href="/#pass-it-along"
+              className={buttonClasses("accent", "w-[246px]", "lg")}
+              style={{ background: "var(--gradient-gold)", boxShadow: "var(--shadow-gold)" }}
+            >
+              Send it to someone
+            </Link>
+            <p className="mt-3 max-w-[234px] text-xs leading-[1.6] text-muted">
+              Send a text, an email, or post it to social media. The draft message is
+              already written for you.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- trust card */}
+      <section
+        className={`${CARD_GAP} rounded-[var(--radius-md)] border border-gold400 bg-gold100`}
+        style={{ padding: "28px 30px" }}
+      >
+        <Eyebrow>One more thing worth knowing</Eyebrow>
+        <h2 className="mt-3 font-serif text-[1.75rem] font-semibold text-ink">
+          The letter guides people. A trust protects the money.
+        </h2>
+        <p className="mt-3 max-w-[66ch] text-[0.9375rem] leading-[1.7]">
+          Your letter tells future caregivers <em>how</em>, but it cannot hold money,
+          protect {name}&rsquo;s public benefits, or legally bind anyone. That&rsquo;s the
+          job of a special needs trust and an estate plan. If you&rsquo;d like to talk
+          through how the two fit together, {firm.attorneyName} works with families across{" "}
+          {firm.licensedStates.join(" and ")}.
+        </p>
+        <div className="mt-5 flex flex-wrap items-center gap-[18px]">
+          <a
+            href={firm.consultUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonClasses("primary")}
+          >
+            Book a conversation
+          </a>
+          <span className="text-[0.9375rem] text-muted">
+            or call{" "}
+            <a href={firm.phoneHref} className="underline underline-offset-[3px]">
+              {firm.phone}
+            </a>
+            . No pressure, ever.
+          </span>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------- reading view */}
+      <ReadingView data={data} hydrated={hydrated} path={path} />
+    </>
+  );
+}
+
+/* --------------------------------------------------------------- pieces */
+
+function HeaderPanel({ lead }: { lead: string }) {
+  return (
+    <div
+      className="rounded-[var(--radius-md)]"
+      style={{
+        background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
+        boxShadow: "var(--shadow-md)",
+        padding: "clamp(26px, 3.4vw, 44px) clamp(24px, 3.4vw, 44px)",
+      }}
+    >
+      <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">The last step</p>
+      <h1 className="mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink">
+        Review &amp; download
+      </h1>
+      <p className="mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody">{lead}</p>
+    </div>
+  );
+}
+
+function FileRow({
+  title,
+  blurb,
+  onClick,
+  disabled,
+  label,
+  last,
+}: {
+  title: string;
+  blurb: string;
+  onClick: () => void;
+  disabled: boolean;
+  label: string | null;
+  last?: boolean;
+}) {
+  return (
+    <li
+      className={
+        last
+          ? "flex flex-wrap items-center gap-3.5"
+          : "mb-3.5 flex flex-wrap items-center gap-3.5 border-b border-line pb-3.5"
+      }
+    >
+      <span className="tw-diamond flex-none" aria-hidden="true" />
+      <span className="min-w-0 flex-[1_1_300px] text-[0.9375rem] leading-[1.65]">
+        <strong className="font-semibold text-ink">{title}</strong>, {blurb}
+      </span>
+      <Button
+        variant="outline"
+        className="w-[150px] flex-none justify-center"
+        onClick={onClick}
+        disabled={disabled}
+      >
+        {label ?? "Download"}
+      </Button>
+    </li>
+  );
+}
+
+function YearlyReview({ data }: { data: LetterData }) {
+  const person = readerName(data);
+  const links = calendarLinks(person, new Date(), firm.appUrl);
+
+  const downloadIcs = () => {
+    const reminder = buildReviewReminderIcs(person, new Date());
+    triggerDownload(reminder.filename, reminder.content, "text/calendar");
+  };
+
+  return (
+    <section className={`tw-card ${CARD_GAP}`}>
+      <div
+        style={{
+          padding:
+            "clamp(26px, 3vw, 36px) clamp(24px, 2.6vw, 36px) clamp(28px, 3vw, 38px)",
+        }}
+      >
+        <Eyebrow>One year from today</Eyebrow>
+        <h2 className="mt-3 font-serif text-[clamp(1.7rem,3vw,2.2rem)] font-semibold tracking-[-0.01em] text-ink">
+          Come back in a year.
+        </h2>
+        <p className="mt-3 max-w-[74ch] leading-[1.75]">
+          A Letter of Intent is trustworthy only while it is current. Next year, load your
+          backup file, change what has changed, and download a fresh set. That yearly pass
+          is what keeps the letter worth trusting, so set the reminder now, while you are
+          thinking about it.
+        </p>
+
+        <div
+          className="mt-[26px] grid gap-[22px]"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))" }}
+        >
+          <div className="rounded-[var(--radius-sm)] border border-line bg-paper2 px-6 pb-6 pt-[22px]">
+            <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+              Option one
+            </p>
+            <h3 className="mt-2 font-serif text-[1.375rem] font-semibold text-ink">
+              Put it in your own calendar
+            </h3>
+            <p className="mt-2.5 text-[0.9375rem] leading-[1.7]">
+              A single event, one year from today: <em>Reread and update the Letter of
+              Intent.</em> No email address, and nothing leaves this device.
+            </p>
+            <div className="mt-[18px] grid auto-rows-[44px] grid-cols-3 gap-2">
+              <button type="button" onClick={downloadIcs} className={buttonClasses("primary", "px-2")}>
+                Apple
+              </button>
               <a
-                href={firm.consultUrl}
+                href={links.google}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonClasses("primary")}
+                className={buttonClasses("primary", "px-2")}
               >
-                Book a conversation with {firm.shortName}
+                Google
               </a>
-              <span className="text-sm text-muted">
-                or call{" "}
-                <a href={firm.phoneHref} className="text-accent underline underline-offset-4">
-                  {firm.phone}
-                </a>{" "}
-                — no pressure, ever.
-              </span>
+              <a
+                href={links.outlook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonClasses("primary", "px-2")}
+              >
+                Outlook
+              </a>
             </div>
-          </section>
+            <p className="mt-3 text-[0.9375rem] leading-[1.7] text-muted">
+              Another calendar app?{" "}
+              <button
+                type="button"
+                onClick={downloadIcs}
+                className="border-0 bg-transparent p-0 font-semibold text-accent underline underline-offset-[3px]"
+              >
+                Download the .ics file
+              </button>
+              .
+            </p>
+            <p className="mt-3.5 text-xs leading-[1.65] text-muted">
+              Apple Calendar and most other apps open the .ics file this device makes.
+              Google and Outlook open in their own tab with the event pre-filled — only
+              the reminder&rsquo;s title and date travel there, never anything from your
+              letter.
+            </p>
+          </div>
+
+          <ReminderPanel />
         </div>
-      ) : null}
 
-      <p className="mt-6 text-sm text-muted">
-        Also wise:{" "}
-        <Link href="/your-data" className="text-accent underline underline-offset-4">
-          download a backup file
-        </Link>{" "}
-        so a cleared browser can never take your work.
-      </p>
-
-      {/* ------------------------------------------------- reading view */}
-      <ReadingView data={data} hydrated={hydrated} />
-    </article>
+        <p className="mt-[22px] border-t border-line pt-[18px] text-[0.9375rem] leading-[1.7] text-muted">
+          Either way, keep your backup file. It is the only way back into the letter next
+          year.{" "}
+          <Link href="/privacy" className="font-semibold underline underline-offset-[3px]">
+            How reminders and your data work →
+          </Link>
+        </p>
+      </div>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------ reading view */
 
-function ReadingView({ data, hydrated }: { data: LetterData; hydrated: boolean }) {
+function ReadingView({
+  data,
+  hydrated,
+  path,
+}: {
+  data: LetterData;
+  hydrated: boolean;
+  path: LetterPath;
+}) {
   if (!hydrated) return null;
+  const sections = pathDef(path).sections;
   const name = readerName(data);
-  const included = sectionDefs.filter((d) => sectionHasContent(data, d));
-  const missing = sectionDefs.filter((d) => !sectionHasContent(data, d));
+  const included = sections.filter((d) => sectionHasContent(data, d));
+  const missing = sections.filter((d) => !sectionHasContent(data, d));
   const author = data.gettingStarted?.authorName?.trim();
   const fullName = data.gettingStarted?.subjectFullName?.trim() || name;
   const dateLong = formatDateLong(letterDateIso(data));
 
   return (
-    <section aria-labelledby="reading-title" className="mt-12 border-t border-line pt-8">
-      <div className="print-hide flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 id="reading-title" className="text-2xl">
-            Read it through
-          </h2>
-          <p className="mt-1 max-w-prose text-sm text-muted">
-            Everything you've written, in one place. This view also prints cleanly if
-            you ever need a copy without the PDF.
-          </p>
+    <section aria-labelledby="reading-title" className={CARD_GAP}>
+      <div
+        className="tw-card print-hide"
+        style={{ borderRadius: "var(--radius-md) var(--radius-md) 0 0" }}
+      >
+        <div
+          className="flex flex-wrap items-start justify-between gap-[18px]"
+          style={{ padding: "26px clamp(24px, 2.6vw, 36px) 28px" }}
+        >
+          <div>
+            <p className="tw-engraved text-[0.6875rem] tracking-[0.22em] text-accent">
+              The letter itself
+            </p>
+            <h2 id="reading-title" className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
+              Read it through
+            </h2>
+            <p className="mt-2 max-w-[60ch] text-[0.9375rem] text-muted">
+              Everything you&rsquo;ve written, in one place, exactly as it appears in the
+              PDF. This view also prints cleanly if you ever need a copy without it.
+            </p>
+          </div>
+          <div className="flex flex-[0_1_340px] justify-end">
+            <Button size="lg" className="w-full justify-center" onClick={() => window.print()}>
+              Print this view
+            </Button>
+          </div>
         </div>
-        <Button variant="secondary" onClick={() => window.print()}>
-          Print this view
-        </Button>
       </div>
 
-      {/* Print-friendly letterhead */}
-      <div className="mt-8 font-serif">
-        <div className="border-b-2 border-gold pb-6 text-center">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-accent">
+      <div className="rounded-b-[var(--radius-md)] border border-t-0 border-line bg-surface px-[clamp(20px,2.6vw,36px)] pb-10 pt-8 font-serif">
+        <div className="border-b-2 border-gold500 pb-6 text-center">
+          <p className="tw-engraved text-xs tracking-[0.2em] text-accent">
             Letter of Intent
           </p>
-          <p className="mt-2 text-3xl text-ink">{fullName}</p>
+          <p className="mt-2 text-[2.25rem] text-ink">{fullName}</p>
           {author ? <p className="mt-2 italic text-muted">Written by {author}</p> : null}
-          {dateLong ? <p className="mt-1 text-sm text-muted">Last updated {dateLong}</p> : null}
+          {dateLong ? (
+            <p className="mt-1 font-sans text-[0.9375rem] text-muted">
+              Last updated {dateLong}
+            </p>
+          ) : null}
         </div>
 
-        {included.map((def) => (
-          <ReadingSection key={def.slug} def={def} data={data} name={name} />
+        {included.map((d, i) => (
+          <ReadingSection key={d.slug} def={d} data={data} name={name} number={i + 1} />
         ))}
       </div>
 
       {missing.length > 0 ? (
-        <div className="print-hide mt-10 rounded-xl border border-line bg-paper2 p-5">
-          <h3 className="text-base font-sans font-semibold text-ink">
+        <div className="print-hide mt-6 rounded-[var(--radius-md)] border border-line bg-paper2 p-5">
+          <h3 className="font-sans text-base font-semibold text-ink">
             Sections without notes yet
           </h3>
           <ul className="mt-2 flex flex-wrap gap-2">
-            {missing.map((def) => (
-              <li key={def.slug}>
+            {missing.map((d) => (
+              <li key={d.slug}>
                 <Link
-                  href={`/letter/${def.slug}`}
-                  className="inline-flex min-h-11 items-center rounded-md border border-line bg-surface px-3 text-sm text-body hover:text-ink"
+                  href={`/letter/${d.slug}`}
+                  className="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] border border-line bg-surface px-3 text-[0.9375rem] text-body hover:text-ink"
                 >
-                  {def.number}. {fillName(def.navTitle, displayName(data))}
+                  {fillName(d.navTitle, displayName(data))}
                 </Link>
               </li>
             ))}
@@ -277,10 +522,12 @@ function ReadingSection({
   def,
   data,
   name,
+  number,
 }: {
   def: SectionDef;
   data: LetterData;
   name: string;
+  number: number;
 }) {
   const values = (data[def.key] ?? {}) as Record<string, unknown>;
   const filled = def.fields.filter((f) => fieldHasContent(values, f));
@@ -288,7 +535,7 @@ function ReadingSection({
     <section className="print-section mt-10">
       <h3 className="flex items-baseline gap-3 border-b border-line pb-2 text-2xl text-navydeep">
         <span aria-hidden="true" className="text-base text-accent">
-          {def.number}.
+          {number}.
         </span>
         {fillName(def.title, name)}
       </h3>
@@ -318,12 +565,15 @@ function ReadingField({
     );
     return (
       <div>
-        <dt className="font-sans text-[0.75rem] font-semibold uppercase tracking-wider text-muted">
+        <dt className="font-sans text-xs font-semibold uppercase tracking-wider text-muted">
           {label}
         </dt>
         <dd className="mt-1.5 grid gap-2.5 sm:grid-cols-2">
           {items.map((item, i) => (
-            <div key={i} className="rounded-lg border border-line bg-surface p-3.5 text-[0.98rem]">
+            <div
+              key={i}
+              className="rounded-[var(--radius-sm)] border border-line bg-paper2 p-3.5 text-[0.98rem]"
+            >
               {field.itemFields
                 .filter((f) => f.kind !== "checkbox")
                 .map((f) => {
@@ -341,7 +591,10 @@ function ReadingField({
               {field.itemFields
                 .filter((f) => f.kind === "checkbox" && item[f.id] === true)
                 .map((f) => (
-                  <p key={f.id} className="mt-1.5 font-sans text-xs font-semibold text-accent">
+                  <p
+                    key={f.id}
+                    className="mt-1.5 font-sans text-xs font-semibold text-accent"
+                  >
                     ◆ {fillName(f.label, name).replace(/ — .*/, "")}
                   </p>
                 ))}
@@ -356,10 +609,10 @@ function ReadingField({
   const value = field.kind === "date" ? (formatDateLong(raw) ?? raw) : raw;
   return (
     <div>
-      <dt className="font-sans text-[0.75rem] font-semibold uppercase tracking-wider text-muted">
+      <dt className="font-sans text-xs font-semibold uppercase tracking-wider text-muted">
         {label}
       </dt>
-      <dd className="mt-1 max-w-prose whitespace-pre-wrap text-[1.02rem] leading-relaxed text-ink">
+      <dd className="mt-1 max-w-[66ch] whitespace-pre-wrap text-[1.02rem] leading-relaxed text-ink">
         {value}
       </dd>
     </div>

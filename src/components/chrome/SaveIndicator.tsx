@@ -24,18 +24,18 @@ export function SaveIndicator() {
   }, [status]);
 
   return (
-    <span
-      className="min-w-[4.5rem] text-right text-sm text-[var(--header-muted)]"
-      data-save-status={status}
-    >
+    <span className="text-right text-[0.9375rem] text-muted" data-save-status={status}>
       <span aria-live="polite" className="sr-only">
         {announcement}
       </span>
       {status === "pending" ? (
         <span aria-hidden="true">Saving…</span>
       ) : status === "saved" ? (
-        <span aria-hidden="true" className="text-[var(--header-success)]">
-          ✓ Saved
+        <span aria-hidden="true" className="inline-flex items-center gap-1.5 text-success">
+          <svg aria-hidden="true" viewBox="0 0 16 16" className="size-[13px] fill-current">
+            <path d="M6.2 12.3 2.4 8.5l1.2-1.2 2.6 2.6 6-6 1.2 1.2z" />
+          </svg>
+          Saved
         </span>
       ) : null}
     </span>

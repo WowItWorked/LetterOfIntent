@@ -69,7 +69,8 @@ export const firm: FirmConfig = {
   consultUrl: "https://calendly.com/trustsandwealth/consultation",
   licensedStates: ["Virginia"],
   logoPath: "/monogram-gold.png",
-  appLogoPath: "/mloi-logo.png",
+  // The stacked lockup is the one the brand system puts on documents.
+  appLogoPath: "/mloi-lockup-stacked.png",
   brand: {
     navy: "#253551",
     navyDeep: "#16223A",

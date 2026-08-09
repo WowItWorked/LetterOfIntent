@@ -20,11 +20,15 @@ export function Disclosure({ label, children, className }: DisclosureProps) {
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-11 items-center gap-1.5 py-1 text-sm font-medium text-accent underline-offset-4 hover:underline"
+        className="inline-flex min-h-11 items-center gap-2 py-1 text-[0.9375rem] font-semibold text-accent underline-offset-4 hover:underline"
       >
-        <span aria-hidden="true" className={cn("text-xs transition-transform motion-reduce:transition-none", open && "rotate-90")}>
-          ▶
-        </span>
+        <span
+          aria-hidden="true"
+          className={cn(
+            "tw-diamond transition-transform motion-reduce:transition-none",
+            open && "scale-125"
+          )}
+        />
         {label}
       </button>
       {open ? (

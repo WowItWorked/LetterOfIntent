@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Cinzel, Cormorant_Garamond, Mulish } from "next/font/google";
 import "./globals.css";
 import { firm } from "@/config/firm";
-import { SETTINGS_BOOT_SCRIPT } from "@/lib/settings-store";
 import { ClientBoot } from "@/components/boot/ClientBoot";
 import { SiteHeader } from "@/components/chrome/SiteHeader";
 import { PrivacyStrip } from "@/components/chrome/PrivacyStrip";
@@ -76,10 +75,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${cinzel.variable} ${cormorant.variable} ${mulish.variable} h-full`}
       suppressHydrationWarning
     >
-      <head>
-        {/* Applies saved text-size / contrast before first paint. */}
-        <script dangerouslySetInnerHTML={{ __html: SETTINGS_BOOT_SCRIPT }} />
-      </head>
       <body className="flex min-h-full flex-col">
         <a
           href="#main"

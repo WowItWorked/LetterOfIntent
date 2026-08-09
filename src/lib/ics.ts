@@ -79,3 +79,40 @@ export function buildReviewReminderIcs(personLabel: string, now: Date): ReviewRe
     content: lines.map(foldIcsLine).join("\r\n") + "\r\n",
   };
 }
+
+/* ------------------------------------------------------- hosted calendars */
+
+const REMINDER_BODY =
+  "A yearly check-in: open the Letter of Intent, update anything that changed " +
+  "(medications, contacts, routines, benefits), change the date, and print or share " +
+  "the new version.";
+
+/**
+ * Deep links for the two calendars that live on the web. Only the reminder's
+ * title and date travel there — the person's name is the one thing the title
+ * carries, and the caller decides whether to use a name or "the".
+ */
+export function calendarLinks(personLabel: string, now: Date, appUrl: string) {
+  const next = new Date(now);
+  next.setFullYear(next.getFullYear() + 1);
+  const day = `${next.getFullYear()}${pad(next.getMonth() + 1)}${pad(next.getDate())}`;
+  const after = new Date(next);
+  after.setDate(after.getDate() + 1);
+  const dayAfter = `${after.getFullYear()}${pad(after.getMonth() + 1)}${pad(after.getDate())}`;
+
+  const title = `Review ${personLabel}'s Letter of Intent`;
+  const details = `${REMINDER_BODY}\n\n${appUrl}`;
+  const enc = encodeURIComponent;
+
+  return {
+    google:
+      "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      `&text=${enc(title)}&dates=${day}/${dayAfter}&details=${enc(details)}`,
+    outlook:
+      "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose" +
+      `&rru=addevent&allday=true&subject=${enc(title)}` +
+      `&startdt=${next.getFullYear()}-${pad(next.getMonth() + 1)}-${pad(next.getDate())}` +
+      `&enddt=${after.getFullYear()}-${pad(after.getMonth() + 1)}-${pad(after.getDate())}` +
+      `&body=${enc(details)}`,
+  };
+}

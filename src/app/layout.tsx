@@ -57,11 +57,21 @@ export const metadata: Metadata = {
     title:
       "Write down what only you know, so they’ll be cared for the way that only you have.",
     description: DESCRIPTION,
+    // Without this, a chat app or social client with no image of its own to
+    // show falls back to screenshotting whatever page was open when the link
+    // was shared — which is how a watermarked sample document ended up as a
+    // text-message preview. The lockup, generated once by
+    // scripts/generate-og-image.mjs onto the site's own paper background, at
+    // the 1200x630 size link previews are built around.
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "My Letter of Intent" }],
   },
   twitter: {
-    card: "summary",
+    // summary_large_image, not summary: the small square crop that "summary"
+    // uses would cut the tagline off the bottom of this lockup.
+    card: "summary_large_image",
     title: "Letter of Intent Builder",
     description: DESCRIPTION,
+    images: ["/og-image.png"],
   },
   // No `icons` entry on purpose: src/app/favicon.ico is picked up by the file
   // convention, and naming one here as well would put two competing <link

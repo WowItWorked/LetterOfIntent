@@ -30,8 +30,6 @@ export function SampleDocuments({ path }: { path: LetterPath }) {
           <li key={s.slug}>
             <Link
               href={`/samples/${s.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
               className="group block rounded-[var(--radius-sm)] focus-visible:outline-offset-4"
             >
               <span

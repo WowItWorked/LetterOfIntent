@@ -191,8 +191,9 @@ test("the home page offers watermarked samples, drawn in the page", async ({ pag
   await expect(links).toHaveCount(4);
 
   for (const link of await links.all()) {
-    expect(await link.getAttribute("target")).toBe("_blank");
-    expect(await link.getAttribute("rel")).toContain("noopener");
+    // Same tab, same masthead — a sample is part of browsing the site, not a
+    // hand-off to a separate window.
+    expect(await link.getAttribute("target")).toBeNull();
     // The viewer, not the raw file — whether a browser opens or downloads a
     // PDF is a per-browser setting we do not control.
     expect(await link.getAttribute("href")).not.toMatch(/\.pdf$/);

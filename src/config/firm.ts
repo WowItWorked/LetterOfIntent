@@ -72,12 +72,10 @@ export const firm: FirmConfig = {
   appUrlLabel: "myletterofintent.com",
   consultUrl: "https://trustsandwealth.com/reserve.html",
   contactUrl: "https://trustsandwealth.com/contact.html",
-  // INTERIM: a Google search for the firm, which surfaces the Business Profile
-  // panel with its own "Write a review" control. Replace with the profile's
-  // direct write-review short link (https://g.page/r/<id>/review, from Google
-  // Business Profile → Ask for reviews) so the button lands on the review form
-  // in one click instead of two.
-  reviewUrl: "https://www.google.com/search?q=Trusts+%26+Wealth+PLLC+reviews",
+  // The Business Profile's own write-review short link, from Google Business
+  // Profile → Ask for reviews. Opens the star-rating dialog directly rather
+  // than a search results page the reader then has to hunt through.
+  reviewUrl: "https://g.page/r/CYJI2xbnvpz7EAE/review",
   licensedStates: ["Virginia"],
   logoPath: "/monogram-gold.png",
   // The stacked lockup is the one the brand system puts on documents.

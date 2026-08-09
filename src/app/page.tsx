@@ -163,17 +163,17 @@ export default function HomePage() {
           >
             <PadlockIcon className="mt-1 size-[15px] fill-gold400" />
             <p className="text-[0.9375rem] leading-[1.65] text-[#D6DDE9]">
-              {/* The strip above already makes the privacy promise and already
-                  links to /privacy, so this box carries only what the strip
-                  does not: the shape of the task, and the one practical
-                  consequence of having no account. No second link to the same
-                  page a screenful apart. */}
               <strong className="font-semibold text-white">
                 No account. No email. About 45–90 minutes, in as many sittings as you
                 need.
               </strong>{" "}
-              Your letter lives in this browser, so download a backup file to keep a copy
-              or open it on another device.
+              Your data remains on your device and is never shared.{" "}
+              <Link
+                href="/privacy"
+                className="whitespace-nowrap font-semibold text-gold400 underline underline-offset-[3px] hover:text-gold300"
+              >
+                Learn more.
+              </Link>
             </p>
           </div>
         </div>

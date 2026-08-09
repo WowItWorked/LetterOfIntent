@@ -44,3 +44,8 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 
+# The attorney review pack: screenshots and a ~15MB Word file, all of it
+# regenerable from scripts/review-doc. The scripts are tracked; their output
+# is not.
+/review-pack/
+

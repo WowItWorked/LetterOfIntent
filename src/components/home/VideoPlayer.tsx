@@ -1,16 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const VIDEO_FILE = "/what-is-a-letter-of-intent.mp4";
-/**
- * Byte-identical to /mloi-lockup-stacked.png today, and deliberately kept as
- * its own file: that one is the document lockup on the PDF covers
- * (firm.appLogoPath). Pointing both at one asset would mean swapping in a real
- * video still one day silently restyled every letter a family has printed.
- */
-const POSTER = "/video-poster-lockup.png";
 const POSITION_KEY = "mloi.video.whatIsALetterOfIntent.position";
 
 /** Don't resume within this many seconds of the end — that's a finished view. */
@@ -19,8 +11,16 @@ const END_MARGIN = 5;
 const SAVE_EVERY_MS = 2000;
 
 /**
- * The explainer video. The whole poster is a button; clicking anywhere starts
- * playback.
+ * The explainer video.
+ *
+ * PROTOTYPE: no custom poster image or "Watch" pill right now — the <video>
+ * is mounted plain, so whatever the browser paints natively (usually its own
+ * first frame, once enough of the file has downloaded) is what shows before
+ * playback starts. Trade-off worth knowing: this also means the file starts
+ * downloading on page load rather than on click, which the previous
+ * click-to-start gate existed to avoid on a marketing homepage. Revisit
+ * before shipping — either restore a poster (a real frame, not the lockup),
+ * or switch preload to "metadata" if the eager download is not wanted.
  *
  * Seeking depends on the host answering range requests. Vercel does, so the
  * blob fallback below should never fire in production — it is here for hosts
@@ -28,9 +28,8 @@ const SAVE_EVERY_MS = 2000;
  * anyone who wants to skip back over a sentence.
  */
 export function VideoPlayer() {
-  const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [src, setSrc] = useState("");
+  const [src, setSrc] = useState(VIDEO_FILE);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const objectUrl = useRef<string | null>(null);
   const blobTried = useRef(false);
@@ -74,13 +73,7 @@ export function VideoPlayer() {
       .catch(() => setLoading(false));
   }, []);
 
-  /* ----------------------------------------------------------------- start */
-  const start = useCallback(() => {
-    setPlaying(true);
-    setSrc((s) => s || VIDEO_FILE);
-  }, []);
-
-  // Runs once the <video> is on the page with a source.
+  // Runs once the <video> is on the page.
   const attach = useCallback(
     (el: HTMLVideoElement | null) => {
       videoRef.current = el;
@@ -96,7 +89,9 @@ export function VideoPlayer() {
       if (el.readyState >= 1) resume();
       else el.addEventListener("loadedmetadata", resume, { once: true });
 
-      void el.play().catch(() => {});
+      // No autoplay call here: the video now mounts on page load rather than
+      // on a click, so there is no user gesture to play on. The browser's own
+      // controls start it.
       el.addEventListener("canplay", ensureSeekable, { once: true });
     },
     [ensureSeekable]
@@ -158,62 +153,20 @@ export function VideoPlayer() {
         className="relative w-full overflow-hidden rounded-[var(--radius-md)] border border-line bg-white"
         style={{ aspectRatio: "16 / 9", boxShadow: "var(--shadow-md)" }}
       >
-        {!playing ? (
-          <button
-            type="button"
-            onClick={start}
-            aria-label="Play the video: what a Letter of Intent is, and how the builder works"
-            className="absolute inset-0 block size-full cursor-pointer border-0 bg-white p-0 transition-colors duration-[var(--dur-fast)] hover:bg-paper motion-reduce:transition-none"
-          >
-            <Image
-              src={POSTER}
-              alt=""
-              fill
-              sizes="(max-width: 900px) 100vw, 560px"
-              className="box-border object-contain p-[5%]"
-              priority={false}
-            />
-            <span
-              aria-hidden="true"
-              className="absolute right-0 top-0 flex h-[52%] w-[42%] items-center justify-center"
-            >
-              <span
-                className="inline-flex items-center gap-[9px] rounded-full bg-navy800 py-[7px] pl-[7px] pr-4"
-                style={{ boxShadow: "var(--shadow-md)" }}
-              >
-                <span
-                  className="flex size-[30px] flex-none items-center justify-center rounded-full"
-                  style={{ background: "var(--gradient-gold)" }}
-                >
-                  <svg viewBox="0 0 24 24" className="ml-0.5 size-[13px] fill-navy900">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </span>
-                <span className="text-xs font-semibold uppercase tracking-[0.09em] text-onink">
-                  Watch
-                </span>
-              </span>
-            </span>
-          </button>
-        ) : null}
-
-        {playing && src ? (
-          // No caption track: the same explanation is written out in full in
-          // the column beside this player.
-          <video
-            ref={attach}
-            src={src}
-            poster={POSTER}
-            controls
-            playsInline
-            preload="auto"
-            tabIndex={0}
-            onClick={onClick}
-            onKeyDown={onKeyDown}
-            onTimeUpdate={onTimeUpdate}
-            className="absolute inset-0 size-full bg-navy900 object-contain outline-offset-2"
-          />
-        ) : null}
+        {/* No caption track: the same explanation is written out in full in
+            the column beside this player. */}
+        <video
+          ref={attach}
+          src={src}
+          controls
+          playsInline
+          preload="auto"
+          tabIndex={0}
+          onClick={onClick}
+          onKeyDown={onKeyDown}
+          onTimeUpdate={onTimeUpdate}
+          className="absolute inset-0 size-full bg-navy900 object-contain outline-offset-2"
+        />
 
         {loading ? (
           <div

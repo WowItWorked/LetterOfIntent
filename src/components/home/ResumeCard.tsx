@@ -37,11 +37,22 @@ export function ResumeCard() {
           &ldquo;{fillName(resume.navTitle, name)}.&rdquo;
         </span>
       </p>
-      <div className="mt-4 flex flex-wrap gap-3">
-        <Link href={`/letter/${resume.slug}`} className={buttonClasses("primary")}>
+      {/* Equal columns, so neither of the two ways forward looks like the
+          secondary one. */}
+      <div
+        className="mt-4 grid max-w-[560px] gap-3"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))" }}
+      >
+        <Link
+          href={`/letter/${resume.slug}`}
+          className={buttonClasses("primary", "w-full px-4 text-center")}
+        >
           Pick up where you left off
         </Link>
-        <Link href="/letter/review" className={buttonClasses("outline")}>
+        <Link
+          href="/letter/review"
+          className={buttonClasses("outline", "w-full px-4 text-center")}
+        >
           Review &amp; download
         </Link>
       </div>

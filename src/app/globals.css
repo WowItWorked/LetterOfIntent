@@ -268,10 +268,15 @@
     border-radius: 2px;
   }
 
-  /* Anchor targets have to clear the sticky header. */
+  /* Anchor targets have to clear the sticky header. This is the floor for any
+     target with no offset of its own: a flat 120px was shorter than the header
+     itself (149px at desktop), so those targets came to rest behind it.
+     Sections carrying their own top padding override this with a *smaller*
+     value on purpose, so that padding hides behind the header rather than
+     stacking below it — see ANCHOR_OFFSET in app/page.tsx. */
   :target,
   [id] {
-    scroll-margin-top: 120px;
+    scroll-margin-top: calc(clamp(64px, 19vw, 124px) + 42px);
   }
 
   /* Native date inputs: keep comfortable touch height. */

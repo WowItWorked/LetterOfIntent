@@ -4,6 +4,12 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const VIDEO_FILE = "/what-is-a-letter-of-intent.mp4";
+/**
+ * Byte-identical to /mloi-lockup-stacked.png today, and deliberately kept as
+ * its own file: that one is the document lockup on the PDF covers
+ * (firm.appLogoPath). Pointing both at one asset would mean swapping in a real
+ * video still one day silently restyled every letter a family has printed.
+ */
 const POSTER = "/video-poster-lockup.png";
 const POSITION_KEY = "mloi.video.whatIsALetterOfIntent.position";
 
@@ -243,18 +249,9 @@ export function VideoPlayer() {
           What a Letter of Intent is, and how the builder works.
         </p>
         <p className="mt-2 text-[0.9375rem] text-muted">
-          Claire walks through what to write, why it matters, and how to finish it in
+          The video walks through what to write, why it matters, and how to finish it in
           ten-minute sittings.
         </p>
-        {playing ? (
-          <p className="mt-2.5 text-xs text-faint">
-            Click the picture to pause. With the video selected:{" "}
-            <strong className="font-semibold text-muted">←</strong> and{" "}
-            <strong className="font-semibold text-muted">→</strong> jump 5 seconds (hold
-            Shift for 30), and <strong className="font-semibold text-muted">1–9</strong>{" "}
-            jump straight to that point in the video.
-          </p>
-        ) : null}
       </figcaption>
     </figure>
   );

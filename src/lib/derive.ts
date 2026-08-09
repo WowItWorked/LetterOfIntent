@@ -253,6 +253,37 @@ export interface KeyPoints {
 }
 
 /**
+ * A page called "at a glance" that runs to two pages is not one. These caps
+ * keep it to a single sheet however much a family has written: five boxes of
+ * roughly two lines each, plus the call band, is what fits.
+ *
+ * Nothing is lost — every box names the section it came from, and the page
+ * says in as many words that it is a summary.
+ */
+export const MAX_KEY_POINT_CHARS = 150;
+export const MAX_CALL_ORDER = 3;
+
+/** Clamps an optional field to key-point length, preserving "absent". */
+function clampKeyPoint(v: string | undefined): string | undefined {
+  const t = trimmed(v);
+  return t ? clampToWord(t, MAX_KEY_POINT_CHARS) : undefined;
+}
+
+/**
+ * Trims to the last whole word inside `max`, and marks the cut. Falls back to
+ * a hard cut only when there is no word boundary to use at all — a single
+ * unbroken string longer than the budget.
+ */
+export function clampToWord(text: string, max: number): string {
+  const flat = text.replace(/\s*\n+\s*/g, " ").trim();
+  if (flat.length <= max) return flat;
+  const cut = flat.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  const kept = lastSpace > 0 ? cut.slice(0, lastSpace) : cut;
+  return `${kept.replace(/[.,;:—-]+$/, "")}…`;
+}
+
+/**
  * Page four of the letter: the handful of things a reader needs in the first
  * five minutes, lifted from sections they would otherwise have to hunt for.
  * Every point cites its source section so nothing here is a second source of
@@ -270,10 +301,11 @@ export function keyPoints(data: LetterData, path: LetterPath = DEFAULT_PATH): Ke
     const phone = trimmed(c.phone);
     callOrder.push([nm, rel, phone].filter(Boolean).join(" · "));
   }
+  callOrder.splice(MAX_CALL_ORDER);
 
   const points: KeyPoint[] = [];
   const add = (title: string, source: string, text?: string, warning?: boolean) => {
-    if (text) points.push({ title, source, text, warning });
+    if (text) points.push({ title, source, text: clampToWord(text, MAX_KEY_POINT_CHARS), warning });
   };
 
   if (path === "general") {
@@ -292,7 +324,7 @@ export function keyPoints(data: LetterData, path: LetterPath = DEFAULT_PATH): Ke
       trimmed(data.dailyCommunication?.whatToAvoid),
       true
     );
-    return { callOrder, points, neverChange: trimmed(data.steppingIn?.neverChange) };
+    return { callOrder, points, neverChange: clampKeyPoint(data.steppingIn?.neverChange) };
   }
 
   add("How to talk with them", "Communication", trimmed(data.communication?.how));
@@ -305,7 +337,7 @@ export function keyPoints(data: LetterData, path: LetterPath = DEFAULT_PATH): Ke
   );
   add("What calms them", "Behavior support", trimmed(data.behavior?.deEscalation));
   add("What makes it worse", "Behavior support", trimmed(data.behavior?.makesWorse), true);
-  return { callOrder, points, neverChange: trimmed(data.housing?.hardLimits) };
+  return { callOrder, points, neverChange: clampKeyPoint(data.housing?.hardLimits) };
 }
 
 export function keyPointsHaveContent(k: KeyPoints): boolean {

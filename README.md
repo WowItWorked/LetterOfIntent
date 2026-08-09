@@ -18,12 +18,14 @@ message) are shared, so a family that switches paths keeps them.
 
 **The two non-negotiables, enforced in code and CI:**
 
-1. **Privacy** — every keystroke stays in the browser. There is no backend, no
-   database, no analytics of any kind, and a production Content-Security-Policy
-   pins `connect-src` to `'self'`. An e2e test records every network request
-   across a full journey (including PDF generation) and fails if any request
-   leaves localhost. The tool never asks for SSNs or account numbers — by schema
-   design.
+1. **Privacy** — every keystroke stays in the browser. There is no backend and
+   no database. Google Analytics counts page views (`src/config/analytics.ts`)
+   and is the only third party the CSP's `connect-src` permits; it is never
+   handed anything from the letter. An e2e test records every network request
+   across a full journey — typing, autosave, PDF generation, photo upload,
+   backup restore — and fails if any request reaches a host other than
+   analytics, **or if any request carries a word of the letter**. The tool
+   never asks for SSNs or account numbers — by schema design.
 2. **Accessibility** — WCAG 2.1 AA. axe runs in CI against every wizard step in
    both paths and must report zero violations. The full keyboard journey is
    tested. `prefers-reduced-motion` is respected and touch targets are ≥ 44px.

@@ -1,18 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { firm } from "@/config/firm";
-import { backupFilename, parseBackup, serializeBackup } from "@/lib/backup";
+import { serializeBackup } from "@/lib/backup";
 import { DEFAULT_PATH, pathDef } from "@/lib/content/paths";
-import { displayName, preferredName, startedCount } from "@/lib/derive";
+import { startedCount } from "@/lib/derive";
+import { documentFilename } from "@/lib/filenames";
 import { triggerDownload } from "@/lib/download";
-import { deleteAllPhotos, photosForBackup, restorePhotos } from "@/lib/photos";
+import { deleteAllPhotos, photosForBackup } from "@/lib/photos";
 import { LETTER_STORAGE_KEY, useLetterStore } from "@/lib/store";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import type { BackupPhoto, LetterData, LetterMeta } from "@/lib/schema";
+import { RestoreFlow } from "@/components/data/RestoreFlow";
 
 type Notice = { tone: "success" | "danger"; text: string } | null;
 
@@ -61,18 +62,11 @@ export function DataControls() {
   const hydrated = useLetterStore((s) => s.hasHydrated);
   const data = useLetterStore((s) => s.data);
   const meta = useLetterStore((s) => s.meta);
-  const replaceAll = useLetterStore((s) => s.replaceAll);
   const clearAll = useLetterStore((s) => s.clearAll);
 
   const [notice, setNotice] = useState<Notice>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [busy, setBusy] = useState<"letter" | "emergency" | null>(null);
-  const [pendingImport, setPendingImport] = useState<{
-    data: LetterData;
-    meta: LetterMeta;
-    photos?: BackupPhoto[];
-  } | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const path = meta.letterPath ?? DEFAULT_PATH;
   const total = pathDef(path).sections.length;
@@ -82,8 +76,11 @@ export function DataControls() {
   const handleExport = async () => {
     const photos = await photosForBackup();
     triggerDownload(
-      backupFilename(preferredName(data), new Date()),
-      serializeBackup(data, meta, photos),
+      documentFilename("backup", path),
+      // Always record which letter this is, even if the family never visited
+      // the chooser — otherwise a file of only shared sections comes back
+      // ambiguous and we have to ask them a question we could have answered.
+      serializeBackup(data, { ...meta, letterPath: path }, photos),
       "application/json"
     );
     setNotice({
@@ -102,10 +99,10 @@ export function DataControls() {
       const mod = await import("@/lib/pdf/generate");
       if (kind === "letter") {
         const blob = await mod.generateLetterPdfBlob(data, path);
-        triggerDownload(mod.letterPdfFilename(data), blob, "application/pdf");
+        triggerDownload(mod.letterPdfFilename(path), blob, "application/pdf");
       } else {
         const blob = await mod.generateEmergencyPdfBlob(data, path);
-        triggerDownload(mod.emergencyPdfFilename(data), blob, "application/pdf");
+        triggerDownload(mod.emergencyPdfFilename(path), blob, "application/pdf");
       }
     } catch (e) {
       console.error(e);
@@ -116,43 +113,6 @@ export function DataControls() {
     } finally {
       setBusy(null);
     }
-  };
-
-  /* ------------------------------------------------------------- import */
-  const handleFile = async (file: File) => {
-    const text = await file.text();
-    const result = parseBackup(text);
-    if (!result.ok) {
-      setNotice({
-        tone: "danger",
-        text:
-          result.reason === "not-json"
-            ? "That file doesn't look like a backup from this tool (it isn't readable as JSON)."
-            : "That file doesn't look like a Letter of Intent backup. Nothing was changed.",
-      });
-      return;
-    }
-    if (count > 0) {
-      setPendingImport({ data: result.data, meta: result.meta, photos: result.photos });
-    } else {
-      await applyImport(result.data, result.meta, result.photos);
-    }
-  };
-
-  const applyImport = async (
-    importedData: LetterData,
-    importedMeta: LetterMeta,
-    photos?: BackupPhoto[],
-  ) => {
-    replaceAll(importedData, importedMeta);
-    if (photos?.length) await restorePhotos(photos);
-    setPendingImport(null);
-    const importedPath = importedMeta.letterPath ?? DEFAULT_PATH;
-    const n = startedCount(importedData, importedPath);
-    setNotice({
-      tone: "success",
-      text: `Backup loaded — ${n} of ${pathDef(importedPath).sections.length} sections have notes. Everything is saved on this device now.`,
-    });
   };
 
   /* ------------------------------------------------------------- delete */
@@ -256,31 +216,18 @@ export function DataControls() {
       <ActionCard
         eyebrow="Continue elsewhere"
         title="Load a backup"
-        actions={
-          <>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="application/json,.json"
-              aria-hidden="true"
-              tabIndex={-1}
-              className="sr-only"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void handleFile(f);
-                e.target.value = "";
-              }}
-            />
-            <Button variant="outline" onClick={() => fileRef.current?.click()}>
-              Choose a backup file…
-            </Button>
-          </>
-        }
+        actions={<RestoreFlow onNotice={setNotice} />}
       >
         <p>
           Continue on this device from a backup file you downloaded earlier — here or on
           another device. Loading a backup replaces whatever is on this device, so
           download a copy of that first if you want to keep it.
+        </p>
+        <p className="mt-3 text-[0.9375rem] text-muted">
+          If the file was written before this tool had two sets of questions, we work out
+          which letter it belongs to from the sections inside it — and ask you if it
+          genuinely cannot be told apart. Anything in the file that cannot be read is
+          reported rather than silently dropped.
         </p>
       </ActionCard>
 
@@ -339,33 +286,6 @@ export function DataControls() {
             Download a backup first
           </Button>
           <Button variant="quiet" onClick={() => setDeleteOpen(false)}>
-            Cancel
-          </Button>
-        </div>
-      </Dialog>
-
-      {/* ------------------------------------------------- import dialog */}
-      <Dialog
-        open={pendingImport !== null}
-        onClose={() => setPendingImport(null)}
-        title="Replace what's on this device?"
-      >
-        <p className="max-w-[66ch] text-body">
-          This device already has a letter with notes in {count} section
-          {count === 1 ? "" : "s"}
-          {preferredName(data) ? ` (about ${displayName(data)})` : ""}. Loading the backup
-          will replace it completely.
-        </p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Button
-            onClick={() =>
-              pendingImport &&
-              void applyImport(pendingImport.data, pendingImport.meta, pendingImport.photos)
-            }
-          >
-            Replace with the backup
-          </Button>
-          <Button variant="quiet" onClick={() => setPendingImport(null)}>
             Cancel
           </Button>
         </div>

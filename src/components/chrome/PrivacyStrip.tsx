@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PadlockIcon } from "@/components/ui/PadlockIcon";
 
 /**
  * The privacy promise, in its own cream band under the masthead. The link is
@@ -16,21 +17,15 @@ export function PrivacyStrip() {
           textWrap: "pretty",
         }}
       >
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 16 16"
-          className="mt-[3px] size-[13px] flex-none fill-gold600"
-        >
-          <path d="M8 1a3.5 3.5 0 0 0-3.5 3.5V6H4a1.5 1.5 0 0 0-1.5 1.5v5A1.5 1.5 0 0 0 4 14h8a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 12 6h-.5V4.5A3.5 3.5 0 0 0 8 1Zm2 5H6V4.5a2 2 0 1 1 4 0V6Z" />
-        </svg>
+        <PadlockIcon className="mt-[3px] size-[13px] fill-gold600" />
         <span className="min-w-0">
-          Private by design. Everything you type stays on this device and is never sent
+          Private by design. Everything you type stays on your device and is never sent
           anywhere.{" "}
           <Link
             href="/privacy"
             className="whitespace-nowrap font-semibold text-accent underline underline-offset-[3px]"
           >
-            How that works
+            How it works
           </Link>
         </span>
       </p>

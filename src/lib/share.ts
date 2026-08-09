@@ -10,9 +10,8 @@ import { firm } from "@/config/firm";
  * invitation on its own.
  */
 export const SHARE_URL = firm.appUrl;
-export const SHARE_URL_LABEL = `www.${firm.appUrlLabel}`;
 
-const SHARE_INTRO = "I thought this might be useful for you.";
+const SHARE_INTRO = "I thought you might find this helpful.";
 
 const SHARE_WHAT =
   "My Letter of Intent is a free tool for writing down what a future caregiver would " +

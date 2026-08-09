@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { keyPoints, keyPointsHaveContent } from "@/lib/derive";
+import {
+  MAX_CALL_ORDER,
+  MAX_KEY_POINT_CHARS,
+  clampToWord,
+  keyPoints,
+  keyPointsHaveContent,
+} from "@/lib/derive";
 import type { LetterData } from "@/lib/schema";
 
 /**
@@ -78,5 +84,58 @@ describe("key points at a glance", () => {
     const k = keyPoints({ ...SPECIAL, behavior: { deEscalation: "  " } }, "special-needs");
     expect(k.points.map((p) => p.title)).not.toContain("What calms them");
     expect(k.points.map((p) => p.title)).not.toContain("What makes it worse");
+  });
+});
+
+/**
+ * The page is one sheet by contract. Everything below exists so that a family
+ * who writes at length still gets a page they can read at a glance.
+ */
+describe("key points stay on one page", () => {
+  const long = (n: number) => "word ".repeat(n).trim();
+
+  it("clamps every point to the character budget", () => {
+    const k = keyPoints(
+      {
+        ...SPECIAL,
+        communication: { how: long(200) },
+        behavior: { deEscalation: long(200), makesWorse: long(200) },
+        housing: { hardLimits: long(200) },
+      },
+      "special-needs"
+    );
+    for (const p of k.points) {
+      expect(p.text.length, p.title).toBeLessThanOrEqual(MAX_KEY_POINT_CHARS + 1);
+    }
+    expect(k.neverChange!.length).toBeLessThanOrEqual(MAX_KEY_POINT_CHARS + 1);
+  });
+
+  it("caps how many names the call band carries", () => {
+    const contacts = Array.from({ length: 8 }, (_, i) => ({
+      id: `c${i}`,
+      name: `Contact ${i}`,
+      phone: "(703) 555-0100",
+      emergency: true,
+    }));
+    const k = keyPoints({ familySupport: { firstCall: "Dana", contacts } });
+    expect(k.callOrder).toHaveLength(MAX_CALL_ORDER);
+    expect(k.callOrder[0]).toBe("Dana");
+  });
+
+  it("leaves short answers exactly as written", () => {
+    const k = keyPoints(SPECIAL, "special-needs");
+    expect(k.points[0].text).toBe("Short sentences; AAC app when overwhelmed.");
+  });
+
+  it("cuts at a word boundary and marks the cut", () => {
+    expect(clampToWord("one two three four five", 12)).toBe("one two…");
+    expect(clampToWord("short", 40)).toBe("short");
+    // Line breaks collapse — the box is a summary, not a transcript.
+    expect(clampToWord("first line\n\nsecond line", 80)).toBe("first line second line");
+  });
+
+  it("does not invent a trailing ellipsis on a clean fit", () => {
+    const exact = "a".repeat(MAX_KEY_POINT_CHARS);
+    expect(clampToWord(exact, MAX_KEY_POINT_CHARS)).toBe(exact);
   });
 });

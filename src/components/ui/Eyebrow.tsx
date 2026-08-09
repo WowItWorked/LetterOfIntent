@@ -17,12 +17,16 @@ export function Eyebrow({
   align = "left",
   tone = "gold",
   flanked = false,
+  diamonds = true,
   className,
 }: {
   children: ReactNode;
   align?: "left" | "center";
   tone?: EyebrowTone;
   flanked?: boolean;
+  /** False drops the diamond markers entirely — for the hero, where the gold
+   *  rule directly above already carries one. */
+  diamonds?: boolean;
   className?: string;
 }) {
   const color =
@@ -38,9 +42,11 @@ export function Eyebrow({
         className
       )}
     >
-      <span className="tw-diamond tw-diamond--sm" aria-hidden="true" />
+      {diamonds ? <span className="tw-diamond tw-diamond--sm" aria-hidden="true" /> : null}
       {children}
-      {flanked ? <span className="tw-diamond tw-diamond--sm" aria-hidden="true" /> : null}
+      {diamonds && flanked ? (
+        <span className="tw-diamond tw-diamond--sm" aria-hidden="true" />
+      ) : null}
     </span>
   );
 }

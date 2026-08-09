@@ -31,6 +31,8 @@ export interface LetterPathDef {
   otherPrompt: string;
   startLabel: string;
   sections: SectionDef[];
+  // The example documents live in lib/content/samples.ts, keyed by path — the
+  // viewer route needs them too, and one list is easier to keep true.
 }
 
 export const LETTER_PATHS: LetterPathDef[] = [

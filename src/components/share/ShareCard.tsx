@@ -1,7 +1,9 @@
 "use client";
 
-import { SHARE_URL_LABEL, shareTargets } from "@/lib/share";
+import { shareTargets } from "@/lib/share";
 import { useCopyLink } from "@/components/share/useCopyLink";
+import { ShareIcon } from "@/components/ui/ShareIcon";
+import { PadlockIcon } from "@/components/ui/PadlockIcon";
 
 const iconTile =
   "inline-flex h-[52px] w-full items-center justify-center rounded-[var(--radius-sm)] " +
@@ -17,7 +19,9 @@ const iconTile =
  * public URL.
  */
 export function ShareCard() {
-  const { copied, copyLink, share } = useCopyLink();
+  // `share` still falls back to copying the link when the browser has no
+  // native share sheet — the hook handles that internally.
+  const { share } = useCopyLink();
 
   return (
     <div className="tw-card" style={{ boxShadow: "var(--shadow-md)" }}>
@@ -55,19 +59,8 @@ export function ShareCard() {
           className="mt-4 flex min-h-[56px] w-full items-center justify-center gap-2.5 rounded-[var(--radius-sm)] border-0 text-[0.9375rem] font-bold uppercase tracking-[0.1em] text-navy900 transition-[filter,transform] duration-[var(--dur-fast)] hover:-translate-y-px hover:brightness-105 motion-reduce:transform-none motion-reduce:transition-none"
           style={{ background: "var(--gradient-gold)", boxShadow: "var(--shadow-gold)" }}
         >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            className="size-[17px] flex-none fill-none stroke-current"
-            strokeWidth={1.8}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 16V4" />
-            <path d="m8 8 4-4 4 4" />
-            <path d="M4 14v4.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V14" />
-          </svg>
-          Share to help someone
+          <ShareIcon />
+          Share to help another family
         </button>
 
         <div className="mt-[18px] rounded-[var(--radius-sm)] border border-line bg-paper2 px-[18px] py-4">
@@ -75,7 +68,7 @@ export function ShareCard() {
             A message comes written for you
           </p>
           <p className="mt-2 font-serif text-lg italic leading-[1.55] text-ink">
-            &ldquo;I thought this might be useful for you. My Letter of Intent is a free
+            &ldquo;I thought you might find this helpful. My Letter of Intent is a free
             tool for writing down what a future caregiver would need to know about someone
             you love: routines, medical details, what calms them, who to call. One small
             question at a time, and it finishes as a document you can print. Everything you
@@ -84,28 +77,12 @@ export function ShareCard() {
           <p className="mt-2 text-xs text-muted">Change a word or send it as it stands.</p>
         </div>
 
-        <div className="mt-[22px] border-t border-line pt-5">
-          <p className="tw-engraved text-[0.6875rem] tracking-[0.24em] text-accent">
-            Or copy the link and send it yourself
-          </p>
-          <div className="mt-3 flex items-stretch overflow-hidden rounded-[var(--radius-sm)] border border-gold400 bg-gold100">
-            <span className="flex min-w-0 flex-1 items-center overflow-hidden text-ellipsis whitespace-nowrap px-4 font-serif text-[clamp(1.05rem,2.2vw,1.3rem)] tracking-[0.01em] text-ink">
-              {SHARE_URL_LABEL}
-            </span>
-            <button
-              type="button"
-              onClick={() => void copyLink()}
-              aria-label="Copy the link"
-              className="min-h-[54px] flex-none border-0 border-l border-gold400 bg-transparent px-[18px] text-xs font-bold uppercase tracking-[0.12em] text-gold700 transition-colors duration-[var(--dur-fast)] hover:bg-gold200 hover:text-navy800 motion-reduce:transition-none"
-            >
-              <span aria-live="polite">{copied ? "Link copied" : "Copy link"}</span>
-            </button>
-          </div>
-        </div>
-
-        <p className="mt-5 border-t border-line pt-[18px] text-[0.9375rem] leading-[1.7] text-muted">
-          Sharing the link reveals nothing you have written. It opens a blank letter on
-          their device, the same way it opened for you.
+        <p className="mt-5 flex items-start gap-2.5 border-t border-line pt-[18px] text-[0.9375rem] leading-[1.7] text-muted">
+          <PadlockIcon className="mt-[5px] size-[14px] fill-gold600" />
+          <span className="min-w-0">
+            Sharing the link reveals nothing you have written. It opens a blank letter on
+            their device, the same way it opened for you.
+          </span>
         </p>
       </div>
     </div>

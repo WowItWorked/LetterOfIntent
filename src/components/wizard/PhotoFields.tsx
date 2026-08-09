@@ -12,6 +12,7 @@ import {
   isSupported,
   putPhoto,
   setCaption,
+  sniffImageType,
 } from "@/lib/photos";
 
 const SLOTS: Array<{
@@ -90,10 +91,7 @@ export function PhotoFields({ name }: { name: string }) {
 
   const accept = async (slot: PhotoSlot, file: File | undefined) => {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setError("That file is not an image. JPEG, PNG, or WebP all work.");
-      return;
-    }
+    // Size first — cheapest check, and it bounds everything after it.
     if (file.size > MAX_PHOTO_BYTES) {
       setError(
         `That photo is ${humanSize(file.size)}. Please pick one under ${humanSize(
@@ -102,6 +100,18 @@ export function PhotoFields({ name }: { name: string }) {
       );
       return;
     }
+
+    // Trust the bytes, not the name or the reported type. A renamed SVG would
+    // otherwise pass, and an SVG is a document that can carry script.
+    const sniffed = await sniffImageType(file);
+    if (!sniffed) {
+      setError(
+        "That file is not a photograph the tool can read. JPEG, PNG, WebP, and HEIC " +
+          "all work — most phone photos are one of those already."
+      );
+      return;
+    }
+
     setError(null);
     try {
       const record = await putPhoto(slot, file, slot === "family" ? caption : undefined);

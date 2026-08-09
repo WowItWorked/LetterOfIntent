@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Cinzel, Cormorant_Garamond, Mulish } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { firm } from "@/config/firm";
+import { GA_MEASUREMENT_ID } from "@/config/analytics";
 import { ClientBoot } from "@/components/boot/ClientBoot";
 import { SiteHeader } from "@/components/chrome/SiteHeader";
 import { PrivacyStrip } from "@/components/chrome/PrivacyStrip";
@@ -52,7 +54,8 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "Letter of Intent Builder",
-    title: "Write down what only you know about caring for them.",
+    title:
+      "Write down what only you know, so they’ll be cared for the way that only you have.",
     description: DESCRIPTION,
   },
   twitter: {
@@ -60,7 +63,9 @@ export const metadata: Metadata = {
     title: "Letter of Intent Builder",
     description: DESCRIPTION,
   },
-  icons: firm.logoPath ? { icon: firm.logoPath } : undefined,
+  // No `icons` entry on purpose: src/app/favicon.ico is picked up by the file
+  // convention, and naming one here as well would put two competing <link
+  // rel="icon"> tags in the head.
 };
 
 export const viewport: Viewport = {
@@ -89,6 +94,23 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+
+        {/*
+          Google Analytics 4. Counts page views; it is never handed anything
+          from the letter — see config/analytics.ts and /privacy section 04.
+          `afterInteractive` keeps it off the critical path, which matters on
+          the slow connections a lot of this audience is on.
+        */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-config" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
       </body>
     </html>
   );

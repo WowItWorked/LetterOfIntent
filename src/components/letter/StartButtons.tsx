@@ -19,12 +19,19 @@ export function StartButtons() {
   };
 
   return (
-    <div className="mt-6 flex flex-wrap gap-3.5">
+    // Equal columns rather than a flex row: the two labels are different
+    // lengths, and a pair of start buttons that disagree about their width
+    // reads as one being the real choice.
+    <div
+      className="mt-6 grid max-w-[640px] gap-3.5"
+      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))" }}
+    >
       {LETTER_PATHS.map((p, i) => (
         <Button
           key={p.id}
           size="lg"
           variant={i === 0 ? "accent" : "outline"}
+          className="w-full px-4 text-center"
           onClick={() => begin(p.id)}
         >
           {p.startLabel}

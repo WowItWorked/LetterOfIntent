@@ -8,32 +8,81 @@ import { FULL_LETTER, seedLetter } from "./fixture";
  * and assert none of them left localhost.
  */
 
-function trackExternal(page: Page): string[] {
+/**
+ * Analytics is allowed to talk to Google. Nothing else is allowed to talk to
+ * anyone, and nothing at all may carry a word of the letter.
+ */
+const ANALYTICS_HOST = /(^|\.)(google-analytics\.com|analytics\.google\.com|googletagmanager\.com)$/;
+
+/**
+ * Distinctive strings from the seeded letter. If any of these ever appear in a
+ * request URL or body, the tool's core promise is broken — that is the thing
+ * this file exists to catch, and adding analytics must not weaken it.
+ */
+const LETTER_SECRETS = [
+  "Alexander",
+  "Alvarez",
+  "Penicillin",
+  "Levetiracetam",
+  "Keppra",
+  "trainspotting",
+  "fireproof",
+];
+
+function trackExternal(page: Page): { external: string[]; leaks: string[] } {
   const external: string[] = [];
+  const leaks: string[] = [];
+
   page.on("request", (req) => {
+    const url = req.url();
+
+    // Whatever the destination, no request may carry letter content.
+    let body = "";
     try {
-      const u = new URL(req.url());
+      body = req.postData() ?? "";
+    } catch {
+      // Binary or unavailable body — the URL check below still applies.
+    }
+    const haystack = `${url} ${body}`;
+    for (const secret of LETTER_SECRETS) {
+      if (haystack.includes(secret)) leaks.push(`${secret} in ${url.slice(0, 120)}`);
+    }
+
+    try {
+      const u = new URL(url);
       // blob:/data:/about: never leave the browser — only real network
       // protocols can exfiltrate anything.
       if (u.protocol !== "http:" && u.protocol !== "https:") return;
-      if (u.hostname !== "localhost" && u.hostname !== "127.0.0.1") {
-        external.push(req.url());
-      }
+      if (u.hostname === "localhost" || u.hostname === "127.0.0.1") return;
+      if (ANALYTICS_HOST.test(u.hostname)) return;
+      external.push(url);
     } catch {
       // unparsable URL — internal scheme
     }
   });
-  return external;
+
+  return {
+    get external() {
+      return external;
+    },
+    get leaks() {
+      return leaks;
+    },
+  } as { external: string[]; leaks: string[] };
 }
 
 test("typing, saving, and generating a PDF makes zero non-local requests", async ({
   page,
 }, testInfo) => {
-  const external = trackExternal(page);
+  const traffic = trackExternal(page);
 
   await page.goto("/");
-  // The footer carries the same words, so take the hero's.
-  await page.getByRole("link", { name: /start your letter · it/i }).click();
+  // The header and footer carry the same words — deliberately, so one
+  // destination reads as one offer — so scope this to the hero.
+  await page
+    .locator("#main")
+    .getByRole("link", { name: /start your letter · it/i })
+    .click();
   await expect(page).toHaveURL(/\/letter$/);
   await page
     .getByRole("button", { name: /start the special needs letter/i })
@@ -61,15 +110,22 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
   const buf = fs.readFileSync(file);
   expect(buf.subarray(0, 5).toString()).toBe("%PDF-");
   expect(buf.length).toBeGreaterThan(5_000);
-  expect(download.suggestedFilename()).toMatch(/^Letter-of-Intent-Alex-.*\.pdf$/);
+  // Names the document and the date, never the person — see lib/filenames.ts.
+  expect(download.suggestedFilename()).toMatch(
+    /^Letter-of-Intent-Disabilities-\d{4}-\d{2}-\d{2}\.pdf$/
+  );
 
-  expect(external, `external requests seen: ${external.join(", ")}`).toEqual([]);
+  expect(traffic.leaks, "letter content found in a request").toEqual([]);
+  expect(
+    traffic.external,
+    `unexpected third-party requests: ${traffic.external.join(", ")}`
+  ).toEqual([]);
 });
 
 test("a fully filled letter renders both PDFs, still with zero external requests", async ({
   page,
 }, testInfo) => {
-  const external = trackExternal(page);
+  const traffic = trackExternal(page);
   await seedLetter(page, FULL_LETTER);
 
   await page.goto("/letter/review");
@@ -111,11 +167,54 @@ test("a fully filled letter renders both PDFs, still with zero external requests
   expect(icsText).toContain("BEGIN:VCALENDAR");
   expect(icsText).toContain("Review Alex's Letter of Intent");
 
-  expect(external, `external requests seen: ${external.join(", ")}`).toEqual([]);
+  expect(traffic.leaks, "letter content found in a request").toEqual([]);
+  expect(
+    traffic.external,
+    `unexpected third-party requests: ${traffic.external.join(", ")}`
+  ).toEqual([]);
+});
+
+test("uploading a photograph and restoring a backup send nothing", async ({ page }) => {
+  const traffic = trackExternal(page);
+
+  // A real photograph, into IndexedDB.
+  await page.goto("/letter/about");
+  // Two slots on the page; the first is the recent photo.
+  await page.locator('input[type="file"][accept*="image"]').first().setInputFiles({
+    name: "photo.png",
+    mimeType: "image/png",
+    // 1×1 PNG — real magic bytes, so it passes the sniff check.
+    buffer: Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+      "base64"
+    ),
+  });
+  await expect(page.getByRole("button", { name: /^Remove$/ }).first()).toBeVisible();
+
+  // A backup, back in.
+  await page.goto("/your-data");
+  await page.locator('input[type="file"][accept*="json"]').setInputFiles({
+    name: "backup.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(
+      JSON.stringify({
+        app: "twl-letter-of-intent",
+        version: 1,
+        meta: { letterPath: "special-needs" },
+        data: { gettingStarted: { subjectPreferredName: "Alex" } },
+      })
+    ),
+  });
+
+  expect(traffic.leaks, "letter content found in a request").toEqual([]);
+  expect(
+    traffic.external,
+    `unexpected third-party requests: ${traffic.external.join(", ")}`
+  ).toEqual([]);
 });
 
 test("the reminder email panel sends nothing, and says so", async ({ page }) => {
-  const external = trackExternal(page);
+  const traffic = trackExternal(page);
   await seedLetter(page, FULL_LETTER);
   await page.goto("/letter/review");
 
@@ -123,7 +222,11 @@ test("the reminder email panel sends nothing, and says so", async ({ page }) => 
   await page.getByRole("button", { name: /send me the reminder/i }).click();
   await expect(page.getByText(/switched on yet, so nothing was sent/i)).toBeVisible();
 
-  expect(external, `external requests seen: ${external.join(", ")}`).toEqual([]);
+  expect(traffic.leaks, "letter content found in a request").toEqual([]);
+  expect(
+    traffic.external,
+    `unexpected third-party requests: ${traffic.external.join(", ")}`
+  ).toEqual([]);
 });
 
 test("downloading all three produces two PDFs and a backup", async ({ page }, testInfo) => {
@@ -139,7 +242,7 @@ test("downloading all three produces two PDFs and a backup", async ({ page }, te
     .toBeGreaterThanOrEqual(3);
 
   expect(downloads.some((f) => /^Letter-of-Intent.*\.pdf$/.test(f))).toBe(true);
-  expect(downloads.some((f) => /^Emergency-Sheet.*\.pdf$/.test(f))).toBe(true);
+  expect(downloads.some((f) => /^Emergency-Information-Sheet.*\.pdf$/.test(f))).toBe(true);
   expect(downloads.some((f) => /\.json$/.test(f))).toBe(true);
   testInfo.attach("downloads", { body: downloads.join("\n") });
 });

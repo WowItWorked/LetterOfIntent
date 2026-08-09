@@ -10,8 +10,8 @@ import { fillName } from "@/lib/derive";
 import { useLetterStore } from "@/lib/store";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
-/** "Step one" / "Step two" rule, engraved with a gold hairline running out. */
-function StepLabel({ children }: { children: React.ReactNode }) {
+/** Engraved section label with a gold hairline running out of it. */
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p className="tw-engraved flex items-center gap-3.5 text-[0.6875rem] tracking-[0.22em] text-accent">
       {children}
@@ -53,7 +53,7 @@ export function PathChooser() {
     <>
       {/* ---------------------------------------------------------- step one */}
       <section id="pick" className="mt-11 scroll-mt-[calc(clamp(64px,19vw,124px)+48px)]">
-        <StepLabel>Step one</StepLabel>
+        <SectionLabel>Start</SectionLabel>
         <h2 className="mt-3.5 font-serif text-[clamp(1.7rem,4vw,2.25rem)] font-semibold tracking-[-0.01em] text-ink">
           Pick the letter that fits your family.
         </h2>
@@ -124,7 +124,7 @@ export function PathChooser() {
         id="questions"
         className="mt-14 scroll-mt-[calc(clamp(64px,19vw,124px)+48px)]"
       >
-        <StepLabel>Step two</StepLabel>
+        <SectionLabel>Prepare</SectionLabel>
         <h2 className="mt-3.5 font-serif text-[clamp(1.7rem,4vw,2.25rem)] font-semibold tracking-[-0.01em] text-ink">
           Every question, before you start.
         </h2>

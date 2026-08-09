@@ -27,9 +27,16 @@ const sizes: Record<ButtonSize, string> = {
   lg: "min-h-[52px] gap-3 px-[34px] py-[15px] text-[15px]",
 };
 
-/** The brand button face: uppercase Mulish 600 with generous tracking. */
+/**
+ * The brand button face: uppercase Mulish 600 with generous tracking.
+ *
+ * Labels wrap rather than run off the edge. The design draws these on one
+ * line, and at any comfortable width they still are — but "Download all three
+ * together" in a 375px column is wider than the phone, and a clipped call to
+ * action is worse than a two-line one.
+ */
 const engravedFace =
-  "font-semibold uppercase tracking-[0.04em] leading-none whitespace-nowrap";
+  "font-semibold uppercase tracking-[0.04em] leading-tight text-center text-balance";
 
 export const buttonClasses = (
   variant: ButtonVariant = "primary",
@@ -40,7 +47,8 @@ export const buttonClasses = (
     // Border width only — every variant sets its own colour. A shared
     // `border-transparent` here would fight the variants' colours, and `cn`
     // is a plain joiner with no conflict resolution.
-    "inline-flex items-center justify-center rounded-[var(--radius-sm)] border-[1.5px]",
+    // max-w-full so a long label can never push a control past its container.
+    "inline-flex max-w-full items-center justify-center rounded-[var(--radius-sm)] border-[1.5px]",
     "transition-[background,color,border-color,transform,box-shadow] duration-[var(--dur-fast)]",
     "motion-reduce:transition-none disabled:pointer-events-none disabled:opacity-45",
     sizes[size],

@@ -5,12 +5,28 @@ import { buttonClasses, buttonStyle } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { VideoPlayer } from "@/components/home/VideoPlayer";
+import { SampleDocuments } from "@/components/home/SampleDocuments";
 import { ShareCard } from "@/components/share/ShareCard";
+import { PadlockIcon } from "@/components/ui/PadlockIcon";
 
 const SECTION_PAD = "clamp(64px, 8vw, 104px) var(--gutter)";
 
-/** Anchor targets have to clear a masthead that is itself clamp()-sized. */
-const ANCHOR_OFFSET = "calc(clamp(64px, 19vw, 124px) + 42px)";
+/**
+ * Where an anchored section comes to rest.
+ *
+ * Offsetting by the masthead's own height is the obvious move and the wrong
+ * one: these sections carry 56–104px of top padding, so the padding then
+ * stacks *below* the masthead and opens a dead band — measured at 141px — of
+ * empty page before anything readable. Subtracting that padding back out lets
+ * it slide up behind the masthead instead, which is what puts the heading near
+ * the top of the screen.
+ *
+ * Both terms are the site's own clamps, so the result tracks the masthead as
+ * it shrinks: it holds the first line ~27px under the header at every width
+ * from 375px up, rather than being right at one size and wrong at the rest.
+ */
+const ANCHOR_OFFSET =
+  "calc(clamp(64px, 19vw, 124px) - clamp(64px, 8vw, 104px) + 52px)";
 
 const HOW_IT_WORKS = [
   {
@@ -56,15 +72,16 @@ export default function HomePage() {
             <span className="tw-diamond" aria-hidden="true" />
           </div>
 
-          <Eyebrow tone="light" align="center" flanked>
-            A free public tool from {firm.name}
+          <Eyebrow tone="light" align="center" diamonds={false}>
+            A free, private Letter of Intent Builder from {firm.name}
           </Eyebrow>
 
           <h1
             className="mx-auto mt-[22px] max-w-[24ch] font-serif text-[clamp(2rem,6.4vw,4rem)] font-semibold leading-[1.1] tracking-[-0.015em] text-onink"
             style={{ textWrap: "pretty" }}
           >
-            Write down what only you know about caring for them.
+            Write down what only you know, so they&rsquo;ll be cared for the way that only
+            you have.
           </h1>
 
           <p
@@ -74,68 +91,89 @@ export default function HomePage() {
             A Letter of Intent is the guide a future caregiver, trustee, or guardian will
             rely on to care well for the person you love: the routines, the warning signs,
             the joys, the hard-won lessons. Everyone tells you to write one. This is the
-            tool that helps you finish it: one small question at a time, saved as you go,
-            and printed as a document you can hand to whoever comes next.
+            tool that helps you finish it, one small question at a time, saved as you go,
+            until it becomes a document you can print and hand to the person who takes
+            over.
           </p>
 
-          <div className="mx-auto mt-[38px] flex flex-col items-center gap-4">
-            <div
-              className="grid w-full max-w-[760px] gap-3.5"
-              style={{
-                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 330px), 1fr))",
-              }}
+          {/*
+            One ask, then two answers.
+
+            A secondary hero button is pressed by the people who are not ready
+            to start, and the old one asked them to share a tool they had not
+            seen yet — the one thing that group cannot honestly do. These two
+            answer the questions that actually stand between them and starting:
+            what do I end up with, and what is this thing? Sharing has not been
+            lost; it still sits in the header, the footer, the section further
+            down this page, and on the screen after the download.
+          */}
+          <div className="mx-auto mt-[38px] flex w-full max-w-[760px] flex-col items-center gap-3.5">
+            {/* The prototype scrolled to the chooser below; the handoff's
+                own spec sends this to /letter, which is also the only
+                version that works for someone driving by keyboard. */}
+            <Link
+              href="/letter"
+              className={buttonClasses("ivory", "w-full tracking-[0.06em]", "lg")}
             >
-              {/* The prototype scrolled to the chooser below; the handoff's
-                  own spec sends this to /letter, which is also the only
-                  version that works for someone driving by keyboard. */}
-              <Link href="/letter" className={buttonClasses("ivory", "tracking-[0.06em]", "lg")}>
-                <span className="tw-diamond" aria-hidden="true" />
-                Start your letter · it&rsquo;s free
-              </Link>
+              <span className="tw-diamond" aria-hidden="true" />
+              Start your letter · it&rsquo;s free
+            </Link>
+
+            <div className="grid w-full grid-cols-1 gap-3.5 sm:grid-cols-2">
               <Link
-                href="#pass-it-along"
-                className={buttonClasses("outlineOnInk", "gap-2.5 tracking-[0.06em]", "lg")}
+                href="#who-this-is-for"
+                className={buttonClasses("outlineOnInk", "w-full gap-2.5 tracking-[0.06em]")}
               >
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
                   className="size-4 flex-none fill-none stroke-current"
-                  strokeWidth={1.8}
+                  strokeWidth={1.7}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M12 15V4m0 0L8.5 7.5M12 4l3.5 3.5" />
-                  <path d="M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14" />
+                  <path d="M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
+                  <path d="M14 3v4h4M8.5 12h7M8.5 16h4.5" />
                 </svg>
-                Know someone that needs this?
+                See a sample
+              </Link>
+              <Link
+                href="#what-it-is"
+                className={buttonClasses("outlineOnInk", "w-full gap-2.5 tracking-[0.06em]")}
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="size-4 flex-none fill-none stroke-current"
+                  strokeWidth={1.7}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="m10 8.5 5.5 3.5L10 15.5V8.5Z" />
+                </svg>
+                Watch &amp; learn more
               </Link>
             </div>
-            <span className="text-[0.9375rem] text-navy300">
-              No account. No email. About 45–90 minutes, in as many sittings as you need.
-            </span>
           </div>
 
           <div
             className="mx-auto mt-11 flex max-w-[760px] items-start gap-3 rounded-[var(--radius-md)] border border-navy500 px-[22px] py-[18px] text-left"
             style={{ background: "rgba(255,255,255,0.045)" }}
           >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 16 16"
-              className="mt-1 size-[15px] flex-none fill-gold400"
-            >
-              <path d="M8 1a3.5 3.5 0 0 0-3.5 3.5V6H4a1.5 1.5 0 0 0-1.5 1.5v5A1.5 1.5 0 0 0 4 14h8a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 12 6h-.5V4.5A3.5 3.5 0 0 0 8 1Zm2 5H6V4.5a2 2 0 1 1 4 0V6Z" />
-            </svg>
+            <PadlockIcon className="mt-1 size-[15px] fill-gold400" />
             <p className="text-[0.9375rem] leading-[1.65] text-[#D6DDE9]">
-              Everything you type stays on this device. We never see it. There is no
-              account, so a letter started here can only be continued here; download a
-              backup file to move it elsewhere.{" "}
-              <Link
-                href="/privacy"
-                className="text-gold400 underline underline-offset-[3px]"
-              >
-                How that works
-              </Link>
+              {/* The strip above already makes the privacy promise and already
+                  links to /privacy, so this box carries only what the strip
+                  does not: the shape of the task, and the one practical
+                  consequence of having no account. No second link to the same
+                  page a screenful apart. */}
+              <strong className="font-semibold text-white">
+                No account. No email. About 45–90 minutes, in as many sittings as you
+                need.
+              </strong>{" "}
+              Your letter lives in this browser, so download a backup file to keep a copy
+              or open it on another device.
             </p>
           </div>
         </div>
@@ -195,15 +233,13 @@ export default function HomePage() {
                     {path.promise}
                   </h3>
                   <p className="mt-3 leading-[1.7] text-body">{path.blurb}</p>
-                  <p className="mt-auto pt-[18px] text-xs text-faint">
-                    {path.countWord} sections · about {path.minutesLabel}
-                  </p>
+                  <SampleDocuments path={path.id} />
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mx-auto mt-9 flex flex-col items-center gap-3.5">
+          <div className="mt-9 flex justify-center">
             <Link
               href="/letter"
               className={buttonClasses("accent", undefined, "lg")}
@@ -211,15 +247,15 @@ export default function HomePage() {
             >
               Create your letter
             </Link>
-            <p className="text-center text-[0.9375rem] text-muted">
-              See every question in both sets before you write a word.
-            </p>
           </div>
         </div>
       </section>
 
       {/* ------------------------------------------------ what it is + video */}
-      <section style={{ padding: SECTION_PAD }}>
+      <section
+        id="what-it-is"
+        style={{ padding: SECTION_PAD, scrollMarginTop: ANCHOR_OFFSET }}
+      >
         <div
           className="mx-auto grid items-start gap-[clamp(36px,5vw,72px)]"
           style={{
@@ -334,7 +370,7 @@ export default function HomePage() {
               ))}
             </ul>
             <p className="mt-[22px] max-w-[56ch] text-[0.9375rem] leading-[1.75] text-muted">
-              It is free and it stays free, and whatever they write stays private on their
+              It is free, and whatever they write stays private on their
               own device. We never see a word of it.
             </p>
           </div>

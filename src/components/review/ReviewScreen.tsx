@@ -12,12 +12,12 @@ import {
   formatDateLong,
   itemHasContent,
   letterDateIso,
-  preferredName,
   readerName,
   sectionHasContent,
   startedCount,
 } from "@/lib/derive";
-import { backupFilename, serializeBackup } from "@/lib/backup";
+import { serializeBackup } from "@/lib/backup";
+import { documentFilename } from "@/lib/filenames";
 import { buildReviewReminderIcs, calendarLinks } from "@/lib/ics";
 import { triggerDownload } from "@/lib/download";
 import { photosForBackup } from "@/lib/photos";
@@ -49,8 +49,9 @@ export function ReviewScreen() {
   const downloadBackup = async () => {
     const photos = await photosForBackup();
     triggerDownload(
-      backupFilename(preferredName(data), new Date()),
-      serializeBackup(data, meta, photos),
+      documentFilename("backup", path),
+      // The file always says which letter it is — see DataControls.
+      serializeBackup(data, { ...meta, letterPath: path }, photos),
       "application/json"
     );
   };
@@ -59,10 +60,10 @@ export function ReviewScreen() {
     const mod = await import("@/lib/pdf/generate");
     if (kind === "letter") {
       const blob = await mod.generateLetterPdfBlob(data, path);
-      triggerDownload(mod.letterPdfFilename(data), blob, "application/pdf");
+      triggerDownload(mod.letterPdfFilename(path), blob, "application/pdf");
     } else {
       const blob = await mod.generateEmergencyPdfBlob(data, path);
-      triggerDownload(mod.emergencyPdfFilename(data), blob, "application/pdf");
+      triggerDownload(mod.emergencyPdfFilename(path), blob, "application/pdf");
     }
   };
 
@@ -192,37 +193,68 @@ export function ReviewScreen() {
 
       {/* ----------------------------------------------------- pass it along */}
       <section className={`tw-card ${CARD_GAP}`}>
-        <div
-          className="flex flex-wrap items-center gap-[clamp(18px,3vw,44px)]"
-          style={{ padding: "28px clamp(24px, 2.6vw, 36px) 30px" }}
-        >
-          <div className="min-w-0 flex-[3_1_360px]">
-            <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
-              Pass it along
-            </p>
-            <h2 className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
-              You know how hard this was to start.
-            </h2>
-            <p className="mt-3 max-w-[68ch] leading-[1.75]">
-              Someone in your circle has been meaning to write one of these for years: a
-              parent in your support group, a sibling, the family at the next table at
-              clinic. The tool is free and always will be, and nothing they write ever
-              leaves their own device. Sending the link takes ten seconds and saves
-              someone else the blank page.
-            </p>
-          </div>
-          <div className="ml-auto flex min-w-0 flex-[0_1_340px] flex-col items-end text-right">
-            <Link
-              href="/#pass-it-along"
-              className={buttonClasses("accent", "w-[246px]", "lg")}
-              style={{ background: "var(--gradient-gold)", boxShadow: "var(--shadow-gold)" }}
-            >
-              Send it to someone
-            </Link>
-            <p className="mt-3 max-w-[234px] text-xs leading-[1.6] text-muted">
-              Send a text, an email, or post it to social media. The draft message is
-              already written for you.
-            </p>
+        <div style={{ padding: "28px clamp(24px, 2.6vw, 36px) 30px" }}>
+          <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+            Pass it along
+          </p>
+          <h2 className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
+            You know how hard this was to start.
+          </h2>
+          <p className="mt-3 max-w-[70ch] leading-[1.75]">
+            Someone in your circle has been meaning to write one of these for years: a
+            parent in your support group, a sibling, the family at the next table at
+            clinic. Two things put the tool in front of them, and both take about a
+            minute.
+          </p>
+
+          {/*
+            Two ways to help, side by side. Each column is a flex column so the
+            buttons sit on a common baseline at the foot of the card however
+            unevenly the two paragraphs wrap.
+          */}
+          <div className="mt-6 grid gap-x-[clamp(20px,3vw,44px)] gap-y-7 border-t border-line pt-6 md:grid-cols-2">
+            <div className="flex min-w-0 flex-col">
+              <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+                Send them the link
+              </p>
+              <p className="mt-2 leading-[1.75]">
+                The tool is free, and nothing they write ever leaves their own device.
+                A text or an email saves someone else from staring at the blank page.
+              </p>
+              <div className="mt-auto pt-5">
+                <Link
+                  href="/#pass-it-along"
+                  className={buttonClasses("accent", "w-full sm:w-[262px]", "lg")}
+                  style={{
+                    background: "var(--gradient-gold)",
+                    boxShadow: "var(--shadow-gold)",
+                  }}
+                >
+                  Send it to someone
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex min-w-0 flex-col">
+              <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+                Put in a good word
+              </p>
+              <p className="mt-2 leading-[1.75]">
+                Most families find this tool by searching. A few honest words about{" "}
+                {firm.name} on Google is what lifts it into those results, and that is
+                how the next parent stumbles onto it.
+              </p>
+              <div className="mt-auto pt-5">
+                <a
+                  href={firm.reviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonClasses("outline", "w-full sm:w-[262px]", "lg")}
+                >
+                  Leave a review
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -234,7 +266,7 @@ export function ReviewScreen() {
       >
         <Eyebrow>One more thing worth knowing</Eyebrow>
         <h2 className="mt-3 font-serif text-[1.75rem] font-semibold text-ink">
-          The letter guides people. A trust protects the money.
+          The letter guides their care. A trust protects their future.
         </h2>
         <p className="mt-3 max-w-[66ch] text-[0.9375rem] leading-[1.7]">
           Your letter tells future caregivers <em>how</em>, but it cannot hold money,
@@ -243,23 +275,36 @@ export function ReviewScreen() {
           through how the two fit together, {firm.attorneyName} works with families across{" "}
           {firm.licensedStates.join(" and ")}.
         </p>
-        <div className="mt-5 flex flex-wrap items-center gap-[18px]">
+        {/*
+          A grid rather than a flex row so the two calls to action are exactly
+          the same width whatever their labels say — the second one is long
+          enough to wrap to two lines, and both cells stretch to match.
+        */}
+        <div className="mt-5 grid gap-3 sm:max-w-[560px] sm:grid-cols-2">
           <a
             href={firm.consultUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={buttonClasses("primary")}
+            className={buttonClasses("primary", "w-full")}
           >
             Book a conversation
           </a>
-          <span className="text-[0.9375rem] text-muted">
-            or call{" "}
-            <a href={firm.phoneHref} className="underline underline-offset-[3px]">
-              {firm.phone}
-            </a>
-            . No pressure, ever.
-          </span>
+          <a
+            href={firm.contactUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonClasses("outline", "w-full")}
+          >
+            Contact {firm.shortName}
+          </a>
         </div>
+        <p className="mt-3.5 text-[0.9375rem] text-muted">
+          or call{" "}
+          <a href={firm.phoneHref} className="underline underline-offset-[3px]">
+            {firm.phone}
+          </a>
+          . No pressure, ever.
+        </p>
       </section>
 
       {/* ---------------------------------------------------- reading view */}
@@ -330,7 +375,9 @@ function FileRow({
 
 function YearlyReview({ data }: { data: LetterData }) {
   const person = readerName(data);
-  const links = calendarLinks(person, new Date(), firm.appUrl);
+  // The hosted links carry no name — see HOSTED_CALENDAR_TITLE. Only the .ics
+  // built on this device does.
+  const links = calendarLinks(new Date(), firm.appUrl);
 
   const downloadIcs = () => {
     const reminder = buildReviewReminderIcs(person, new Date());
@@ -360,7 +407,7 @@ function YearlyReview({ data }: { data: LetterData }) {
           className="mt-[26px] grid gap-[22px]"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))" }}
         >
-          <div className="rounded-[var(--radius-sm)] border border-line bg-paper2 px-6 pb-6 pt-[22px]">
+          <div className="rounded-[var(--radius-sm)] border border-line bg-paper2 px-5 pb-6 pt-[22px] sm:px-6">
             <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
               Option one
             </p>
@@ -371,15 +418,26 @@ function YearlyReview({ data }: { data: LetterData }) {
               A single event, one year from today: <em>Reread and update the Letter of
               Intent.</em> No email address, and nothing leaves this device.
             </p>
-            <div className="mt-[18px] grid auto-rows-[44px] grid-cols-3 gap-2">
-              <button type="button" onClick={downloadIcs} className={buttonClasses("primary", "px-2")}>
+            {/*
+              Three equal columns in a ~240px card leaves each button about
+              75px wide, and "Outlook" set at the md size very nearly fills it
+              edge to edge. The sm size (13px, px-4) is what buys the label
+              visible air on a phone — a `px-2` override would not, because
+              `cn` is a plain joiner and the size's own px- wins.
+            */}
+            <div className="mt-[18px] grid auto-rows-[44px] grid-cols-3 gap-1.5 sm:gap-2">
+              <button
+                type="button"
+                onClick={downloadIcs}
+                className={buttonClasses("primary", undefined, "sm")}
+              >
                 Apple
               </button>
               <a
                 href={links.google}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonClasses("primary", "px-2")}
+                className={buttonClasses("primary", undefined, "sm")}
               >
                 Google
               </a>
@@ -387,7 +445,7 @@ function YearlyReview({ data }: { data: LetterData }) {
                 href={links.outlook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonClasses("primary", "px-2")}
+                className={buttonClasses("primary", undefined, "sm")}
               >
                 Outlook
               </a>
@@ -402,12 +460,6 @@ function YearlyReview({ data }: { data: LetterData }) {
                 Download the .ics file
               </button>
               .
-            </p>
-            <p className="mt-3.5 text-xs leading-[1.65] text-muted">
-              Apple Calendar and most other apps open the .ics file this device makes.
-              Google and Outlook open in their own tab with the event pre-filled — only
-              the reminder&rsquo;s title and date travel there, never anything from your
-              letter.
             </p>
           </div>
 
@@ -452,27 +504,17 @@ function ReadingView({
         className="tw-card print-hide"
         style={{ borderRadius: "var(--radius-md) var(--radius-md) 0 0" }}
       >
-        <div
-          className="flex flex-wrap items-start justify-between gap-[18px]"
-          style={{ padding: "26px clamp(24px, 2.6vw, 36px) 28px" }}
-        >
-          <div>
-            <p className="tw-engraved text-[0.6875rem] tracking-[0.22em] text-accent">
-              The letter itself
-            </p>
-            <h2 id="reading-title" className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
-              Read it through
-            </h2>
-            <p className="mt-2 max-w-[60ch] text-[0.9375rem] text-muted">
-              Everything you&rsquo;ve written, in one place, exactly as it appears in the
-              PDF. This view also prints cleanly if you ever need a copy without it.
-            </p>
-          </div>
-          <div className="flex flex-[0_1_340px] justify-end">
-            <Button size="lg" className="w-full justify-center" onClick={() => window.print()}>
-              Print this view
-            </Button>
-          </div>
+        <div style={{ padding: "26px clamp(24px, 2.6vw, 36px) 28px" }}>
+          <p className="tw-engraved text-[0.6875rem] tracking-[0.22em] text-accent">
+            The letter itself
+          </p>
+          <h2 id="reading-title" className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
+            Read it through
+          </h2>
+          <p className="mt-2 max-w-[60ch] text-[0.9375rem] text-muted">
+            Everything you&rsquo;ve written, in one place, exactly as it appears in the
+            PDF. This view also prints cleanly if you ever need a copy without it.
+          </p>
         </div>
       </div>
 

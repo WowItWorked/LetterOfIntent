@@ -35,6 +35,28 @@ export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
 
 export const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
 
+/**
+ * What the file actually is, read from its first bytes.
+ *
+ * A file's name and its reported MIME type are both attacker-controlled — a
+ * renamed .svg passes `type.startsWith("image/")` and an SVG is a document
+ * that can carry script. Sniffing the header is the only check that means
+ * anything, and it is cheap: the first 12 bytes are enough.
+ */
+export async function sniffImageType(file: Blob): Promise<string | null> {
+  const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+  const startsWith = (...bytes: number[]) => bytes.every((b, i) => head[i] === b);
+  const ascii = (offset: number, text: string) =>
+    [...text].every((c, i) => head[offset + i] === c.charCodeAt(0));
+
+  if (startsWith(0xff, 0xd8, 0xff)) return "image/jpeg";
+  if (startsWith(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)) return "image/png";
+  if (ascii(0, "RIFF") && ascii(8, "WEBP")) return "image/webp";
+  // HEIC/HEIF: an ISO-BMFF box whose brand starts "hei" or "mif".
+  if (ascii(4, "ftyp") && (ascii(8, "hei") || ascii(8, "mif"))) return "image/heic";
+  return null;
+}
+
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);

@@ -1,8 +1,8 @@
 import { pdf } from "@react-pdf/renderer";
 import { firm } from "@/config/firm";
-import { sanitizeForFilename } from "@/lib/backup";
 import { DEFAULT_PATH } from "@/lib/content/paths";
-import { emergencyInfo, letterDateIso, preferredName } from "@/lib/derive";
+import { documentFilename } from "@/lib/filenames";
+import { emergencyInfo } from "@/lib/derive";
 import { blobToDataUrl, getPhoto } from "@/lib/photos";
 import type { LetterData, LetterPath } from "@/lib/schema";
 import { LoiDocument } from "./loi-document";
@@ -113,15 +113,14 @@ export async function generateEmergencyPdfBlob(
   ).toBlob();
 }
 
-function nameSlug(data: LetterData): string {
-  const n = preferredName(data);
-  return n ? `-${sanitizeForFilename(n)}` : "";
+/**
+ * Filenames carry the document type and the date, never the person's name —
+ * see lib/filenames.ts for why.
+ */
+export function letterPdfFilename(path: LetterPath = DEFAULT_PATH): string {
+  return documentFilename("letter", path);
 }
 
-export function letterPdfFilename(data: LetterData): string {
-  return `Letter-of-Intent${nameSlug(data)}-${letterDateIso(data)}.pdf`;
-}
-
-export function emergencyPdfFilename(data: LetterData): string {
-  return `Emergency-Sheet${nameSlug(data)}-${letterDateIso(data)}.pdf`;
+export function emergencyPdfFilename(path: LetterPath = DEFAULT_PATH): string {
+  return documentFilename("emergency", path);
 }

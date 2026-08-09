@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { firm } from "@/config/firm";
+import { GA_OPT_OUT_URL } from "@/config/analytics";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export const metadata: Metadata = {
   title: "Privacy & how your data works",
   description:
-    "Everything you type stays on this device. No account, no analytics, no tracking " +
+    "Everything you type stays on your device. No account, and nothing you write is " +
+    "ever captured — we count page visits and nothing else. " +
     "of any kind. Here is exactly how that works, in plain words.",
   alternates: { canonical: "/privacy" },
 };
@@ -74,7 +76,7 @@ export default function PrivacyPage() {
           Your privacy, in plain words
         </h1>
         <p className="mt-4 max-w-[62ch] text-lg leading-[1.7] text-oninkbody">
-          Everything you type stays on this device. We never see it, and it is never sent
+          Everything you type stays on your device. We never see it, and it is never sent
           anywhere. One page, no legalese. Here is exactly how that works.
         </p>
       </div>
@@ -90,12 +92,12 @@ export default function PrivacyPage() {
             "Your letter is written to this browser's own storage. There is no server that receives it.",
           ],
           [
-            "No account, and no analytics",
-            "No sign-in anywhere on this site, and no analytics or tracking scripts of any kind — not ours, not anyone's.",
+            "No account, and no reading",
+            "No sign-in anywhere. We count visits with Google Analytics to see how the tool is used and improve it, but nothing you type into the letter is ever captured.",
           ],
           [
-            "Nothing to opt out of",
-            "There is no cookie banner because the site sets no tracking cookies. Your letter is stored on this device, and only for you.",
+            "You can opt out entirely",
+            "Google's own add-on turns the counting off across every site, and the builder works exactly the same either way.",
           ],
         ].map(([title, body]) => (
           <div key={title} className="tw-card" style={{ boxShadow: "var(--shadow-xs)" }}>
@@ -147,8 +149,10 @@ export default function PrivacyPage() {
           holds it, and no way to see it.
         </p>
         <p className={para}>
-          You can confirm this yourself: open your browser&rsquo;s developer tools while
-          you type, and the network tab stays quiet.
+          You can confirm this yourself: open your browser&rsquo;s developer tools, go to
+          the network tab, and type into the letter. Nothing is sent. You will see the
+          analytics request that counts the page when it first loads — and after that,
+          silence, no matter how much you write.
         </p>
       </section>
 
@@ -217,26 +221,42 @@ export default function PrivacyPage() {
       <section id="p4" className={sectionClass} style={{ scrollMarginTop: ANCHOR }}>
         <SectionHead n="04" title="What we do and do not measure" />
         <p className={para}>
-          We measure nothing. This site runs no analytics: no Google Analytics, no
-          product analytics, no heatmaps, no session recording, no advertising pixels, and
-          no third-party scripts of any kind. We do not know how many people visit, which
-          pages they open, or how far anyone gets. That is a deliberate trade — we give up
-          knowing whether the tool is working in exchange for being able to say this
-          without an asterisk.
+          We use Google Analytics for one purpose: to understand how many people visit
+          and how the site is used, so we can improve the Letter of Intent Builder.
+          Knowing which pages families open, which ones they never find, and where they
+          stop is what tells us what to fix next — a question we have no other way to
+          answer, because we never see the letters themselves.
+        </p>
+        <p className={para}>
+          It reports the ordinary things a web server sees: which pages were opened,
+          roughly which region the visit came from, the browser and device, and the link
+          that brought you here. Google sets its own cookies to do that, and its privacy
+          terms apply to what it collects.
         </p>
         <Callout>
+          What it never sees is the letter.{" "}
           <strong className="font-semibold text-ink">
             Nothing you type into any field is captured
           </strong>
           , by us or by anyone else through this site. The words stay in this
           browser&rsquo;s own storage, and no script on this page reads them, sends them,
-          or records your screen.
+          or records your screen. Analytics counts that a page was opened, never what was
+          written on it.
         </Callout>
         <p className="mt-5 max-w-[72ch] text-[0.9375rem] leading-[1.75] text-muted">
-          The site sets no tracking cookies, so there is no cookie banner and nothing to
-          opt out of. Our host keeps ordinary web server logs — the sort every website
-          receives, including the address a request came from — and those are used only to
-          keep the site up and secure.
+          If you would rather not be counted at all, Google&rsquo;s own{" "}
+          <a
+            href={GA_OPT_OUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-[3px]"
+          >
+            opt-out add-on
+          </a>{" "}
+          turns it off across every site, and most ad and tracker blockers do the same.
+          The builder works exactly the same either way. Our host also keeps ordinary web
+          server logs — the sort every website receives, including the address a request
+          came from — and those are used only to keep the site up and secure.
         </p>
       </section>
 

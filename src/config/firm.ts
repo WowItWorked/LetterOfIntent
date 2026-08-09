@@ -33,8 +33,12 @@ export interface FirmConfig {
    */
   appUrl: string;
   appUrlLabel: string;
-  /** Where the single post-download call to action points. */
+  /** Where "Book a conversation" points. */
   consultUrl: string;
+  /** Where "Contact Trusts & Wealth" points, for people who would rather write. */
+  contactUrl: string;
+  /** Where "Leave a review" points. */
+  reviewUrl: string;
   licensedStates: string[];
   /** The firm's monogram. Path under /public, or null to hide it. */
   logoPath: string | null;
@@ -66,7 +70,14 @@ export const firm: FirmConfig = {
   websiteLabel: "trustsandwealth.com",
   appUrl: "https://myletterofintent.com",
   appUrlLabel: "myletterofintent.com",
-  consultUrl: "https://calendly.com/trustsandwealth/consultation",
+  consultUrl: "https://trustsandwealth.com/reserve.html",
+  contactUrl: "https://trustsandwealth.com/contact.html",
+  // INTERIM: a Google search for the firm, which surfaces the Business Profile
+  // panel with its own "Write a review" control. Replace with the profile's
+  // direct write-review short link (https://g.page/r/<id>/review, from Google
+  // Business Profile → Ask for reviews) so the button lands on the review form
+  // in one click instead of two.
+  reviewUrl: "https://www.google.com/search?q=Trusts+%26+Wealth+PLLC+reviews",
   licensedStates: ["Virginia"],
   logoPath: "/monogram-gold.png",
   // The stacked lockup is the one the brand system puts on documents.
@@ -84,7 +95,7 @@ export const firm: FirmConfig = {
     "Trusts & Wealth, PLLC. Her practice includes special needs planning — special " +
     "needs trusts, public benefits, and guardianship — for Virginia families.",
   privacyPromise:
-    "Everything you type stays on this device. We never see it, and it is never " +
+    "Everything you type stays on your device. We never see it, and it is never " +
     "sent anywhere. Download a backup file to keep it safe.",
   disclaimerShort:
     "This free tool is provided by Trusts & Wealth, PLLC for general information. " +

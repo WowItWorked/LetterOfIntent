@@ -154,6 +154,8 @@ test("the header collapses to a menu on a narrow screen", async ({ page, isMobil
   const menuButton = page.getByRole("button", { name: "Menu" });
   await expect(menuButton).toBeVisible();
   await menuButton.click();
-  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: /^Start now$/ }).click();
+  // Matched on the leading word so the test survives copy tweaks to the
+  // reassurance half of the label ("Start · it's free").
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: /^Start\b/ }).click();
   await expect(page).toHaveURL(/\/letter$/);
 });

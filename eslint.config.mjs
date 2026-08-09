@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // This project's build dir (see next.config.ts: OneDrive workaround).
     "node_modules/**",
+    // Static assets, not source. Includes the pre-built pdf.js worker, which
+    // is a megabyte of vendored minified output.
+    "public/**",
   ]),
   {
     rules: {

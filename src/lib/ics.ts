@@ -88,11 +88,21 @@ const REMINDER_BODY =
   "the new version.";
 
 /**
- * Deep links for the two calendars that live on the web. Only the reminder's
- * title and date travel there — the person's name is the one thing the title
- * carries, and the caller decides whether to use a name or "the".
+ * The title used on Google's and Outlook's servers. Deliberately impersonal.
+ *
+ * The .ics file is built and read on this device, so it can carry the person's
+ * name. These two links are different in kind: following one hands the title
+ * to a third party, and "Review Alex's Letter of Intent" sitting in a Google
+ * account discloses a name and, by implication, a disability. The event is
+ * just as useful without it.
  */
-export function calendarLinks(personLabel: string, now: Date, appUrl: string) {
+export const HOSTED_CALENDAR_TITLE = "Review the Letter of Intent";
+
+/**
+ * Deep links for the two calendars that live on the web. Only a fixed title
+ * and a date travel there — nothing from the letter, and no name.
+ */
+export function calendarLinks(now: Date, appUrl: string) {
   const next = new Date(now);
   next.setFullYear(next.getFullYear() + 1);
   const day = `${next.getFullYear()}${pad(next.getMonth() + 1)}${pad(next.getDate())}`;
@@ -100,7 +110,7 @@ export function calendarLinks(personLabel: string, now: Date, appUrl: string) {
   after.setDate(after.getDate() + 1);
   const dayAfter = `${after.getFullYear()}${pad(after.getMonth() + 1)}${pad(after.getDate())}`;
 
-  const title = `Review ${personLabel}'s Letter of Intent`;
+  const title = HOSTED_CALENDAR_TITLE;
   const details = `${REMINDER_BODY}\n\n${appUrl}`;
   const enc = encodeURIComponent;
 

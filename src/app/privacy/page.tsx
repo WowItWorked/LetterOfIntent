@@ -193,7 +193,8 @@ export default function PrivacyPage() {
               <Link href="/your-data" className="underline underline-offset-[3px]">
                 Delete all my data
               </Link>{" "}
-              when you finish, or work in a private window and export a backup first.
+              when you finish, or work in a private window and download a backup file
+              first.
             </p>
           </li>
         </ul>

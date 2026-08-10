@@ -154,7 +154,11 @@ export function DataControls() {
       {/* ------------------------------------------------------- backup */}
       <ActionCard
         eyebrow="Keep a copy"
-        title="Download a backup"
+        // One noun for this thing, everywhere: "backup file". The card used to
+        // say "a backup" while its own button said "backup file", which asks a
+        // tired reader to work out whether those are the same object. They are
+        // the one thing standing between them and total loss of the letter.
+        title="Download your backup file"
         actions={
           <Button onClick={() => void handleExport()} disabled={!hydrated}>
             Download backup file
@@ -165,8 +169,8 @@ export function DataControls() {
           One file holds your whole letter
           {count > 0 ? ` (${count} of ${total} sections have notes)` : ""}, photographs
           included. Keep it in a safe place, move it to another device, or email it to
-          yourself. If this browser&rsquo;s data is ever cleared, the backup is how you
-          get everything back.
+          yourself. If this browser&rsquo;s data is ever cleared, the backup file is how
+          you get everything back.
         </p>
         <div className="mt-4 rounded-[var(--radius-sm)] border border-gold400 bg-gold100 px-4 py-3.5 text-[0.9375rem] leading-[1.7]">
           <strong className="font-semibold text-ink">There is no account</strong>, so
@@ -215,12 +219,12 @@ export function DataControls() {
       {/* ------------------------------------------------------- import */}
       <ActionCard
         eyebrow="Continue elsewhere"
-        title="Load a backup"
+        title="Load a backup file"
         actions={<RestoreFlow onNotice={setNotice} />}
       >
         <p>
           Continue on this device from a backup file you downloaded earlier — here or on
-          another device. Loading a backup replaces whatever is on this device, so
+          another device. Loading a backup file replaces whatever is on this device, so
           download a copy of that first if you want to keep it.
         </p>
         <p className="mt-3 text-[0.9375rem] text-muted">

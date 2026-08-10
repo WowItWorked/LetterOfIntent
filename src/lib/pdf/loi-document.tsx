@@ -251,6 +251,13 @@ export function LoiDocument({
       author={author ?? "Prepared with the Letter of Intent Builder"}
       creator={`Letter of Intent Builder — ${firm.name}`}
       producer={firm.name}
+      // Sets the catalog /Lang. Without it a screen reader guesses, and may
+      // read an English letter in whatever voice the reader's system defaults
+      // to — veraPDF counted 198 failed checks on this document for the
+      // missing declaration alone. This does NOT make the file tagged; that is
+      // a separate and much larger job. It is simply the highest-value line
+      // available in this pipeline.
+      language="en"
     >
       {/* ------------------------------------------------------------ cover */}
       <Page size="LETTER" style={s.coverPage}>

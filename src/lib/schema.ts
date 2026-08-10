@@ -328,7 +328,7 @@ export const backupPhotoSchema = z.object({
   caption: s,
 });
 
-/** Envelope written by "Export a backup" and read by "Import a backup". */
+/** Envelope written by "Download your backup file" and read by "Load a backup file". */
 export const backupSchema = z.object({
   app: z.literal("twl-letter-of-intent"),
   version: z.number(),

@@ -1,18 +1,42 @@
 {
   "generatedFrom": "myletterofintent.com audit",
   "commit": "b243107",
-  "receivedFrom": "site owner, via the dashboard export",
+  "receivedFrom": "site owner, via the dashboard export (second round)",
   "decisions": {
     "A6-004": { "decision": "defer", "note": "" },
     "A6-012": { "decision": "defer", "note": "" },
     "A8-006": { "decision": "defer", "note": "" },
     "A4-001": { "decision": "defer", "note": "" },
-    "A1-002": { "decision": "accept", "note": "" },
+    "A1-002": { "decision": "defer", "note": "" },
     "A1-003": { "decision": "accept", "note": "" },
     "A1-006": { "decision": "accept", "note": "" },
     "A1-009": { "decision": "accept", "note": "" },
     "A1-004": { "decision": "accept", "note": "" },
     "A1-010": { "decision": "accept", "note": "" },
-    "A1-012": { "decision": "accept", "note": "" }
+    "A1-012": { "decision": "accept", "note": "" },
+    "A5-005": { "decision": "accept", "note": "" },
+    "A3-001": { "decision": "accept", "note": "" },
+    "A4-006": { "decision": "accept", "note": "" },
+    "A4-012": { "decision": "accept", "note": "" }
+  },
+  "implementationNotes": {
+    "A1-002_vs_A3-001_conflict": {
+      "issue": "A1-002 was marked defer while A3-001 was marked accept. They are the same defect — the focus indicator being invisible on light surfaces — found independently by two analysts and grouped as one cluster in convergence.md. A4-012 (the Windows High Contrast facet) is the same CSS rule again. They cannot be separated in code.",
+      "resolution": "Not reverted. Accepting A3-001 and A4-012 means the fix stays; it shipped in ecfe989. Raised with the owner rather than resolved silently.",
+      "shippedIn": "ecfe989"
+    },
+    "A4-006": {
+      "done": "Added language=\"en\" to both PDF <Document> elements.",
+      "measured": "veraPDF PDF/UA-1: Letter of Intent 489 -> 291 failed checks; Emergency sheet 132 -> 83. Clause 7.2-34 cleared on both. 247 checks resolved, matching A4's prediction.",
+      "notDone": "Full tagging (StructTreeRoot, MarkInfo, XMP) remains — that is A6-004, deferred, and blocked anyway: @react-pdf/renderer 4.5.1 exposes no structure-tree API."
+    },
+    "A5-005": {
+      "finding_was_overstated": "A5 claimed 19 uses of 'export' in user-facing copy. Verification (V3) had already found its measuring tool counted TypeScript `export` keywords as copy. Independently re-measured: 2 real instances, one of which ('export a smaller copy') refers to phone photos, not backups. So the real count naming this action was 1.",
+      "done": "Standardised the noun to 'backup file' across all three control labels, retired 'export' from copy and from a stale schema comment naming buttons that no longer exist.",
+      "deliberately_not_done": "Did not force 'backup file' into running prose where 'a backup' reads naturally. Over-standardising would make the copy stilted, which costs this audience more than the inconsistency does."
+    },
+    "A1-006": {
+      "no_code_change": "Auto-preload and the missing poster were fixed earlier and are deployed; the video now mounts only on click. The remaining 18.8 MB is 568 kbps for 4:38 — already modest. Reducing it needs a re-encode and ffmpeg is unavailable here."
+    }
   }
 }

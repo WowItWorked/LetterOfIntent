@@ -5,8 +5,8 @@ import { DataControls } from "@/components/data/DataControls";
 export const metadata: Metadata = {
   title: "Your data — back up, move, or delete",
   description:
-    "Back up your letter, load a backup, download the documents, or erase everything " +
-    "this tool has stored on this device.",
+    "Download a backup file, load one back in, download the documents, or erase " +
+    "everything this tool has stored on this device.",
   alternates: { canonical: "/your-data" },
 };
 

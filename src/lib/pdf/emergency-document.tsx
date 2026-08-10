@@ -159,6 +159,10 @@ export function EmergencyDocument({
       title={`Emergency information — ${info.fullName ?? info.preferred ?? ""}`}
       creator={`Letter of Intent Builder — ${firm.name}`}
       producer={firm.name}
+      // See loi-document.tsx — 49 failed checks on this sheet came from the
+      // missing language declaration. It matters more here than anywhere: this
+      // is the page read aloud in an emergency.
+      language="en"
     >
       <Page size="LETTER" style={s.page} wrap={false}>
         {/* Brand row sits above the navy bar so the sheet still reads

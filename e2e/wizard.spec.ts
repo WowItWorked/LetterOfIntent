@@ -25,7 +25,7 @@ test("work survives a reload and the chooser offers to resume", async ({ page })
 
   await page.goto("/letter");
   await expect(page.getByText(/welcome back/i)).toBeVisible();
-  await expect(page.getByText(/2 of 15 sections/)).toBeVisible();
+  await expect(page.getByText(/2 of 20 sections/)).toBeVisible();
   await page.getByRole("link", { name: /pick up where you left off/i }).click();
   await expect(page).toHaveURL(/a-typical-day/);
 });
@@ -52,7 +52,7 @@ test("every section is reachable with the Next button and empty fields draw no e
   await expect(page.getByText(/nothing to review yet/i)).toBeVisible();
 });
 
-test("choosing the general path switches the rail to its fourteen sections", async ({
+test("choosing the general path switches the rail to its nineteen sections", async ({
   page,
 }) => {
   await page.goto("/letter");
@@ -75,7 +75,7 @@ test("choosing the general path switches the rail to its fourteen sections", asy
   await expect(
     page.getByRole("heading", { level: 1, name: /a typical week/i })
   ).toBeVisible();
-  await expect(page.getByText(/of 14 ·/i).first()).toBeVisible();
+  await expect(page.getByText(/of 19 ·/i).first()).toBeVisible();
 });
 
 test("every general-path section renders", async ({ page }) => {

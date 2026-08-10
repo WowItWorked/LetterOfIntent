@@ -147,8 +147,8 @@ export function blobToDataUrl(blob: Blob): Promise<string> {
 }
 
 /**
- * Decoded by hand rather than with `fetch(dataUrl)` — the CSP pins
- * connect-src to 'self', which blocks fetching even a data: URL.
+ * Decoded by hand rather than with `fetch(dataUrl)` — synchronous, and it
+ * keeps this module working no matter how tightly connect-src is pinned.
  */
 export function dataUrlToBlob(dataUrl: string): Blob {
   const [header, encoded] = dataUrl.split(",", 2);

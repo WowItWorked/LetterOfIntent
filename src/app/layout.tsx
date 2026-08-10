@@ -14,10 +14,13 @@ import { SiteFooter } from "@/components/chrome/SiteFooter";
  * Cormorant Garamond for display serif, Mulish for body/UI. next/font bundles
  * them at build time and serves them same-origin — no runtime font requests,
  * so the "nothing leaves this device" promise and the CSP stay intact.
+ * Cinzel 400 and Mulish 800 joined for the Care Cards, which render in-browser
+ * at 1080x1920; without these, titles fall back to 500 and labels to
+ * synthesized faux-bold.
  */
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["500", "600"],
+  weight: ["400", "500", "600"],
   variable: "--font-cinzel",
   display: "swap",
 });
@@ -30,7 +33,7 @@ const cormorant = Cormorant_Garamond({
 });
 const mulish = Mulish({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-mulish",
   display: "swap",
 });

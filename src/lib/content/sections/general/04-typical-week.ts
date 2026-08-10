@@ -21,8 +21,8 @@ export const typicalWeek: SectionDef = {
       placeholder:
         "Wake time, medications, breakfast, the paper, what happens before anything else can",
       example:
-        "Up at six whether anyone likes it or not. Coffee first — half a cup, milk, " +
-        "no sugar — then the pills in the blue box on the counter, then the paper. " +
+        "Up at six whether anyone likes it or not. Coffee first (half a cup, milk, " +
+        "no sugar), then the pills in the blue box on the counter, then the paper. " +
         "Do not try to talk to him about anything real before the paper.",
     },
     {

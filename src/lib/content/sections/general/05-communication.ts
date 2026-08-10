@@ -21,7 +21,7 @@ export const dailyCommunication: SectionDef = {
       help: "Directly or gently? Face to face or over the phone? Is there someone they will accept news from that they will not accept from anyone else?",
       example:
         "Say it straight and say it once. She can tell when she is being handled and " +
-        "it makes her dig in. Anything about money should come from my brother — she " +
+        "it makes her dig in. Anything about money should come from my brother: she " +
         "has always trusted him with that and it is not worth relitigating.",
     },
     {
@@ -29,10 +29,10 @@ export const dailyCommunication: SectionDef = {
       kind: "textarea",
       rows: 4,
       label: "Hearing, vision, and memory, as they are now",
-      help: "Be honest and specific — this is the page that keeps someone from mistaking a hearing problem for confusion.",
+      help: "Be honest and specific: this is the page that keeps someone from mistaking a hearing problem for confusion.",
       example:
         "Hearing aids in both ears; he forgets the left one. Reading glasses on the " +
-        "chain. Memory is fine for the distant past, patchy for this week — he will " +
+        "chain. Memory is fine for the distant past, patchy for this week. He will " +
         "cover for it rather than ask you to repeat something.",
     },
     {

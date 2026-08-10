@@ -8,79 +8,153 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 export const metadata: Metadata = {
   title: "Create your letter",
   description:
-    "Two sets of questions — one for a loved one with disabilities, one for anyone " +
+    "Two sets of questions: one for a loved one with disabilities, one for anyone " +
     "you care for. Read every question before you write a word.",
   alternates: { canonical: "/letter" },
 };
 
+/** The three-step "how it works" trio — moved here from the home page. */
+const HOW_IT_WORKS = [
+  {
+    numeral: "I",
+    title: "Answer what you can",
+    body: "Twenty short sections, every question optional. Jump around. A ten-minute sitting is a real contribution.",
+  },
+  {
+    numeral: "II",
+    title: "It saves only on your device",
+    body: (
+      <>
+        It saves after every answer, so you can stop mid-sentence tonight and pick it up
+        on Thursday. No account and no login, so it saves in <em>this</em> browser only:
+        download a backup file to switch devices.
+      </>
+    ),
+  },
+  {
+    numeral: "III",
+    title: "Download the documents and your backup file",
+    body: "A polished, printable Letter of Intent, the one-page emergency sheet, and your care cards, plus the backup file that lets you pick the letter up again later, or on another device.",
+  },
+];
+
 export default function LetterLandingPage() {
   return (
-    <div
-      className="mx-auto w-full"
-      style={{
-        maxWidth: "var(--container)",
-        padding: "clamp(36px, 5vw, 72px) var(--gutter) 80px",
-      }}
-    >
-      {/* ------------------------------------------------------ header panel */}
+    <>
+      {/* Full-bleed header band, flush under the privacy strip — the same
+          edge-to-edge treatment as the home page hero, not an inset box. */}
       <div
-        className="rounded-[var(--radius-md)]"
         style={{
           background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
-          boxShadow: "var(--shadow-md)",
-          padding: "clamp(26px, 3.4vw, 44px) clamp(24px, 3.4vw, 44px)",
+          padding: "clamp(32px, 4.5vw, 56px) var(--gutter) clamp(34px, 4.5vw, 60px)",
         }}
       >
-        <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">
-          Create your letter
-        </p>
-        <h1 className="mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
-          Create your Letter of Intent
-        </h1>
-        <p className="mt-4 max-w-[72ch] text-lg leading-[1.7] text-oninkbody">
-          Two sets of questions, because two situations are not the same. Pick the one
-          that fits the person you care for, read exactly what it will ask, and begin.
-          Nothing is required, and you can start the other set at any time.
-        </p>
-        <p className="mt-5 border-t border-navy500 pt-[18px] text-[0.9375rem] text-oninkbody">
-          It saves as you go, on this device only. About 45–90 minutes in total, in as
-          many sittings as you need.
-        </p>
+        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
+          <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">
+            Create your letter
+          </p>
+          <h1 className="mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
+            Create your Letter of Intent
+          </h1>
+          <p className="mt-4 max-w-[72ch] text-lg leading-[1.7] text-oninkbody">
+            Two sets of questions, because two situations are not the same. Pick the one
+            that fits the person you care for, read exactly what it will ask, and begin.
+            Nothing is required, and you can start the other set at any time.
+          </p>
+          <p className="mt-5 border-t border-navy500 pt-[18px] text-[0.9375rem] text-oninkbody">
+            It saves as you go, on this device only. About 45 minutes to two hours in
+            total, in as many sittings as you need.
+          </p>
+        </div>
       </div>
 
+      <div
+        className="mx-auto w-full"
+        style={{
+          maxWidth: "var(--container)",
+          padding: "clamp(10px, 2vw, 24px) var(--gutter) 80px",
+        }}
+      >
       {/* Returning visitors land here from the header's Start now, so the
           letter already on this device has to be reachable in one click. */}
       <ResumeCard />
 
       <PathChooser />
 
-      {/* --------------------------------------------------------- begin card */}
+      {/* The begin card that used to sit here folded into the how-it-works
+          band below: its copy repeated the band's intro, and the owner asked
+          for the buttons to close the page. */}
+      </div>
+
+      {/* ------------------------------------- how it works, closing the page.
+          Moved from the home page; full-bleed navy like the header band. The
+          begin card directly above holds the start buttons, so this band ends
+          on the steps rather than repeating a CTA. */}
       <section
-        className="mt-11 overflow-hidden rounded-[var(--radius-md)] border border-gold400 bg-surface"
-        style={{ boxShadow: "var(--shadow-md)" }}
+        style={{
+          background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
+          padding: "clamp(56px, 7.5vw, 96px) var(--gutter)",
+        }}
       >
-        <div className="h-[3px]" style={{ background: "var(--gradient-gold)" }} />
-        <div style={{ padding: "32px clamp(24px, 3vw, 40px) 34px" }}>
-          <Eyebrow>Begin</Eyebrow>
-          <h2 className="mt-3 font-serif text-[clamp(1.6rem,3.4vw,2.1rem)] font-semibold text-ink">
-            Start with ten minutes.
-          </h2>
-          <p className="mt-3 max-w-[70ch] leading-[1.7]">
-            You do not have to do this all at once, or do it perfectly. A letter with
-            three sections filled in is worth more to a future caregiver than the perfect
-            letter that never gets written.
-          </p>
-          <StartButtons />
-          <p className="mt-[18px] text-[0.9375rem] text-muted">
-            No account and no email address. It saves on this device as you go, and you
-            can{" "}
-            <Link href="/your-data" className="underline underline-offset-[3px]">
-              download a backup file
-            </Link>{" "}
-            at any time.
-          </p>
+        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
+          <div className="mx-auto max-w-[760px] text-center">
+            <Eyebrow tone="light" align="center" flanked>
+              How it works
+            </Eyebrow>
+            <h2 className="mt-5 font-serif text-[clamp(1.75rem,5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
+              Start with ten minutes.
+            </h2>
+            <p className="mx-auto mt-5 max-w-[58ch] text-lg leading-[1.7] text-oninkbody">
+              You don&rsquo;t have to do this all at once, and you don&rsquo;t have to do
+              it perfectly. A letter with three sections filled in is already worth more
+              to a future caregiver than the perfect letter that never got written.
+            </p>
+          </div>
+
+          <ol
+            className="mx-auto mt-11 grid max-w-[1080px] list-none gap-5 p-0 text-left"
+            style={{
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
+            }}
+          >
+            {HOW_IT_WORKS.map((step) => (
+              <li
+                key={step.numeral}
+                className="rounded-[var(--radius-md)] border border-navy500 px-7 pb-7 pt-6"
+                style={{ background: "rgba(255,255,255,0.045)" }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="tw-engraved block text-[28px] tracking-[0.06em] text-gold400"
+                >
+                  {step.numeral}
+                </span>
+                <h3 className="mt-2 font-serif text-[1.25rem] font-semibold text-onink">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-[0.9375rem] leading-[1.7] text-oninkbody">
+                  {step.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mx-auto mt-[30px] max-w-[640px]">
+            <StartButtons onInk />
+            <p className="mt-[18px] text-center text-[0.9375rem] leading-[1.65] text-oninkbody">
+              No account and no email address. It saves on this device as you go, and
+              you can{" "}
+              <Link
+                href="/your-data"
+                className="font-semibold text-gold400 underline underline-offset-[3px] hover:text-gold300"
+              >
+                download a backup file
+              </Link>{" "}
+              at any time.
+            </p>
+          </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

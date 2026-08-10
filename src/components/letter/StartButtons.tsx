@@ -8,8 +8,11 @@ import { Button } from "@/components/ui/Button";
 /**
  * Both start buttons. Each one records which set of questions the letter is
  * being written from before opening the first section.
+ *
+ * `onInk` restyles the outline button for a navy ground — the default outline
+ * draws navy-on-navy there.
  */
-export function StartButtons() {
+export function StartButtons({ onInk = false }: { onInk?: boolean }) {
   const router = useRouter();
   const setLetterPath = useLetterStore((s) => s.setLetterPath);
 
@@ -30,7 +33,7 @@ export function StartButtons() {
         <Button
           key={p.id}
           size="lg"
-          variant={i === 0 ? "accent" : "outline"}
+          variant={i === 0 ? "accent" : onInk ? "outlineOnInk" : "outline"}
           className="w-full px-4 text-center"
           onClick={() => begin(p.id)}
         >

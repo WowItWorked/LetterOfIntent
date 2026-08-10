@@ -17,7 +17,15 @@ async function expectNoViolations(page: import("@playwright/test").Page) {
   ).toEqual([]);
 }
 
-for (const path of ["/", "/letter", "/privacy", "/your-data", "/letter/review"]) {
+for (const path of [
+  "/",
+  "/letter",
+  "/privacy",
+  "/your-data",
+  "/letter/review",
+  "/care-cards",
+  "/emergency-sheet",
+]) {
   test(`axe clean: ${path}`, async ({ page }) => {
     await page.goto(path);
     await page.waitForSelector("h1");
@@ -55,11 +63,26 @@ test("axe clean: review page with a full letter, including the reading view", as
   await expectNoViolations(page);
 });
 
+test("axe clean: care cards with a bundle picked and previews showing", async ({
+  page,
+}) => {
+  await seedLetter(page, FULL_LETTER);
+  await page.goto("/care-cards");
+  await page.getByRole("button", { name: /quick trip/i }).click();
+  // "for Alex": the page's Bonnie gallery renders a same-titled card, so the
+  // seeded preview must be pinned by person.
+  await page
+    .getByRole("img", { name: /emergency protocol care card for alex/i })
+    .waitFor({ timeout: 15_000 });
+  await expectNoViolations(page);
+});
+
 test("axe clean: a section with example disclosures open and hints showing", async ({
   page,
 }) => {
   await page.goto("/letter/family-and-support");
-  await page.getByRole("button", { name: /add a person/i }).click();
+  // A repeater now starts with one blank record, so the Email field is
+  // already on screen — no "Add a person" click needed first.
   await page.getByLabel("Email").fill("not-an-email");
   await page.getByLabel("Email").blur();
   await page.getByText(/doesn't look like a full email/i).waitFor();

@@ -72,9 +72,10 @@ export function ShareCard() {
             tool for writing down what a future caregiver would need to know about someone
             you love: routines, medical details, what calms them, who to call. One small
             question at a time, and it finishes as a document you can print. Everything you
-            write stays private on your own device.&rdquo;
+            write stays private on your own device until you choose to share it with a
+            caregiver.&rdquo;
           </p>
-          <p className="mt-2 text-xs text-muted">Change a word or send it as it stands.</p>
+          <p className="mt-2 text-xs text-muted">Edit or send it as it stands.</p>
         </div>
 
         <p className="mt-5 flex items-start gap-2.5 border-t border-line pt-[18px] text-[0.9375rem] leading-[1.7] text-muted">

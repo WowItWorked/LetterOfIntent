@@ -9,7 +9,7 @@ export const typicalDay: SectionDef = {
   minutes: 15,
   intro:
     "Routine is safety. The more a new caregiver can keep {name}'s days familiar, " +
-    "the easier every hard thing becomes. Describe what a day actually looks like — " +
+    "the easier every hard thing becomes. Describe what a day actually looks like: " +
     "not the ideal version, the real one.",
   fields: [
     {
@@ -18,9 +18,9 @@ export const typicalDay: SectionDef = {
       rows: 4,
       label: "Morning routine",
       placeholder:
-        "Wake time, how they like to be woken, bathroom, meds, breakfast, getting dressed — in the order it happens",
+        "Wake time, how they like to be woken, bathroom, meds, breakfast, getting dressed, in the order it happens",
       example:
-        "Alex wakes at 6:30 on his own. Don't rush him — he needs ten minutes under " +
+        "Alex wakes at 6:30 on his own. Don't rush him. He needs ten minutes under " +
         "the covers listening to the radio before anything else. Meds go in the blue " +
         "cup with orange juice, never water. Breakfast is the same every day: two " +
         "waffles cut in strips, syrup on the side.",
@@ -44,7 +44,7 @@ export const typicalDay: SectionDef = {
       id: "food",
       kind: "textarea",
       rows: 4,
-      label: "Food — favorites, dislikes, and rules",
+      label: "Food: favorites, dislikes, and rules",
       help: "Include textures, brands, how food is prepared and served, and anything they will not eat. Note any swallowing or choking concerns here too.",
     },
     {
@@ -59,14 +59,14 @@ export const typicalDay: SectionDef = {
       kind: "textarea",
       rows: 4,
       label: "Sensory sensitivities",
-      help: "Sounds, lights, textures, smells, crowds, touch. What overwhelms — and what soothes?",
+      help: "Sounds, lights, textures, smells, crowds, touch. What overwhelms, and what soothes?",
     },
     {
       id: "comfortObjects",
       kind: "textarea",
       rows: 3,
       label: "Comfort objects and favorites",
-      placeholder: "The things that must never be lost — and where the backups live",
+      placeholder: "The things that must never be lost, and where the backups live",
     },
     {
       id: "goodDay",

@@ -42,7 +42,10 @@ const securityHeaders = [
       // answer range requests — the file is fetched once and re-served locally.
       "media-src 'self' blob:",
       "font-src 'self' data:",
-      `connect-src 'self' ${ga}`,
+      // data:: @react-pdf loads its yoga WASM engine with fetch(data:...) on
+      // first PDF build. A data: URL carries its own bytes — fetching one
+      // sends nothing anywhere, so the "no host but GA" promise is untouched.
+      `connect-src 'self' data: ${ga}`,
       "worker-src 'self' blob:",
       "object-src 'none'",
       "base-uri 'self'",
@@ -90,6 +93,10 @@ const nextConfig: NextConfig = {
   async headers() {
     if (process.env.NODE_ENV !== "production") return [];
     return [{ source: "/:path*", headers: securityHeaders }];
+  },
+  async redirects() {
+    // The working picker moved onto /care-cards; saved links keep working.
+    return [{ source: "/letter/cards", destination: "/care-cards", permanent: true }];
   },
 };
 

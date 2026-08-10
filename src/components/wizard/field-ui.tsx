@@ -44,6 +44,9 @@ export function errMessage(
 interface FieldShellProps {
   htmlFor: string;
   label: string;
+  /** "Appears on the … card" line from lib/cards/status — config-driven. */
+  marker?: string;
+  markerId?: string;
   help?: string;
   helpId?: string;
   hint?: string;
@@ -53,13 +56,15 @@ interface FieldShellProps {
 }
 
 /**
- * Standard wrapper for a single question: label, helper text, the input,
- * a gentle format hint (never blocking, never red), and an optional
- * "See an example" disclosure.
+ * Standard wrapper for a single question: label, an optional card marker,
+ * helper text, the input, a gentle format hint (never blocking, never red),
+ * and an optional "See an example" disclosure.
  */
 export function FieldShell({
   htmlFor,
   label,
+  marker,
+  markerId,
   help,
   helpId,
   hint,
@@ -72,6 +77,11 @@ export function FieldShell({
       <label htmlFor={htmlFor} className="block font-semibold text-ink">
         {label}
       </label>
+      {marker ? (
+        <p id={markerId} className="mt-1 text-[0.8125rem] text-muted">
+          {marker}
+        </p>
+      ) : null}
       {help ? (
         <p id={helpId} className="mt-1.5 max-w-[66ch] text-[0.9375rem] text-muted">
           {help}

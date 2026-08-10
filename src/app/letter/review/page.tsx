@@ -7,15 +7,7 @@ export const metadata: Metadata = {
 };
 
 export default function ReviewPage() {
-  return (
-    <div
-      className="mx-auto w-full"
-      style={{
-        maxWidth: "var(--container)",
-        padding: "clamp(28px, 4vw, 52px) var(--gutter) 72px",
-      }}
-    >
-      <ReviewScreen />
-    </div>
-  );
+  // Bare on purpose: the screen renders its own full-bleed header band and
+  // centered content container.
+  return <ReviewScreen />;
 }

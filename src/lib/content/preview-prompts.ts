@@ -27,6 +27,31 @@ export const previewPrompts: Record<string, [string, string, string]> = {
     "What you hope for them",
     "Words for the person taking over",
   ],
+  allergies: [
+    "Each allergy, and what the reaction looks like",
+    "How serious each one is: life-threatening, serious, or mild",
+    "What to do when it happens",
+  ],
+  "emergency-plan": [
+    "The steps to take, in order",
+    "When to call 911, and who to call otherwise",
+    "The rule on over-the-counter medicine",
+  ],
+  "daily-routines": [
+    "Each block of the day as steps: waking, meals, bedtime",
+    "Rough times, and the order things happen in",
+    "How to move between activities without a fight",
+  ],
+  "food-and-eating": [
+    "Foods that always work, and foods they will not eat",
+    "Texture rules and choking risks",
+    "The mealtime help that keeps things calm",
+  ],
+  "personal-care": [
+    "Toileting, dressing, bathing, and getting around",
+    "The steps for each, written for a first-timer",
+    "The equipment involved, and where it lives",
+  ],
 
   /* ------------------------------------------------- special needs sections */
   about: [

@@ -63,6 +63,36 @@
   --info: #3e5c84;
   --info-bg: #eaeff6;
 
+  /* ---- Care Card topic colors ------------------------------------------ */
+  /* The seven topic colors from the care-cards design export. Four principals
+     sit on the existing status tokens by design — the cards were drawn inside
+     the Trusts & Wealth palette, and the var() aliases keep that identity
+     honest. Three hues (behavior/routine/food) and all seven deep values are
+     new to the palette and stay literal. meds-deep #8a6a38 numerically equals
+     --gold-700 by coincidence only; it is kept literal on purpose so a future
+     gold retune cannot silently restyle the medications card. */
+  --card-identity: var(--success);
+  --card-identity-deep: #3a5c41;
+  --card-identity-tint: var(--success-bg);
+  --card-emergency: var(--danger);
+  --card-emergency-deep: #7f3232;
+  --card-emergency-tint: var(--danger-bg);
+  --card-meds: var(--warning);
+  --card-meds-deep: #8a6a38;
+  --card-meds-tint: var(--warning-bg);
+  --card-behavior: #b5622c;
+  --card-behavior-deep: #8c4a1f;
+  --card-behavior-tint: #f7ece2;
+  --card-routine: #6a4a73;
+  --card-routine-deep: #513959;
+  --card-routine-tint: #f0ebf3;
+  --card-food: #2f6b6b;
+  --card-food-deep: #235252;
+  --card-food-tint: #e7f0f0;
+  --card-care: var(--info);
+  --card-care-deep: #2c4463;
+  --card-care-tint: var(--info-bg);
+
   /* ---- Text on navy panels -------------------------------------------- */
   --on-ink-heading: #f6f4ee;
   --on-ink-body: #c3ccdd;

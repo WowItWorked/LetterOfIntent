@@ -33,9 +33,16 @@ describe("analytics config and the CSP agree", () => {
     }
   });
 
-  it("keeps connect-src limited to self plus analytics", () => {
-    const connect = /`connect-src 'self' \$\{ga\}`/.test(configSource);
-    expect(connect, "connect-src must be 'self' plus the analytics hosts only").toBe(true);
+  it("keeps connect-src limited to self, data:, and analytics", () => {
+    // data: is not a host — a data: URL carries its own bytes and a fetch of
+    // one sends nothing anywhere (react-pdf's WASM engine loads this way).
+    // The promise this test guards is unchanged: no NETWORK destination
+    // beyond the analytics hosts.
+    const connect = /`connect-src 'self' data: \$\{ga\}`/.test(configSource);
+    expect(
+      connect,
+      "connect-src must be 'self' + data: plus the analytics hosts only"
+    ).toBe(true);
   });
 
   it("has a measurement ID in the shape Google issues", () => {

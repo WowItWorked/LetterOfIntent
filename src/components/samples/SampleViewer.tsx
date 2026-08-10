@@ -84,6 +84,13 @@ export function SampleViewer({
   }, [file, title]);
 
   useEffect(() => {
+    // Client-side navigation lands here mid-scroll: this segment is a lazily
+    // loaded client component, so at the moment the router runs its
+    // scroll-to-top there is nothing mounted to scroll to, and the previous
+    // page's position survives. Every arrival at a sample should start at the
+    // masthead, so reset it ourselves once the viewer exists.
+    window.scrollTo(0, 0);
+
     // Deferred to a microtask: `draw` sets state as each page finishes, and
     // calling it straight from the effect body would be a synchronous setState
     // in an effect.

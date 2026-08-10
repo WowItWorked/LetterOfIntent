@@ -86,7 +86,7 @@ export function DataControls() {
     setNotice({
       tone: "success",
       text:
-        "Backup downloaded. Keep it somewhere safe — a cloud drive, an email to " +
+        "Backup downloaded. Keep it somewhere safe: a cloud drive, an email to " +
         "yourself, a USB stick." +
         (photos.length ? ` Your ${photos.length === 1 ? "photo is" : "photos are"} inside it too.` : ""),
     });
@@ -223,13 +223,13 @@ export function DataControls() {
         actions={<RestoreFlow onNotice={setNotice} />}
       >
         <p>
-          Continue on this device from a backup file you downloaded earlier — here or on
+          Continue on this device from a backup file you downloaded earlier, here or on
           another device. Loading a backup file replaces whatever is on this device, so
           download a copy of that first if you want to keep it.
         </p>
         <p className="mt-3 text-[0.9375rem] text-muted">
           If the file was written before this tool had two sets of questions, we work out
-          which letter it belongs to from the sections inside it — and ask you if it
+          which letter it belongs to from the sections inside it, and ask you if it
           genuinely cannot be told apart. Anything in the file that cannot be read is
           reported rather than silently dropped.
         </p>
@@ -247,7 +247,7 @@ export function DataControls() {
         }
       >
         <p>
-          Erases everything this tool has stored on this device — the whole letter and any
+          Erases everything this tool has stored on this device: the whole letter and any
           photographs. This cannot be undone, and there is no copy anywhere else. If you
           might want the letter later, download a backup first.
         </p>
@@ -278,7 +278,7 @@ export function DataControls() {
       >
         <p className="max-w-[66ch] text-body">
           Your whole letter
-          {count > 0 ? ` — including the ${count} sections with notes —` : ""} will be
+          {count > 0 ? ` (including the ${count} sections with notes)` : ""} will be
           permanently erased from this device, along with any photographs. There is no
           undo.
         </p>

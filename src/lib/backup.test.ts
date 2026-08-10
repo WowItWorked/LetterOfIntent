@@ -39,6 +39,94 @@ describe("backup round trip", () => {
     if (r.ok) expect(r.data.medical?.allergies).toContain("Penicillin");
   });
 
+  it("round-trips the card sections and the extended medication fields", () => {
+    const withCards: LetterData = {
+      gettingStarted: { subjectFullName: "Alex Rivera", subjectAddress: "12 Elm St" },
+      familySupport: {
+        contacts: [
+          { id: "c1", name: "Dana", roles: ["primary", "medical_decision"], altPhone: "555-0100" },
+        ],
+      },
+      medical: {
+        medications: [
+          {
+            id: "m1",
+            name: "Epinephrine",
+            isRescue: true,
+            location: "Red pouch, front of backpack",
+            schedule: ["prn", "14:30"],
+            prnTrigger: "Bee sting",
+            prnMaxPerDay: "2",
+            keepOffCards: false,
+          },
+        ],
+      },
+      allergies: {
+        items: [{ id: "a1", allergen: "Bee stings", severity: "life-threatening" }],
+      },
+      routines: {
+        items: [{ id: "r1", timeOfDay: "morning", steps: "Wake\nBreakfast" }],
+        transitions: "Five-minute warning, then one-minute.",
+      },
+      foods: { items: [{ id: "f1", item: "Grapes", type: "choking_risk" }] },
+      careTasks: { items: [{ id: "t1", category: "bathing", steps: "Check temperature" }] },
+      emergencyPlan: {
+        responseSteps: "1 · Auto-injector\n2 · Call 911",
+        scenarios: [
+          { id: "s1", trigger: "If she bolts", steps: "Check closets\nCall Jessie" },
+        ],
+        otcPolicy: "Nothing else",
+      },
+    };
+    const r = parseBackup(serializeBackup(withCards, {}));
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    // The new sections came through the salvage path, not the unknown bucket.
+    expect(r.salvage.unknown).toEqual([]);
+    expect(r.salvage.restored).toEqual(
+      expect.arrayContaining(["allergies", "routines", "foods", "careTasks", "emergencyPlan"])
+    );
+    expect(r.data.gettingStarted?.subjectAddress).toBe("12 Elm St");
+    expect(r.data.familySupport?.contacts?.[0]?.roles).toEqual(["primary", "medical_decision"]);
+    expect(r.data.medical?.medications?.[0]?.isRescue).toBe(true);
+    expect(r.data.medical?.medications?.[0]?.schedule).toEqual(["prn", "14:30"]);
+    expect(r.data.medical?.medications?.[0]?.location).toContain("Red pouch");
+    expect(r.data.allergies?.items?.[0]?.severity).toBe("life-threatening");
+    expect(r.data.routines?.items?.[0]?.steps).toBe("Wake\nBreakfast");
+    expect(r.data.foods?.items?.[0]?.type).toBe("choking_risk");
+    expect(r.data.careTasks?.items?.[0]?.category).toBe("bathing");
+    expect(r.data.emergencyPlan?.otcPolicy).toBe("Nothing else");
+    expect(r.data.emergencyPlan?.scenarios?.[0]?.trigger).toBe("If she bolts");
+    expect(r.data.emergencyPlan?.scenarios?.[0]?.steps).toBe("Check closets\nCall Jessie");
+  });
+
+  it("restores an old backup written before the card sections existed", () => {
+    // Exactly the shape a pre-cards export produced: no card sections, no
+    // extended record fields. A family's older file must never pay for an
+    // upgrade they have not made.
+    const old = {
+      app: "twl-letter-of-intent",
+      version: 1,
+      data: {
+        gettingStarted: { authorName: "Maria", subjectPreferredName: "Alex" },
+        medical: {
+          medications: [{ id: "m1", name: "Keppra", dose: "500 mg", purpose: "Seizures" }],
+          allergies: "Penicillin — hives",
+        },
+      },
+    };
+    const r = parseBackup(JSON.stringify(old));
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(r.salvage.skipped).toEqual([]);
+    expect(r.salvage.unknown).toEqual([]);
+    expect(r.data.medical?.medications?.[0]?.name).toBe("Keppra");
+    expect(r.data.medical?.allergies).toContain("Penicillin");
+    // Absent stays absent — no section is invented on restore.
+    expect(r.data).not.toHaveProperty("allergies");
+    expect(r.data).not.toHaveProperty("emergencyPlan");
+  });
+
   it("strips unknown fields instead of failing (forward compatibility)", () => {
     const withExtra = JSON.parse(serializeBackup(sample, {}));
     withExtra.data.futureSection = { anything: "at all" };

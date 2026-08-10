@@ -9,9 +9,12 @@ import {
   resolvePath,
   sectionBySlugInPath,
   sectionsFor,
+  type LetterPath,
 } from "@/lib/content/paths";
+import type { SectionDef } from "@/lib/content/types";
 import { displayName, fillName } from "@/lib/derive";
 import { useLetterStore } from "@/lib/store";
+import { CardStatusPanel } from "@/components/wizard/CardStatusPanel";
 import { SectionForm } from "@/components/wizard/SectionForm";
 import { PhotoFields } from "@/components/wizard/PhotoFields";
 import { Button, buttonClasses } from "@/components/ui/Button";
@@ -75,6 +78,8 @@ export function SectionScreen({ slug }: { slug: string }) {
         </aside>
       ) : null}
 
+      {hydrated ? <LegacyEcho def={def} path={path} /> : null}
+
       <div className="mt-[34px]">
         {!hydrated ? (
           <FormSkeleton />
@@ -92,8 +97,55 @@ export function SectionScreen({ slug }: { slug: string }) {
         )}
       </div>
 
+      {/* After the form, before the nav: the letter comes first, and a card
+          line is something noticed on the way out, not a bar to clear. */}
+      {hydrated && !showGate ? <CardStatusPanel section={def.key} path={path} /> : null}
+
       {!showGate ? <NextPrev slug={def.slug} name={name} /> : null}
     </article>
+  );
+}
+
+/**
+ * Blob coexistence, made visible: when a structured card section shadows a
+ * free-text answer the family already wrote (medical.allergies, the typical
+ * day's food and routines), quote their own words back above the new form.
+ * Nothing is parsed or moved for them — the quote just says where the prose
+ * lives, so retyping an entry below never feels like their paragraph was
+ * lost. Renders only when the older field actually holds something.
+ */
+function LegacyEcho({ def, path }: { def: SectionDef; path: LetterPath }) {
+  const data = useLetterStore((s) => s.data);
+  const refs = def.legacyRefs?.[path] ?? [];
+  const filled = refs
+    .map((ref) => {
+      const section = data[ref.sectionKey] as Record<string, unknown> | undefined;
+      const value = section?.[ref.fieldKey];
+      const text = typeof value === "string" ? value.trim() : "";
+      return { ref, text };
+    })
+    .filter((r) => r.text !== "");
+  if (filled.length === 0) return null;
+
+  return (
+    <aside className="mt-6 max-w-[66ch] rounded-[var(--radius-sm)] border border-line bg-paper2 p-4">
+      <p className="text-[0.9375rem] font-semibold text-ink">
+        You wrote this earlier — the entries below are what reach the cards.
+      </p>
+      {filled.map(({ ref, text }) => (
+        <blockquote
+          key={`${ref.sectionKey}.${ref.fieldKey}`}
+          className="mt-3 border-l-2 border-gold400 pl-3.5"
+        >
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+            {ref.label}
+          </p>
+          <p className="mt-1 whitespace-pre-wrap text-[0.9375rem] italic leading-[1.6] text-body">
+            &ldquo;{text}&rdquo;
+          </p>
+        </blockquote>
+      ))}
+    </aside>
   );
 }
 

@@ -17,7 +17,8 @@ const SHARE_WHAT =
   "My Letter of Intent is a free tool for writing down what a future caregiver would " +
   "need to know about someone you love: routines, medical details, what calms them, " +
   "who to call. One small question at a time, and it finishes as a document you can " +
-  "print. Everything you write stays private on your own device.";
+  "print. Everything you write stays private on your own device until you choose " +
+  "to share it with a caregiver.";
 
 export const SHARE_MESSAGE = `${SHARE_INTRO} ${SHARE_WHAT}`;
 

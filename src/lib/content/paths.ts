@@ -9,6 +9,8 @@ export const DEFAULT_PATH: LetterPath = "special-needs";
 
 export interface LetterPathDef {
   id: LetterPath;
+  /** The gold-diamond eyebrow under "Option N" on the chooser's cards. */
+  optionName: string;
   /** Engraved eyebrow on the option card. */
   audience: string;
   /** Serif promise line. */
@@ -38,6 +40,7 @@ export interface LetterPathDef {
 export const LETTER_PATHS: LetterPathDef[] = [
   {
     id: "special-needs",
+    optionName: "Disabilities and Special Needs Form",
     audience: "For a loved one with disabilities",
     promise: "The letter a trustee will read.",
     blurb:
@@ -53,8 +56,11 @@ export const LETTER_PATHS: LetterPathDef[] = [
     difference:
       "behavior support, benefits & money, legal & advocacy, and a section written " +
       "directly to the trustee.",
-    countWord: "Fifteen",
-    minutesLabel: "45–90 minutes",
+    // Five optional card-data sections (~5 minutes each) joined the roster;
+    // the floor stays where it was because they can all be skipped, and the
+    // ceiling moves honestly to cover filling them in.
+    countWord: "Twenty",
+    minutesLabel: "45 minutes–2 hours",
     tabLabel: "Disability & special needs",
     setHeading: "It assumes daily support, and maybe a trust",
     setBlurb:
@@ -68,6 +74,7 @@ export const LETTER_PATHS: LetterPathDef[] = [
   },
   {
     id: "general",
+    optionName: "Anyone You Care For",
     audience: "For anyone you care for",
     promise: "The letter only you can write.",
     blurb:
@@ -83,8 +90,8 @@ export const LETTER_PATHS: LetterPathDef[] = [
     difference:
       "home & daily living, work & obligations, money & documents, and whoever steps " +
       "in. No trust or benefits questions.",
-    countWord: "Fourteen",
-    minutesLabel: "40–80 minutes",
+    countWord: "Nineteen",
+    minutesLabel: "40 minutes–2 hours",
     tabLabel: "Aging & general care",
     setHeading: "It assumes an adult who mostly manages",
     setBlurb:

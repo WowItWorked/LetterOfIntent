@@ -1,0 +1,29 @@
+{
+  "browser": "chromium",
+  "checks": {
+    "diff": {
+      "pass": true,
+      "pctTol8": 2.6033,
+      "pctTol64": 0.3447,
+      "differingTol8": 53981,
+      "pixels": 2073600
+    },
+    "size": {
+      "pass": true,
+      "width": 1080,
+      "height": 1920
+    },
+    "spineRed": {
+      "pass": true,
+      "pct": 92.1
+    },
+    "spineGlyphs": {
+      "pass": true,
+      "pixels": 2223
+    },
+    "fontEmbedProof": {
+      "pass": true,
+      "pct": 13.1053
+    }
+  }
+}

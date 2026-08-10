@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   title: "Privacy & how your data works",
   description:
     "Everything you type stays on your device. No account, and nothing you write is " +
-    "ever captured — we count page visits and nothing else. " +
-    "of any kind. Here is exactly how that works, in plain words.",
+    "ever captured. We count page visits and nothing else. Here is exactly how that " +
+    "works, in plain words.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -53,34 +53,36 @@ const para = "mt-4 max-w-[72ch] leading-[1.8]";
 
 export default function PrivacyPage() {
   return (
-    <div
+    <>
+      {/* Full-bleed header band, flush under the privacy strip — matches the
+          home page hero rather than an inset box. */}
+      <div
+        style={{
+          background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
+          padding: "clamp(32px, 4.5vw, 56px) var(--gutter) clamp(34px, 4.5vw, 60px)",
+        }}
+      >
+        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
+          <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">
+            How it works
+          </p>
+          <h1 className="mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
+            Your privacy, in plain words
+          </h1>
+          <p className="mt-4 max-w-[62ch] text-lg leading-[1.7] text-oninkbody">
+            Everything you type stays on your device. We never see it, and it is never
+            sent anywhere. One page, no legalese. Here is exactly how that works.
+          </p>
+        </div>
+      </div>
+
+      <div
       className="mx-auto w-full"
       style={{
         maxWidth: "var(--container)",
-        padding: "clamp(36px, 5vw, 72px) var(--gutter) 80px",
+        padding: "clamp(10px, 2vw, 24px) var(--gutter) 80px",
       }}
     >
-      {/* ------------------------------------------------------ header panel */}
-      <div
-        className="rounded-[var(--radius-md)]"
-        style={{
-          background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
-          boxShadow: "var(--shadow-md)",
-          padding: "clamp(26px, 3.4vw, 44px) clamp(24px, 3.4vw, 44px)",
-        }}
-      >
-        <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">
-          How your data works
-        </p>
-        <h1 className="mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
-          Your privacy, in plain words
-        </h1>
-        <p className="mt-4 max-w-[62ch] text-lg leading-[1.7] text-oninkbody">
-          Everything you type stays on your device. We never see it, and it is never sent
-          anywhere. One page, no legalese. Here is exactly how that works.
-        </p>
-      </div>
-
       {/* ------------------------------------------------------ three claims */}
       <div
         className="mt-[22px] grid gap-4"
@@ -119,20 +121,27 @@ export default function PrivacyPage() {
         <p className="tw-engraved mb-3 text-xs tracking-[0.15em] text-accent">
           On this page
         </p>
+        {/*
+          Equal-sized buttons: the grid sizes every cell alike and h-full
+          stretches each link to its row's height, so the tallest label sets
+          the size for all six. Text wraps inside its button — nothing is
+          clipped at any width, and on a phone the grid stacks.
+        */}
         <ol
-          className="grid list-none gap-x-6 gap-y-1 p-0"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))" }}
+          className="grid list-none items-stretch gap-3 p-0"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 250px), 1fr))" }}
         >
           {CONTENTS.map(([id, label], i) => (
-            <li key={id}>
+            <li key={id} className="flex">
               <a
                 href={`#${id}`}
-                className="flex min-h-8 items-baseline gap-2.5 text-[0.9375rem] text-body hover:text-gold700"
+                className="flex h-full w-full items-center gap-2.5 rounded-[var(--radius-sm)] border border-line bg-surface px-4 py-3 text-[0.9375rem] leading-snug text-body transition-[border-color,color] duration-[var(--dur-fast)] hover:border-gold400 hover:text-gold700 motion-reduce:transition-none"
+                style={{ boxShadow: "var(--shadow-xs)" }}
               >
-                <span className="tw-engraved text-xs text-accent">
+                <span className="tw-engraved flex-none text-xs text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>{" "}
-                {label}
+                <span className="min-w-0">{label}</span>
               </a>
             </li>
           ))}
@@ -151,7 +160,7 @@ export default function PrivacyPage() {
         <p className={para}>
           You can confirm this yourself: open your browser&rsquo;s developer tools, go to
           the network tab, and type into the letter. Nothing is sent. You will see the
-          analytics request that counts the page when it first loads — and after that,
+          analytics request that counts the page when it first loads. After that,
           silence, no matter how much you write.
         </p>
       </section>
@@ -225,7 +234,7 @@ export default function PrivacyPage() {
           We use Google Analytics for one purpose: to understand how many people visit
           and how the site is used, so we can improve the Letter of Intent Builder.
           Knowing which pages families open, which ones they never find, and where they
-          stop is what tells us what to fix next — a question we have no other way to
+          stop is what tells us what to fix next, a question we have no other way to
           answer, because we never see the letters themselves.
         </p>
         <p className={para}>
@@ -256,8 +265,8 @@ export default function PrivacyPage() {
           </a>{" "}
           turns it off across every site, and most ad and tracker blockers do the same.
           The builder works exactly the same either way. Our host also keeps ordinary web
-          server logs — the sort every website receives, including the address a request
-          came from — and those are used only to keep the site up and secure.
+          server logs (the sort every website receives, including the address a request
+          came from), and those are used only to keep the site up and secure.
         </p>
       </section>
 
@@ -276,7 +285,7 @@ export default function PrivacyPage() {
           </strong>{" "}
           Nothing is collected, stored, or transmitted if you type an address into it
           today. When it does run, this page will say so first, and the only thing sent
-          will be your email address and the date — never a word of your letter.
+          will be your email address and the date. Never a word of your letter.
         </Callout>
         <p className="mt-[22px] max-w-[72ch] text-[0.9375rem] leading-[1.7] text-muted">
           The two calendar links we offer beside the file, Google Calendar and Outlook,
@@ -351,5 +360,6 @@ export default function PrivacyPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

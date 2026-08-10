@@ -3,7 +3,7 @@ import Link from "next/link";
 import { DataControls } from "@/components/data/DataControls";
 
 export const metadata: Metadata = {
-  title: "Your data — back up, move, or delete",
+  title: "Your data: back up, move, or delete",
   description:
     "Download a backup file, load one back in, download the documents, or erase " +
     "everything this tool has stored on this device.",
@@ -12,21 +12,16 @@ export const metadata: Metadata = {
 
 export default function YourDataPage() {
   return (
-    <div
-      className="mx-auto w-full"
-      style={{
-        maxWidth: "var(--container)",
-        padding: "clamp(36px, 5vw, 72px) var(--gutter) 80px",
-      }}
-    >
+    <>
+      {/* Full-bleed header band, flush under the privacy strip — matches the
+          home page hero rather than an inset box. */}
       <div
-        className="rounded-[var(--radius-md)]"
         style={{
           background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
-          boxShadow: "var(--shadow-md)",
-          padding: "clamp(26px, 3.4vw, 44px) clamp(24px, 3.4vw, 44px)",
+          padding: "clamp(32px, 4.5vw, 56px) var(--gutter) clamp(34px, 4.5vw, 60px)",
         }}
       >
+        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
         <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">Your data</p>
         <h1 className="mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
           Everything you have written is on this device
@@ -48,9 +43,18 @@ export default function YourDataPage() {
             Read the privacy policy →
           </Link>
         </p>
+        </div>
       </div>
 
-      <DataControls />
-    </div>
+      <div
+        className="mx-auto w-full"
+        style={{
+          maxWidth: "var(--container)",
+          padding: "clamp(10px, 2vw, 24px) var(--gutter) 80px",
+        }}
+      >
+        <DataControls />
+      </div>
+    </>
   );
 }

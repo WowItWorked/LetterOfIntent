@@ -83,7 +83,7 @@ test("a backup that cannot be told apart asks which letter it is", async ({ page
   // rather than the rail, which is inside a collapsed menu on a narrow screen.
   await page.goto("/letter/a-typical-week");
   await expect(page.locator("h1")).toBeVisible();
-  await expect(page.getByText(/Section \d+ of 14/i)).toBeVisible();
+  await expect(page.getByText(/Section \d+ of 19/i)).toBeVisible();
 });
 
 test("a damaged backup restores what it can and says what it could not", async ({
@@ -182,13 +182,19 @@ test("downloaded files are named by document and date, never by person", async (
   for (const n of names) expect(n.toLowerCase()).not.toContain("alex");
 });
 
-test("the home page offers watermarked samples, drawn in the page", async ({ page }) => {
+test("the letter chooser offers watermarked samples, drawn in the page", async ({
+  page,
+}) => {
   const downloads: string[] = [];
   page.on("download", (d) => downloads.push(d.suggestedFilename()));
 
-  await page.goto("/");
-  const links = page.locator('#who-this-is-for a[href^="/samples/"]');
-  await expect(links).toHaveCount(4);
+  // The letter samples moved from the home page to the chooser, beside the
+  // decision they inform — one per path. The emergency-sheet sample lives on
+  // /emergency-sheet now, so it no longer repeats here.
+  await page.goto("/letter");
+  const links = page.locator('main a[href^="/samples/letter-of-intent"]');
+  await expect(links).toHaveCount(2);
+  await expect(page.locator('main a[href^="/samples/emergency"]')).toHaveCount(0);
 
   for (const link of await links.all()) {
     // Same tab, same masthead — a sample is part of browsing the site, not a

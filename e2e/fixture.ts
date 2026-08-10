@@ -13,6 +13,11 @@ export const SECTION_SLUGS = [
   "communication",
   "medical",
   "behavioral-support",
+  "allergies",
+  "emergency-plan",
+  "daily-routines",
+  "food-and-eating",
+  "personal-care",
   "school-and-work",
   "housing",
   "benefits-and-finances",
@@ -23,7 +28,7 @@ export const SECTION_SLUGS = [
   "a-personal-message",
 ] as const;
 
-/** The general path — four sections are shared with the list above. */
+/** The general path — nine sections are shared with the list above. */
 export const GENERAL_SECTION_SLUGS = [
   "getting-started",
   "about-them",
@@ -31,6 +36,11 @@ export const GENERAL_SECTION_SLUGS = [
   "a-typical-week",
   "talking-with-them",
   "health-and-medical",
+  "allergies",
+  "emergency-plan",
+  "daily-routines",
+  "food-and-eating",
+  "personal-care",
   "home-and-daily-living",
   "money-and-documents",
   "work-and-obligations",
@@ -46,7 +56,7 @@ export const ALL_SECTION_SLUGS = [
   ...new Set([...SECTION_SLUGS, ...GENERAL_SECTION_SLUGS]),
 ] as const;
 
-/** A letter with content in all 15 sections, including repeaters. */
+/** A letter with content in all 20 sections, including repeaters. */
 export const FULL_LETTER: LetterData = {
   gettingStarted: {
     authorName: "Maria Alvarez",
@@ -188,6 +198,77 @@ export const FULL_LETTER: LetterData = {
     toCaregivers: "When he is difficult, he is scared. Thank you for being with him.",
     toSiblings: "Sofia — he is not your burden. Your own life matters too.",
     toPerson: "Alex: you are the best thing we ever did.",
+  },
+  allergies: {
+    items: [
+      {
+        id: "al1",
+        allergen: "Penicillin",
+        reaction: "Hives, then swelling around the mouth",
+        severity: "life-threatening",
+        treatment: "Call 911 if breathing changes. Benadryl for hives alone.",
+      },
+      {
+        id: "al2",
+        allergen: "Latex",
+        reaction: "Red, itchy skin",
+        severity: "mild",
+        treatment: "Wash the area; hydrocortisone from the medicine box",
+      },
+    ],
+  },
+  emergencyPlan: {
+    responseSteps:
+      "Start timing the seizure\nOn his side, nothing in his mouth\nOver 3 minutes: rescue med from the red pouch\nCall 911, then Dana",
+    call911When: "Any seizure over 3 minutes, or any trouble breathing",
+    otherwiseCall: "Dana — (703) 555-0142, any hour",
+    ifNoOneAnswers: "Go to Inova Fairfax — they have his records",
+    otcPolicy: "Nothing beyond the list without calling us first",
+  },
+  routines: {
+    items: [
+      {
+        id: "r1",
+        timeOfDay: "morning",
+        time: "6:30 AM",
+        steps:
+          "Radio on before the covers come off\nMeds in the blue cup with orange juice\nWaffles cut in strips",
+      },
+      {
+        id: "r2",
+        timeOfDay: "night",
+        time: "9:00 PM",
+        steps: "Shower\nTwo books\nHallway light stays on",
+        notes: "If bedtime slips past ten, the next day is hard.",
+      },
+    ],
+    transitions: "Five-minute warning, then two. 'First shoes, then the park.'",
+  },
+  foods: {
+    items: [
+      {
+        id: "f1",
+        item: "Waffles",
+        type: "always_works",
+        reason: "Cut in strips, syrup on the side — never on top",
+      },
+      {
+        id: "f2",
+        item: "Grapes",
+        type: "choking_risk",
+        reason: "Always quartered, never whole",
+      },
+    ],
+  },
+  careTasks: {
+    items: [
+      {
+        id: "ct1",
+        category: "bathing",
+        steps: "Water running before he comes in\nCheck the temperature — he cannot judge it",
+        equipment: "Shower chair; grab bar by the tub",
+      },
+    ],
   },
 };
 

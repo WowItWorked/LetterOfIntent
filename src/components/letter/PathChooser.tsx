@@ -9,6 +9,7 @@ import { previewPrompts } from "@/lib/content/preview-prompts";
 import { fillName } from "@/lib/derive";
 import { useLetterStore } from "@/lib/store";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { SampleDocuments } from "@/components/home/SampleDocuments";
 
 /** Engraved section label with a gold hairline running out of it. */
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -94,7 +95,9 @@ export function PathChooser() {
                     style={{ background: "var(--gradient-gold)" }}
                   />
                 </span>
-                <Eyebrow>{p.audience}</Eyebrow>
+                {/* optionName, not audience: the card names the FORM here —
+                    the rail keeps audience for who it serves. */}
+                <Eyebrow>{p.optionName}</Eyebrow>
                 <span className="mt-3.5 block font-serif text-[1.75rem] font-semibold text-ink">
                   {p.promise}
                 </span>
@@ -115,6 +118,22 @@ export function PathChooser() {
                 </span>
               </span>
             </button>
+          ))}
+        </div>
+
+        {/*
+          Watermarked page-one samples, one pair per path, aligned under the
+          option cards. They moved here from the home page: the moment someone
+          is choosing a letter is the moment "what do I actually get?" needs
+          answering. The option cards are buttons, so the sample links live
+          outside them — nested interactive controls are an axe violation.
+        */}
+        <div
+          className="grid gap-x-7"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))" }}
+        >
+          {LETTER_PATHS.map((p) => (
+            <SampleDocuments key={p.id} path={p.id} letterOnly />
           ))}
         </div>
       </section>

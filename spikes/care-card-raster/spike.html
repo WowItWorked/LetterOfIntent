@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Care-card raster spike — emergency card</title>
+<style>
+  /* Same faces the design system loads from Google Fonts; local static files so
+     the capture can embed the identical bytes it measures against. */
+  @font-face { font-family: 'Cinzel'; font-style: normal; font-weight: 400; src: url(fonts/cinzel-400.woff2) format('woff2'); }
+  @font-face { font-family: 'Mulish'; font-style: normal; font-weight: 400; src: url(fonts/mulish-400.woff2) format('woff2'); }
+  @font-face { font-family: 'Mulish'; font-style: normal; font-weight: 700; src: url(fonts/mulish-700.woff2) format('woff2'); }
+  @font-face { font-family: 'Mulish'; font-style: normal; font-weight: 800; src: url(fonts/mulish-800.woff2) format('woff2'); }
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+</style>
+</head>
+<body>
+
+<!--
+  EMERGENCY card from the design export, rendered UNSCALED at true 1080x1920.
+  Markup is CareCard.dc.html's six-zone DOM with renderVals() already applied for
+  the emergency card (ivory theme, scale 1): color #A64545, deep #7F3232, tint
+  #F6E9E7. The preview wrapper (border-radius, shadow, transform:scale) is
+  deliberately absent — that pattern is preview-only.
+
+  Font-family custom properties live INLINE on the card root, not in a page
+  stylesheet: foreignObject content cannot see document stylesheets, so the
+  variables must survive XMLSerializer to reach the capture.
+-->
+<div id="card" style="--font-engraved:'Cinzel','Trajan Pro',Georgia,serif;--font-display:'Cormorant Garamond','EB Garamond',Georgia,serif;--font-body:'Mulish','Helvetica Neue',Arial,sans-serif;width:1080px;height:1920px;display:flex;flex-direction:row;overflow:hidden;background:#FBFAF6;font-family:var(--font-body);-webkit-font-smoothing:antialiased">
+
+  <div style="width:64px;flex:none;background:#A64545;display:flex;align-items:center;justify-content:center;padding:56px 0">
+    <span style="writing-mode:vertical-rl;font-size:24px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden">Emergency Protocol</span>
+  </div>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+    <div style="flex:none;background:#A64545;padding:38px 58px 44px;display:flex;align-items:flex-start;gap:36px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:18px;margin-bottom:26px">
+          <span style="font-size:25px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.72)">Care card</span>
+          <span style="width:9px;height:9px;background:#E3C89B;transform:rotate(45deg);display:inline-block;flex:none"></span>
+          <span style="font-size:25px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.72)">Bonnie, 11</span>
+        </div>
+        <div style="font-family:var(--font-engraved);font-weight:400;font-size:74px;line-height:1.04;letter-spacing:.085em;text-transform:uppercase;color:#FFFFFF">Emergency</div>
+        <div style="font-family:var(--font-engraved);font-weight:400;font-size:74px;line-height:1.04;letter-spacing:.085em;text-transform:uppercase;color:rgba(255,255,255,.8)">Protocol</div>
+        <div style="margin-top:24px;font-size:34px;line-height:1.34;color:rgba(255,255,255,.85);max-width:640px;text-wrap:pretty">What to do, in order — and when to call 911.</div>
+      </div>
+      <svg viewBox="0 0 24 24" width="112" height="112" fill="none" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;opacity:.55;margin-top:6px">
+        <path d="M21.73 18 13.73 4a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3ZM12 9v4M12 17h.01"></path>
+      </svg>
+    </div>
+
+    <div style="height:5px;flex:none;background:linear-gradient(90deg,#E3C89B 0%,#C9A063 42%,#A87E45 78%,#C9A063 100%)"></div>
+
+    <div style="flex:1;min-height:0;padding:42px 58px 28px;display:flex;flex-direction:column;gap:26px;background:#FBFAF6">
+
+      <div style="background:#F6E9E7;border-left:8px solid #A64545;border-radius:4px 10px 10px 4px;padding:24px 28px 26px">
+        <div style="font-size:26px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7F3232;margin-bottom:12px">Allergies</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:0px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233">Bee stings — </span>anaphylaxis.</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:10px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233">Amoxicillin — </span>hives.</div>
+      </div>
+
+      <div style="background:transparent;border-left:0;border-radius:0;padding:0">
+        <div style="font-size:26px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7F3232;margin-bottom:12px">Rescue medication</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:0px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233">Epinephrine auto-injector — </span>red pouch, front left of her backpack. Spare in the kitchen drawer.</div>
+      </div>
+
+      <div style="background:transparent;border-left:0;border-radius:0;padding:0">
+        <div style="font-size:26px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7F3232;margin-bottom:12px">If she is stung</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:0px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233">1 · </span>Auto-injector, outer thigh, through clothing.</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:10px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233">2 · </span>Call 911.</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:10px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233">3 · </span>Call Jessie.</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:10px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233">4 · </span>Keep her lying down. Stay in her sight.</div>
+      </div>
+
+      <div style="background:#F6E9E7;border-left:8px solid #A64545;border-radius:4px 10px 10px 4px;padding:24px 28px 26px">
+        <div style="font-size:26px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7F3232;margin-bottom:12px">Call 911, not us</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:0px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233"></span>Trouble breathing. Swelling of the face or throat. No response to her name. Otherwise, call Jessie.</div>
+      </div>
+
+      <div style="background:transparent;border-left:0;border-radius:0;padding:0">
+        <div style="font-size:26px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7F3232;margin-bottom:12px">If she bolts</div>
+        <div style="font-size:39px;line-height:1.38;color:#3A4456;margin-top:0px;text-wrap:pretty"><span style="font-weight:800;color:#1A2233"></span>Check closets, under beds, behind doors. She hides, she does not run.</div>
+      </div>
+
+    </div>
+
+    <div style="flex:none;background:#A64545;padding:26px 44px 26px 18px;display:flex;align-items:center;gap:18px">
+      <span style="font-size:32px;line-height:1;font-weight:700;letter-spacing:0;color:rgba(255,255,255,.94);white-space:nowrap;flex:none">myletterofintent.com</span>
+      <span style="flex:1;display:flex;align-items:center;justify-content:center">
+        <span style="width:11px;height:11px;background:#E3C89B;transform:rotate(45deg);display:inline-block;flex:none"></span>
+      </span>
+      <span style="font-size:27px;line-height:1;color:rgba(255,255,255,.76);text-align:right;white-space:nowrap;flex:none">Updated Aug 8, 2026 · Not a medical document</span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// Hand-rolled SVG-foreignObject capture — the exact mechanism html-to-image
+// wraps. If this passes verification the repo needs no capture dependency.
+(() => {
+  const W = 1080, H = 1920;
+
+  const FONTS = [
+    { family: "Cinzel", weight: 400, file: "fonts/cinzel-400.woff2" },
+    { family: "Mulish", weight: 400, file: "fonts/mulish-400.woff2" },
+    { family: "Mulish", weight: 700, file: "fonts/mulish-700.woff2" },
+    { family: "Mulish", weight: 800, file: "fonts/mulish-800.woff2" },
+  ];
+
+  const blobToDataURL = (blob) =>
+    new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result);
+      r.onerror = () => reject(r.error);
+      r.readAsDataURL(blob);
+    });
+
+  // Fonts must ride INSIDE the SVG as data: URIs. An <img>-loaded SVG fetches no
+  // external resources, and foreignObject content cannot see this document's
+  // stylesheets — embedding is the only route by which glyphs reach the capture.
+  async function buildFontCss() {
+    const rules = await Promise.all(
+      FONTS.map(async (f) => {
+        const res = await fetch(f.file);
+        if (!res.ok) throw new Error("font fetch failed: " + f.file);
+        const dataUrl = await blobToDataURL(await res.blob());
+        return (
+          "@font-face{font-family:'" + f.family + "';font-style:normal;font-weight:" +
+          f.weight + ";src:url(" + dataUrl + ") format('woff2');}"
+        );
+      })
+    );
+    return rules.join("\n");
+  }
+
+  async function buildSvgMarkup(embedFonts) {
+    const node = document.getElementById("card");
+    // XMLSerializer stamps xmlns="http://www.w3.org/1999/xhtml" on the root and
+    // keeps the inline icon in the SVG namespace — both required for the markup
+    // to be legal foreignObject content.
+    const xhtml = new XMLSerializer().serializeToString(node);
+    const fontCss = embedFonts ? await buildFontCss() : "";
+    return (
+      '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '">' +
+      "<style>" + fontCss + "</style>" +
+      '<foreignObject x="0" y="0" width="' + W + '" height="' + H + '">' +
+      xhtml +
+      "</foreignObject></svg>"
+    );
+  }
+
+  // embedFonts=false exists for the font-embed proof: a capture whose glyphs
+  // came from fallback faces should differ substantially from the real one.
+  window.__runCapture = async function (embedFonts = true) {
+    await document.fonts.ready;
+    const svgMarkup = await buildSvgMarkup(embedFonts);
+    // data: URL, not a blob URL: Chromium taints the canvas when the drawn SVG
+    // arrived via blob: (measured here — toBlob threw SecurityError). data:
+    // URLs are the route html-to-image ships with, and they stay taint-free.
+    const svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgMarkup);
+    const img = new Image();
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = () => reject(new Error("SVG image failed to load"));
+      img.src = svgUrl;
+    });
+    // decode() gives the rasterizer a chance to finish loading the data: URI
+    // fonts before we sample pixels; onload alone fires too early in Chromium.
+    if (img.decode) await img.decode().catch(() => {});
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    canvas.getContext("2d").drawImage(img, 0, 0, W, H);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    if (!blob) throw new Error("canvas.toBlob returned null (tainted canvas?)");
+    return await blobToDataURL(blob);
+  };
+})();
+</script>
+</body>
+</html>

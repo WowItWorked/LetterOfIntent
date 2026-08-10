@@ -17,6 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: slug === "getting-started" ? 0.8 : 0.7,
     })),
     { url: url("/letter/review"), lastModified, changeFrequency: "monthly", priority: 0.6 },
+    { url: url("/care-cards"), lastModified, changeFrequency: "monthly", priority: 0.6 },
+    { url: url("/emergency-sheet"), lastModified, changeFrequency: "monthly", priority: 0.6 },
     { url: url("/privacy"), lastModified, changeFrequency: "yearly", priority: 0.5 },
     { url: url("/your-data"), lastModified, changeFrequency: "yearly", priority: 0.3 },
   ];

@@ -54,7 +54,7 @@ export const aboutThem: SectionDef = {
       kind: "textarea",
       rows: 3,
       label: "What they cannot abide",
-      help: "Being talked about in the third person, being rushed, baby talk, the television at that volume. Say it plainly — it saves everyone a bad first week.",
+      help: "Being talked about in the third person, being rushed, baby talk, the television at that volume. Say it plainly. It saves everyone a bad first week.",
     },
     {
       id: "strangersGetWrong",

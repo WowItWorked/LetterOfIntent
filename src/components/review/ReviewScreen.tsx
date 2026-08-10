@@ -10,6 +10,7 @@ import {
   fieldHasContent,
   fillName,
   formatDateLong,
+  formatItemValue,
   itemHasContent,
   letterDateIso,
   readerName,
@@ -81,7 +82,7 @@ export function ReviewScreen() {
       console.error(e);
       setError(
         "The files couldn't be prepared on this device. The reading view below still " +
-          "prints cleanly — use your browser's Print button as a fallback."
+          "prints cleanly. Use your browser's Print button as a fallback."
       );
     } finally {
       setBusy(null);
@@ -91,8 +92,7 @@ export function ReviewScreen() {
   /* ---------------------------------------------------------- empty state */
   if (hydrated && count === 0) {
     return (
-      <>
-        <HeaderPanel lead="Nothing to review yet — your letter doesn't have any notes so far. Even one section makes a real, useful document." />
+      <Shell lead="Nothing to review yet: your letter doesn't have any notes so far. Even one section makes a real, useful document.">
         <section className={`tw-card ${CARD_GAP} p-8`}>
           <p className="text-body">
             Start anywhere. A letter with three sections filled in is already worth more
@@ -105,22 +105,20 @@ export function ReviewScreen() {
             Start with the first section
           </Link>
         </section>
-      </>
+      </Shell>
     );
   }
 
   const busyLabel = busy ? "Preparing…" : null;
 
   return (
-    <>
-      <HeaderPanel
-        lead={
-          count === total
-            ? `Every section has notes. All three files are created right here on your device: nothing is uploaded.`
-            : `${count} of ${total} sections have notes so far, which is already worth printing. All three files are created right here on your device: nothing is uploaded.`
-        }
-      />
-
+    <Shell
+      lead={
+        count === total
+          ? `Every section has notes. All three files are created right here on your device: nothing is uploaded.`
+          : `${count} of ${total} sections have notes so far, which is already worth printing. All three files are created right here on your device: nothing is uploaded.`
+      }
+    >
       <div aria-live="assertive">
         {error ? (
           <p className="mt-4 rounded-[var(--radius-sm)] border border-danger bg-dangerbg p-4 text-danger">
@@ -185,6 +183,29 @@ export function ReviewScreen() {
           <p aria-live="polite" className="sr-only">
             {busy ? "Preparing your files. This stays on your device." : ""}
           </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- care cards */}
+      <section className={`tw-card ${CARD_GAP}`}>
+        <div style={{ padding: "28px clamp(24px, 2.6vw, 36px) 30px" }}>
+          <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
+            A bonus for your phone
+          </p>
+          <h2 className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
+            Care cards
+          </h2>
+          <p className="mt-3 max-w-[70ch] leading-[1.7]">
+            Pocket-size picture cards drawn from what you have already written about{" "}
+            {name}: one topic each, sized for a phone screen, easy to text to a sitter
+            or keep in a camera roll. Pick the set that fits the moment, preview it, and
+            download the images. They are drawn on your device too: nothing is uploaded.
+          </p>
+          <div className="mt-5">
+            <Link href="/care-cards#make-yours" className={buttonClasses("outline")}>
+              Choose your cards
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -309,7 +330,7 @@ export function ReviewScreen() {
 
       {/* ---------------------------------------------------- reading view */}
       <ReadingView data={data} hydrated={hydrated} path={path} />
-    </>
+    </Shell>
   );
 }
 
@@ -318,19 +339,41 @@ export function ReviewScreen() {
 function HeaderPanel({ lead }: { lead: string }) {
   return (
     <div
-      className="rounded-[var(--radius-md)]"
       style={{
         background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
-        boxShadow: "var(--shadow-md)",
-        padding: "clamp(26px, 3.4vw, 44px) clamp(24px, 3.4vw, 44px)",
+        padding: "clamp(32px, 4.5vw, 56px) var(--gutter) clamp(34px, 4.5vw, 60px)",
       }}
     >
-      <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">The last step</p>
-      <h1 className="mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink">
-        Review &amp; download
-      </h1>
-      <p className="mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody">{lead}</p>
+      <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
+        <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">The last step</p>
+        <h1 className="mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink">
+          Review &amp; download
+        </h1>
+        <p className="mt-4 max-w-[66ch] text-lg leading-[1.7] text-oninkbody">{lead}</p>
+      </div>
     </div>
+  );
+}
+
+/**
+ * Full-bleed header band flush under the privacy strip (the home-page hero
+ * treatment), then the page's own centered container. The route page renders
+ * the screen bare so the band can reach both edges.
+ */
+function Shell({ lead, children }: { lead: string; children: React.ReactNode }) {
+  return (
+    <>
+      <HeaderPanel lead={lead} />
+      <div
+        className="mx-auto w-full"
+        style={{
+          maxWidth: "var(--container)",
+          padding: "clamp(10px, 2vw, 24px) var(--gutter) 72px",
+        }}
+      >
+        {children}
+      </div>
+    </>
   );
 }
 
@@ -619,7 +662,7 @@ function ReadingField({
               {field.itemFields
                 .filter((f) => f.kind !== "checkbox")
                 .map((f) => {
-                  const v = String(item[f.id] ?? "").trim();
+                  const v = formatItemValue(f, item[f.id]);
                   if (!v) return null;
                   return (
                     <p key={f.id} className="mt-0.5 first:mt-0">
@@ -637,7 +680,7 @@ function ReadingField({
                     key={f.id}
                     className="mt-1.5 font-sans text-xs font-semibold text-accent"
                   >
-                    ◆ {fillName(f.label, name).replace(/ — .*/, "")}
+                    ◆ {fillName(f.label, name).replace(/( — |: ).*/, "")}
                   </p>
                 ))}
             </div>

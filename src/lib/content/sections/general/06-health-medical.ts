@@ -12,7 +12,7 @@ export const healthMedical: SectionDef = {
     "they would need. Conditions, medications with doses, allergies, and who to " +
     "call. It also prints on the one-page emergency sheet.",
   note:
-    "Write down where the cards and records are kept — never the numbers themselves. " +
+    "Write down where the cards and records are kept, never the numbers themselves. " +
     "This tool never asks for a Social Security number, an account number, or a " +
     "policy number, and you should not add one anywhere in it.",
   fields: [
@@ -29,13 +29,13 @@ export const healthMedical: SectionDef = {
       kind: "textarea",
       rows: 2,
       label: "Allergies and bad reactions",
-      help: "Medications, foods, materials — and what the reaction actually looks like.",
+      help: "Medications, foods, materials, and what the reaction actually looks like.",
     },
     {
       id: "medications",
       kind: "repeater",
       label: "Medications",
-      help: "Everything taken regularly, including over-the-counter and supplements. Doses change — update this page when they do.",
+      help: "Everything taken regularly, including over-the-counter and supplements. Doses change. Update this page when they do.",
       itemNoun: "medication",
       addLabel: "Add a medication",
       itemFields: [
@@ -46,6 +46,95 @@ export const healthMedical: SectionDef = {
           kind: "text",
           label: "What it is for",
           placeholder: "e.g., Blood pressure — never skip this one",
+        },
+        {
+          id: "schedule",
+          kind: "multiselect",
+          label: "When they take it",
+          help: "Check all that apply. The Medications card groups doses by time of day, and a typed clock time (8:00 AM) prints exactly as written.",
+          options: [
+            { value: "morning", label: "Morning" },
+            { value: "noon", label: "Noon" },
+            { value: "evening", label: "Evening" },
+            { value: "bedtime", label: "Bedtime" },
+            { value: "prn", label: "As needed (PRN)" },
+          ],
+          custom: {
+            label: "Custom time",
+            placeholder: "e.g., 14:30 or 2:30 PM",
+            addLabel: "Add time",
+          },
+        },
+        {
+          id: "withFood",
+          kind: "checkbox",
+          label: "Take with food",
+          width: "half",
+        },
+        {
+          id: "isRescue",
+          kind: "checkbox",
+          label: "Rescue medication: for emergencies, not the daily routine",
+          help: "Rescue medications print first, and land on the Emergency card too.",
+        },
+        {
+          id: "location",
+          kind: "text",
+          label: "Where it is kept",
+          placeholder: "e.g., The nitroglycerin stays in the top kitchen drawer",
+          help: "Matters most for a rescue medication: the card tells a helper where to grab it.",
+        },
+        {
+          id: "unit",
+          kind: "text",
+          group: "more",
+          width: "half",
+          label: "Dose amount",
+          placeholder: "e.g., 25 mg",
+        },
+        {
+          id: "route",
+          kind: "text",
+          group: "more",
+          width: "half",
+          label: "How it is taken",
+          placeholder: "e.g., By mouth; patch; injection",
+        },
+        {
+          id: "prnTrigger",
+          kind: "text",
+          group: "more",
+          label: "As needed: give it when",
+          placeholder: "e.g., Chest tightness, before calling anyone",
+        },
+        {
+          id: "prnMaxPerDay",
+          kind: "text",
+          group: "more",
+          width: "half",
+          label: "As needed: most in one day",
+          placeholder: "e.g., 2 doses",
+        },
+        {
+          id: "refusalStrategy",
+          kind: "textarea",
+          group: "more",
+          label: "If they refuse it",
+          placeholder:
+            "e.g., Set it beside their plate and walk away. Come back in five minutes. Handing it over directly turns it into a fight.",
+        },
+        {
+          id: "sideEffects",
+          kind: "textarea",
+          group: "more",
+          label: "Side effects to watch for",
+          placeholder: "e.g., Dizzy if they stand up fast (a fall risk)",
+        },
+        {
+          id: "keepOffCards",
+          kind: "checkbox",
+          label: "Keep off shareable cards",
+          help: "It stays in the full letter. It just never prints on the cards you might text a sitter.",
         },
       ],
     },
@@ -66,6 +155,26 @@ export const healthMedical: SectionDef = {
           placeholder: "e.g., Primary care, cardiology",
         },
         { id: "phone", kind: "tel", label: "Phone", width: "half" },
+        {
+          id: "practice",
+          kind: "text",
+          label: "Practice or clinic",
+          width: "half",
+          placeholder: "e.g., Vienna Family Medicine",
+        },
+        {
+          id: "notes",
+          kind: "textarea",
+          group: "more",
+          label: "Notes",
+          placeholder: "e.g., The cardiologist knows to call me after every visit",
+        },
+        {
+          id: "keepOffCards",
+          kind: "checkbox",
+          label: "Keep off shareable cards",
+          help: "They stay in the full letter. They just never print on the cards you might text a sitter.",
+        },
       ],
     },
     {

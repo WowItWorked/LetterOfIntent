@@ -9,6 +9,7 @@ import {
   fieldHasContent,
   fillName,
   formatDateLong,
+  formatItemValue,
   itemHasContent,
   keyPoints,
   keyPointsHaveContent,
@@ -647,26 +648,28 @@ function RepeaterCard({
   name: string;
 }) {
   const textFields = itemFields.filter((f) => f.kind !== "checkbox");
-  const first = textFields.find((f) => String(item[f.id] ?? "").trim() !== "");
+  const first = textFields.find((f) => formatItemValue(f, item[f.id]) !== "");
   const rest = textFields.filter(
-    (f) => f !== first && String(item[f.id] ?? "").trim() !== ""
+    (f) => f !== first && formatItemValue(f, item[f.id]) !== ""
   );
   const tags = itemFields.filter((f) => f.kind === "checkbox" && item[f.id] === true);
 
   return (
     <View style={s.itemCard} wrap={false}>
-      {first ? <Text style={s.itemTitle}>{String(item[first.id]).trim()}</Text> : null}
+      {first ? (
+        <Text style={s.itemTitle}>{formatItemValue(first, item[first.id])}</Text>
+      ) : null}
       {rest.map((f) => (
         <Text key={f.id} style={s.itemLine}>
           <Text style={{ fontFamily: SANS, fontWeight: 700, fontSize: 8, color: GRAY }}>
             {`${fillName(f.label, name).toUpperCase()}  `}
           </Text>
-          {String(item[f.id]).trim()}
+          {formatItemValue(f, item[f.id])}
         </Text>
       ))}
       {tags.map((f) => (
         <Text key={f.id} style={s.itemTag}>
-          ◆ {fillName(f.label, name).replace(/ — .*/, "").toUpperCase()}
+          ◆ {fillName(f.label, name).replace(/( — |: ).*/, "").toUpperCase()}
         </Text>
       ))}
     </View>

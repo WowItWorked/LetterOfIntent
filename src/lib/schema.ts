@@ -23,24 +23,121 @@ export const contactSchema = z.object({
   name: s,
   relationship: s,
   phone: s,
+  altPhone: s,
   email: s,
   role: s,
+  /**
+   * Card-role tokens: "primary" | "medical_decision" | "pickup" |
+   * "neighbor_backup" — kept as free strings so an imported backup is never
+   * rejected over an unknown token. The older `emergency` boolean below stays
+   * untouched: card derivations treat emergency === true as a legacy synonym
+   * for the primary/emergency role, so a letter written before roles existed
+   * still puts its people on the cards.
+   */
+  roles: z.array(z.string()).optional(),
   emergency: b,
   notes: s,
+  /** True → this record stays in the full letter and off shareable cards. */
+  keepOffCards: b,
 });
 
 export const providerSchema = z.object({
   id: s,
   name: s,
   specialty: s,
+  practice: s,
   phone: s,
+  notes: s,
+  keepOffCards: b,
 });
+// preferredHospital deliberately stays a section scalar (medical and
+// healthMedical each already ask it once per letter) rather than moving onto
+// the provider record as the card model drew it — a family has one preferred
+// hospital, not one per doctor, and moving it would strand existing answers.
 
 export const medicationSchema = z.object({
   id: s,
   name: s,
   dose: s,
   purpose: s,
+  unit: s,
+  route: s,
+  /**
+   * Schedule tokens: "morning" | "noon" | "evening" | "bedtime" | "prn", or a
+   * typed clock time such as "14:30". Deliberately not an enum: a family that
+   * writes "2:30 PM" keeps it, and a backup is never rejected over a token we
+   * did not anticipate. The card layer sorts the known tokens (that order
+   * lives in content/cards.ts) and renders anything else verbatim.
+   */
+  schedule: z.array(z.string()).optional(),
+  withFood: b,
+  isRescue: b,
+  /** Where a rescue medication physically lives — the pouch, the drawer. */
+  location: s,
+  refusalStrategy: s,
+  sideEffects: s,
+  // The card model nests these as prn: { trigger, maxPerDay }. Flattened here
+  // on purpose: the backup salvage path reads flat optional scalars robustly,
+  // and flat is the house style everywhere else in this schema.
+  prnTrigger: s,
+  prnMaxPerDay: s,
+  keepOffCards: b,
+});
+
+/* ---------------------------------------------------- care-card record types
+ *
+ * Structured records behind the shareable care cards. Every field optional,
+ * every token list a free string: the cards sort and group by the tokens they
+ * know and render anything else verbatim, and an imported backup can never be
+ * rejected over one.
+ */
+
+export const allergyRecordSchema = z.object({
+  id: s,
+  allergen: s,
+  reaction: s,
+  /**
+   * Severity tokens: "life-threatening" | "serious" | "mild". The sort order
+   * (worst first on the emergency card) lives in content/cards.ts, not here —
+   * the schema stores what the family said, the card config decides urgency.
+   */
+  severity: s,
+  treatment: s,
+  keepOffCards: b,
+});
+
+export const routineRecordSchema = z.object({
+  id: s,
+  /** Token: "morning" | "afternoon" | "evening" | "night". */
+  timeOfDay: s,
+  /** Free text like "7:00 AM" — the order matters more than the clock. */
+  time: s,
+  /**
+   * Multiline: one step per line; the cards split on newline. A string[] would
+   * need a repeater inside a repeater the form is never going to grow.
+   */
+  steps: s,
+  notes: s,
+  keepOffCards: b,
+});
+
+export const foodRecordSchema = z.object({
+  id: s,
+  item: s,
+  /** Token: "always_works" | "will_not_eat" | "texture" | "choking_risk" | "support". */
+  type: s,
+  reason: s,
+  keepOffCards: b,
+});
+
+export const careTaskRecordSchema = z.object({
+  id: s,
+  /** Token: "toileting" | "dressing" | "bathing" | "equipment" | "mobility". */
+  category: s,
+  /** Multiline: one step per line, same convention as routine steps. */
+  steps: s,
+  equipment: s,
+  keepOffCards: b,
 });
 
 /* ----------------------------------------------------------------- sections */
@@ -50,6 +147,11 @@ export const gettingStartedSchema = z.object({
   authorRelationship: s,
   subjectFullName: s,
   subjectPreferredName: s,
+  /**
+   * The identity card's address line — the one piece of postal PII the letter
+   * collects, added for the card a sitter hands to a paramedic. Owner-approved.
+   */
+  subjectAddress: s,
   letterDate: s,
 });
 
@@ -272,6 +374,64 @@ export const steppingInSchema = z.object({
   consultFirst: s,
 });
 
+/* ------------------------------------------------- shared card-data sections
+ *
+ * The structured collections the care cards draw from. They sit ALONGSIDE the
+ * prose fields (medical.allergies, typicalDay.food, …) rather than replacing
+ * them: nothing parses a family's prose into records, and a letter holding
+ * only the prose is still whole. Shared by both paths, like familySupport.
+ * Not yet in either wizard roster — the form cannot render their pickers until
+ * Phase C — but registered in the trio below so a backup written by a newer
+ * version restores instead of silently dropping them.
+ */
+
+export const allergiesSchema = z.object({
+  items: z.array(allergyRecordSchema).optional(),
+});
+
+export const routinesSchema = z.object({
+  items: z.array(routineRecordSchema).optional(),
+  /** The routine card's flagged block: how to move between activities safely. */
+  transitions: s,
+});
+
+export const foodsSchema = z.object({
+  items: z.array(foodRecordSchema).optional(),
+});
+
+export const careTasksSchema = z.object({
+  items: z.array(careTaskRecordSchema).optional(),
+});
+
+export const emergencyScenarioSchema = z.object({
+  id: s,
+  /** The situation, in the family's words — "If she is stung", "If she bolts". */
+  trigger: s,
+  /** Multiline: one action per line; the card numbers them like responseSteps. */
+  steps: s,
+});
+
+export const emergencyPlanSchema = z.object({
+  /** Multiline: one numbered step per line — "1 · Auto-injector…". */
+  responseSteps: s,
+  /**
+   * Named what-if plans. Each renders on the Emergency card as its own block
+   * labeled by its trigger, steps numbered exactly like responseSteps — which
+   * stays, and still renders first as the unnamed "What to do" block.
+   */
+  scenarios: z.array(emergencyScenarioSchema).optional(),
+  call911When: s,
+  otherwiseCall: s,
+  ifNoOneAnswers: s,
+  /**
+   * The medications card's "Nothing else" block — the family's rule on
+   * unapproved over-the-counter medicine. It lives here rather than on a
+   * medication record because it is a safety rule about medicines the person
+   * does NOT take; there is no record for it to hang on.
+   */
+  otcPolicy: s,
+});
+
 /* -------------------------------------------------------------- whole letter */
 
 export const letterDataSchema = z.object({
@@ -301,6 +461,13 @@ export const letterDataSchema = z.object({
   faithCommunity: faithCommunitySchema.optional(),
   legalDecisions: legalDecisionsSchema.optional(),
   steppingIn: steppingInSchema.optional(),
+
+  // Shared card-data sections (both paths, Phase C wizard registration).
+  allergies: allergiesSchema.optional(),
+  routines: routinesSchema.optional(),
+  foods: foodsSchema.optional(),
+  careTasks: careTasksSchema.optional(),
+  emergencyPlan: emergencyPlanSchema.optional(),
 });
 
 export const letterPathSchema = z.enum(["special-needs", "general"]);
@@ -341,6 +508,11 @@ export const backupSchema = z.object({
 export type Contact = z.infer<typeof contactSchema>;
 export type Provider = z.infer<typeof providerSchema>;
 export type Medication = z.infer<typeof medicationSchema>;
+export type AllergyRecord = z.infer<typeof allergyRecordSchema>;
+export type RoutineRecord = z.infer<typeof routineRecordSchema>;
+export type FoodRecord = z.infer<typeof foodRecordSchema>;
+export type CareTaskRecord = z.infer<typeof careTaskRecordSchema>;
+export type EmergencyScenario = z.infer<typeof emergencyScenarioSchema>;
 export type LetterData = z.infer<typeof letterDataSchema>;
 export type LetterMeta = z.infer<typeof letterMetaSchema>;
 export type LetterPath = z.infer<typeof letterPathSchema>;
@@ -379,6 +551,12 @@ export const sectionSchemas = {
   faithCommunity: faithCommunitySchema,
   legalDecisions: legalDecisionsSchema,
   steppingIn: steppingInSchema,
+
+  allergies: allergiesSchema,
+  routines: routinesSchema,
+  foods: foodsSchema,
+  careTasks: careTasksSchema,
+  emergencyPlan: emergencyPlanSchema,
 } as const;
 
 export const BACKUP_APP_ID = "twl-letter-of-intent" as const;

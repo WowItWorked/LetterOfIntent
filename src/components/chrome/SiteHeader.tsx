@@ -8,8 +8,11 @@ import { SaveIndicator } from "@/components/chrome/SaveIndicator";
 import { ShareIcon } from "@/components/ui/ShareIcon";
 
 /** Below this width the nav collapses to a hamburger. The only breakpoint on
- *  the site — everything else responds through clamp() and auto-fit grids. */
-const COMPACT_BELOW = 1100;
+ *  the site — everything else responds through clamp() and auto-fit grids.
+ *  Raised from 1100 when the Care cards and Emergency sheet links joined the
+ *  row: five items need the room, and a crowded masthead collapses early
+ *  rather than wraps. */
+const COMPACT_BELOW = 1200;
 
 
 /**
@@ -24,9 +27,17 @@ const COMPACT_BELOW = 1100;
  * collapse into a hamburger menu, which does list Privacy: a menu is a site
  * map, not a row of competing buttons.
  */
+/** The three document pages, shared by the dropdown and the mobile menu. */
+const DOCUMENT_LINKS = [
+  ["Letter of Intent", "/letter"],
+  ["Emergency Sheet", "/emergency-sheet"],
+  ["Care Cards", "/care-cards"],
+] as const;
+
 export function SiteHeader() {
   const [compact, setCompact] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [docsOpen, setDocsOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -48,6 +59,7 @@ export function SiteHeader() {
   if (menuPath !== pathname) {
     setMenuPath(pathname);
     setMenuOpen(false);
+    setDocsOpen(false);
   }
 
   const closeMenu = () => setMenuOpen(false);
@@ -99,9 +111,60 @@ export function SiteHeader() {
                 <span className="tw-diamond" aria-hidden="true" />
                 Start your letter &middot; it&rsquo;s free
               </Link>
+              {/* One Documents dropdown instead of a row of page links — the
+                  masthead stays one filled action plus quiet utilities. */}
+              <div
+                className="relative"
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                    setDocsOpen(false);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setDocsOpen(false);
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setDocsOpen((v) => !v)}
+                  aria-expanded={docsOpen}
+                  aria-controls="docs-menu"
+                  className="inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-[var(--radius-sm)] pl-3 pr-1.5 text-xs font-semibold uppercase tracking-[0.09em] text-muted transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none"
+                >
+                  Resources
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                    className={`size-3 flex-none fill-none stroke-current transition-transform duration-[var(--dur-fast)] motion-reduce:transition-none ${docsOpen ? "rotate-180" : ""}`}
+                    strokeWidth={1.8}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m5 8 5 5 5-5" />
+                  </svg>
+                </button>
+                {docsOpen ? (
+                  <div
+                    id="docs-menu"
+                    className="absolute right-0 top-full z-10 mt-1 min-w-[228px] rounded-[var(--radius-sm)] border border-line bg-surface py-1.5"
+                    style={{ boxShadow: "var(--shadow-md)" }}
+                  >
+                    {DOCUMENT_LINKS.map(([label, href]) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setDocsOpen(false)}
+                        className="block px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.09em] text-navy700 hover:bg-paper2 hover:text-gold700"
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
               <Link
                 href="/#pass-it-along"
-                className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] px-3 text-xs font-semibold uppercase tracking-[0.09em] text-muted transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none"
+                className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] pl-1.5 pr-3 text-xs font-semibold uppercase tracking-[0.09em] text-muted transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none"
               >
                 <ShareIcon />
                 Share
@@ -143,6 +206,27 @@ export function SiteHeader() {
             >
               <span className="tw-diamond" aria-hidden="true" />
               Start your letter &middot; it&rsquo;s free
+            </Link>
+            <Link
+              href="/letter"
+              onClick={closeMenu}
+              className="flex min-h-[52px] items-center border-b border-line px-1 text-[0.9375rem] font-semibold uppercase tracking-[0.09em] text-navy700 hover:text-gold700"
+            >
+              Letter of Intent
+            </Link>
+            <Link
+              href="/care-cards"
+              onClick={closeMenu}
+              className="flex min-h-[52px] items-center border-b border-line px-1 text-[0.9375rem] font-semibold uppercase tracking-[0.09em] text-navy700 hover:text-gold700"
+            >
+              Care cards
+            </Link>
+            <Link
+              href="/emergency-sheet"
+              onClick={closeMenu}
+              className="flex min-h-[52px] items-center border-b border-line px-1 text-[0.9375rem] font-semibold uppercase tracking-[0.09em] text-navy700 hover:text-gold700"
+            >
+              Emergency sheet
             </Link>
             <Link
               href="/#pass-it-along"

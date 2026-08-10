@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { FieldDef, SectionDef } from "@/lib/content/types";
+import type { SectionDef } from "@/lib/content/types";
 
 /**
  * Gentle, format-only hints. These never block navigation or saving — they
@@ -28,7 +28,7 @@ function emptyOr(check: (v: string) => boolean) {
   return (v: string | undefined) => !v || v.trim() === "" || check(v.trim());
 }
 
-function scalarHint(kind: FieldDef["kind"]) {
+function scalarHint(kind: string) {
   const base = z.string().optional();
   if (kind === "email") return base.refine(emptyOr(looksLikeEmail), EMAIL_HINT);
   if (kind === "date") return base.refine(emptyOr(looksLikeDate), DATE_HINT);
@@ -38,7 +38,9 @@ function scalarHint(kind: FieldDef["kind"]) {
 /**
  * Builds the react-hook-form resolver schema for one section from its
  * declarative definition. Every field remains optional; only email and date
- * formats produce (soft) messages.
+ * formats produce (soft) messages. Multiselects are string arrays — the
+ * tokens are free strings on purpose (a typed "2:30 PM" is as valid as
+ * "morning"), so there is nothing to hint about.
  */
 export function buildHintSchema(def: SectionDef) {
   const shape: Record<string, z.ZodTypeAny> = {};
@@ -47,7 +49,11 @@ export function buildHintSchema(def: SectionDef) {
       const itemShape: Record<string, z.ZodTypeAny> = { id: z.string().optional() };
       for (const item of field.itemFields) {
         itemShape[item.id] =
-          item.kind === "checkbox" ? z.boolean().optional() : scalarHint(item.kind);
+          item.kind === "checkbox"
+            ? z.boolean().optional()
+            : item.kind === "multiselect"
+              ? z.array(z.string()).optional()
+              : scalarHint(item.kind);
       }
       shape[field.id] = z.array(z.object(itemShape)).optional();
     } else {

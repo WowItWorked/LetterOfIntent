@@ -1,5 +1,5 @@
 import { DEFAULT_PATH, sectionsFor } from "@/lib/content/paths";
-import type { FieldDef, SectionDef } from "@/lib/content/types";
+import type { FieldDef, RepeaterItemField, SectionDef } from "@/lib/content/types";
 import type { Contact, LetterData, LetterPath, Medication, SectionKey } from "@/lib/schema";
 
 /* ------------------------------------------------------------------ naming */
@@ -35,7 +35,13 @@ function isFilledString(v: unknown): boolean {
   return typeof v === "string" && v.trim() !== "";
 }
 
-/** True if a repeater item holds anything beyond its generated id. */
+/**
+ * True if a repeater item holds anything beyond its generated id. Deliberately
+ * text-only: every record's identifying field (a contact's name, a medication's
+ * name, an allergen) is a text field, so a record holding nothing but ticked
+ * boxes or schedule tokens has nothing any output could render — counting it
+ * would put blank rows on the emergency sheet.
+ */
 export function itemHasContent(item: Record<string, unknown>): boolean {
   return Object.entries(item).some(([k, v]) => k !== "id" && isFilledString(v));
 }
@@ -88,6 +94,27 @@ export function formatDateLong(value: string | undefined): string | undefined {
   return `${month} ${Number(m[3])}, ${Number(m[1])}`;
 }
 
+/**
+ * One repeater-item value as display text, for the review page and the PDF.
+ * Select and multiselect values render through the field's own option labels
+ * ("life-threatening" → "Life-threatening"); tokens the field doesn't know —
+ * a typed clock time, a value from a newer backup — pass through verbatim,
+ * and arrays join with a spaced separator instead of String()'s bare comma.
+ */
+export function formatItemValue(field: RepeaterItemField, value: unknown): string {
+  const label = (token: string) =>
+    "options" in field
+      ? (field.options.find((o) => o.value === token)?.label ?? token)
+      : token;
+  if (Array.isArray(value)) {
+    return value
+      .map((v) => label(String(v).trim()))
+      .filter(Boolean)
+      .join(" · ");
+  }
+  return label(String(value ?? "").trim());
+}
+
 export function todayIso(): string {
   const d = new Date();
   const p = (n: number) => String(n).padStart(2, "0");
@@ -104,7 +131,17 @@ export function letterDateIso(data: LetterData): string {
 
 /**
  * Builds react-hook-form default values for one section: every scalar becomes
- * "" (controlled from the start) and every repeater becomes an array.
+ * "" (controlled from the start), every checkbox a boolean, every multiselect
+ * a string[] — RHF checkboxes go uncontrolled if a default is missing — and
+ * every repeater becomes an array.
+ *
+ * A repeater never starts empty: an empty stored array is seeded with one
+ * blank record, so the first thing a tired person sees is a form to fill, not
+ * an "Add" button to find. This is safe because a blank record autosaves as
+ * id-only (plus empty strings/arrays/false), and itemHasContent() — which
+ * counts only filled strings — filters id-only records out of everything
+ * downstream: sectionHasContent/started counts, emergencyInfo, the review
+ * screen, and the PDF (loi-document.tsx) all run items through it.
  */
 export function defaultValuesForSection(
   def: SectionDef,
@@ -115,21 +152,27 @@ export function defaultValuesForSection(
   for (const field of def.fields) {
     if (field.kind === "repeater") {
       const arr = Array.isArray(stored[field.id]) ? (stored[field.id] as unknown[]) : [];
-      values[field.id] = arr.map((raw) => {
+      const items = arr.map((raw) => {
         const item = (raw ?? {}) as Record<string, unknown>;
         const out: Record<string, unknown> = {
           id: typeof item.id === "string" && item.id ? item.id : newItemId(),
         };
         for (const itemField of field.itemFields) {
+          const v = item[itemField.id];
           out[itemField.id] =
             itemField.kind === "checkbox"
-              ? item[itemField.id] === true
-              : typeof item[itemField.id] === "string"
-                ? item[itemField.id]
-                : "";
+              ? v === true
+              : itemField.kind === "multiselect"
+                ? Array.isArray(v)
+                  ? v.filter((t): t is string => typeof t === "string")
+                  : []
+                : typeof v === "string"
+                  ? v
+                  : "";
         }
         return out;
       });
+      values[field.id] = items.length > 0 ? items : [emptyRepeaterItem(field)];
     } else {
       values[field.id] = typeof stored[field.id] === "string" ? stored[field.id] : "";
     }
@@ -144,7 +187,9 @@ export function newItemId(): string {
 
 export function emptyRepeaterItem(field: Extract<FieldDef, { kind: "repeater" }>) {
   const item: Record<string, unknown> = { id: newItemId() };
-  for (const f of field.itemFields) item[f.id] = f.kind === "checkbox" ? false : "";
+  for (const f of field.itemFields) {
+    item[f.id] = f.kind === "checkbox" ? false : f.kind === "multiselect" ? [] : "";
+  }
   return item;
 }
 

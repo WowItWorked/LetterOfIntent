@@ -7,6 +7,7 @@ import {
   fieldHasContent,
   fillName,
   formatDateLong,
+  formatItemValue,
   preferredName,
   readerName,
   sectionHasContent,
@@ -81,6 +82,36 @@ describe("dates", () => {
     expect(formatDateLong("2026-08-07")).toBe("August 7, 2026");
     expect(formatDateLong("sometime in June")).toBe("sometime in June");
     expect(formatDateLong(undefined)).toBeUndefined();
+  });
+});
+
+describe("repeater value display", () => {
+  const severity = {
+    id: "severity",
+    label: "How serious",
+    kind: "select",
+    options: [{ value: "life-threatening", label: "Life-threatening" }],
+  } as const;
+  const schedule = {
+    id: "schedule",
+    label: "When",
+    kind: "multiselect",
+    options: [{ value: "morning", label: "Morning" }],
+  } as const;
+  const plain = { id: "name", label: "Name", kind: "text" } as const;
+
+  it("renders stored tokens through their option labels", () => {
+    expect(formatItemValue(severity, "life-threatening")).toBe("Life-threatening");
+  });
+
+  it("joins arrays with a spaced separator, unknown tokens verbatim", () => {
+    expect(formatItemValue(schedule, ["morning", "14:30"])).toBe("Morning · 14:30");
+    expect(formatItemValue(schedule, [])).toBe("");
+  });
+
+  it("leaves plain text fields alone", () => {
+    expect(formatItemValue(plain, "  Dana  ")).toBe("Dana");
+    expect(formatItemValue(plain, undefined)).toBe("");
   });
 });
 

@@ -236,7 +236,7 @@ export function PhotoFields({ name }: { name: string }) {
           value={caption}
           onChange={(e) => onCaption(e.target.value)}
           placeholder="Left to right: Alex, his sister Nora, and their grandmother"
-          className="mt-2 min-h-11 w-full rounded-[var(--radius-sm)] border border-control bg-surface px-3.5 py-2.5 text-base text-ink placeholder:text-faint focus:border-gold400 focus:outline-none focus:shadow-[0_0_0_3px_var(--focus-ring)]"
+          className="mt-2 min-h-11 w-full rounded-[var(--radius-sm)] border border-control bg-surface px-3.5 py-2.5 text-base text-ink placeholder:text-faint focus:border-gold400"
         />
       </div>
 

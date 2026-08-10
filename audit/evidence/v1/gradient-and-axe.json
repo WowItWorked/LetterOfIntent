@@ -1,0 +1,280 @@
+{
+  "gradientUnderText": [
+    {
+      "label": "Create your letter",
+      "buttonPx": [
+        243,
+        52
+      ],
+      "textRectPx": [
+        173,
+        19
+      ],
+      "fontSize": "15px",
+      "fontWeight": "600",
+      "labelColor": "rgb(22, 34, 58)",
+      "corners": [
+        {
+          "corner": "TL",
+          "gradientPos": 0.186,
+          "rgb": [
+            215,
+            182,
+            130
+          ],
+          "contrastVsLabel": 8.23
+        },
+        {
+          "corner": "TR",
+          "gradientPos": 0.706,
+          "rgb": [
+            175,
+            133,
+            75
+          ],
+          "contrastVsLabel": 4.74
+        },
+        {
+          "corner": "BL",
+          "gradientPos": 0.285,
+          "rgb": [
+            209,
+            173,
+            117
+          ],
+          "contrastVsLabel": 7.51
+        },
+        {
+          "corner": "BR",
+          "gradientPos": 0.804,
+          "rgb": [
+            172,
+            130,
+            72
+          ],
+          "contrastVsLabel": 4.56
+        }
+      ],
+      "worstCornerContrast": 4.56,
+      "worstCorner": "BR",
+      "passes4_5": true,
+      "passes3_0_asLargeText": true
+    },
+    {
+      "label": "Share to help another family",
+      "buttonPx": [
+        498,
+        56
+      ],
+      "textRectPx": [
+        323,
+        19
+      ],
+      "fontSize": "15px",
+      "fontWeight": "700",
+      "labelColor": "rgb(22, 34, 58)",
+      "corners": [
+        {
+          "corner": "TL",
+          "gradientPos": 0.199,
+          "rgb": [
+            215,
+            181,
+            129
+          ],
+          "contrastVsLabel": 8.17
+        },
+        {
+          "corner": "TR",
+          "gradientPos": 0.742,
+          "rgb": [
+            171,
+            130,
+            72
+          ],
+          "contrastVsLabel": 4.55
+        },
+        {
+          "corner": "BL",
+          "gradientPos": 0.254,
+          "rgb": [
+            211,
+            176,
+            121
+          ],
+          "contrastVsLabel": 7.75
+        },
+        {
+          "corner": "BR",
+          "gradientPos": 0.798,
+          "rgb": [
+            171,
+            129,
+            71
+          ],
+          "contrastVsLabel": 4.5
+        }
+      ],
+      "worstCornerContrast": 4.5,
+      "worstCorner": "BR",
+      "passes4_5": true,
+      "passes3_0_asLargeText": true
+    }
+  ],
+  "axe": {
+    "/": {
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "tags": [
+            "best-practice"
+          ],
+          "nodes": 1,
+          "sample": [
+            {
+              "target": ".leading-\\[1\\.5\\] > .min-w-0",
+              "summary": "Fix any of the following: Some page content is not contained by landmarks"
+            }
+          ]
+        }
+      ],
+      "incompleteIds": [
+        "color-contrast(23)"
+      ],
+      "passCount": 43
+    },
+    "/letter": {
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "tags": [
+            "best-practice"
+          ],
+          "nodes": 1,
+          "sample": [
+            {
+              "target": ".leading-\\[1\\.5\\] > .min-w-0",
+              "summary": "Fix any of the following: Some page content is not contained by landmarks"
+            }
+          ]
+        }
+      ],
+      "incompleteIds": [
+        "color-contrast(10)"
+      ],
+      "passCount": 46
+    },
+    "/letter/getting-started": {
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "tags": [
+            "best-practice"
+          ],
+          "nodes": 1,
+          "sample": [
+            {
+              "target": ".leading-\\[1\\.5\\] > .min-w-0",
+              "summary": "Fix any of the following: Some page content is not contained by landmarks"
+            }
+          ]
+        }
+      ],
+      "incompleteIds": [
+        "color-contrast(4)"
+      ],
+      "passCount": 47
+    },
+    "/letter/medical": {
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "tags": [
+            "best-practice"
+          ],
+          "nodes": 1,
+          "sample": [
+            {
+              "target": ".leading-\\[1\\.5\\] > .min-w-0",
+              "summary": "Fix any of the following: Some page content is not contained by landmarks"
+            }
+          ]
+        }
+      ],
+      "incompleteIds": [
+        "color-contrast(3)"
+      ],
+      "passCount": 48
+    },
+    "/letter/review": {
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "tags": [
+            "best-practice"
+          ],
+          "nodes": 1,
+          "sample": [
+            {
+              "target": ".leading-\\[1\\.5\\] > .min-w-0",
+              "summary": "Fix any of the following: Some page content is not contained by landmarks"
+            }
+          ]
+        }
+      ],
+      "incompleteIds": [
+        "color-contrast(4)"
+      ],
+      "passCount": 40
+    },
+    "/privacy": {
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "tags": [
+            "best-practice"
+          ],
+          "nodes": 1,
+          "sample": [
+            {
+              "target": ".leading-\\[1\\.5\\] > .min-w-0",
+              "summary": "Fix any of the following: Some page content is not contained by landmarks"
+            }
+          ]
+        }
+      ],
+      "incompleteIds": [
+        "color-contrast(11)"
+      ],
+      "passCount": 42
+    },
+    "/your-data": {
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "tags": [
+            "best-practice"
+          ],
+          "nodes": 1,
+          "sample": [
+            {
+              "target": ".leading-\\[1\\.5\\] > .min-w-0",
+              "summary": "Fix any of the following: Some page content is not contained by landmarks"
+            }
+          ]
+        }
+      ],
+      "incompleteIds": [
+        "color-contrast(11)"
+      ],
+      "passCount": 42
+    }
+  }
+}

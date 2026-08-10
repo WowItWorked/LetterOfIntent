@@ -31,7 +31,7 @@ export function ShareCard() {
             "clamp(26px, 3vw, 36px) clamp(24px, 3vw, 36px) clamp(28px, 3vw, 36px)",
         }}
       >
-        <p className="tw-engraved text-[0.6875rem] tracking-[0.24em] text-accent">
+        <p className="tw-engraved text-xs tracking-[0.16em] text-accent">
           Post it where families gather
         </p>
 
@@ -64,7 +64,7 @@ export function ShareCard() {
         </button>
 
         <div className="mt-[18px] rounded-[var(--radius-sm)] border border-line bg-paper2 px-[18px] py-4">
-          <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+          <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
             A message comes written for you
           </p>
           <p className="mt-2 font-serif text-lg italic leading-[1.55] text-ink">

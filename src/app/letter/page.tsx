@@ -65,7 +65,7 @@ export default function LetterLandingPage() {
           <h2 className="mt-3 font-serif text-[clamp(1.6rem,3.4vw,2.1rem)] font-semibold text-ink">
             Start with ten minutes.
           </h2>
-          <p className="mt-3 max-w-[70ch] leading-[1.75]">
+          <p className="mt-3 max-w-[70ch] leading-[1.7]">
             You do not have to do this all at once, or do it perfectly. A letter with
             three sections filled in is worth more to a future caregiver than the perfect
             letter that never gets written.

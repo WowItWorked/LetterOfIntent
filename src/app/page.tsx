@@ -220,7 +220,7 @@ export default function HomePage() {
                   className="flex flex-1 flex-col"
                   style={{ padding: "30px clamp(24px, 3vw, 36px)" }}
                 >
-                  <p className="tw-engraved mb-3.5 flex items-center gap-3 text-[0.6875rem] tracking-[0.22em] text-accent">
+                  <p className="tw-engraved mb-3.5 flex items-center gap-3 text-xs tracking-[0.16em] text-accent">
                     Option {i + 1}
                     <span
                       aria-hidden="true"
@@ -269,14 +269,14 @@ export default function HomePage() {
             <h2 className="mt-3.5 font-serif text-[clamp(1.7rem,4.6vw,2.5rem)] font-semibold tracking-[-0.01em] text-onink">
               What is a Letter of Intent?
             </h2>
-            <p className="mt-5 max-w-[60ch] leading-[1.75] text-oninkbody">
+            <p className="mt-5 max-w-[60ch] leading-[1.7] text-oninkbody">
               It&rsquo;s a plain-language companion to a special needs trust and estate
               plan. It is not a legal document, and that is the point. No lawyer is
               needed. It&rsquo;s everything a future caregiver would need to know but
               could never guess: how your loved one communicates, what calms them, which
               doctor to call, what a good day looks like.
             </p>
-            <p className="mt-4 max-w-[60ch] leading-[1.75] text-oninkbody">
+            <p className="mt-4 max-w-[60ch] leading-[1.7] text-oninkbody">
               Most families are told to write one and never do, because a blank page is
               paralyzing. This tool replaces the blank page with small, answerable
               questions, and turns your answers into a document you can hand to a trustee,
@@ -354,12 +354,12 @@ export default function HomePage() {
             <h2 className="mt-3.5 font-serif text-[clamp(1.9rem,3.4vw,2.5rem)] font-semibold tracking-[-0.01em] text-ink">
               Someone you know needs this too.
             </h2>
-            <p className="mt-[18px] max-w-[56ch] leading-[1.75]">
+            <p className="mt-[18px] max-w-[56ch] leading-[1.7]">
               Most families are told to write a Letter of Intent and never do, because the
               blank page wins. Sending the link takes ten seconds and saves someone else
               that blank page.
             </p>
-            <p className="tw-engraved mt-[26px] text-[0.6875rem] tracking-[0.2em] text-accent">
+            <p className="tw-engraved mt-[26px] text-xs tracking-[0.15em] text-accent">
               Who tends to need it
             </p>
             <ul className="mt-3 flex max-w-[52ch] list-none flex-col gap-[9px] p-0">
@@ -370,7 +370,7 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-            <p className="mt-[22px] max-w-[56ch] text-[0.9375rem] leading-[1.75] text-muted">
+            <p className="mt-[22px] max-w-[56ch] text-[0.9375rem] leading-[1.7] text-muted">
               It is free, and whatever they write stays private on their
               own device. We never see a word of it.
             </p>

@@ -1,0 +1,30 @@
+{
+  "one-answer-per-section": {
+    "answersGiven": 15,
+    "questionsAvailable": 83,
+    "rail": {
+      "text": "FOR A LOVED ONE WITH DISABILITIES You've added notes to 15 of 15 sections. Every section has notes. A yearly review keeps it trustworthy. 01 Getting started , has notes 02 About your loved one , has n",
+      "barWidth": "100%",
+      "dotsShown": 15
+    },
+    "review": {
+      "lead": "Every section has notes. All three files are created right here on your device: nothing is uploaded.",
+      "listsMissing": false,
+      "missingCount": 0
+    }
+  },
+  "one-section-only": {
+    "answersGiven": 1,
+    "questionsAvailable": 83,
+    "rail": {
+      "text": "FOR A LOVED ONE WITH DISABILITIES You've added notes to 1 of 15 sections. 01 Getting started , has notes 02 About your loved one 03 Family & support 04 A typical day 05 Communication 06 Medical 07 Beh",
+      "barWidth": "7%",
+      "dotsShown": 1
+    },
+    "review": {
+      "lead": "1 of 15 sections have notes so far, which is already worth printing. All three files are created right here on your device: nothing is uploaded.",
+      "listsMissing": true,
+      "missingCount": 14
+    }
+  }
+}

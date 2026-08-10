@@ -1,0 +1,97 @@
+{
+  "dns_A": {
+    "status": 0,
+    "ad": false,
+    "answers": [
+      {
+        "type": 1,
+        "data": "172.67.215.2"
+      },
+      {
+        "type": 1,
+        "data": "104.21.50.242"
+      }
+    ],
+    "authority": []
+  },
+  "dns_NS": {
+    "status": 0,
+    "ad": false,
+    "answers": [
+      {
+        "type": 2,
+        "data": "kinsley.ns.cloudflare.com."
+      },
+      {
+        "type": 2,
+        "data": "steven.ns.cloudflare.com."
+      }
+    ],
+    "authority": []
+  },
+  "dns_CAA": {
+    "status": 0,
+    "ad": false,
+    "answers": [],
+    "authority": [
+      "kinsley.ns.cloudflare.com. dns.cloudflare.com. 2411631587 10000 2400 604800 1800"
+    ]
+  },
+  "dns_DNSKEY": {
+    "status": 0,
+    "ad": false,
+    "answers": [],
+    "authority": [
+      "kinsley.ns.cloudflare.com. dns.cloudflare.com. 2411631587 10000 2400 604800 1800"
+    ]
+  },
+  "dns_DS": {
+    "status": 0,
+    "ad": false,
+    "answers": [],
+    "authority": [
+      "a.gtld-servers.net. nstld.verisign-grs.com. 1786311224 1800 900 604800 900"
+    ]
+  },
+  "dns_CAA_google": {
+    "Status": 0,
+    "TC": false,
+    "RD": true,
+    "RA": true,
+    "AD": false,
+    "CD": false,
+    "Question": [
+      {
+        "name": "myletterofintent.com.",
+        "type": 257
+      }
+    ],
+    "Authority": [
+      {
+        "name": "myletterofintent.com.",
+        "type": 6,
+        "TTL": 1800,
+        "data": "kinsley.ns.cloudflare.com. dns.cloudflare.com. 2411631587 10000 2400 604800 1800"
+      }
+    ],
+    "Comment": "Response from 162.159.44.17."
+  },
+  "hstsPreload": {
+    "name": "myletterofintent.com",
+    "status": "unknown",
+    "bulk": false,
+    "preloadedDomain": ""
+  },
+  "ariaLiveRegions": [
+    {
+      "live": "polite",
+      "text": ""
+    },
+    {
+      "live": "polite",
+      "text": "Deleted. We checked: this device now holds nothing from this tool."
+    }
+  ],
+  "pageTextHasWeChecked": true,
+  "noticeParagraph": "Deleted. We checked: this device now holds nothing from this tool."
+}

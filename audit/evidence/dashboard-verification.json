@@ -1,0 +1,22 @@
+{
+  "file": "C:\\Users\\patri\\OneDrive\\Documents\\Claude Code\\Trusts Wealth Website\\loi-builder\\audit\\index.html",
+  "externalRequests": [],
+  "consoleErrors": [],
+  "axe": {
+    "tabsScanned": 7,
+    "totalViolations": 0,
+    "violations": []
+  },
+  "decisions": {
+    "testedFinding": "A5-005",
+    "storedAfterInput": true,
+    "survivedReload": true,
+    "noteSurvivedReload": true
+  },
+  "filters": {
+    "p0Shown": 12,
+    "allShown": 157
+  },
+  "firstTabStop": "A.skip \"Skip to main content\"",
+  "skipTargetExists": true
+}

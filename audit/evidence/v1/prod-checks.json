@@ -1,0 +1,378 @@
+{
+  "videoNetwork": {
+    "mp4Requested": false,
+    "mp4Urls": [],
+    "totalRequests": 33
+  },
+  "videoDom": {
+    "videoElementPresentOnLoad": false,
+    "videoPreload": null,
+    "videoPoster": null,
+    "trackCount": null,
+    "textTracks": null,
+    "posterImagePresent": true,
+    "playButtonAriaLabel": "Play the video: what a Letter of Intent is, and how the builder works",
+    "transcriptLike": [],
+    "durationLabel": [
+      "Watch · under 5 minutes"
+    ]
+  },
+  "smallType": {
+    "count": 15,
+    "rows": [
+      {
+        "fs": 11,
+        "ls": "1.98px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved mb-3.5 flex items-center gap-3 text-[0.6875rem] ",
+        "text": "Option 1"
+      },
+      {
+        "fs": 11,
+        "ls": "1.98px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent",
+        "text": "See a sample"
+      },
+      {
+        "fs": 10,
+        "ls": "1.4px",
+        "tt": "uppercase",
+        "fam": "Mulish",
+        "cls": "pointer-events-none absolute inset-0 flex items-center justi",
+        "text": "View sample"
+      },
+      {
+        "fs": 10,
+        "ls": "1.4px",
+        "tt": "uppercase",
+        "fam": "Mulish",
+        "cls": "pointer-events-none absolute inset-0 flex items-center justi",
+        "text": "View sample"
+      },
+      {
+        "fs": 11,
+        "ls": "1.98px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved mb-3.5 flex items-center gap-3 text-[0.6875rem] ",
+        "text": "Option 2"
+      },
+      {
+        "fs": 11,
+        "ls": "1.98px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent",
+        "text": "See a sample"
+      },
+      {
+        "fs": 10,
+        "ls": "1.4px",
+        "tt": "uppercase",
+        "fam": "Mulish",
+        "cls": "pointer-events-none absolute inset-0 flex items-center justi",
+        "text": "View sample"
+      },
+      {
+        "fs": 10,
+        "ls": "1.4px",
+        "tt": "uppercase",
+        "fam": "Mulish",
+        "cls": "pointer-events-none absolute inset-0 flex items-center justi",
+        "text": "View sample"
+      },
+      {
+        "fs": 11,
+        "ls": "1.98px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved mt-[26px] text-[0.6875rem] tracking-[0.2em] text",
+        "text": "Who tends to need it"
+      },
+      {
+        "fs": 11,
+        "ls": "1.98px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[0.6875rem] tracking-[0.24em] text-accent",
+        "text": "Post it where families gather"
+      },
+      {
+        "fs": 11,
+        "ls": "1.98px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent",
+        "text": "A message comes written for you"
+      },
+      {
+        "fs": 10,
+        "ls": "1.8px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[10px] text-accent mt-[5px] block",
+        "text": "Estate and Tax Planning · Virginia"
+      },
+      {
+        "fs": 10,
+        "ls": "2px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[10px] text-accent mb-0.5",
+        "text": "The tool"
+      },
+      {
+        "fs": 10,
+        "ls": "2px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[10px] text-accent mb-0.5",
+        "text": "Contact"
+      },
+      {
+        "fs": 10,
+        "ls": "2px",
+        "tt": "uppercase",
+        "fam": "Cinzel",
+        "cls": "tw-engraved text-[10px] text-accent mb-3.5",
+        "text": "Pass it along"
+      }
+    ]
+  },
+  "typeCombos": {
+    "distinctCombos": 29,
+    "leadingsPerSize": [
+      {
+        "fs": 10,
+        "lineHeights": [
+          12.2,
+          16.2
+        ]
+      },
+      {
+        "fs": 12,
+        "lineHeights": [
+          14.64,
+          16,
+          18,
+          22.2
+        ]
+      },
+      {
+        "fs": 15,
+        "lineHeights": [
+          18.75,
+          24.3,
+          24.75,
+          25.5,
+          26.25
+        ]
+      },
+      {
+        "fs": 16,
+        "lineHeights": [
+          25.6,
+          25.92,
+          27.2,
+          28
+        ]
+      },
+      {
+        "fs": 18,
+        "lineHeights": [
+          27.9,
+          30.6
+        ]
+      },
+      {
+        "fs": 22,
+        "lineHeights": [
+          25.96,
+          26.4,
+          29.7
+        ]
+      },
+      {
+        "fs": 48,
+        "lineHeights": [
+          53.76,
+          56.64
+        ]
+      }
+    ]
+  },
+  "whatIsSection": {
+    "headingFound": true,
+    "sectionClass": "tw-panel-navy",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "linear-gradient(168deg, rgb(29, 44, 70) 0%, rgb(22, 34, 58) 78%)",
+    "headingColor": "rgb(246, 244, 238)"
+  },
+  "viewSample": [
+    {
+      "opacity": "0",
+      "visibility": "visible",
+      "fontSize": "10px",
+      "cls": "pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 bg-[rgba(22,34,58,0.78)] text-[0.625rem] f",
+      "linkText": "View sampleThe Letter of Intent",
+      "linkTarget": null
+    },
+    {
+      "opacity": "0",
+      "visibility": "visible",
+      "fontSize": "10px",
+      "cls": "pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 bg-[rgba(22,34,58,0.78)] text-[0.625rem] f",
+      "linkText": "View sampleEmergency sheet",
+      "linkTarget": null
+    },
+    {
+      "opacity": "0",
+      "visibility": "visible",
+      "fontSize": "10px",
+      "cls": "pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 bg-[rgba(22,34,58,0.78)] text-[0.625rem] f",
+      "linkText": "View sampleThe Letter of Intent",
+      "linkTarget": null
+    },
+    {
+      "opacity": "0",
+      "visibility": "visible",
+      "fontSize": "10px",
+      "cls": "pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 bg-[rgba(22,34,58,0.78)] text-[0.625rem] f",
+      "linkText": "View sampleEmergency sheet",
+      "linkTarget": null
+    }
+  ],
+  "focusRing": {
+    "resolvedRGB": "oklab(0.85155 0.0119952 0.0494828)",
+    "rawVar": "color-mix(in oklab, #c9a063 55%, white)",
+    "ringToken": "#253551"
+  },
+  "focusRingApplied": {
+    "activeTag": "A",
+    "activeText": "",
+    "outlineColor": "oklab(0.85155 0.0119952 0.0494828)",
+    "outlineWidth": "3px",
+    "outlineStyle": "solid",
+    "groundBehind": "rgba(251, 250, 246, 0.93)"
+  },
+  "accentButton": [
+    {
+      "text": "Create your letter",
+      "w": 243,
+      "h": 52,
+      "fontSize": "15px",
+      "fontWeight": "600",
+      "color": "rgb(22, 34, 58)",
+      "gradientAxisPx": 166,
+      "pxTo78pct": 130,
+      "bgImage": "linear-gradient(150deg, rgb(227, 200, 155) 0%, rgb(201, 160, 99) 42%, rgb(168, 126, 69) 78"
+    },
+    {
+      "text": "Share to help another family",
+      "w": 498,
+      "h": 56,
+      "fontSize": "15px",
+      "fontWeight": "700",
+      "color": "rgb(22, 34, 58)",
+      "gradientAxisPx": 297,
+      "pxTo78pct": 232,
+      "bgImage": "linear-gradient(150deg, rgb(227, 200, 155) 0%, rgb(201, 160, 99) 42%, rgb(168, 126, 69) 78"
+    }
+  ],
+  "homeResume": {
+    "hasPickUpWhereYouLeftOff": false,
+    "hasContinueYourLetter": false
+  },
+  "homeSearch": {
+    "roleSearch": 0,
+    "searchInputs": 0
+  },
+  "textareaMeasure": {
+    "count": 7,
+    "fields": [
+      {
+        "name": "allergies",
+        "innerPx": 778,
+        "fontSize": "16px",
+        "lineHeight": "27.2px",
+        "maxWidth": "none",
+        "perCharPx": 7.524,
+        "chars": 103
+      },
+      {
+        "name": "emergencyProtocol",
+        "innerPx": 778,
+        "fontSize": "16px",
+        "lineHeight": "27.2px",
+        "maxWidth": "none",
+        "perCharPx": 7.524,
+        "chars": 103
+      },
+      {
+        "name": "therapies",
+        "innerPx": 778,
+        "fontSize": "16px",
+        "lineHeight": "27.2px",
+        "maxWidth": "none",
+        "perCharPx": 7.524,
+        "chars": 103
+      },
+      {
+        "name": "equipment",
+        "innerPx": 778,
+        "fontSize": "16px",
+        "lineHeight": "27.2px",
+        "maxWidth": "none",
+        "perCharPx": 7.524,
+        "chars": 103
+      },
+      {
+        "name": "insurance",
+        "innerPx": 778,
+        "fontSize": "16px",
+        "lineHeight": "27.2px",
+        "maxWidth": "none",
+        "perCharPx": 7.524,
+        "chars": 103
+      },
+      {
+        "name": "whatWorked",
+        "innerPx": 778,
+        "fontSize": "16px",
+        "lineHeight": "27.2px",
+        "maxWidth": "none",
+        "perCharPx": 7.524,
+        "chars": 103
+      },
+      {
+        "name": "whatDidNot",
+        "innerPx": 778,
+        "fontSize": "16px",
+        "lineHeight": "27.2px",
+        "maxWidth": "none",
+        "perCharPx": 7.524,
+        "chars": 103
+      }
+    ]
+  },
+  "prerenderHeader320": {
+    "headerText": "START YOUR LETTER · IT’S FREE SHARE",
+    "hasMenuButton": false,
+    "hasStartCta": true,
+    "hasShare": true,
+    "headerScrollWidth": 431,
+    "headerClientWidth": 320,
+    "docScrollWidth": 431,
+    "docClientWidth": 320
+  },
+  "settledHeader320": {
+    "hasMenuButton": true,
+    "headerText": "",
+    "docScrollWidth": 320,
+    "docClientWidth": 320,
+    "overflow": 0
+  }
+}

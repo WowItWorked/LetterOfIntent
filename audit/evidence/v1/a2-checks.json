@@ -1,0 +1,255 @@
+{
+  "base": "http://localhost:3000",
+  "A2_001_storageBlockedProd": {
+    "/": {
+      "formInputs": 0,
+      "mainChars": 4708,
+      "bodyStart": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How i",
+      "errorBoundaryText": false,
+      "uncaughtErrors": []
+    },
+    "/letter": {
+      "formInputs": 0,
+      "mainChars": 3220,
+      "bodyStart": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How i",
+      "errorBoundaryText": false,
+      "uncaughtErrors": []
+    },
+    "/letter/getting-started": {
+      "formInputs": 5,
+      "mainChars": 1405,
+      "bodyStart": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How i",
+      "errorBoundaryText": false,
+      "uncaughtErrors": []
+    },
+    "/letter/medical": {
+      "formInputs": 8,
+      "mainChars": 1809,
+      "bodyStart": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How i",
+      "errorBoundaryText": false,
+      "uncaughtErrors": []
+    },
+    "/letter/review": {
+      "formInputs": 0,
+      "mainChars": 326,
+      "bodyStart": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How i",
+      "errorBoundaryText": false,
+      "uncaughtErrors": []
+    }
+  },
+  "A2_001_controlProd": {
+    "/letter/getting-started": {
+      "formInputs": 5,
+      "mainChars": 1405
+    },
+    "/letter/medical": {
+      "formInputs": 8,
+      "mainChars": 1809
+    }
+  },
+  "A2_002": {
+    "seeded": {
+      "storageKey": "mloi.letter",
+      "sections": 15
+    },
+    "rail": {
+      "barStyles": [
+        "width:0%;background:var(--gradient-gold)",
+        "width:0%;background:var(--gradient-gold)"
+      ],
+      "railText": "START YOUR LETTER · IT’S FREE SHARE",
+      "anyEverySectionHasNotes": false,
+      "bodyMentions": null
+    },
+    "review": {
+      "everySectionHasNotes": false,
+      "lead": null
+    }
+  },
+  "A2_004": {
+    "documentHeight": 5881,
+    "screensOfScroll": 7,
+    "startButtonY": 978,
+    "startButtonLabel": "Option 1For a loved one with disabilitiesThe lette",
+    "bigOptionCards": [
+      {
+        "h": 614,
+        "tag": "BUTTON",
+        "nameChars": 529,
+        "nameWords": 88,
+        "namePreview": "Option 1For a loved one with disabilitiesThe letter a trustee will rea"
+      },
+      {
+        "h": 624,
+        "tag": "BUTTON",
+        "nameChars": 550,
+        "nameWords": 95,
+        "namePreview": "Option 2For anyone you care forThe letter only you can write.An aging "
+      }
+    ],
+    "headerCtaVisibleWithoutMenu": false
+  },
+  "A2_005": {
+    "home": {
+      "pickUpWhereYouLeftOff": false,
+      "continueYourLetter": false,
+      "mentionsAlex": false,
+      "headerText": ""
+    },
+    "letterPage": {
+      "pickUpWhereYouLeftOff": false
+    }
+  },
+  "A2_006_012_015": {
+    "/letter/getting-started": {
+      "tabsToFirstFormField": 23,
+      "tabTrail": [
+        "a Skip to main content",
+        "a My Letter of Intent, home",
+        "a Start your letter · it’s free",
+        "a Share",
+        "a How it works",
+        "a 01Getting started",
+        "a 02About your loved one",
+        "a 03Family & support",
+        "a 04A typical day",
+        "a 05Communication",
+        "a 06Medical",
+        "a 07Behavior support",
+        "a 08School & work",
+        "a 09Housing",
+        "a 10Benefits & money",
+        "a 11Joy & faith",
+        "a 12Legal & advocacy",
+        "a 13For the trustee",
+        "a 14Final wishes (optional)",
+        "a 15Your message",
+        "a Review & download →",
+        "a Back up or delete your data",
+        "input:text authorName"
+      ],
+      "headingsInMain": [
+        "H1 Getting started"
+      ],
+      "searchAffordance": {
+        "roleSearch": 0,
+        "searchInput": 0
+      },
+      "railInsideMain": true,
+      "skipLinkTarget": {
+        "text": "Skip to main content",
+        "href": "#main"
+      },
+      "pageScrollHeight": 2041
+    },
+    "/letter/medical": {
+      "tabsToFirstFormField": 25,
+      "tabTrail": [
+        "a Skip to main content",
+        "a My Letter of Intent, home",
+        "a Start your letter · it’s free",
+        "a Share",
+        "a How it works",
+        "a 01Getting started",
+        "a 02About your loved one",
+        "a 03Family & support",
+        "a 04A typical day",
+        "a 05Communication",
+        "a 06Medical",
+        "a 07Behavior support",
+        "a 08School & work",
+        "a 09Housing",
+        "a 10Benefits & money",
+        "a 11Joy & faith",
+        "a 12Legal & advocacy",
+        "a 13For the trustee",
+        "a 14Final wishes (optional)",
+        "a 15Your message",
+        "a Review & download →",
+        "a Back up or delete your data",
+        "button:button + Add a provider",
+        "button:button + Add a medication",
+        "textarea allergies"
+      ],
+      "headingsInMain": [
+        "H1 Medical"
+      ],
+      "searchAffordance": {
+        "roleSearch": 0,
+        "searchInput": 0
+      },
+      "railInsideMain": true,
+      "skipLinkTarget": {
+        "text": "Skip to main content",
+        "href": "#main"
+      },
+      "pageScrollHeight": 3152
+    }
+  },
+  "A2_007": {
+    "zoom200-512x384": {
+      "viewportH": 384,
+      "headerH": 114,
+      "stripH": 58,
+      "headerPosition": "sticky",
+      "chromePctOfViewport": 45,
+      "usableRows": 212,
+      "screens": 6.8,
+      "horizontalOverflow": 0,
+      "scrollWidth": 512,
+      "firstFieldY": 885
+    },
+    "zoom100-1024x768": {
+      "viewportH": 768,
+      "headerH": 149,
+      "stripH": 40,
+      "headerPosition": "sticky",
+      "chromePctOfViewport": 25,
+      "usableRows": 579,
+      "screens": 2.9,
+      "horizontalOverflow": 0,
+      "scrollWidth": 1024,
+      "firstFieldY": 759
+    }
+  },
+  "A2_008": {
+    "controlCount": 8,
+    "addButtons": [
+      "+ Add a provider",
+      "+ Add a medication"
+    ],
+    "emptyRepeaterCopy": [
+      "Nothing here yet — add the first provider whenever you're ready.",
+      "Nothing here yet — add the first medication whenever you're ready."
+    ],
+    "familyAndSupport": {
+      "controlCount": 2,
+      "emptyRepeaterCopy": [
+        "Nothing here yet — add the first person whenever you're ready."
+      ],
+      "firstCallLabel": [
+        "Who would you call first in an emergency?"
+      ]
+    }
+  },
+  "A2_010": {
+    "dateInputPresent": true,
+    "value": "",
+    "label": "Today's date",
+    "helpNearby": ""
+  },
+  "A2_011": [
+    {
+      "chars": 529,
+      "words": 88,
+      "headingsInside": 0,
+      "preview": "Option 1For a loved one with disabilitiesThe letter a trustee will read.If your plan inclu"
+    },
+    {
+      "chars": 550,
+      "words": 95,
+      "headingsInside": 0,
+      "preview": "Option 2For anyone you care forThe letter only you can write.An aging parent, a spouse, a "
+    }
+  ]
+}

@@ -95,8 +95,16 @@
   --btn-bg-hover: var(--navy-800);
   --btn-fg: #f3f1ea;
 
-  --focus-ring: color-mix(in oklab, var(--gold-500) 55%, white);
-  --ring: var(--navy-700);
+  /* Focus indicator — two-tone by necessity, not decoration.
+     SC 1.4.11 wants 3:1 against adjacent colour, and this site has both ivory
+     and navy grounds. Measured against every real surface, NO single colour
+     clears 3:1 on both: the previous soft gold scored 1.38–1.58 on every light
+     ground, and navy-700 (the obvious fix) scores 11.78 on paper but 1.14 on
+     the navy panels, so it would have traded one failure for another. The pair
+     always leaves one half visible — worst case 4.33:1, on the gold CTA.
+     Numbers: audit/tools/ring-candidates.mjs */
+  --focus-ring: var(--navy-900);
+  --focus-halo: var(--paper);
   --ring-w: 2px;
 
   /* ---- Typography ------------------------------------------------------ */
@@ -261,11 +269,24 @@
     color: var(--ink);
   }
 
-  /* One visible focus style everywhere — a 3px soft gold ring. */
+  /* One visible focus style everywhere: a dark ring with a light halo sitting
+     in the offset gap. Whichever half the background defeats, the other half
+     survives — so the indicator is visible on ivory cards and on navy panels
+     without either surface needing its own override.
+     forced-colors: Windows High Contrast ignores our colours entirely, so hand
+     the job to the system keyword rather than leaving nothing behind. */
   :focus-visible {
     outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--focus-halo);
     border-radius: 2px;
+  }
+
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 3px solid Highlight;
+      box-shadow: none;
+    }
   }
 
   /* Anchor targets have to clear the sticky header. This is the floor for any

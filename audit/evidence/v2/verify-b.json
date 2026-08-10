@@ -1,0 +1,269 @@
+{
+  "canvasReadback": [
+    {
+      "expr": "var(--focus-ring)",
+      "resolved": "oklab(0.85155 0.0119952 0.0494828)",
+      "srgb": [
+        226,
+        202,
+        170
+      ]
+    },
+    {
+      "expr": "color-mix(in oklab, #c9a063 55%, white)",
+      "resolved": "oklab(0.85155 0.0119952 0.0494828)",
+      "srgb": [
+        226,
+        202,
+        170
+      ]
+    },
+    {
+      "expr": "var(--gold-500)",
+      "resolved": "rgb(201, 160, 99)",
+      "srgb": [
+        201,
+        160,
+        99
+      ]
+    },
+    {
+      "expr": "var(--navy-700)",
+      "resolved": "rgb(37, 53, 81)",
+      "srgb": [
+        37,
+        53,
+        81
+      ]
+    }
+  ],
+  "forcedColors": {
+    "forcedActive": true,
+    "railCurrent": {
+      "bg": "rgb(255, 255, 255)",
+      "bgImg": "none",
+      "borderLeftColor": "rgb(0, 0, 159)",
+      "color": "rgb(0, 0, 159)",
+      "w": 236.47,
+      "h": 44
+    },
+    "railOther": {
+      "bg": "rgba(255, 255, 255, 0)",
+      "bgImg": "none",
+      "borderLeftColor": "rgb(0, 0, 159)",
+      "color": "rgb(0, 0, 159)",
+      "w": 236.47,
+      "h": 44
+    },
+    "dot": {
+      "bg": "rgb(255, 255, 255)",
+      "bgImg": "none",
+      "borderLeftColor": "rgb(0, 0, 159)",
+      "color": "rgb(0, 0, 159)",
+      "w": 6,
+      "h": 6
+    },
+    "diamond": {
+      "bg": "rgba(255, 255, 255, 0)",
+      "bgImg": "none",
+      "borderLeftColor": "rgb(0, 0, 159)",
+      "color": "rgb(0, 0, 159)",
+      "w": 9.9,
+      "h": 9.9
+    },
+    "progressBar": {
+      "bg": "rgba(255, 255, 255, 0)",
+      "bgImg": "none",
+      "borderLeftColor": "rgb(0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "w": 16.55,
+      "h": 4
+    },
+    "input": {
+      "before": {
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(55, 0, 110)",
+        "boxShadow": "none",
+        "borderColor": "rgb(55, 0, 110)"
+      },
+      "after": {
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(55, 0, 110)",
+        "boxShadow": "none",
+        "borderColor": "rgb(55, 0, 110)"
+      }
+    },
+    "link": {
+      "before": {
+        "outlineStyle": "none",
+        "outlineColor": "rgb(0, 0, 159)"
+      },
+      "after": {
+        "outlineStyle": "none",
+        "outlineColor": "rgb(0, 0, 159)"
+      }
+    }
+  },
+  "colorScheme_dark": {
+    "bodyBg": "rgb(251, 250, 246)",
+    "inputBg": "rgb(255, 255, 255)",
+    "rootColorScheme": "light",
+    "metaColorScheme": null,
+    "prefersDark": true
+  },
+  "colorScheme_light": {
+    "bodyBg": "rgb(251, 250, 246)",
+    "inputBg": "rgb(255, 255, 255)",
+    "rootColorScheme": "light",
+    "metaColorScheme": null,
+    "prefersDark": false
+  },
+  "mobileRail": {
+    "detailsPresent": true,
+    "open": false,
+    "summaryText": "Sections\n▾",
+    "progressVisibleOutsideDetails": "inside-details",
+    "bodyTextHasProgress": false,
+    "reviewLinkOutsideDetails": true
+  },
+  "storedKeys": [
+    "twl-loi-letter-v1"
+  ],
+  "homeAfterProgress": {
+    "hasResume": false,
+    "firstHeadingish": "Write down what only you know, so they’ll be cared for the way that only you have."
+  },
+  "chooserAfterProgress": {
+    "hasResume": true
+  },
+  "tabs": {
+    "before": [
+      "true",
+      "false"
+    ],
+    "after": [
+      "true",
+      "false"
+    ],
+    "focusedName": "Disability & special needs 15 SECTIONS",
+    "tablistLabel": "Which set of questions",
+    "tabIndexAttrs": [
+      null,
+      null
+    ],
+    "tabIds": [
+      null,
+      null
+    ],
+    "ariaControls": [
+      "question-set",
+      "question-set"
+    ],
+    "panel": {
+      "exists": true,
+      "role": null,
+      "labelledby": null,
+      "tabindex": null
+    }
+  },
+  "sample": {
+    "status": "ok",
+    "canvasCount": 11,
+    "firstCanvas": {
+      "role": "img",
+      "ariaLabel": "Letter of Intent — for a loved one with disabilities, page 1 of 11",
+      "textContentLength": 0,
+      "cssWidth": 1104,
+      "intrinsicWidth": 1100
+    },
+    "hasTextLayer": false,
+    "bodyTextChars": 1663
+  },
+  "sampleHttp": 200,
+  "sample320": {
+    "cssWidth": 280,
+    "intrinsicWidth": 1100,
+    "scale": 0.255,
+    "effectiveBodyTextCssPx": 3.39
+  },
+  "skipToFirstField": {
+    "skipName": "Skip to main content",
+    "n": 18,
+    "tag": "BUTTON",
+    "inForm": true,
+    "text": "+ Add a provider"
+  },
+  "railInsideMain": true,
+  "routeChangeFocus": {
+    "url": "/letter/about",
+    "activeTag": "BODY",
+    "isBody": true,
+    "title": "About your loved one — Letter of Intent Builder",
+    "scrollY": 0
+  },
+  "share": {
+    "hasNativeShare": false,
+    "textBefore": "SHARE TO HELP ANOTHER FAMILY",
+    "textAfter": "SHARE TO HELP ANOTHER FAMILY",
+    "labelChanged": false,
+    "liveBefore": "",
+    "liveAfter": "",
+    "liveChanged": false
+  },
+  "gradientCtas": [
+    {
+      "text": "CREATE YOUR LETTER",
+      "color": "rgb(22, 34, 58)",
+      "fontSize": "15px",
+      "fontWeight": "600",
+      "bgImage": "linear-gradient(150deg, rgb(227, 200, 155) 0%, rgb(201, 160, 99) 42%, rgb(168, 126, 69) 78%, rgb(201, 160, 99) 100%)"
+    },
+    {
+      "text": "SHARE TO HELP ANOTHER FAMILY",
+      "color": "rgb(22, 34, 58)",
+      "fontSize": "15px",
+      "fontWeight": "700",
+      "bgImage": "linear-gradient(150deg, rgb(227, 200, 155) 0%, rgb(201, 160, 99) 42%, rgb(168, 126, 69) 78%, rgb(201, 160, 99) 100%)"
+    }
+  ],
+  "targetSize375": [
+    {
+      "text": "Skip to main content",
+      "w": 1,
+      "h": 1,
+      "inline": false
+    },
+    {
+      "text": "How it works",
+      "w": 74.5,
+      "h": 15,
+      "inline": true
+    },
+    {
+      "text": "Learn more.",
+      "w": 83.4,
+      "h": 19,
+      "inline": true
+    }
+  ],
+  "review": {
+    "pageHeight": 4338,
+    "marks": {
+      "download all three": 549,
+      "come back in a year": 1096,
+      "pass it along": 1862,
+      "a trust protects": 2387,
+      "read it through": 2735,
+      "sections without notes": 3495
+    }
+  },
+  "reminderPanel": {
+    "inputPresent": true,
+    "inputType": "email",
+    "autoComplete": "email",
+    "buttonText": "SEND ME THE REMINDER",
+    "buttonBgBefore": "none"
+  }
+}

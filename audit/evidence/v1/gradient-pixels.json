@@ -1,0 +1,58 @@
+[
+  {
+    "label": "Create your letter",
+    "labelColor": "rgb(22, 34, 58)",
+    "textBox": {
+      "x": 35,
+      "y": 16,
+      "w": 173,
+      "h": 19
+    },
+    "png": [
+      243,
+      53
+    ],
+    "glyphPixelsSkipped": 615,
+    "backgroundPixelsSampled": 2672,
+    "minContrastUnderLabel": 3.224,
+    "minAt": {
+      "px": 206,
+      "py": 29,
+      "rgb": [
+        108,
+        117,
+        69
+      ]
+    },
+    "pixelsBelow4_5": 246,
+    "pctOfLabelBoxBelow4_5": 9.2
+  },
+  {
+    "label": "Share to help another family",
+    "labelColor": "rgb(22, 34, 58)",
+    "textBox": {
+      "x": 87,
+      "y": 18,
+      "w": 323,
+      "h": 19
+    },
+    "png": [
+      498,
+      57
+    ],
+    "glyphPixelsSkipped": 1212,
+    "backgroundPixelsSampled": 4925,
+    "minContrastUnderLabel": 3.175,
+    "minAt": {
+      "px": 356,
+      "py": 28,
+      "rgb": [
+        128,
+        109,
+        74
+      ]
+    },
+    "pixelsBelow4_5": 417,
+    "pctOfLabelBoxBelow4_5": 8.5
+  }
+]

@@ -13,7 +13,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 /** Engraved section label with a gold hairline running out of it. */
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="tw-engraved flex items-center gap-3.5 text-[0.6875rem] tracking-[0.22em] text-accent">
+    <p className="tw-engraved flex items-center gap-3.5 text-xs tracking-[0.16em] text-accent">
       {children}
       <span
         aria-hidden="true"
@@ -86,7 +86,7 @@ export function PathChooser() {
                 className="flex flex-1 flex-col"
                 style={{ padding: "34px clamp(24px, 3vw, 38px)" }}
               >
-                <span className="tw-engraved mb-3.5 flex items-center gap-3 text-[0.6875rem] tracking-[0.22em] text-accent">
+                <span className="tw-engraved mb-3.5 flex items-center gap-3 text-xs tracking-[0.16em] text-accent">
                   Option {i + 1}
                   <span
                     aria-hidden="true"
@@ -175,7 +175,7 @@ export function PathChooser() {
               padding: "26px clamp(22px, 2.6vw, 32px) 24px",
             }}
           >
-            <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-gold400">
+            <p className="tw-engraved text-xs tracking-[0.15em] text-gold400">
               What this set asks
             </p>
             <p className="mt-2.5 font-serif text-[1.75rem] leading-[1.25] text-onink">

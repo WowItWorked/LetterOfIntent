@@ -1,0 +1,435 @@
+{
+  "tokens": {
+    "--focus-ring": {
+      "raw": "color-mix(in oklab, #c9a063 55%, white)",
+      "painted": "oklab(0.85155 0.0119952 0.0494828)"
+    },
+    "--paper": {
+      "raw": "#fbfaf6",
+      "painted": "rgb(251, 250, 246)"
+    },
+    "--paper-2": {
+      "raw": "#f4efe6",
+      "painted": "rgb(244, 239, 230)"
+    },
+    "--gold-500": {
+      "raw": "#c9a063",
+      "painted": "rgb(201, 160, 99)"
+    },
+    "--gold-400": {
+      "raw": "#d9b97f",
+      "painted": "rgb(217, 185, 127)"
+    },
+    "--gold-700": {
+      "raw": "#8a6a38",
+      "painted": "rgb(138, 106, 56)"
+    },
+    "--navy-700": {
+      "raw": "#253551",
+      "painted": "rgb(37, 53, 81)"
+    },
+    "--navy-800": {
+      "raw": "#1d2c46",
+      "painted": "rgb(29, 44, 70)"
+    },
+    "--navy-900": {
+      "raw": "#16223a",
+      "painted": "rgb(22, 34, 58)"
+    },
+    "--control-border": {
+      "raw": "#6e7889",
+      "painted": "rgb(110, 120, 137)"
+    },
+    "--ink-500": {
+      "raw": "#5e6878",
+      "painted": "rgb(94, 104, 120)"
+    },
+    "--ink-faint": {
+      "raw": "#646d7b",
+      "painted": "rgb(100, 109, 123)"
+    },
+    "--accent-text": {
+      "raw": "#7d5f31",
+      "painted": "rgb(125, 95, 49)"
+    },
+    "--gold-100": {
+      "raw": "#f7eedf",
+      "painted": "rgb(247, 238, 223)"
+    },
+    "--gradient-gold": {
+      "raw": "linear-gradient(150deg,\n    #e3c89b 0%,\n    #c9a063 42%,\n    #a87e45 78%,\n    #c9a063 100%)",
+      "painted": null
+    }
+  },
+  "tokens_hex": {
+    "--focus-ring": "#010000",
+    "--paper": "#fbfaf6",
+    "--paper-2": "#f4efe6",
+    "--gold-500": "#c9a063",
+    "--gold-400": "#d9b97f",
+    "--gold-700": "#8a6a38",
+    "--navy-700": "#253551",
+    "--navy-800": "#1d2c46",
+    "--navy-900": "#16223a",
+    "--control-border": "#6e7889",
+    "--ink-500": "#5e6878",
+    "--ink-faint": "#646d7b",
+    "--accent-text": "#7d5f31",
+    "--gold-100": "#f7eedf"
+  },
+  "focusRingRatios": {
+    "vs_paper": 20.08,
+    "vs_paper2": 18.31,
+    "vs_white": 20.98,
+    "vs_navy800": 1.5,
+    "vs_navy900": 1.32
+  },
+  "home": {
+    "videoPlayButton": {
+      "ariaLabel": "Play the video: what a Letter of Intent is, and how the builder works",
+      "visibleText": "WATCH",
+      "allText": "Watch"
+    },
+    "figcaptionText": "WATCH · UNDER 5 MINUTES What a Letter of Intent is, and how the builder works. The video walks through what to write, why it matters, and how to finish it in ten-minute sittings.",
+    "transcriptAffordances": [],
+    "resumeAffordanceOnHome": false,
+    "ogImage": "https://myletterofintent.com/og-image.png"
+  },
+  "video": {
+    "duration": 277.999999,
+    "trackEls": 0,
+    "textTracks": 0,
+    "controls": true,
+    "tabIndex": 0,
+    "childHTML": "",
+    "src": "http://localhost:3000/what-is-a-letter-of-intent.mp4"
+  },
+  "videoKeys": {
+    "log": [
+      {
+        "key": " ",
+        "defaultPrevented": true,
+        "notCancelled": false
+      },
+      {
+        "key": "Enter",
+        "defaultPrevented": false,
+        "notCancelled": true
+      },
+      {
+        "key": "f",
+        "defaultPrevented": false,
+        "notCancelled": true
+      },
+      {
+        "key": "k",
+        "defaultPrevented": true,
+        "notCancelled": false
+      },
+      {
+        "key": "ArrowRight",
+        "defaultPrevented": true,
+        "notCancelled": false
+      }
+    ],
+    "activeIsVideo": true
+  },
+  "focusedInput": {
+    "id": "f-allergies",
+    "tag": "TEXTAREA",
+    "unfocused": {
+      "outlineStyle": "none",
+      "borderColor": "rgb(110, 120, 137)",
+      "boxShadow": "none"
+    },
+    "focused": {
+      "outlineStyle": "none",
+      "outlineColor": "oklab(0.85155 0.0119952 0.0494828)",
+      "outlineWidth": "3px",
+      "borderColor": "rgb(217, 185, 127)",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.85155 0.0119952 0.0494828) 0px 0px 0px 3px"
+    },
+    "matchesFocusVisible": true
+  },
+  "rail": {
+    "current": {
+      "bg": "rgb(247, 238, 223)",
+      "color": "rgb(26, 34, 51)",
+      "borderLeftColor": "rgb(201, 160, 99)",
+      "borderLeftWidth": "2px",
+      "fontWeight": "400",
+      "textDecorationLine": "none"
+    },
+    "other": {
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(58, 68, 86)",
+      "borderLeftColor": "rgba(0, 0, 0, 0)",
+      "borderLeftWidth": "2px",
+      "fontWeight": "400",
+      "textDecorationLine": "none"
+    },
+    "dot": {
+      "bg": "rgb(201, 160, 99)",
+      "w": 0,
+      "h": 0
+    },
+    "srOnlyHasNotes": true,
+    "progressText": "You've added notes to 1 of 15 sections"
+  },
+  "railDotRatio": {
+    "vs_white": 2.42,
+    "vs_current_bg": 2.1
+  },
+  "railCurrentBorderRatio": 2.1,
+  "autocomplete": {
+    "getting-started": {
+      "formAutocomplete": "off",
+      "fields": [
+        {
+          "id": "f-authorName",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-authorRelationship",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-subjectFullName",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-subjectPreferredName",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-letterDate",
+          "autocomplete": null,
+          "effective": ""
+        }
+      ]
+    },
+    "about": {
+      "formAutocomplete": "off",
+      "fields": [
+        {
+          "id": "f-dateOfBirth",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-diagnoses",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-lifeHistory",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-firstFiveMinutes",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-importantToKnow",
+          "autocomplete": null,
+          "effective": ""
+        }
+      ]
+    },
+    "family-and-support": {
+      "formAutocomplete": "off",
+      "fields": [
+        {
+          "id": "f-firstCall",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-doNotInvolve",
+          "autocomplete": null,
+          "effective": ""
+        }
+      ]
+    },
+    "medical": {
+      "formAutocomplete": "off",
+      "fields": [
+        {
+          "id": "f-allergies",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-emergencyProtocol",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-therapies",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-equipment",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-insurance",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-preferredHospital",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-whatWorked",
+          "autocomplete": null,
+          "effective": ""
+        },
+        {
+          "id": "f-whatDidNot",
+          "autocomplete": null,
+          "effective": ""
+        }
+      ]
+    }
+  },
+  "focusObscured": {
+    "headerHeight": 149,
+    "stopsMeasured": 40,
+    "fullyHidden": [
+      {
+        "name": "+ Add a provider",
+        "tag": "BUTTON",
+        "rectTop": 101,
+        "rectBottom": 145,
+        "heightPx": 44,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 44,
+        "fullyHidden": true
+      },
+      {
+        "name": "10 Benefits & money",
+        "tag": "A",
+        "rectTop": 61,
+        "rectBottom": 105,
+        "heightPx": 44,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 44,
+        "fullyHidden": true
+      },
+      {
+        "name": "09 Housing",
+        "tag": "A",
+        "rectTop": 15,
+        "rectBottom": 59,
+        "heightPx": 44,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 44,
+        "fullyHidden": true
+      },
+      {
+        "name": "08 School & work",
+        "tag": "A",
+        "rectTop": 0,
+        "rectBottom": 44,
+        "heightPx": 44,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 44,
+        "fullyHidden": true
+      }
+    ],
+    "partiallyCovered": [
+      {
+        "name": "f-whatDidNot",
+        "tag": "TEXTAREA",
+        "rectTop": 126,
+        "rectBottom": 229,
+        "heightPx": 104,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 23,
+        "fullyHidden": false
+      },
+      {
+        "name": "f-insurance",
+        "tag": "TEXTAREA",
+        "rectTop": 110,
+        "rectBottom": 213,
+        "heightPx": 104,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 39,
+        "fullyHidden": false
+      },
+      {
+        "name": "See an example",
+        "tag": "BUTTON",
+        "rectTop": 142,
+        "rectBottom": 186,
+        "heightPx": 44,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 7,
+        "fullyHidden": false
+      },
+      {
+        "name": "f-emergencyProtocol",
+        "tag": "TEXTAREA",
+        "rectTop": -14,
+        "rectBottom": 144,
+        "heightPx": 158,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 144,
+        "fullyHidden": false
+      },
+      {
+        "name": "11 Joy & faith",
+        "tag": "A",
+        "rectTop": 107,
+        "rectBottom": 151,
+        "heightPx": 44,
+        "headerBottom": 149,
+        "inHeader": false,
+        "coveredPx": 42,
+        "fullyHidden": false
+      }
+    ]
+  },
+  "headerPct": {
+    "320x256": {
+      "headerH": 81,
+      "pct": 32
+    },
+    "400x320": {
+      "headerH": 93,
+      "pct": 29
+    },
+    "375x667": {
+      "headerH": 88,
+      "pct": 13
+    },
+    "1280x900": {
+      "headerH": 149,
+      "pct": 17
+    },
+    "640x512": {
+      "headerH": 141,
+      "pct": 28
+    }
+  }
+}

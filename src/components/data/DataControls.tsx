@@ -50,7 +50,7 @@ function ActionCard({
         <div className="min-w-0 flex-[3_1_340px]">
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2 className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">{title}</h2>
-          <div className="mt-2.5 max-w-[66ch] leading-[1.75]">{children}</div>
+          <div className="mt-2.5 max-w-[66ch] leading-[1.7]">{children}</div>
         </div>
         <div className="flex min-w-0 flex-[1_1_250px] flex-col gap-3">{actions}</div>
       </div>

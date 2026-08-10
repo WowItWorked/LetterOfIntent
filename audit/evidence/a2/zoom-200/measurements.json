@@ -1,0 +1,62 @@
+{
+  "home@zoom200-512x384": {
+    "viewportH": 384,
+    "headerH": 114,
+    "stripH": 58,
+    "chromePctOfViewport": 45,
+    "usableRows": 212,
+    "firstThingY": null,
+    "docHeight": 7231,
+    "screens": 18.8
+  },
+  "wizard@zoom200-512x384": {
+    "viewportH": 384,
+    "headerH": 114,
+    "stripH": 58,
+    "chromePctOfViewport": 45,
+    "usableRows": 212,
+    "firstThingY": 353,
+    "docHeight": 2600,
+    "screens": 6.8
+  },
+  "review@zoom200-512x384": {
+    "viewportH": 384,
+    "headerH": 114,
+    "stripH": 58,
+    "chromePctOfViewport": 45,
+    "usableRows": 212,
+    "firstThingY": 2088,
+    "docHeight": 5637,
+    "screens": 14.7
+  },
+  "home@zoom100-1024x768": {
+    "viewportH": 768,
+    "headerH": 149,
+    "stripH": 40,
+    "chromePctOfViewport": 25,
+    "usableRows": 579,
+    "firstThingY": null,
+    "docHeight": 5257,
+    "screens": 6.8
+  },
+  "wizard@zoom100-1024x768": {
+    "viewportH": 768,
+    "headerH": 149,
+    "stripH": 40,
+    "chromePctOfViewport": 25,
+    "usableRows": 579,
+    "firstThingY": 291,
+    "docHeight": 2194,
+    "screens": 2.9
+  },
+  "review@zoom100-1024x768": {
+    "viewportH": 768,
+    "headerH": 149,
+    "stripH": 40,
+    "chromePctOfViewport": 25,
+    "usableRows": 579,
+    "firstThingY": 1478,
+    "docHeight": 4195,
+    "screens": 5.5
+  }
+}

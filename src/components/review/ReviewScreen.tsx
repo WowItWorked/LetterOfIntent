@@ -194,13 +194,13 @@ export function ReviewScreen() {
       {/* ----------------------------------------------------- pass it along */}
       <section className={`tw-card ${CARD_GAP}`}>
         <div style={{ padding: "28px clamp(24px, 2.6vw, 36px) 30px" }}>
-          <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+          <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
             Pass it along
           </p>
           <h2 className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
             You know how hard this was to start.
           </h2>
-          <p className="mt-3 max-w-[70ch] leading-[1.75]">
+          <p className="mt-3 max-w-[70ch] leading-[1.7]">
             Someone in your circle has been meaning to write one of these for years: a
             parent in your support group, a sibling, the family at the next table at
             clinic. Two things put the tool in front of them, and both take about a
@@ -214,10 +214,10 @@ export function ReviewScreen() {
           */}
           <div className="mt-6 grid gap-x-[clamp(20px,3vw,44px)] gap-y-7 border-t border-line pt-6 md:grid-cols-2">
             <div className="flex min-w-0 flex-col">
-              <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+              <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
                 Send them the link
               </p>
-              <p className="mt-2 leading-[1.75]">
+              <p className="mt-2 leading-[1.7]">
                 The tool is free, and nothing they write ever leaves their own device.
                 A text or an email saves someone else from staring at the blank page.
               </p>
@@ -236,10 +236,10 @@ export function ReviewScreen() {
             </div>
 
             <div className="flex min-w-0 flex-col">
-              <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+              <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
                 Put in a good word
               </p>
-              <p className="mt-2 leading-[1.75]">
+              <p className="mt-2 leading-[1.7]">
                 Most families find this tool by searching. A few honest words about{" "}
                 {firm.name} on Google is what lifts it into those results, and that is
                 how the next parent stumbles onto it.
@@ -396,7 +396,7 @@ function YearlyReview({ data }: { data: LetterData }) {
         <h2 className="mt-3 font-serif text-[clamp(1.7rem,3vw,2.2rem)] font-semibold tracking-[-0.01em] text-ink">
           Come back in a year.
         </h2>
-        <p className="mt-3 max-w-[74ch] leading-[1.75]">
+        <p className="mt-3 max-w-[74ch] leading-[1.7]">
           A Letter of Intent is trustworthy only while it is current. Next year, load your
           backup file, change what has changed, and download a fresh set. That yearly pass
           is what keeps the letter worth trusting, so set the reminder now, while you are
@@ -408,7 +408,7 @@ function YearlyReview({ data }: { data: LetterData }) {
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))" }}
         >
           <div className="rounded-[var(--radius-sm)] border border-line bg-paper2 px-5 pb-6 pt-[22px] sm:px-6">
-            <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+            <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
               Option one
             </p>
             <h3 className="mt-2 font-serif text-[1.375rem] font-semibold text-ink">
@@ -505,7 +505,7 @@ function ReadingView({
         style={{ borderRadius: "var(--radius-md) var(--radius-md) 0 0" }}
       >
         <div style={{ padding: "26px clamp(24px, 2.6vw, 36px) 28px" }}>
-          <p className="tw-engraved text-[0.6875rem] tracking-[0.22em] text-accent">
+          <p className="tw-engraved text-xs tracking-[0.16em] text-accent">
             The letter itself
           </p>
           <h2 id="reading-title" className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">

@@ -1,0 +1,18 @@
+{
+  "generatedFrom": "myletterofintent.com audit",
+  "commit": "b243107",
+  "receivedFrom": "site owner, via the dashboard export",
+  "decisions": {
+    "A6-004": { "decision": "defer", "note": "" },
+    "A6-012": { "decision": "defer", "note": "" },
+    "A8-006": { "decision": "defer", "note": "" },
+    "A4-001": { "decision": "defer", "note": "" },
+    "A1-002": { "decision": "accept", "note": "" },
+    "A1-003": { "decision": "accept", "note": "" },
+    "A1-006": { "decision": "accept", "note": "" },
+    "A1-009": { "decision": "accept", "note": "" },
+    "A1-004": { "decision": "accept", "note": "" },
+    "A1-010": { "decision": "accept", "note": "" },
+    "A1-012": { "decision": "accept", "note": "" }
+  }
+}

@@ -1,0 +1,366 @@
+{
+  "load/": {
+    "dom": {
+      "csp": [
+        {
+          "blockedURI": "https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496",
+          "violatedDirective": "script-src-elem",
+          "disposition": "enforce"
+        }
+      ],
+      "cfBeaconScriptInDom": true,
+      "hasCfBeaconGlobal": false,
+      "emailDecodeInDom": false,
+      "emailDecodePerfEntry": true,
+      "emailProtectionLinks": [],
+      "cfEmailSpans": 0,
+      "mailtoLinks": [
+        "mailto:?subject=A%20free%20tool%20for%20writing%20a%20Letter%20of%20Intent&body=I%20thought%20you%20might%20find%20this%20helpful.%0A%0AMy%20Letter%20of%20Intent%20is%20a%20free%20tool%20for%20writing%20down%20what%20a%20future%20caregiver%20would%20need%20to%20know%20about%20someone%20you%20love%3A%20routines%2C%20medical%20details%2C%20what%20calms%20them%2C%20who%20to%20call.%20One%20small%20question%20at%20a%20time%2C%20and%20it%20finishes%20as%20a%20document%20you%20can%20print.%20Everything%20you%20write%20stays%20private%20on%20your%20own%20device.%0A%0Ahttps%3A%2F%2Fmyletterofintent.com%0A",
+        "mailto:contact@trustsandwealth.com"
+      ],
+      "videoCount": 0,
+      "trackCount": 0,
+      "videoSrc": [],
+      "resourceHosts": [
+        "myletterofintent.com",
+        "www.googletagmanager.com",
+        "static.cloudflareinsights.com",
+        "www.google-analytics.com"
+      ]
+    },
+    "storagePersisted": {
+      "persisted": false,
+      "api": true
+    },
+    "cookies": [
+      {
+        "name": "_ga_90YXKXB5TC",
+        "domain": ".myletterofintent.com",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expires": 1820870674.328366,
+        "expiresISO": "2027-09-13T21:24:34.328Z"
+      },
+      {
+        "name": "_ga",
+        "domain": ".myletterofintent.com",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expires": 1820870674.328657,
+        "expiresISO": "2027-09-13T21:24:34.328Z"
+      }
+    ],
+    "gaEvents": [
+      {
+        "en": "page_view",
+        "dl": "https://myletterofintent.com/",
+        "dt": "Letter of Intent Builder — Trusts & Wealth, PLLC",
+        "gcs": null,
+        "cid": "705317417.1786310674"
+      }
+    ],
+    "uniqueHosts": [
+      "myletterofintent.com",
+      "www.googletagmanager.com",
+      "static.cloudflareinsights.com",
+      "www.google-analytics.com"
+    ],
+    "failed": [
+      {
+        "url": "https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496",
+        "reason": "csp"
+      },
+      {
+        "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-90YXKXB5TC&gtm=45je6852v9260739505za200zd9260739505&_p=1786310674280&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=705317417.1786310674&frm=0&ngs=1&pscdl=noapi&rcb=8&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253DA%253FBrand%3B99.0.0.0%7CHeadlessChrome%3B151.0.7922.34%7CChromium%3B151.0.7922.34&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=en-us&_s=1&tag_exp=115938465~115938469~118897920~118897930~119367802~119367810~119404703~119527020~119896802~120385423&sid=1786310674&sct=1&seg=0&dl=https%3A%2F%2Fmyletterofintent.com%2F&dt=Letter%20of%20Intent%20Builder%20%E2%80%94%20Trusts%20%26%20Wealth%2C%20PLLC&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=429",
+        "reason": "net::ERR_ABORTED"
+      }
+    ],
+    "cspFromConsole": [
+      "error: Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com\". Note that 'script-src-elem' was not ex"
+    ]
+  },
+  "load/privacy": {
+    "dom": {
+      "csp": [
+        {
+          "blockedURI": "https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496",
+          "violatedDirective": "script-src-elem",
+          "disposition": "enforce"
+        }
+      ],
+      "cfBeaconScriptInDom": true,
+      "hasCfBeaconGlobal": false,
+      "emailDecodeInDom": false,
+      "emailDecodePerfEntry": true,
+      "emailProtectionLinks": [],
+      "cfEmailSpans": 0,
+      "mailtoLinks": [
+        "mailto:contact@trustsandwealth.com",
+        "mailto:contact@trustsandwealth.com"
+      ],
+      "videoCount": 0,
+      "trackCount": 0,
+      "videoSrc": [],
+      "resourceHosts": [
+        "myletterofintent.com",
+        "www.googletagmanager.com",
+        "static.cloudflareinsights.com",
+        "www.google-analytics.com"
+      ]
+    },
+    "storagePersisted": {
+      "persisted": false,
+      "api": true
+    },
+    "cookies": [
+      {
+        "name": "_ga_90YXKXB5TC",
+        "domain": ".myletterofintent.com",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expires": 1820870678.438231,
+        "expiresISO": "2027-09-13T21:24:38.438Z"
+      },
+      {
+        "name": "_ga",
+        "domain": ".myletterofintent.com",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expires": 1820870678.43848,
+        "expiresISO": "2027-09-13T21:24:38.438Z"
+      }
+    ],
+    "gaEvents": [
+      {
+        "en": "page_view",
+        "dl": "https://myletterofintent.com/privacy",
+        "dt": "Privacy & how your data works — Letter of Intent Builder",
+        "gcs": null,
+        "cid": "399483016.1786310678"
+      }
+    ],
+    "uniqueHosts": [
+      "myletterofintent.com",
+      "www.googletagmanager.com",
+      "static.cloudflareinsights.com",
+      "www.google-analytics.com"
+    ],
+    "failed": [
+      {
+        "url": "https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496",
+        "reason": "csp"
+      },
+      {
+        "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-90YXKXB5TC&gtm=45je6852v9260739505za200zd9260739505&_p=1786310678389&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=399483016.1786310678&frm=0&ngs=1&pscdl=noapi&rcb=11&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253DA%253FBrand%3B99.0.0.0%7CHeadlessChrome%3B151.0.7922.34%7CChromium%3B151.0.7922.34&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=en-us&_s=1&tag_exp=115938466~115938468~118897920~118897930~119337770~119527020~119896803&sid=1786310678&sct=1&seg=0&dl=https%3A%2F%2Fmyletterofintent.com%2Fprivacy&dt=Privacy%20%26%20how%20your%20data%20works%20%E2%80%94%20Letter%20of%20Intent%20Builder&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=431",
+        "reason": "net::ERR_ABORTED"
+      }
+    ],
+    "cspFromConsole": [
+      "error: Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com\". Note that 'script-src-elem' was not ex"
+    ]
+  },
+  "load/letter/about": {
+    "dom": {
+      "csp": [
+        {
+          "blockedURI": "https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496",
+          "violatedDirective": "script-src-elem",
+          "disposition": "enforce"
+        }
+      ],
+      "cfBeaconScriptInDom": true,
+      "hasCfBeaconGlobal": false,
+      "emailDecodeInDom": false,
+      "emailDecodePerfEntry": true,
+      "emailProtectionLinks": [],
+      "cfEmailSpans": 0,
+      "mailtoLinks": [
+        "mailto:contact@trustsandwealth.com"
+      ],
+      "videoCount": 0,
+      "trackCount": 0,
+      "videoSrc": [],
+      "resourceHosts": [
+        "myletterofintent.com",
+        "static.cloudflareinsights.com",
+        "www.googletagmanager.com",
+        "www.google-analytics.com"
+      ]
+    },
+    "storagePersisted": {
+      "persisted": false,
+      "api": true
+    },
+    "cookies": [
+      {
+        "name": "_ga_90YXKXB5TC",
+        "domain": ".myletterofintent.com",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expires": 1820870682.444712,
+        "expiresISO": "2027-09-13T21:24:42.444Z"
+      },
+      {
+        "name": "_ga",
+        "domain": ".myletterofintent.com",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expires": 1820870682.444966,
+        "expiresISO": "2027-09-13T21:24:42.444Z"
+      }
+    ],
+    "gaEvents": [
+      {
+        "en": "page_view",
+        "dl": "https://myletterofintent.com/letter/about",
+        "dt": "About your loved one — Letter of Intent Builder",
+        "gcs": null,
+        "cid": "553443307.1786310682"
+      }
+    ],
+    "uniqueHosts": [
+      "myletterofintent.com",
+      "www.googletagmanager.com",
+      "static.cloudflareinsights.com",
+      "www.google-analytics.com"
+    ],
+    "failed": [
+      {
+        "url": "https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496",
+        "reason": "csp"
+      },
+      {
+        "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-90YXKXB5TC&gtm=45je6860h2v9260739505za200zd9260739505&_p=1786310682381&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=553443307.1786310682&frm=0&ngs=1&pscdl=noapi&rcb=6&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253DA%253FBrand%3B99.0.0.0%7CHeadlessChrome%3B151.0.7922.34%7CChromium%3B151.0.7922.34&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=en-us&_s=1&tag_exp=115616985~115938465~115938468~118395335~118897920~118897930~119527020~119896802~120385422&sid=1786310682&sct=1&seg=0&dl=https%3A%2F%2Fmyletterofintent.com%2Fletter%2Fabout&dt=About%20your%20loved%20one%20%E2%80%94%20Letter%20of%20Intent%20Builder&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=345",
+        "reason": "net::ERR_ABORTED"
+      }
+    ],
+    "cspFromConsole": [
+      "error: Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com\". Note that 'script-src-elem' was not ex"
+    ]
+  },
+  "typing/letter/about": {
+    "fieldInfo": {
+      "tag": "TEXTAREA",
+      "id": "f-diagnoses",
+      "name": "diagnoses",
+      "inForm": true
+    },
+    "formCount": 1,
+    "gaEventsAll": [
+      {
+        "en": "page_view",
+        "dl": "https://myletterofintent.com/letter/about",
+        "dt": "About your loved one — Letter of Intent Builder",
+        "gcs": null,
+        "cid": "491552055.1786310687"
+      }
+    ],
+    "gaEventsAfterTyping": [],
+    "gaEventNames": [
+      "page_view"
+    ],
+    "canaryHits": [],
+    "canaryInAnyOutbound": false
+  },
+  "typing/letter/medical": {
+    "fieldInfo": {
+      "tag": "TEXTAREA",
+      "id": "f-allergies",
+      "name": "allergies",
+      "inForm": true
+    },
+    "formCount": 1,
+    "gaEventsAll": [
+      {
+        "en": "page_view",
+        "dl": "https://myletterofintent.com/letter/medical",
+        "dt": "Medical — Letter of Intent Builder",
+        "gcs": null,
+        "cid": "1864906406.1786310703"
+      }
+    ],
+    "gaEventsAfterTyping": [],
+    "gaEventNames": [
+      "page_view"
+    ],
+    "canaryHits": [],
+    "canaryInAnyOutbound": false
+  },
+  "typing/letter/getting-started": {
+    "fieldInfo": {
+      "tag": "INPUT",
+      "id": "f-authorName",
+      "name": "authorName",
+      "inForm": true
+    },
+    "formCount": 1,
+    "gaEventsAll": [
+      {
+        "en": "page_view",
+        "dl": "https://myletterofintent.com/letter/getting-started",
+        "dt": "Getting started — Letter of Intent Builder",
+        "gcs": null,
+        "cid": "1638957203.1786310718"
+      }
+    ],
+    "gaEventsAfterTyping": [],
+    "gaEventNames": [
+      "page_view"
+    ],
+    "canaryHits": [],
+    "canaryInAnyOutbound": false
+  },
+  "deleteFlow": {
+    "before": {
+      "localStorage": {
+        "twl-loi-letter-v1": 269
+      },
+      "indexedDB": [
+        "twl-loi-photos"
+      ],
+      "photoCount": 1,
+      "cookieString": "_ga=GA1.1.258038368.1786310734; _ga_90YXKXB5TC=GS2.1.s1786310734$o1$g1$t1786310740$j54$l0$h0"
+    },
+    "noticeShown": "",
+    "afterNoReload": {
+      "localStorage": {},
+      "indexedDB": [
+        "twl-loi-photos"
+      ],
+      "photoCount": 0,
+      "cookieString": "_ga=GA1.1.258038368.1786310734; _ga_90YXKXB5TC=GS2.1.s1786310734$o1$g1$t1786310740$j54$l0$h0"
+    },
+    "cookiesAfterDelete": [
+      {
+        "name": "_ga",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expiresISO": "2027-09-13T21:25:40.563Z"
+      },
+      {
+        "name": "_ga_90YXKXB5TC",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "expiresISO": "2027-09-13T21:25:40.563Z"
+      }
+    ],
+    "afterReload": {
+      "localStorage": {
+        "twl-loi-letter-v1": 43
+      },
+      "indexedDB": [
+        "twl-loi-photos"
+      ],
+      "photoCount": 0,
+      "cookieString": "_ga=GA1.1.258038368.1786310734; _ga_90YXKXB5TC=GS2.1.s1786310734$o1$g1$t1786310747$j47$l0$h0"
+    }
+  }
+}

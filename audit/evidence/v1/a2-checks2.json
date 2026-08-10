@@ -1,0 +1,133 @@
+{
+  "A2_001_prod_blocked": {
+    "/": {
+      "formInputs": 0,
+      "mainVisibleChars": 4708,
+      "errorBoundaryShown": false,
+      "visibleText": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How it works A FREE, PRIVATE LETTER OF INTENT BUILDER FROM TRUSTS & WEALTH,",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ]
+    },
+    "/letter": {
+      "formInputs": 0,
+      "mainVisibleChars": 3220,
+      "errorBoundaryShown": false,
+      "visibleText": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How it works CREATE YOUR LETTER Create your Letter of Intent Two sets of qu",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ]
+    },
+    "/letter/getting-started": {
+      "formInputs": 0,
+      "mainVisibleChars": 0,
+      "errorBoundaryShown": true,
+      "visibleText": "This page couldn’t load Reload to try again, or go back. Reload Back",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded.",
+        "QuotaExceededError: The quota has been exceeded."
+      ]
+    },
+    "/letter/medical": {
+      "formInputs": 0,
+      "mainVisibleChars": 0,
+      "errorBoundaryShown": true,
+      "visibleText": "This page couldn’t load Reload to try again, or go back. Reload Back",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded.",
+        "QuotaExceededError: The quota has been exceeded."
+      ]
+    },
+    "/letter/review": {
+      "formInputs": 0,
+      "mainVisibleChars": 326,
+      "errorBoundaryShown": false,
+      "visibleText": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How it works THE LAST STEP Review & download Nothing to review yet — your l",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ]
+    },
+    "/your-data": {
+      "formInputs": 1,
+      "mainVisibleChars": 2072,
+      "errorBoundaryShown": false,
+      "visibleText": "Skip to main content START YOUR LETTER · IT’S FREE SHARE Private by design. Everything you type stays on your device and is never sent anywhere. How it works YOUR DATA Everything you have written is on this device Nothin",
+      "uncaughtErrors": [
+        "QuotaExceededError: The quota has been exceeded."
+      ]
+    }
+  },
+  "A2_002_prod": {
+    "rail": {
+      "barStyle": "width: 100%; background: var(--gradient-gold);",
+      "notesLine": "You've added notes to 15 of 15 sections.",
+      "everySectionHasNotes": "Every section has notes. A yearly review keeps it trustworthy."
+    },
+    "review": {
+      "everySectionHasNotes": "Every section has notes. All three files are created right here on your device: nothing is uploaded.",
+      "mentionsUnanswered": false
+    }
+  },
+  "A2_005_prod": {
+    "homePickUp": false,
+    "homeContinue": false,
+    "headerCta": "START YOUR LETTER · IT’S FREE SHARE",
+    "letterPagePickUp": true
+  },
+  "A2_002_dev": {
+    "rail": {
+      "barStyle": "width: 100%; background: var(--gradient-gold);",
+      "notesLine": "You've added notes to 15 of 15 sections.",
+      "everySectionHasNotes": "Every section has notes. A yearly review keeps it trustworthy."
+    },
+    "review": {
+      "everySectionHasNotes": "Every section has notes. All three files are created right here on your device: nothing is uploaded.",
+      "mentionsUnanswered": false
+    }
+  },
+  "A2_005_dev": {
+    "homePickUp": false,
+    "homeContinue": false,
+    "headerCta": "START YOUR LETTER · IT’S FREE SHARE",
+    "letterPagePickUp": true
+  },
+  "A2_004_prod": {
+    "documentHeight": 5881,
+    "screensOfScroll": 7,
+    "exactStartButtons": [
+      {
+        "y": 4421,
+        "tag": "BUTTON",
+        "text": "Start the special needs letter"
+      }
+    ],
+    "anyStartCtaInFirstViewport": false,
+    "headerHasStartCta": false
+  },
+  "A2_017": {
+    "slow3g": {
+      "wallMsToLoadEvent": 12937,
+      "fcp": 3672,
+      "lcp": null,
+      "transferBytesHeaderSum": 483366
+    },
+    "fast3g": {
+      "wallMsToLoadEvent": 4039,
+      "fcp": 1400,
+      "lcp": null,
+      "transferBytesHeaderSum": 483363
+    },
+    "none": {
+      "wallMsToLoadEvent": 275,
+      "fcp": 248,
+      "lcp": null,
+      "transferBytesHeaderSum": 410186
+    }
+  },
+  "A2_016": {
+    "buttonFound": true,
+    "msUntilBusyCleared": 13424,
+    "busyLabel": "Preparing your files…",
+    "cpuThrottle": "4x"
+  }
+}

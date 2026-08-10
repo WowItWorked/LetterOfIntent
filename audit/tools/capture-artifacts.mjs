@@ -13,7 +13,18 @@ import { chromium } from "playwright";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
-const BASE = "http://localhost:3000";
+/*
+ * A1-012: the first run of this script hard-coded localhost, so the shared
+ * screenshot set every analyst reasoned from was local dev — complete with a
+ * Next.js dev badge — while several findings described "production". The base
+ * is now explicit and recorded in the output filenames, so evidence can never
+ * again silently claim to be from somewhere it is not.
+ *
+ *   node audit/tools/capture-artifacts.mjs --base https://myletterofintent.com
+ */
+const argBase = process.argv.indexOf("--base");
+const BASE = argBase > -1 ? process.argv[argBase + 1] : "http://localhost:3000";
+const ORIGIN_TAG = BASE.includes("localhost") ? "local" : "prod";
 const OUT = path.resolve("audit/evidence");
 const LETTER_KEY = "twl-loi-letter-v1";
 
@@ -162,7 +173,7 @@ async function main() {
         continue;
       }
       await page.waitForTimeout(700);
-      const file = path.join(OUT, "screenshots", `${slug}-${vp.name}.png`);
+      const file = path.join(OUT, "screenshots", `${ORIGIN_TAG}-${slug}-${vp.name}.png`);
       await page
         .screenshot({ path: file, fullPage: true, animations: "disabled", scale: "css" })
         .catch(() => {});

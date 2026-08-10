@@ -21,7 +21,7 @@ export function SampleDocuments({ path }: { path: LetterPath }) {
 
   return (
     <div className="mt-6 border-t border-line pt-5">
-      <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+      <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
         See a sample
       </p>
 
@@ -63,7 +63,7 @@ export function SampleDocuments({ path }: { path: LetterPath }) {
                 />
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 bg-[rgba(22,34,58,0.78)] text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-onink opacity-0 transition-opacity duration-[var(--dur-base)] group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
+                  className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 bg-[rgba(22,34,58,0.78)] text-xs font-semibold uppercase tracking-[0.14em] text-onink opacity-0 transition-opacity duration-[var(--dur-base)] group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
                 >
                   View sample
                   <svg
@@ -80,6 +80,26 @@ export function SampleDocuments({ path }: { path: LetterPath }) {
 
               <span className="mt-2 block text-[0.8125rem] font-semibold leading-tight text-ink group-hover:text-gold700">
                 {s.label}
+              </span>
+              {/*
+                A permanent affordance, not a hover-revealed one. The overlay
+                above only appears on hover and focus, which means a touch user
+                — most of this audience, most of the time — gets no signal that
+                the thumbnail opens anything at all. This line costs nothing and
+                works on every input type.
+              */}
+              <span className="mt-0.5 flex items-center gap-1 text-xs leading-tight text-accent">
+                Open sample
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="size-3 flex-none fill-none stroke-current"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
               </span>
             </Link>
           </li>

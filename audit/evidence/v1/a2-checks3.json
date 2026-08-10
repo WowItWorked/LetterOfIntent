@@ -1,0 +1,36 @@
+{
+  "A2_013": {
+    "a_reload_immediately": {
+      "label": "reload with zero delay",
+      "storedAtZeroDelay": null,
+      "valueAfterReload": "",
+      "preserved": false
+    },
+    "b_reload_after_debounce": {
+      "label": "reload after 900ms",
+      "storedAfter900ms": "Maria Alvarez",
+      "valueAfterReload": "Maria Alvarez",
+      "preserved": true
+    },
+    "c_in_app_nav_immediately": {
+      "label": "in-app nav, no pause",
+      "storedAfterNav": "Maria Alvarez",
+      "preserved": true
+    },
+    "listenersInSrc": "beforeunload/pagehide/visibilitychange: verified absent by grep"
+  },
+  "A2_017_devtoolsPresets": {
+    "slow3g-devtools": {
+      "wallMsToLoadEvent": 18359,
+      "fcp": 7636,
+      "lcp": 7636,
+      "transferBytesHeaderSum": 483366
+    },
+    "fast3g-devtools": {
+      "wallMsToLoadEvent": 4760,
+      "fcp": 2164,
+      "lcp": 2164,
+      "transferBytesHeaderSum": 483366
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "phone-390": {
+    "whileTyping": {
+      "present": true,
+      "status": "pending",
+      "text": "Saving…",
+      "rect": {
+        "top": 33,
+        "h": 24,
+        "w": 58
+      },
+      "inViewport": true,
+      "fontSizePx": 15,
+      "scrollY": 2150
+    },
+    "afterSave": {
+      "status": "saved",
+      "text": "Your work is saved on this device.\nSaved",
+      "inViewport": true,
+      "headerIsSticky": "sticky"
+    }
+  },
+  "zoom200-512": {
+    "whileTyping": {
+      "present": true,
+      "status": "pending",
+      "text": "Saving…",
+      "rect": {
+        "top": 44,
+        "h": 24,
+        "w": 58
+      },
+      "inViewport": true,
+      "fontSizePx": 15,
+      "scrollY": 2346
+    },
+    "afterSave": {
+      "status": "saved",
+      "text": "Your work is saved on this device.\nSaved",
+      "inViewport": true,
+      "headerIsSticky": "sticky"
+    }
+  },
+  "desktop-1280": {
+    "whileTyping": {
+      "present": true,
+      "status": "pending",
+      "text": "Saving…",
+      "rect": {
+        "top": 62,
+        "h": 24,
+        "w": 58
+      },
+      "inViewport": true,
+      "fontSizePx": 15,
+      "scrollY": 1956
+    },
+    "afterSave": {
+      "status": "saved",
+      "text": "Your work is saved on this device.\nSaved",
+      "inViewport": true,
+      "headerIsSticky": "sticky"
+    }
+  }
+}

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { firm } from "@/config/firm";
 
-const engraved = "tw-engraved text-[10px] text-accent";
+const engraved = "tw-engraved text-xs text-accent";
 const columnLink =
   "text-[0.9375rem] text-body transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none";
 

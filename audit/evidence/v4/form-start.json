@@ -1,0 +1,137 @@
+{
+  "gtagBootstrap": {
+    "status": 200,
+    "length": 497736,
+    "hasFormStartToken": true,
+    "hasFormSubmitToken": true,
+    "hasFileDownloadToken": true,
+    "hasScrollToken": true,
+    "hasVideoStartToken": true,
+    "hasViewSearchResults": true,
+    "emContext": [
+      "erateRandom\"]],[52,\"m\",[\"require\",\"makeString\"]],[52,\"n\",[\"require\",\"toBase64\"]],[52,\"o\",[17,[15,\"h\"],\"B\"]],[52,\"p\",\"form_submit\"],[52,\"q\",\"form_start\"],[52,\"r\",\"isRegistered\"],[52,\"s\",\"eventMetadata\"],[52,\"t\",\"click\"],[52,\"u\",[17,[15,\"a\"],\"instanceDestinationId\"]],[22,[\"d\",[15,\"u\"],[15,\"o",
+      "[8,\"eventId\",[16,[15,\"aO\"],\"gtm.uniqueEventId\"]]],[\"y\",[15,\"aS\"]],[\"z\",[15,\"aS\"],[15,\"aO\"]],[43,[16,[15,\"aS\"],[15,\"s\"]],[17,[15,\"i\"],\"AC\"],\"form_start\"],[\"aA\",[15,\"q\"],[15,\"aR\"],[15,\"aS\"]]]],[52,\"aD\",[\"aN\"]],[52,\"aE\",[51,\"\",[7,\"aO\",\"aP\"],[52,\"aQ\",[\"aD\",[15,\"p\"]]],[\"aC\",[15,\"aO\"],[44]],[52,",
+      "led\"]],[52,\"i\",[15,\"__module_features\"]],[52,\"j\",[15,\"__module_adwordsHitType\"]],[52,\"k\",[17,[15,\"e\"],\"B\"]],[52,\"l\",\"form_submit\"],[52,\"m\",\"form_start\"],[52,\"n\",\"click\"],[36,[8,\"A\",[15,\"o\"]]]],[36,[\"a\"]]]],[\"$0\"]]]\n ,[52,\"__module_ccdEmOutboundClickActivity\",[13,[41,\"$0\"],[3,\"$0\",[51,\"\",[7"
+    ]
+  },
+  "route/letter/about": {
+    "gtagState": {
+      "hasGtag": true,
+      "dataLayerLen": 4,
+      "hasTagData": true,
+      "tagDataKeys": [
+        "tidr",
+        "xcd",
+        "uach_promise",
+        "ics",
+        "uach",
+        "gl"
+      ],
+      "formCount": 1,
+      "firstFieldId": "f-dateOfBirth"
+    },
+    "gaEventNamesAfterTyping": [
+      "page_view",
+      "form_start"
+    ],
+    "gaEventNamesAfterScroll": [
+      "page_view",
+      "form_start"
+    ],
+    "gaEventNamesFinal": [
+      "page_view",
+      "form_start",
+      "scroll"
+    ],
+    "allGaEvents": [
+      {
+        "en": "page_view",
+        "_et": null,
+        "dl": "https://myletterofintent.com/letter/about"
+      },
+      {
+        "en": "form_start",
+        "_et": "9717",
+        "dl": "https://myletterofintent.com/letter/about",
+        "ep.form_id": "",
+        "ep.form_destination": "https://myletterofintent.com/letter/about",
+        "epn.form_length": "7",
+        "ep.first_field_id": "f-diagnoses",
+        "ep.first_field_name": "diagnoses",
+        "epn.first_field_position": "2"
+      },
+      {
+        "en": null,
+        "_et": null,
+        "dl": "https://myletterofintent.com/letter/about"
+      },
+      {
+        "en": "scroll",
+        "_from": "post",
+        "epn.percent_scrolled": "90"
+      },
+      {
+        "en": "page_view",
+        "_from": "post"
+      }
+    ],
+    "gaRequestCount": 3,
+    "anyEpFirstField": true
+  },
+  "route/letter/medical": {
+    "gtagState": {
+      "hasGtag": true,
+      "dataLayerLen": 4,
+      "hasTagData": true,
+      "tagDataKeys": [
+        "tidr",
+        "xcd",
+        "uach_promise",
+        "ics",
+        "uach",
+        "gl"
+      ],
+      "formCount": 1,
+      "firstFieldId": "f-allergies"
+    },
+    "gaEventNamesAfterTyping": [
+      "page_view",
+      "form_start"
+    ],
+    "gaEventNamesAfterScroll": [
+      "page_view",
+      "form_start"
+    ],
+    "gaEventNamesFinal": [
+      "page_view",
+      "form_start",
+      "scroll"
+    ],
+    "allGaEvents": [
+      {
+        "en": "page_view",
+        "_et": null,
+        "dl": "https://myletterofintent.com/letter/medical"
+      },
+      {
+        "en": "form_start",
+        "_et": "9667",
+        "dl": "https://myletterofintent.com/letter/medical",
+        "ep.form_id": "",
+        "ep.form_destination": "https://myletterofintent.com/letter/medical",
+        "epn.form_length": "13",
+        "ep.first_field_id": "f-allergies",
+        "ep.first_field_name": "allergies",
+        "epn.first_field_position": "1"
+      },
+      {
+        "en": "scroll",
+        "_et": "5609",
+        "dl": "https://myletterofintent.com/letter/medical",
+        "epn.percent_scrolled": "90"
+      }
+    ],
+    "gaRequestCount": 3,
+    "anyEpFirstField": true
+  }
+}

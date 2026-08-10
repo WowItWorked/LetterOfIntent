@@ -1,0 +1,140 @@
+{
+  "forced_active": {
+    "firstLink": {
+      "label": "tab1",
+      "tag": "A",
+      "id": null,
+      "name": "Skip to main content",
+      "outlineStyle": "solid",
+      "outlineWidth": "3px",
+      "outlineColor": "rgb(55, 0, 110)",
+      "boxShadow": "none",
+      "borderColor": "rgb(0, 0, 159)",
+      "focusVisible": true
+    },
+    "firstField": {
+      "label": "tab23",
+      "tag": "INPUT",
+      "id": "f-authorName",
+      "name": "",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "outlineColor": "rgb(55, 0, 110)",
+      "boxShadow": "none",
+      "borderColor": "rgb(55, 0, 110)",
+      "focusVisible": true
+    },
+    "fieldUnfocused": {
+      "tag": "INPUT",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "outlineColor": "rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "borderColor": "rgb(0, 0, 0)"
+    },
+    "stopCount": 23
+  },
+  "forced_none": {
+    "firstLink": {
+      "label": "tab1",
+      "tag": "A",
+      "id": null,
+      "name": "Skip to main content",
+      "outlineStyle": "solid",
+      "outlineWidth": "3px",
+      "outlineColor": "oklab(0.85155 0.0119952 0.0494828)",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0",
+      "borderColor": "rgb(26, 34, 51)",
+      "focusVisible": true
+    },
+    "firstField": {
+      "label": "tab23",
+      "tag": "INPUT",
+      "id": "f-authorName",
+      "name": "",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "outlineColor": "oklab(0.85155 0.0119952 0.0494828)",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0",
+      "borderColor": "rgb(217, 185, 127)",
+      "focusVisible": true
+    },
+    "fieldUnfocused": {
+      "tag": "INPUT",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "outlineColor": "rgb(26, 34, 51)",
+      "boxShadow": "none",
+      "borderColor": "rgb(110, 120, 137)"
+    },
+    "stopCount": 23
+  },
+  "labelInName": {
+    "/": [
+      {
+        "tag": "BUTTON",
+        "visibleText": "WATCH",
+        "accessibleName": "Play the video: what a Letter of Intent is, and how the builder works"
+      }
+    ],
+    "/letter": [],
+    "/letter/getting-started": [],
+    "/letter/medical": [],
+    "/letter/review": [],
+    "/privacy": [],
+    "/your-data": []
+  },
+  "mobileReviewLinks": [
+    {
+      "text": "",
+      "insideDetails": true,
+      "insideFooter": false,
+      "insideNav": false,
+      "visible": true
+    },
+    {
+      "text": "Review & download →",
+      "insideDetails": false,
+      "insideFooter": false,
+      "insideNav": false,
+      "visible": false
+    }
+  ],
+  "mobileFooterHasReview": false,
+  "reminderValid": {
+    "btnBg": null,
+    "btnColor": null,
+    "calendarBtnText": null,
+    "calendarBtnBg": null
+  },
+  "readingLevel": {
+    "/": {
+      "words": 858,
+      "sentences": 53,
+      "avgWordsPerSentence": 16.2,
+      "fleschKincaidGrade": 6.8,
+      "fleschReadingEase": 75.2
+    },
+    "/letter/medical": {
+      "words": 265,
+      "sentences": 15,
+      "avgWordsPerSentence": 17.7,
+      "fleschKincaidGrade": 10.8,
+      "fleschReadingEase": 48.8
+    },
+    "/privacy": {
+      "words": 975,
+      "sentences": 56,
+      "avgWordsPerSentence": 17.4,
+      "fleschKincaidGrade": 7.8,
+      "fleschReadingEase": 70.1
+    },
+    "/letter/review": {
+      "words": 55,
+      "sentences": 5,
+      "avgWordsPerSentence": 11,
+      "fleschKincaidGrade": 6.1,
+      "fleschReadingEase": 71.1
+    }
+  }
+}

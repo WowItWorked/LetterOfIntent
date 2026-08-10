@@ -1,0 +1,107 @@
+{
+  "captureTopLevelKeys": [
+    "capturedAt",
+    "target",
+    "base",
+    "canaries",
+    "typedCanaryPrefix",
+    "routes",
+    "requestCount",
+    "uniqueHosts",
+    "requests",
+    "responses",
+    "cookies",
+    "storageByRoute"
+  ],
+  "requestCount": 431,
+  "responseCount": 420,
+  "uniqueHosts": [
+    "myletterofintent.com",
+    "static.cloudflareinsights.com",
+    "www.google-analytics.com",
+    "www.googletagmanager.com"
+  ],
+  "postDataCount": 0,
+  "hostsFromRequests": [
+    "myletterofintent.com",
+    "www.googletagmanager.com",
+    "static.cloudflareinsights.com",
+    "www.google-analytics.com"
+  ],
+  "requestsWithNoResponse": [
+    "https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496"
+  ],
+  "requestsWithNoResponseCount": 11,
+  "beaconRequestCount": 11,
+  "emailDecodeRequestCount": 11,
+  "emailDecodeResponses": [
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "cookies": [
+    {
+      "name": "_ga",
+      "domain": ".myletterofintent.com",
+      "secure": false,
+      "httpOnly": false,
+      "sameSite": "Lax",
+      "expires": 1820867112.867853,
+      "expiresISO": "2027-09-13T20:25:12.867Z"
+    },
+    {
+      "name": "_ga_90YXKXB5TC",
+      "domain": ".myletterofintent.com",
+      "secure": false,
+      "httpOnly": false,
+      "sameSite": "Lax",
+      "expires": 1820867112.867652,
+      "expiresISO": "2027-09-13T20:25:12.867Z"
+    }
+  ],
+  "canaryHitsInRequests": {
+    "ZQXCANARY": 0,
+    "ZQXTYPEDCANARY": 0,
+    "requestsCharLength": 199698
+  },
+  "canaryHitsInStorage": {
+    "ZQXCANARY": 72,
+    "ZQXTYPEDCANARY": 0
+  },
+  "gaEventNamesInCapture": [
+    "page_view"
+  ],
+  "referersAllEmpty": true,
+  "sampleRequestKeys": [
+    "phase",
+    "method",
+    "url",
+    "host",
+    "resourceType",
+    "headers",
+    "postData",
+    "isNavigation"
+  ],
+  "privacyProse": {
+    "words": 898,
+    "sentences": 55,
+    "avgWordsPerSentence": 16.33,
+    "avgSyllablesPerWord": 1.408,
+    "polysyllabicPct": 7,
+    "fleschReadingEase": 71.2,
+    "fleschKincaidGrade": 7.4,
+    "gunningFog": 9.3,
+    "smog": 9.2,
+    "sentencesOver25Words": 9
+  },
+  "privacyProseSample": "How your data works Everything you type stays on your device. We never see it, and it is never sent anywhere. One page, no legalese. Here is exactly how that works. Nothing is uploaded Your letter is written to this browser&#x27;s own storage. There is no server that receives it. No account, and no reading No sign-in anywhere. We count visits with Google Analytics to see how the tool is used and i",
+  "paraCount": 29
+}

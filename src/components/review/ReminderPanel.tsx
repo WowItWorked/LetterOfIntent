@@ -28,7 +28,7 @@ export function ReminderPanel() {
         background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 84%)",
       }}
     >
-      <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-gold400">
+      <p className="tw-engraved text-xs tracking-[0.15em] text-gold400">
         Option two · not switched on yet
       </p>
       <h3 className="mt-2 font-serif text-[1.375rem] font-semibold text-onink">
@@ -68,7 +68,10 @@ export function ReminderPanel() {
               setTried(false);
             }}
             aria-describedby="reminder-note"
-            className="min-h-[46px] min-w-0 flex-[1_1_200px] rounded-[var(--radius-sm)] border border-navy500 bg-white px-3.5 py-2.5 text-base text-ink focus:border-gold500 focus:outline-none focus:shadow-[0_0_0_3px_var(--focus-ring)]"
+            // No focus:outline-none — the global two-tone ring is the focus
+            // indicator, and this field sits on a navy panel where the old
+            // soft-gold shadow was the least visible of all.
+            className="min-h-[46px] min-w-0 flex-[1_1_200px] rounded-[var(--radius-sm)] border border-navy500 bg-white px-3.5 py-2.5 text-base text-ink focus:border-gold500"
           />
           <button
             type="submit"

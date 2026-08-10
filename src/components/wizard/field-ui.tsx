@@ -4,12 +4,25 @@ import type { ReactNode } from "react";
 import type { FieldErrors } from "react-hook-form";
 import { Disclosure } from "@/components/ui/Disclosure";
 
+/*
+ * No `focus:outline-none` here. Suppressing the outline and substituting a
+ * soft-gold box-shadow measured 1.58:1 against the white field — effectively
+ * invisible, and the single most-converged finding in the audit. The global
+ * :focus-visible rule in globals.css now draws a two-tone ring that works on
+ * every ground, so these fields only need to not fight it.
+ */
 export const inputClasses =
   "w-full min-h-11 rounded-[var(--radius-sm)] border border-control bg-surface px-3.5 py-2.5 " +
-  "text-base text-ink placeholder:text-faint focus:border-gold400 focus:outline-none " +
-  "focus:shadow-[0_0_0_3px_var(--focus-ring)]";
+  "text-base text-ink placeholder:text-faint focus:border-gold400";
 
-export const textareaClasses = `${inputClasses} resize-y leading-[1.7]`;
+/*
+ * Capped at the measure the design system already defines. Uncapped, the boxes
+ * where parents write the hardest prose in the document ran to 105 characters
+ * a line on a wide screen — well past the 45–75 that sustained reading wants,
+ * and worst exactly where the writing is most difficult. The box stays as wide
+ * as the column; only the text is bounded.
+ */
+export const textareaClasses = `${inputClasses} resize-y leading-[1.7] max-w-[70ch]`;
 
 /** Digs a message out of RHF's (possibly nested) error object. */
 export function errMessage(

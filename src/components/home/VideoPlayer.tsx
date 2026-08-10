@@ -234,7 +234,7 @@ export function VideoPlayer() {
                 }}
               />
             </span>
-            <span className="tw-engraved text-[10px] tracking-[0.16em] text-gold300">
+            <span className="tw-engraved text-xs tracking-[0.16em] text-gold300">
               Preparing to scrub
             </span>
           </div>

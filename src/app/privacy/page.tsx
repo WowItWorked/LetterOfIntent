@@ -102,7 +102,7 @@ export default function PrivacyPage() {
         ].map(([title, body]) => (
           <div key={title} className="tw-card" style={{ boxShadow: "var(--shadow-xs)" }}>
             <div className="px-[22px] pb-[22px] pt-5">
-              <p className="tw-engraved text-[0.6875rem] tracking-[0.2em] text-accent">
+              <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
                 {title}
               </p>
               <p className="mt-2 text-[0.9375rem] leading-[1.7] text-body">{body}</p>
@@ -116,7 +116,7 @@ export default function PrivacyPage() {
         aria-label="On this page"
         className="mt-[30px] rounded-[var(--radius-md)] border border-line bg-paper2 px-[22px] py-[18px]"
       >
-        <p className="tw-engraved mb-3 text-[0.6875rem] tracking-[0.2em] text-accent">
+        <p className="tw-engraved mb-3 text-xs tracking-[0.15em] text-accent">
           On this page
         </p>
         <ol
@@ -129,7 +129,7 @@ export default function PrivacyPage() {
                 href={`#${id}`}
                 className="flex min-h-8 items-baseline gap-2.5 text-[0.9375rem] text-body hover:text-gold700"
               >
-                <span className="tw-engraved text-[0.6875rem] text-accent">
+                <span className="tw-engraved text-xs text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>{" "}
                 {label}
@@ -167,7 +167,7 @@ export default function PrivacyPage() {
             <p className="font-serif text-[1.375rem] leading-[1.3] text-ink">
               Your work stays here
             </p>
-            <p className="mt-2.5 text-[0.9375rem] leading-[1.75]">
+            <p className="mt-2.5 text-[0.9375rem] leading-[1.7]">
               Another computer or phone will not see it unless you move it there yourself
               with a backup file.
             </p>
@@ -176,7 +176,7 @@ export default function PrivacyPage() {
             <p className="font-serif text-[1.375rem] leading-[1.3] text-ink">
               Clearing browser data erases it
             </p>
-            <p className="mt-2.5 text-[0.9375rem] leading-[1.75]">
+            <p className="mt-2.5 text-[0.9375rem] leading-[1.7]">
               If you or a cleanup tool clear this site&rsquo;s data, the letter is gone.{" "}
               <Link href="/your-data" className="underline underline-offset-[3px]">
                 Download a backup
@@ -188,7 +188,7 @@ export default function PrivacyPage() {
             <p className="font-serif text-[1.375rem] leading-[1.3] text-ink">
               On a shared computer
             </p>
-            <p className="mt-2.5 text-[0.9375rem] leading-[1.75]">
+            <p className="mt-2.5 text-[0.9375rem] leading-[1.7]">
               At a library or on a family machine, use{" "}
               <Link href="/your-data" className="underline underline-offset-[3px]">
                 Delete all my data
@@ -243,7 +243,7 @@ export default function PrivacyPage() {
           or records your screen. Analytics counts that a page was opened, never what was
           written on it.
         </Callout>
-        <p className="mt-5 max-w-[72ch] text-[0.9375rem] leading-[1.75] text-muted">
+        <p className="mt-5 max-w-[72ch] text-[0.9375rem] leading-[1.7] text-muted">
           If you would rather not be counted at all, Google&rsquo;s own{" "}
           <a
             href={GA_OPT_OUT_URL}
@@ -277,7 +277,7 @@ export default function PrivacyPage() {
           today. When it does run, this page will say so first, and the only thing sent
           will be your email address and the date — never a word of your letter.
         </Callout>
-        <p className="mt-[22px] max-w-[72ch] text-[0.9375rem] leading-[1.75] text-muted">
+        <p className="mt-[22px] max-w-[72ch] text-[0.9375rem] leading-[1.7] text-muted">
           The two calendar links we offer beside the file, Google Calendar and Outlook,
           open those services with the reminder pre-filled. Only the event&rsquo;s title
           and date travel there, and only if you click them. Their own privacy terms apply
@@ -292,7 +292,7 @@ export default function PrivacyPage() {
         <SectionHead n="06" title="The legal fine print, plainly" />
         <p className={para}>{firm.disclaimerFull}</p>
         {firm.advertisingNotice ? (
-          <p className="mt-5 max-w-[72ch] rounded-[var(--radius-sm)] border border-line bg-paper2 px-5 py-4 text-[0.9375rem] leading-[1.75] text-muted">
+          <p className="mt-5 max-w-[72ch] rounded-[var(--radius-sm)] border border-line bg-paper2 px-5 py-4 text-[0.9375rem] leading-[1.7] text-muted">
             {firm.advertisingNotice}
           </p>
         ) : null}
@@ -309,7 +309,7 @@ export default function PrivacyPage() {
             <h2 className="mt-2 font-serif text-[1.75rem] font-semibold text-ink">
               Ask a person, not a form.
             </h2>
-            <p className="mt-2.5 max-w-[60ch] leading-[1.75]">
+            <p className="mt-2.5 max-w-[60ch] leading-[1.7]">
               Call {firm.name} at{" "}
               <a href={firm.phoneHref} className="underline underline-offset-[3px]">
                 {firm.phone}

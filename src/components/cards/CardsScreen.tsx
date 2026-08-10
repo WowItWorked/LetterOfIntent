@@ -9,7 +9,13 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { BUNDLES, CARD_KEYS, type CardBundle, type CardKey } from "@/lib/content/cards";
+import {
+  BUNDLES,
+  CARD_KEYS,
+  INDEX_CARD,
+  type CardBundle,
+  type CardKey,
+} from "@/lib/content/cards";
 import { DEFAULT_PATH } from "@/lib/content/paths";
 import { deriveCard } from "@/lib/cards/derive";
 import { captureCardPng } from "@/lib/cards/capture";
@@ -175,6 +181,9 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
   };
 
   const jobCount = allMeasured ? buildJobs().length : 0;
+  // Every download also carries the static Which Cards To Send index card, so
+  // the file count the button promises includes it.
+  const totalCount = jobCount > 0 ? jobCount + 1 : 0;
 
   // Mount one page at scale 1, wait for layout, hand its frame to capture.
   useEffect(() => {
@@ -207,20 +216,26 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
     if (jobs.length === 0 || busy) return;
     setBusy(true);
     setError(null);
+    // The static index card rides along with every set, so the running count
+    // the family watches includes it.
+    const total = jobs.length + 1;
     try {
       // Sequential on purpose — the review page's multi-download pattern.
       for (let i = 0; i < jobs.length; i++) {
-        setProgress(`Preparing card ${i + 1} of ${jobs.length}…`);
+        setProgress(`Preparing card ${i + 1} of ${total}…`);
         const frame = await renderForCapture(jobs[i].card);
         const png = await captureCardPng(frame);
         // PNG only, never JPEG — 39px type keeps its edges.
         triggerDownload(jobs[i].filename, png, "image/png");
       }
-      setProgress(
-        jobs.length === 1
-          ? "Your card is in your downloads folder."
-          : `All ${jobs.length} cards are in your downloads folder.`
-      );
+      // The Which Cards To Send index card, last so the topic cards a family
+      // is waiting on land first. A fixed asset fetched from this site's own
+      // public folder: same-origin, no family data in the request.
+      setProgress(`Preparing card ${total} of ${total}…`);
+      const res = await fetch(INDEX_CARD.asset);
+      if (!res.ok) throw new Error(`index card fetch failed: ${res.status}`);
+      triggerDownload(cardFilename(INDEX_CARD.title), await res.blob(), "image/png");
+      setProgress(`All ${total} cards are in your downloads folder.`);
     } catch (e) {
       console.error(e);
       setProgress("");
@@ -447,8 +462,10 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
             </h2>
             <p className="mt-3 max-w-[70ch] leading-[1.7]">
               PNG images, one file per card. A card that runs long arrives as numbered
-              continuations, just like the preview. They are drawn on this device and go
-              straight to your downloads folder: nothing is uploaded.
+              continuations, just like the preview. Every set also includes the Which
+              Cards To Send index card, the guide to which cards fit which hand-off.
+              They are drawn on this device and go straight to your downloads folder:
+              nothing is uploaded.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-4">
               <Button
@@ -458,8 +475,8 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
               >
                 {busy
                   ? "Preparing your cards…"
-                  : jobCount > 0
-                    ? `Download ${jobCount} ${jobCount === 1 ? "card" : "cards"}`
+                  : totalCount > 0
+                    ? `Download ${totalCount} cards`
                     : "Download"}
               </Button>
               <span className="text-[0.9375rem] text-muted">

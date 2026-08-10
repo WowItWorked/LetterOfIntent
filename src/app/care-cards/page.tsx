@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { BUNDLES, type CardKey } from "@/lib/content/cards";
+import { BUNDLES, INDEX_CARD, type CardKey } from "@/lib/content/cards";
 import { CardsScreen } from "@/components/cards/CardsScreen";
 import { buttonClasses, buttonStyle } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -120,47 +121,82 @@ export default function CareCardsPage() {
             &mdash; Emergency Protocol.png, so the camera roll stays legible.
           </p>
 
-          <ul
-            className="mt-7 list-none divide-y divide-line overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface p-0"
+          {/* One box holding both: the bundle rows on the left, and on the
+              right the static Which Cards To Send index card — the same list
+              in card form, shipped in every download. The real PNG is shown
+              rather than a re-rendering that could drift from what actually
+              downloads. */}
+          <div
+            className="mt-7 overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface"
             style={{ boxShadow: "var(--shadow-sm)" }}
           >
-            {BUNDLES.map((bundle) => (
-              <li
-                key={bundle.name}
-                className="flex flex-col gap-3 px-[clamp(20px,3vw,34px)] py-6 sm:grid sm:gap-x-8"
-                style={{ gridTemplateColumns: "minmax(170px, 230px) 1fr" }}
-              >
-                <div>
-                  <span className="block font-serif text-[1.375rem] font-semibold text-ink">
-                    {bundle.name}
-                  </span>
-                  <span className="mt-1 block text-[0.9375rem] text-muted">
-                    {bundle.cards.length} cards
-                  </span>
-                </div>
-                <div className="min-w-0">
-                  <span className="flex flex-wrap gap-2">
-                    {bundle.cards.map((k) => (
-                      <span
-                        key={k}
-                        className="inline-flex items-center gap-2 rounded-full border border-line bg-paper2 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-ink"
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="size-2.5 flex-none rounded-[2px]"
-                          style={{ background: `var(--card-${k})` }}
-                        />
-                        {CHIP_LABELS[k]}
+            <div className="grid lg:grid-cols-[1fr_minmax(300px,360px)]">
+              {/* Two-column rows (name beside chips) keep the list compact, so
+                  the box stays close to the height of the card it holds. */}
+              <ul className="m-0 list-none divide-y divide-line p-0">
+                {BUNDLES.map((bundle) => (
+                  <li
+                    key={bundle.name}
+                    className="flex flex-col gap-3 px-[clamp(20px,3vw,34px)] py-5 sm:grid sm:gap-x-7"
+                    style={{ gridTemplateColumns: "minmax(150px, 200px) 1fr" }}
+                  >
+                    <div>
+                      <span className="block font-serif text-[1.375rem] font-semibold text-ink">
+                        {bundle.name}
                       </span>
-                    ))}
+                      <span className="mt-1 block text-[0.9375rem] text-muted">
+                        {bundle.cards.length} cards
+                      </span>
+                    </div>
+                    <div className="min-w-0">
+                      <span className="flex flex-wrap gap-2">
+                        {bundle.cards.map((k) => (
+                          <span
+                            key={k}
+                            className="inline-flex items-center gap-2 rounded-full border border-line bg-paper2 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-ink"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="size-2.5 flex-none rounded-[2px]"
+                              style={{ background: `var(--card-${k})` }}
+                            />
+                            {CHIP_LABELS[k]}
+                          </span>
+                        ))}
+                      </span>
+                      <span className="mt-3 block text-[0.9375rem] leading-[1.6] text-muted">
+                        {bundle.note}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* The card forms the column's top and sides — flush against the
+                  box edges, its corners clipped by the box's own rounding —
+                  with the remaining ground below reserved for the caption. */}
+              <figure className="m-0 flex flex-col border-t border-line bg-paper2 lg:border-l lg:border-t-0">
+                <Image
+                  src={INDEX_CARD.asset}
+                  alt={
+                    "The Which Cards To Send index card: the five bundles beside " +
+                    "it in card form, one row per hand-off with the color chips " +
+                    "of the cards to send."
+                  }
+                  width={1080}
+                  height={1920}
+                  className="w-full border-b border-line"
+                />
+                <figcaption className="flex flex-1 items-center justify-center px-[clamp(20px,3vw,34px)] py-6">
+                  <span className="max-w-[40ch] text-center text-[0.9375rem] leading-[1.6] text-muted">
+                    The eighth card, included in every download: this list in card
+                    form, the same for every family, so the guide rides in the album
+                    next to the cards themselves.
                   </span>
-                  <span className="mt-3 block text-[0.9375rem] leading-[1.6] text-muted">
-                    {bundle.note}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
         </div>
 
         {/* Make yours: renders only when the visitor's letter can actually

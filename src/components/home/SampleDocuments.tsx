@@ -1,20 +1,20 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { LetterPath } from "@/lib/schema";
 import { samplesForPath } from "@/lib/content/samples";
+import { DeliverableArt } from "@/components/home/DeliverableArt";
 
 /**
- * The two example documents, inside an option card.
- *
- * Families ask "what do I actually get at the end of this?" before anything
- * else, and a list of section names does not answer it. Page one of each real
- * document does — watermarked, so nobody mistakes the example for their own
- * letter.
+ * A sample-document card for the chooser: the brand-drawn letter vignette
+ * (nothing legible, no sample-family name to hide), the navy Open-sample
+ * affordance bar, and the registry's own serif title and subtitle beside it.
  *
  * These link to /samples/<slug> rather than straight at the .pdf. Whether a
  * browser opens a PDF or drops it in the downloads folder is a per-browser
- * setting; the viewer draws it on the page instead, so "see a sample" always
+ * setting; the viewer draws it on the page instead, so a sample link always
  * shows a sample. The PDF itself is a button away once you are there.
+ *
+ * The caller owns the strip's "See Samples" label — this component rendering
+ * its own put the same engraved words above every column.
  */
 export function SampleDocuments({
   path,
@@ -33,49 +33,22 @@ export function SampleDocuments({
   );
 
   return (
-    <div className="mt-6 border-t border-line pt-5">
-      <p className="tw-engraved text-xs tracking-[0.15em] text-accent">
-        See a sample
-      </p>
-
-      {/* A lone sample spans the full column so its edges line up with the
-          option card above it; a pair splits the column as before. */}
-      <ul
-        className={`mt-3 grid list-none gap-3.5 p-0 ${
-          samples.length === 1 ? "grid-cols-1" : "grid-cols-2"
-        }`}
-      >
-        {samples.map((s) => (
-          <li key={s.slug}>
-            <Link
-              href={`/samples/${s.slug}`}
-              className="group block rounded-[var(--radius-sm)] focus-visible:outline-offset-4"
-            >
-              <span
-                className="relative block overflow-hidden rounded-[var(--radius-sm)] border border-line bg-white transition-[transform,box-shadow,border-color] duration-[var(--dur-base)] group-hover:-translate-y-[3px] group-hover:border-gold400 motion-reduce:transform-none motion-reduce:transition-none"
-                style={{ aspectRatio: "16 / 11", boxShadow: "var(--shadow-xs)" }}
-              >
-                <Image
-                  src={s.thumb}
-                  alt={s.alt}
-                  fill
-                  sizes="(max-width: 700px) 45vw, 200px"
-                  // A landscape crop of the top of page one. The whole page at
-                  // this size is a block of grey noise — nobody can read 9pt
-                  // body copy at 200px wide, so all it contributes is clutter.
-                  // The masthead, the title, and the name are legible, and they
-                  // are what tells you which document you are looking at.
-                  className="object-cover object-top"
-                />
-                {/*
-                  A solid light-blue bar rather than a fade: the crop ends
-                  right where the sample family's name begins, and the bar
-                  covers it — a sample should advertise the document, not a
-                  name. It also carries the permanent "Open sample" affordance
-                  that used to sit under the tile.
-                */}
+    <ul className="grid list-none grid-cols-1 gap-3.5 p-0">
+      {samples.map((s) => (
+        <li key={s.slug}>
+          <Link
+            href={`/samples/${s.slug}`}
+            className="group block overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface transition-[transform,box-shadow,border-color] duration-[var(--dur-base)] hover:-translate-y-[3px] hover:border-gold400 focus-visible:outline-offset-4 motion-reduce:transform-none motion-reduce:transition-none"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+          >
+            <span className="block h-[3px]" style={{ background: "var(--gradient-gold)" }} />
+            <span className="flex flex-col sm:flex-row">
+              <span className="relative flex aspect-[16/10] flex-none flex-col overflow-hidden border-b border-line sm:aspect-auto sm:w-[44%] sm:border-b-0 sm:border-r">
+                <span className="min-h-0 flex-1">
+                  <DeliverableArt kind="letter" />
+                </span>
                 <span
-                  className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-onink"
+                  className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-onink"
                   style={{ background: "var(--navy-800)" }}
                 >
                   Open sample
@@ -90,30 +63,22 @@ export function SampleDocuments({
                     <path d="M7 17 17 7M9 7h8v8" />
                   </svg>
                 </span>
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 bg-[rgba(22,34,58,0.78)] text-xs font-semibold uppercase tracking-[0.14em] text-onink opacity-0 transition-opacity duration-[var(--dur-base)] group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
-                >
-                  View sample
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="size-3 fill-none stroke-current"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M7 17 17 7M9 7h8v8" />
-                  </svg>
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col justify-center px-6 py-5">
+                <span className="tw-engraved text-xs tracking-[0.15em] text-accent">
+                  {s.detail}
+                </span>
+                <span className="mt-1.5 block font-serif text-[1.375rem] font-semibold leading-snug text-ink group-hover:text-gold700">
+                  {s.label}
+                </span>
+                <span className="mt-2 block text-[0.9375rem] leading-[1.65] text-body">
+                  {s.subtitle}
                 </span>
               </span>
-
-              <span className="mt-2 block text-[0.8125rem] font-semibold leading-tight text-ink group-hover:text-gold700">
-                {s.label}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

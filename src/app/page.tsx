@@ -4,6 +4,7 @@ import { buttonClasses } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { VideoPlayer } from "@/components/home/VideoPlayer";
+import { DeliverableArt } from "@/components/home/DeliverableArt";
 import { ShareCard } from "@/components/share/ShareCard";
 import { PadlockIcon } from "@/components/ui/PadlockIcon";
 
@@ -35,7 +36,7 @@ const ANCHOR_OFFSET =
  */
 const PROCESS = [
   {
-    numeral: "I",
+    numeral: "A.",
     title: "Pick your letter",
     bullets: [
       "One written for disabilities and special needs",
@@ -44,7 +45,7 @@ const PROCESS = [
     ],
   },
   {
-    numeral: "II",
+    numeral: "B.",
     title: "Fill out the form",
     bullets: [
       "Short sections, every question optional",
@@ -53,7 +54,7 @@ const PROCESS = [
     ],
   },
   {
-    numeral: "III",
+    numeral: "C.",
     title: "Download all four",
     bullets: [
       "The Letter of Intent",
@@ -64,7 +65,7 @@ const PROCESS = [
     ],
   },
   {
-    numeral: "IV",
+    numeral: "D.",
     title: "Hand them to the right people",
     bullets: [
       "The letter goes to the trustee, the guardian, the sibling who steps in",
@@ -107,93 +108,6 @@ const DELIVERABLES = [
   },
 ];
 
-/**
- * Calm, brand-drawn stands-ins for the three deliverables: shapes and the
- * house palette only, nothing legible. Decorative — each tile's heading and
- * blurb carry the meaning, so the art is hidden from assistive tech.
- */
-function DeliverableArt({ kind }: { kind: "letter" | "sheet" | "cards" }) {
-  if (kind === "letter") {
-    return (
-      <div aria-hidden="true" className="flex h-full items-center justify-center bg-paper2">
-        <div
-          className="w-[44%] rounded-[6px] border border-line bg-white px-[6%] py-[7%]"
-          style={{ boxShadow: "var(--shadow-md)", aspectRatio: "8.5 / 11" }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/emblem-envelope.png" alt="" className="mx-auto w-[46%]" />
-          <div
-            className="mx-auto mt-[8%] h-[3px] w-[54%]"
-            style={{ background: "var(--gradient-gold)" }}
-          />
-          <div className="mx-auto mt-[7%] h-[5px] w-[72%] rounded-full bg-line" />
-          <div className="mx-auto mt-[5%] h-[5px] w-[62%] rounded-full bg-line" />
-        </div>
-      </div>
-    );
-  }
-  if (kind === "sheet") {
-    return (
-      <div aria-hidden="true" className="flex h-full items-center justify-center bg-paper2">
-        <div
-          className="w-[52%] overflow-hidden rounded-[6px] border border-line bg-white"
-          style={{ boxShadow: "var(--shadow-md)", aspectRatio: "11 / 8.5" }}
-        >
-          <div className="h-[22%] bg-navy800" />
-          <div className="grid grid-cols-2 gap-[6%] p-[7%]">
-            <div>
-              <div className="h-[5px] w-[85%] rounded-full bg-line" />
-              <div className="mt-[9%] h-[5px] w-[70%] rounded-full bg-line" />
-            </div>
-            <div>
-              <div className="h-[5px] w-[80%] rounded-full bg-line" />
-              <div className="mt-[9%] h-[5px] w-[65%] rounded-full bg-line" />
-            </div>
-            <div
-              className="col-span-2 rounded-[4px] px-[4%] py-[3.5%]"
-              style={{ background: "var(--danger-bg, #f7e9e9)" }}
-            >
-              <div
-                className="h-[5px] w-[46%] rounded-full"
-                style={{ background: "var(--card-emergency)", opacity: 0.55 }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div aria-hidden="true" className="relative h-full bg-paper2">
-      {(
-        [
-          ["var(--card-identity)", "-14%", "rotate(-8deg)"],
-          ["var(--card-meds)", "14%", "rotate(8deg)"],
-          ["var(--card-emergency)", "0%", "none"],
-        ] as const
-      ).map(([color, shift, rotate]) => (
-        <div
-          key={color}
-          className="absolute left-1/2 top-1/2 w-[26%] overflow-hidden rounded-[7px] border border-line bg-white"
-          style={{
-            aspectRatio: "9 / 16",
-            transform: `translate(calc(-50% + ${shift === "0%" ? "0px" : shift}), -50%) ${
-              rotate === "none" ? "" : rotate
-            }`,
-            boxShadow: "var(--shadow-md)",
-          }}
-        >
-          <div className="h-[30%]" style={{ background: color }} />
-          <div className="p-[10%]">
-            <div className="h-[4px] w-[80%] rounded-full bg-line" />
-            <div className="mt-[12%] h-[4px] w-[62%] rounded-full bg-line" />
-            <div className="mt-[12%] h-[4px] w-[72%] rounded-full bg-line" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 const WHO_NEEDS_IT = [
   "A parent in your support group who keeps meaning to start",
@@ -264,7 +178,7 @@ export default function HomePage() {
               Start your letter · it&rsquo;s free
             </Link>
 
-            <div className="grid w-full grid-cols-1 gap-3.5 sm:grid-cols-3">
+            <div className="grid w-full grid-cols-1 gap-3.5 sm:grid-cols-2">
               <Link
                 href="#what-you-get"
                 className={buttonClasses("outlineOnInk", "w-full gap-2.5 tracking-[0.06em]")}
@@ -283,22 +197,6 @@ export default function HomePage() {
                 See samples
               </Link>
               <Link
-                href="#the-process"
-                className={buttonClasses("outlineOnInk", "w-full gap-2.5 tracking-[0.06em]")}
-              >
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  className="size-4 flex-none fill-none stroke-current"
-                  strokeWidth={1.7}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 6h.01M5 12h.01M5 18h.01M9.5 6H19M9.5 12H19M9.5 18H19" />
-                </svg>
-                The process
-              </Link>
-              <Link
                 href="#what-it-is"
                 className={buttonClasses("outlineOnInk", "w-full gap-2.5 tracking-[0.06em]")}
               >
@@ -313,7 +211,7 @@ export default function HomePage() {
                   <circle cx="12" cy="12" r="9" />
                   <path d="m10 8.5 5.5 3.5L10 15.5V8.5Z" />
                 </svg>
-                Learn more
+                Watch &amp; learn more
               </Link>
             </div>
           </div>

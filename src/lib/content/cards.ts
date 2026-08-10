@@ -504,6 +504,23 @@ export const PRIORITY_ORDER: Record<CardKey, readonly string[]> = {
   care: ["user_order"],
 };
 
+/* --------------------------------------------------------------- index card */
+
+/**
+ * The eighth card in every pack: "Which Cards To Send", the bundle guide in
+ * card form. The seven topic cards are for the caregiver; this one is for the
+ * parent. It is a fixed asset, not a derived card — it carries no name, no
+ * age, and no date, so the same PNG ships unchanged in every family's
+ * download and never needs rendering.
+ */
+export const INDEX_CARD = {
+  title: "Which Cards To Send",
+  /** Static asset under public/; served same-origin, nothing leaves the device. */
+  asset: "/cards/which-cards-to-send.png",
+  /** Navy spine color from the design export (the "bundles" topic). */
+  color: "#253551",
+} as const;
+
 /* ------------------------------------------------------------------ bundles */
 
 export interface CardBundle {

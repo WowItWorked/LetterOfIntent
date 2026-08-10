@@ -54,8 +54,11 @@ test("a downloaded card is a real PNG named for the person — the deliberate in
   await page.getByRole("button", { name: /individual cards/i }).click();
   await page.getByRole("checkbox", { name: /identity & contacts/i }).check();
 
+  const names: string[] = [];
+  page.on("download", (d) => names.push(d.suggestedFilename()));
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: /download 1 card/i }).click();
+  // One picked card + the always-included Which Cards To Send index = 2 files.
+  await page.getByRole("button", { name: /download 2 cards/i }).click();
   const download = await downloadPromise;
 
   /**
@@ -65,6 +68,11 @@ test("a downloaded card is a real PNG named for the person — the deliberate in
    * FULL_LETTER is about "Alex", and the filename SHOULD contain Alex.
    */
   expect(download.suggestedFilename()).toBe("Alex — Identity & Contacts.png");
+
+  // The static index card rides along, name-free: its face carries no name,
+  // so (by the same rule) neither does its filename.
+  await expect.poll(() => names.length, { timeout: 90_000 }).toBeGreaterThanOrEqual(2);
+  expect(names).toContain("Which Cards To Send.png");
 
   // PNG only, never JPEG: check the actual bytes, not just the extension.
   const file = testInfo.outputPath("identity-card.png");
@@ -87,20 +95,23 @@ test("a bundle downloads one PNG per card, every filename patterned the same way
   const names: string[] = [];
   page.on("download", (d) => names.push(d.suggestedFilename()));
   // Quick trip = identity + emergency + behavior, all single-page with
-  // FULL_LETTER, so exactly three files.
-  await page.getByRole("button", { name: /download 3 cards/i }).click();
-  await expect.poll(() => names.length, { timeout: 90_000 }).toBeGreaterThanOrEqual(3);
+  // FULL_LETTER, plus the always-included index card: exactly four files.
+  await page.getByRole("button", { name: /download 4 cards/i }).click();
+  await expect.poll(() => names.length, { timeout: 90_000 }).toBeGreaterThanOrEqual(4);
 
   expect(names).toEqual(
     expect.arrayContaining([
       "Alex — Identity & Contacts.png",
       "Alex — Emergency Protocol.png",
       "Alex — Behavior & Communication.png",
+      "Which Cards To Send.png",
     ])
   );
-  // "{Preferred name} — {Card title}.png", continuations "… 2 of 3.png".
+  // "{Preferred name} — {Card title}.png", continuations "… 2 of 3.png" —
+  // except the static index card, whose nameless face keeps its filename
+  // nameless too.
   for (const n of names) {
-    expect(n).toMatch(/^Alex — [A-Za-z&' ]+( \d+ of \d+)?\.png$/);
+    expect(n).toMatch(/^(Alex — [A-Za-z&' ]+( \d+ of \d+)?|Which Cards To Send)\.png$/);
   }
 });
 

@@ -122,19 +122,23 @@ export function PathChooser() {
         </div>
 
         {/*
-          Watermarked page-one samples, one pair per path, aligned under the
-          option cards. They moved here from the home page: the moment someone
-          is choosing a letter is the moment "what do I actually get?" needs
-          answering. The option cards are buttons, so the sample links live
-          outside them — nested interactive controls are an axe violation.
+          One sample card per path, aligned under the option cards. They moved
+          here from the home page: the moment someone is choosing a letter is
+          the moment "what do I actually get?" needs answering. The option
+          cards are buttons, so the sample links live outside them — nested
+          interactive controls are an axe violation. One shared label, not one
+          per column: the same engraved words twice in a row read as an error.
         */}
-        <div
-          className="grid gap-x-7"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))" }}
-        >
-          {LETTER_PATHS.map((p) => (
-            <SampleDocuments key={p.id} path={p.id} letterOnly />
-          ))}
+        <div className="mt-6 border-t border-line pt-5">
+          <p className="tw-engraved text-xs tracking-[0.15em] text-accent">See Samples</p>
+          <div
+            className="mt-3 grid gap-x-7 gap-y-3.5"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))" }}
+          >
+            {LETTER_PATHS.map((p) => (
+              <SampleDocuments key={p.id} path={p.id} letterOnly />
+            ))}
+          </div>
         </div>
       </section>
 

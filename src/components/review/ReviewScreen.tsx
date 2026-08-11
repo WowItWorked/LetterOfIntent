@@ -129,8 +129,8 @@ export function ReviewScreen() {
     <Shell
       lead={
         count === total
-          ? `Every section has notes. All three files are created right here on your device: nothing is uploaded.`
-          : `${count} of ${total} sections have notes so far, which is already worth printing. All three files are created right here on your device: nothing is uploaded.`
+          ? `Every section has notes. Every file in your set is created right here on your device: nothing is uploaded.`
+          : `${count} of ${total} sections have notes so far, which is already worth printing. Every file in your set is created right here on your device: nothing is uploaded.`
       }
     >
       <div aria-live="assertive">

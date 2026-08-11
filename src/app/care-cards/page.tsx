@@ -99,7 +99,7 @@ export default function CareCardsPage() {
               </p>
             </HomeCareCards>
             <p className="mx-auto mt-4 max-w-[64ch] text-center text-[0.9375rem] leading-[1.6] text-muted">
-              Shown filled in for Bonnie, the same example family as the sample
+              Shown filled in for Danny, the same example family as the sample
               documents (invented details, not a real person).
             </p>
           </div>

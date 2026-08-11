@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import fs from "node:fs";
-import { FULL_LETTER, seedLetter } from "./fixture";
+import { FULL_LETTER, LETTER_KEY, persistedState, seedLetter } from "./fixture";
 
 /**
  * Loading a backup is the one place a family can lose work, so every branch
@@ -293,4 +293,32 @@ test("the sample documents still render watermarked, drawn in the page", async (
   await page.goto("/samples/letter-of-intent-disabilities");
   await expect(page.locator("canvas").first()).toBeVisible({ timeout: 60_000 });
   expect(downloads).toEqual([]);
+});
+
+test("opening samples leaves the visitor's own letter byte-identical", async ({
+  page,
+}) => {
+  // A visitor mid-letter browses the samples: generation must be strictly
+  // read-only. The init script re-seeds on navigation, so the assertion reads
+  // localStorage AFTER each sample finishes drawing — any write the viewer
+  // made after load would show up here.
+  await seedLetter(page, FULL_LETTER);
+  const expected = persistedState(FULL_LETTER);
+
+  for (const slug of [
+    "letter-of-intent-disabilities", // Ruiz trustee letter
+    "emergency-sheet-anyone", // Hale sheet — the other family and kind
+  ]) {
+    await page.goto(`/samples/${slug}`);
+    // Wait for the full document, not just the first page: the completion
+    // note only appears once every page has been drawn.
+    await expect(page.getByText(/generated on your device/i)).toBeVisible({
+      timeout: 60_000,
+    });
+    const stored = await page.evaluate(
+      (key) => window.localStorage.getItem(key),
+      LETTER_KEY
+    );
+    expect(stored, slug).toBe(expected);
+  }
 });

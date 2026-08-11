@@ -74,18 +74,20 @@ async function loadPhoto(
  */
 export async function generateLetterPdfBlob(
   data: LetterData,
-  meta: LetterMeta = {}
+  meta: LetterMeta = {},
+  opts: { watermark?: boolean } = {}
 ): Promise<Blob> {
   const [logo, appLogo, familyPhoto] = await Promise.all([
     loadLogo(firm.logoPath),
     loadLogo(firm.appLogoPath),
-    loadPhoto("family"),
+    opts.watermark ? Promise.resolve(undefined) : loadPhoto("family"),
   ]);
   const registry: Record<string, number> = {};
   await pdf(
     <LoiDocument
       data={data}
       meta={meta}
+      watermark={opts.watermark}
       logo={logo}
       appLogo={appLogo}
       familyPhoto={familyPhoto}
@@ -97,6 +99,7 @@ export async function generateLetterPdfBlob(
     <LoiDocument
       data={data}
       meta={meta}
+      watermark={opts.watermark}
       logo={logo}
       appLogo={appLogo}
       familyPhoto={familyPhoto}
@@ -112,17 +115,19 @@ export async function generateLetterPdfBlob(
  */
 export async function generateCaregiverPdfBlob(
   data: LetterData,
-  meta: LetterMeta = {}
+  meta: LetterMeta = {},
+  opts: { watermark?: boolean } = {}
 ): Promise<Blob> {
   const [appLogo, familyPhoto] = await Promise.all([
     loadLogo(firm.appLogoPath),
-    loadPhoto("family"),
+    opts.watermark ? Promise.resolve(undefined) : loadPhoto("family"),
   ]);
   const registry: Record<string, number> = {};
   await pdf(
     <CaregiverDocument
       data={data}
       meta={meta}
+      watermark={opts.watermark}
       appLogo={appLogo}
       familyPhoto={familyPhoto}
       registry={registry}
@@ -133,6 +138,7 @@ export async function generateCaregiverPdfBlob(
     <CaregiverDocument
       data={data}
       meta={meta}
+      watermark={opts.watermark}
       appLogo={appLogo}
       familyPhoto={familyPhoto}
       registry={null}
@@ -141,14 +147,43 @@ export async function generateCaregiverPdfBlob(
   ).toBlob();
 }
 
-export async function generateEmergencyPdfBlob(data: LetterData): Promise<Blob> {
+export async function generateEmergencyPdfBlob(
+  data: LetterData,
+  opts: { watermark?: boolean } = {}
+): Promise<Blob> {
   const [appLogo, photo] = await Promise.all([
     loadLogo(firm.appLogoPath),
-    loadPhoto("recent"),
+    opts.watermark ? Promise.resolve(undefined) : loadPhoto("recent"),
   ]);
   return pdf(
-    <EmergencyDocument info={emergencyInfo(data)} appLogo={appLogo} photo={photo} />
+    <EmergencyDocument
+      info={emergencyInfo(data)}
+      appLogo={appLogo}
+      photo={photo}
+      watermark={opts.watermark}
+    />
   ).toBlob();
+}
+
+/**
+ * A sample document, generated live from a fixture family — never from the
+ * visitor's own letter, never touching the store, and always watermarked.
+ * The fixtures cannot go stale: they are LetterData, so they ride every
+ * schema change through the same pipeline a real letter does.
+ */
+export async function generateSamplePdfBlob(
+  kind: "letter" | "caregiver" | "emergency",
+  family: "high-support" | "aging-parent"
+): Promise<Blob> {
+  const [{ RUIZ_LETTER, RUIZ_META }, { HALE_LETTER, HALE_META }] = await Promise.all([
+    import("@/lib/content/samples/ruiz"),
+    import("@/lib/content/samples/hale"),
+  ]);
+  const data = family === "high-support" ? RUIZ_LETTER : HALE_LETTER;
+  const meta = family === "high-support" ? RUIZ_META : HALE_META;
+  if (kind === "letter") return generateLetterPdfBlob(data, meta, { watermark: true });
+  if (kind === "caregiver") return generateCaregiverPdfBlob(data, meta, { watermark: true });
+  return generateEmergencyPdfBlob(data, { watermark: true });
 }
 
 /**

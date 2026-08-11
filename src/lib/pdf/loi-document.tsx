@@ -200,6 +200,8 @@ export interface LoadedImage {
 
 export interface LoiDocumentProps {
   data: LetterData;
+  /** Stamp SAMPLE on every page — the live sample documents. */
+  watermark?: boolean;
   /** The letter's routing answers — they decide which sections print. */
   meta?: LetterMeta;
   /** Firm monogram with its measured aspect ratio, if it loaded. */
@@ -216,6 +218,7 @@ export interface LoiDocumentProps {
 
 export function LoiDocument({
   data,
+  watermark = false,
   meta = {},
   logo,
   appLogo,
@@ -264,6 +267,7 @@ export function LoiDocument({
     >
       {/* ------------------------------------------------------------ cover */}
       <Page size="LETTER" style={s.coverPage}>
+        {watermark ? <SampleWatermark /> : null}
         <View style={{ alignItems: "center" }}>
           {appLogo ? (
             <Image src={appLogo.dataUrl} style={{ width: 230, height: 230 / appLogo.aspect }} />
@@ -378,6 +382,7 @@ export function LoiDocument({
       {/* ----------------------------------------------------- how to use */}
       <Page size="LETTER" style={s.page}>
         <PdfFooter line={footerLine} />
+        {watermark ? <SampleWatermark /> : null}
         <Text style={s.sectionEyebrow}>TO THE READER</Text>
         <Text style={s.sectionTitle}>How to use this letter</Text>
         <View style={s.sectionRule} />
@@ -410,6 +415,7 @@ export function LoiDocument({
       {included.length > 0 ? (
         <Page size="LETTER" style={s.page}>
           <PdfFooter line={footerLine} />
+        {watermark ? <SampleWatermark /> : null}
           <Text style={s.sectionEyebrow}>CONTENTS</Text>
           <Text style={s.sectionTitle}>What&apos;s in this letter</Text>
           <View style={s.sectionRule} />
@@ -438,6 +444,7 @@ export function LoiDocument({
           name={name}
           registry={registry}
           footerLine={footerLine}
+          watermark={watermark}
           projection={TRUSTEE_PROJECTION}
           familyPhoto={def.photoSlot ? familyPhoto : undefined}
         />
@@ -447,6 +454,40 @@ export function LoiDocument({
 }
 
 /* ------------------------------------------------------------------ pieces */
+
+/**
+ * The SAMPLE watermark for live-generated sample documents: fixed, so it
+ * stamps every page it is placed on, and unmistakable without drowning the
+ * content it exists to demonstrate.
+ */
+export function SampleWatermark() {
+  return (
+    <View
+      fixed
+      style={{
+        position: "absolute",
+        top: 340,
+        left: 0,
+        right: 0,
+        alignItems: "center",
+      }}
+    >
+      <Text
+        style={{
+          fontFamily: SANS,
+          fontWeight: 700,
+          fontSize: 110,
+          color: "#1F2A44",
+          opacity: 0.08,
+          transform: "rotate(-30deg)",
+          letterSpacing: 18,
+        }}
+      >
+        SAMPLE
+      </Text>
+    </View>
+  );
+}
 
 export function PdfFooter({ line }: { line: string }) {
   return (
@@ -467,10 +508,12 @@ export function SectionPage({
   name,
   registry,
   footerLine,
+  watermark = false,
   projection,
   familyPhoto,
 }: {
   def: SectionDef;
+  watermark?: boolean;
   number: number;
   data: LetterData;
   name: string;
@@ -488,6 +531,7 @@ export function SectionPage({
   return (
     <Page size="LETTER" style={s.page}>
       <PdfFooter line={footerLine} />
+        {watermark ? <SampleWatermark /> : null}
       <View minPresenceAhead={90}>
         <Text
           style={s.sectionEyebrow}

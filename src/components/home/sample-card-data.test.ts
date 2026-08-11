@@ -21,9 +21,9 @@ describe("the home page sample letter", () => {
       expect(card).not.toBeNull();
       // A derived card with no blocks would be a header over nothing.
       expect(card!.blocks.length).toBeGreaterThan(0);
-      // The spoken label ("… care card for Bonnie, 11") is what the e2e spec
+      // The spoken label ("… care card for Danny, 24") is what the e2e spec
       // and screen readers key on — it must name the sample person.
-      expect(card!.personLine).toMatch(/^Bonnie/);
+      expect(card!.personLine).toMatch(/^Danny/);
     }
   );
 

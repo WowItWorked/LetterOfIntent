@@ -2,21 +2,28 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { SampleDoc } from "@/lib/content/samples";
+import { triggerDownload } from "@/lib/download";
 import { buttonClasses } from "@/components/ui/Button";
 
 /**
- * Renders a sample PDF onto canvases with pdf.js.
+ * Generates a sample document LIVE from its fixture family and draws it onto
+ * canvases with pdf.js.
  *
- * Linking straight at the .pdf looked simpler, but whether it opens or lands
- * in the downloads folder is a per-browser setting we do not control — Chrome
- * has a "download PDFs instead of opening them" preference that is on for a
- * lot of people, and a prospective family clicking "see a sample" should not
- * get a file to manage. Drawing it ourselves makes the outcome the same
- * everywhere, and the real PDF is still one click away underneath.
+ * Live generation means a sample can never go stale: the fixtures are
+ * LetterData, so they ride every schema change through the same pipeline a
+ * real letter does, watermarked SAMPLE on every page. Strictly read-only —
+ * nothing here touches the visitor's own letter, localStorage, or the photo
+ * database, and an e2e test holds that line byte-for-byte.
  *
- * The worker is served from /public rather than resolved through the bundler,
- * so the path is deterministic and stays inside `worker-src 'self'`. It is
- * copied from node_modules — see scripts/sync-pdf-worker.mjs.
+ * Linking straight at a .pdf looked simpler, but whether it opens or lands
+ * in the downloads folder is a per-browser setting we do not control. Drawing
+ * it ourselves makes the outcome the same everywhere, and the real PDF is
+ * still one click away: the download button hands over the same generated
+ * blob.
+ *
+ * The pdf.js worker is served from /public rather than resolved through the
+ * bundler, so the path is deterministic and stays inside `worker-src 'self'`.
  */
 
 const WORKER_SRC = "/pdf.worker.min.mjs";
@@ -25,31 +32,27 @@ const RENDER_WIDTH = 1100;
 
 type Status = "loading" | "ready" | "failed";
 
-export function SampleViewer({
-  file,
-  title,
-  subtitle,
-  note,
-}: {
-  file: string;
-  title: string;
-  subtitle: string;
-  note?: string;
-}) {
+export function SampleViewer({ sample }: { sample: SampleDoc }) {
   const [status, setStatus] = useState<Status>("loading");
   const [pageCount, setPageCount] = useState(0);
   const [rendered, setRendered] = useState(0);
   const holder = useRef<HTMLDivElement>(null);
+  const blobRef = useRef<Blob | null>(null);
 
   const draw = useCallback(async () => {
     const el = holder.current;
     if (!el) return;
 
     try {
-      const pdfjs = await import("pdfjs-dist");
+      const [{ generateSamplePdfBlob }, pdfjs] = await Promise.all([
+        import("@/lib/pdf/generate"),
+        import("pdfjs-dist"),
+      ]);
       pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
 
-      const doc = await pdfjs.getDocument({ url: file }).promise;
+      const blob = await generateSamplePdfBlob(sample.kind, sample.family);
+      blobRef.current = blob;
+      const doc = await pdfjs.getDocument({ data: await blob.arrayBuffer() }).promise;
       setPageCount(doc.numPages);
       el.replaceChildren();
 
@@ -64,7 +67,7 @@ export function SampleViewer({
         canvas.className =
           "block h-auto w-full rounded-[var(--radius-sm)] border border-line bg-white";
         canvas.setAttribute("role", "img");
-        canvas.setAttribute("aria-label", `${title}, page ${n} of ${doc.numPages}`);
+        canvas.setAttribute("aria-label", `${sample.title}, page ${n} of ${doc.numPages}`);
 
         const wrap = document.createElement("figure");
         wrap.className = "m-0 mb-6";
@@ -81,7 +84,7 @@ export function SampleViewer({
     } catch {
       setStatus("failed");
     }
-  }, [file, title]);
+  }, [sample]);
 
   useEffect(() => {
     // Client-side navigation lands here mid-scroll: this segment is a lazily
@@ -103,6 +106,18 @@ export function SampleViewer({
     };
   }, [draw]);
 
+  const download = async () => {
+    // The blob is usually already in hand from the preview; generate it
+    // fresh only if the preview failed before it existed.
+    const blob =
+      blobRef.current ??
+      (await (await import("@/lib/pdf/generate")).generateSamplePdfBlob(
+        sample.kind,
+        sample.family
+      ));
+    triggerDownload(sample.downloadName, blob, "application/pdf");
+  };
+
   return (
     <div
       className="mx-auto w-full"
@@ -123,20 +138,23 @@ export function SampleViewer({
           Sample document
         </p>
         <h1 className="mt-3 font-serif text-[clamp(1.6rem,4.5vw,2.5rem)] font-semibold tracking-[-0.015em] text-onink">
-          {title}
+          {sample.title}
         </h1>
-        <p className="mt-3 max-w-[66ch] text-lg leading-[1.7] text-oninkbody">{subtitle}</p>
+        <p className="mt-3 max-w-[66ch] text-lg leading-[1.7] text-oninkbody">
+          {sample.subtitle}
+        </p>
 
-        {note ? (
+        {sample.note ? (
           <p className="mt-5 flex max-w-[70ch] items-start gap-3 rounded-[var(--radius-sm)] border border-gold500 bg-[rgba(255,255,255,0.06)] px-5 py-4 text-[0.9375rem] leading-[1.7] text-onink">
             <span className="tw-diamond mt-2 flex-none" aria-hidden="true" />
-            <span>{note}</span>
+            <span>{sample.note}</span>
           </p>
         ) : null}
 
         <p className="mt-4 border-t border-navy500 pt-4 text-[0.9375rem] text-oninkbody">
-          Every name, diagnosis, and phone number here is invented. The pages are marked
-          SAMPLE so this is never mistaken for a real family&rsquo;s letter.
+          Every name, diagnosis, and phone number here is invented, and the document is
+          drawn fresh on your device each time. The pages are marked SAMPLE so this is
+          never mistaken for a real family&rsquo;s letter.
         </p>
         {/* Equal columns: two calls to action of different label lengths look
             like one is the real choice when they are sized by their text. */}
@@ -144,14 +162,14 @@ export function SampleViewer({
           className="mt-5 grid max-w-[520px] gap-3"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(220px, 100%), 1fr))" }}
         >
-          <a
-            href={file}
-            download
+          <button
+            type="button"
+            onClick={() => void download()}
             className={buttonClasses("accent", "w-full px-4 text-center", "md")}
             style={{ background: "var(--gradient-gold)", boxShadow: "var(--shadow-gold)" }}
           >
             Download this PDF
-          </a>
+          </button>
           <Link
             href="/letter"
             className={buttonClasses("outlineOnInk", "w-full px-4 text-center tracking-[0.06em]")}
@@ -169,11 +187,8 @@ export function SampleViewer({
         ) : null}
         {status === "failed" ? (
           <p className="max-w-[66ch] rounded-[var(--radius-sm)] border border-danger bg-dangerbg p-4 text-danger">
-            Sorry — the preview could not be drawn in this browser.{" "}
-            <a href={file} className="font-semibold underline underline-offset-[3px]">
-              Open the PDF directly
-            </a>{" "}
-            instead.
+            Sorry — the sample could not be drawn in this browser. Nothing is wrong with
+            your own letter; try another browser, or start your own letter above.
           </p>
         ) : null}
       </div>
@@ -182,8 +197,8 @@ export function SampleViewer({
 
       {status === "ready" ? (
         <p className="mt-2 text-[0.9375rem] text-muted">
-          {pageCount} page{pageCount === 1 ? "" : "s"}. This is what the builder produces
-          from a part-finished letter.
+          {pageCount} page{pageCount === 1 ? "" : "s"}, generated on your device just
+          now. This is what the builder produces.
         </p>
       ) : null}
     </div>

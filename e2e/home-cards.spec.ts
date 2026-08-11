@@ -161,13 +161,13 @@ test("the care-cards page shows real sample cards and routes to the cards page",
   // (Previews mount after hydration; the assertions wait for them.)
   // The gallery shows the whole set — all seven cards, by name.
   for (const name of [
-    /identity & contacts care card for bonnie/i,
-    /emergency protocol care card for bonnie/i,
-    /medications care card for bonnie/i,
-    /behavior & communication care card for bonnie/i,
-    /daily routine care card for bonnie/i,
-    /eating & food care card for bonnie/i,
-    /personal care & mobility care card for bonnie/i,
+    /identity & contacts care card for danny/i,
+    /emergency protocol care card for danny/i,
+    /medications care card for danny/i,
+    /behavior & communication care card for danny/i,
+    /daily routine care card for danny/i,
+    /eating & food care card for danny/i,
+    /personal care & mobility care card for danny/i,
   ]) {
     await expect(section.getByRole("img", { name })).toBeVisible();
   }

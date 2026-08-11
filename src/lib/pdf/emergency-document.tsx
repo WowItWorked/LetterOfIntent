@@ -3,6 +3,7 @@ import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/render
 import type { ReactNode } from "react";
 import { firm } from "@/config/firm";
 import { formatDateLong, type EmergencyInfo } from "@/lib/derive";
+import { SampleWatermark } from "./loi-document";
 import {
   ENGRAVED,
   GOLD_DEEP,
@@ -141,12 +142,15 @@ export function EmergencyDocument({
   info,
   appLogo,
   photo,
+  watermark = false,
 }: {
   info: EmergencyInfo;
   /** The tool's lockup, with its measured aspect ratio. */
   appLogo?: { dataUrl: string; aspect: number };
   /** The recent photograph, so a stranger recognizes them straight away. */
   photo?: { dataUrl: string; aspect: number };
+  /** Stamp SAMPLE — the live sample documents. */
+  watermark?: boolean;
 }) {
   const displayCaps = (info.preferred ?? info.fullName ?? "—").toUpperCase();
   const updated = formatDateLong(info.updatedIso) ?? info.updatedIso;
@@ -165,6 +169,7 @@ export function EmergencyDocument({
       language="en"
     >
       <Page size="LETTER" style={s.page} wrap={false}>
+        {watermark ? <SampleWatermark /> : null}
         {/* Brand row sits above the navy bar so the sheet still reads
             "EMERGENCY INFORMATION" at a glance. */}
         {appLogo ? (

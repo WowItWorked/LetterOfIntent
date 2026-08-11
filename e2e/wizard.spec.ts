@@ -40,6 +40,7 @@ test("every active section is reachable with the Next button and empty fields dr
     // No validation messages anywhere on an untouched form.
     await expect(page.getByText(/doesn't look/i)).toHaveCount(0);
     if (page.url().includes("a-personal-message")) break;
+    const before = page.url();
     const next = page.getByRole("link", { name: /^Next:/ });
     if (await next.count()) {
       await next.click();
@@ -47,6 +48,11 @@ test("every active section is reachable with the Next button and empty fields dr
       // An emotional section shows its gentle gate instead of a Next button.
       await page.getByRole("link", { name: /skip for now/i }).click();
     }
+    // Under mobile emulation on a loaded machine a click's navigation can
+    // land AFTER the next loop turn starts, so iterations were burned
+    // re-clicking a stale page until the bound ran out. Each turn holds
+    // until its own navigation arrives.
+    await page.waitForURL((u) => u.toString() !== before, { timeout: 15_000 });
   }
   await expect(page).toHaveURL(/a-personal-message/);
   // The last section is emotional too — acknowledge it, then leave via the

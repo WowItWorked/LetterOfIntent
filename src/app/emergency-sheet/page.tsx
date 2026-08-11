@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { buttonClasses, buttonStyle } from "@/components/ui/Button";
+import { DeliverableArt } from "@/components/home/DeliverableArt";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export const metadata: Metadata = {
@@ -108,13 +108,13 @@ export default function EmergencySheetPage() {
               className="relative block overflow-hidden rounded-[var(--radius-md)] border border-line bg-white transition-[transform,box-shadow,border-color] duration-[var(--dur-base)] group-hover:-translate-y-[3px] group-hover:border-gold400 motion-reduce:transform-none motion-reduce:transition-none"
               style={{ aspectRatio: "16 / 12", boxShadow: "var(--shadow-sm)" }}
             >
-              <Image
-                src="/samples/sample-emergency-information-sheet-disabilities.png"
-                alt="The sample one-page Emergency Information Sheet, watermarked as a sample"
-                fill
-                sizes="(max-width: 700px) 90vw, 560px"
-                className="object-cover object-top"
-              />
+              {/* The brand-drawn sheet vignette, like the home tiles: the real
+                  document is generated live one click away, so the linking
+                  card carries the abstraction, not a screenshot that could
+                  drift from what the viewer actually draws. */}
+              <span className="absolute inset-0">
+                <DeliverableArt kind="sheet" />
+              </span>
               {/* The same solid navy bar the letter-page samples wear — it
                   covers the crop's ragged edge and carries the affordance. */}
               <span

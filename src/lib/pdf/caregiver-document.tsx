@@ -17,6 +17,7 @@ import {
   s,
   MultilineValue,
   PdfFooter,
+  SampleWatermark,
   SectionPage,
   type LoadedImage,
 } from "./loi-document";
@@ -38,6 +39,8 @@ import { ENGRAVED, FAINT, GOLD, GOLD_DEEP, GRAY, INK, NAVY, SANS, SERIF } from "
 
 export interface CaregiverDocumentProps {
   data: LetterData;
+  /** Stamp SAMPLE on every page — the live sample documents. */
+  watermark?: boolean;
   meta?: LetterMeta;
   appLogo?: LoadedImage;
   familyPhoto?: LoadedImage & { caption?: string };
@@ -49,6 +52,7 @@ export interface CaregiverDocumentProps {
 
 export function CaregiverDocument({
   data,
+  watermark = false,
   meta = {},
   appLogo,
   familyPhoto,
@@ -87,6 +91,7 @@ export function CaregiverDocument({
     >
       {/* ------------------------------------------------------------ cover */}
       <Page size="LETTER" style={s.coverPage}>
+        {watermark ? <SampleWatermark /> : null}
         <View style={{ alignItems: "center" }}>
           {appLogo ? (
             <Image src={appLogo.dataUrl} style={{ width: 230, height: 230 / appLogo.aspect }} />
@@ -199,6 +204,7 @@ export function CaregiverDocument({
       {/* ----------------------------------------------------- how to use */}
       <Page size="LETTER" style={s.page}>
         <PdfFooter line={footerLine} />
+        {watermark ? <SampleWatermark /> : null}
         <Text style={s.sectionEyebrow}>TO THE READER</Text>
         <Text style={s.sectionTitle}>How to use this letter</Text>
         <View style={s.sectionRule} />
@@ -233,6 +239,7 @@ export function CaregiverDocument({
       {showKeyPoints ? (
         <Page size="LETTER" style={s.page}>
           <PdfFooter line={footerLine} />
+        {watermark ? <SampleWatermark /> : null}
           <Text style={s.sectionEyebrow}>IF YOU READ ONE PAGE</Text>
           <Text style={s.sectionTitle}>Key points at a glance</Text>
           <View style={s.sectionRule} />
@@ -292,6 +299,7 @@ export function CaregiverDocument({
       {included.length > 0 ? (
         <Page size="LETTER" style={s.page}>
           <PdfFooter line={footerLine} />
+        {watermark ? <SampleWatermark /> : null}
           <Text style={s.sectionEyebrow}>CONTENTS</Text>
           <Text style={s.sectionTitle}>What&apos;s in this letter</Text>
           <View style={s.sectionRule} />
@@ -316,6 +324,7 @@ export function CaregiverDocument({
           name={name}
           registry={registry}
           footerLine={footerLine}
+          watermark={watermark}
           projection={CAREGIVER_PROJECTION}
           familyPhoto={def.photoSlot ? familyPhoto : undefined}
         />

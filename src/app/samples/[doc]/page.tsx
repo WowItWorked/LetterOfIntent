@@ -28,12 +28,5 @@ export default async function SamplePage({ params }: PageProps<"/samples/[doc]">
   const sample = sampleBySlug(doc);
   if (!sample) notFound();
 
-  return (
-    <SampleViewer
-      file={sample.pdf}
-      title={sample.title}
-      subtitle={sample.subtitle}
-      note={sample.note}
-    />
-  );
+  return <SampleViewer sample={sample} />;
 }

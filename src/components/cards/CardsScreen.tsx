@@ -16,7 +16,6 @@ import {
   type CardBundle,
   type CardKey,
 } from "@/lib/content/cards";
-import { DEFAULT_PATH } from "@/lib/content/paths";
 import { deriveCard } from "@/lib/cards/derive";
 import { captureCardPng } from "@/lib/cards/capture";
 import { cardFilename } from "@/lib/cards/filenames";
@@ -88,8 +87,6 @@ interface Measured {
 export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
   const hydrated = useLetterStore((s) => s.hasHydrated);
   const data = useLetterStore((s) => s.data);
-  const meta = useLetterStore((s) => s.meta);
-  const path = meta.letterPath ?? DEFAULT_PATH;
 
   const [selection, setSelection] = useState<CardSelection>({ kind: "none" });
   const [measured, setMeasured] = useState<Partial<Record<CardKey, Measured>>>({});
@@ -106,18 +103,18 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
     const m = new Map<CardKey, CardData>();
     if (!hydrated) return m;
     for (const key of CARD_KEYS) {
-      const card = deriveCard(data, path, key);
+      const card = deriveCard(data, key);
       if (card) m.set(key, card);
     }
     return m;
-  }, [hydrated, data, path]);
+  }, [hydrated, data]);
 
   const statuses = useMemo(() => {
     const m = new Map<CardKey, CardStatus>();
     if (!hydrated) return m;
-    for (const key of CARD_KEYS) m.set(key, cardStatus(data, path, key));
+    for (const key of CARD_KEYS) m.set(key, cardStatus(data, key));
     return m;
-  }, [hydrated, data, path]);
+  }, [hydrated, data]);
 
   const handleMeasured = useCallback((card: CardData, pagination: CardPagination) => {
     setMeasured((prev) =>

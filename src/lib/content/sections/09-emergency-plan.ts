@@ -1,22 +1,28 @@
 import type { SectionDef } from "@/lib/content/types";
 
 /**
- * Shared by both paths. Every field here prints on a card: the steps, the 911
- * line, and the call order go to the Emergency card; the over-the-counter
- * rule closes the Medications card.
+ * Every field here prints on a card: the steps, the 911 line, and the call
+ * order go to the Emergency card; the over-the-counter rule closes the
+ * Medications card. The prose protocol in `health` is the older answer this
+ * section shadows, and the emergency sheet prefers these steps when present.
  */
 export const emergencyPlan: SectionDef = {
   slug: "emergency-plan",
   key: "emergencyPlan",
-  number: 9,
   title: "The emergency plan",
   navTitle: "Emergency plan",
-  minutes: 5,
   optionalTag: true,
   intro:
     "If something goes wrong, the person holding the phone needs steps, not " +
     "paragraphs. This section prints on the Emergency card, the one card " +
     "someone reads under stress. Short lines, in order.",
+  legacyRefs: [
+    {
+      sectionKey: "health",
+      fieldKey: "emergencyProtocol",
+      label: "Seizure or emergency protocol",
+    },
+  ],
   fields: [
     {
       id: "responseSteps",

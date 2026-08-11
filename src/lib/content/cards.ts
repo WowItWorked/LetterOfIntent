@@ -1,4 +1,4 @@
-import type { LetterPath, SectionKey } from "@/lib/schema";
+import type { SectionKey } from "@/lib/schema";
 
 /**
  * The single source of truth for the shareable care cards.
@@ -184,160 +184,95 @@ export interface CardSource {
 }
 
 /**
- * Ordered content sources per card, per letter path. The two paths keep the
- * same information in different sections (the same split emergencyInfo() in
- * lib/derive.ts already handles), so each card lists both paths explicitly —
- * shared entries are duplicated rather than merged, so a consumer never has
- * to combine lists.
+ * Ordered content sources per card. ONE list per card — the canonical schema
+ * has no path variants, so a card can never disagree with the section a
+ * family actually wrote in. docs/output-matrix.md is the contract this table
+ * implements.
  */
-export type CardSources = Record<CardKey, Record<LetterPath, readonly CardSource[]>>;
-
-const IDENTITY_SHARED_HEAD: readonly CardSource[] = [
-  { section: "gettingStarted", field: "subjectFullName", kind: "scalar", tier: "required" },
-  { section: "gettingStarted", field: "subjectPreferredName", kind: "scalar", tier: "enriches" },
-  { section: "gettingStarted", field: "subjectAddress", kind: "scalar", tier: "enriches" },
-];
-
-const IDENTITY_SHARED_TAIL: readonly CardSource[] = [
-  {
-    section: "familySupport",
-    field: "contacts",
-    kind: "records",
-    recordFilter: "byRole",
-    tier: "required",
-  },
-];
-
-const EMERGENCY_SHARED: readonly CardSource[] = [
-  { section: "allergies", field: "items", kind: "records", tier: "required" },
-  { section: "emergencyPlan", field: "responseSteps", kind: "scalar", tier: "required" },
-  // Named what-if plans ("If she is stung"), each its own block after the
-  // unnamed responseSteps. Enriches, deliberately: RENDER_REQUIREMENTS stays
-  // unchanged, so scenarios alone do not light the card.
-  { section: "emergencyPlan", field: "scenarios", kind: "records", tier: "enriches" },
-  { section: "emergencyPlan", field: "call911When", kind: "scalar", tier: "required" },
-  { section: "emergencyPlan", field: "otherwiseCall", kind: "scalar", tier: "enriches" },
-  { section: "emergencyPlan", field: "ifNoOneAnswers", kind: "scalar", tier: "enriches" },
-  {
-    section: "familySupport",
-    field: "contacts",
-    kind: "records",
-    recordFilter: "emergencyOnly",
-    tier: "enriches",
-  },
-];
-
-const ROUTINE_SHARED: readonly CardSource[] = [
-  { section: "routines", field: "items", kind: "records", tier: "required" },
-  { section: "routines", field: "transitions", kind: "scalar", tier: "enriches" },
-];
+export type CardSources = Record<CardKey, readonly CardSource[]>;
 
 export const SOURCES: CardSources = {
-  identity: {
-    "special-needs": [
-      ...IDENTITY_SHARED_HEAD,
-      { section: "about", field: "dateOfBirth", kind: "scalar", tier: "enriches" },
-      ...IDENTITY_SHARED_TAIL,
-      { section: "medical", field: "providers", kind: "records", tier: "enriches" },
-      { section: "medical", field: "preferredHospital", kind: "scalar", tier: "enriches" },
-      { section: "emergencyPlan", field: "ifNoOneAnswers", kind: "scalar", tier: "enriches" },
-    ],
-    general: [
-      ...IDENTITY_SHARED_HEAD,
-      { section: "aboutThem", field: "dateOfBirth", kind: "scalar", tier: "enriches" },
-      ...IDENTITY_SHARED_TAIL,
-      { section: "healthMedical", field: "providers", kind: "records", tier: "enriches" },
-      { section: "healthMedical", field: "preferredHospital", kind: "scalar", tier: "enriches" },
-      { section: "emergencyPlan", field: "ifNoOneAnswers", kind: "scalar", tier: "enriches" },
-    ],
-  },
-  emergency: {
-    "special-needs": [
-      ...EMERGENCY_SHARED,
-      {
-        section: "medical",
-        field: "medications",
-        kind: "records",
-        recordFilter: "rescueOnly",
-        tier: "required",
-      },
-    ],
-    general: [
-      ...EMERGENCY_SHARED,
-      {
-        section: "healthMedical",
-        field: "medications",
-        kind: "records",
-        recordFilter: "rescueOnly",
-        tier: "required",
-      },
-    ],
-  },
-  meds: {
-    "special-needs": [
-      { section: "medical", field: "medications", kind: "records", tier: "required" },
-      { section: "emergencyPlan", field: "otcPolicy", kind: "scalar", tier: "enriches" },
-    ],
-    general: [
-      { section: "healthMedical", field: "medications", kind: "records", tier: "required" },
-      { section: "emergencyPlan", field: "otcPolicy", kind: "scalar", tier: "enriches" },
-    ],
-  },
+  identity: [
+    { section: "gettingStarted", field: "subjectFullName", kind: "scalar", tier: "required" },
+    { section: "gettingStarted", field: "subjectPreferredName", kind: "scalar", tier: "enriches" },
+    { section: "gettingStarted", field: "subjectAddress", kind: "scalar", tier: "enriches" },
+    { section: "person", field: "dateOfBirth", kind: "scalar", tier: "enriches" },
+    {
+      section: "familySupport",
+      field: "contacts",
+      kind: "records",
+      recordFilter: "byRole",
+      tier: "required",
+    },
+    { section: "health", field: "providers", kind: "records", tier: "enriches" },
+    { section: "health", field: "preferredHospital", kind: "scalar", tier: "enriches" },
+    { section: "emergencyPlan", field: "ifNoOneAnswers", kind: "scalar", tier: "enriches" },
+  ],
+  emergency: [
+    { section: "allergies", field: "items", kind: "records", tier: "required" },
+    { section: "emergencyPlan", field: "responseSteps", kind: "scalar", tier: "required" },
+    // Named what-if plans ("If she is stung"), each its own block after the
+    // unnamed responseSteps. Enriches, deliberately: RENDER_REQUIREMENTS stays
+    // unchanged, so scenarios alone do not light the card.
+    { section: "emergencyPlan", field: "scenarios", kind: "records", tier: "enriches" },
+    { section: "emergencyPlan", field: "call911When", kind: "scalar", tier: "required" },
+    { section: "emergencyPlan", field: "otherwiseCall", kind: "scalar", tier: "enriches" },
+    { section: "emergencyPlan", field: "ifNoOneAnswers", kind: "scalar", tier: "enriches" },
+    {
+      section: "familySupport",
+      field: "contacts",
+      kind: "records",
+      recordFilter: "emergencyOnly",
+      tier: "enriches",
+    },
+    {
+      section: "health",
+      field: "medications",
+      kind: "records",
+      recordFilter: "rescueOnly",
+      tier: "required",
+    },
+  ],
+  meds: [
+    { section: "health", field: "medications", kind: "records", tier: "required" },
+    { section: "emergencyPlan", field: "otcPolicy", kind: "scalar", tier: "enriches" },
+  ],
   // Deliberately records-free: the behavior card is clamped prose, the same
-  // material the emergency sheet already lifts. One required anchor per path;
-  // everything else only enriches.
-  behavior: {
-    "special-needs": [
-      { section: "communication", field: "how", kind: "scalar", tier: "required" },
-      { section: "communication", field: "yesNo", kind: "scalar", tier: "enriches" },
-      { section: "communication", field: "pain", kind: "scalar", tier: "enriches" },
-      { section: "behavior", field: "triggers", kind: "scalar", tier: "enriches" },
-      { section: "behavior", field: "deEscalation", kind: "scalar", tier: "enriches" },
-      { section: "communication", field: "whatNotToSay", kind: "scalar", tier: "enriches" },
-    ],
-    general: [
-      { section: "dailyCommunication", field: "howToSpeak", kind: "scalar", tier: "required" },
-      { section: "dailyCommunication", field: "whatHelps", kind: "scalar", tier: "enriches" },
-      { section: "dailyCommunication", field: "whatToAvoid", kind: "scalar", tier: "enriches" },
-      { section: "dailyCommunication", field: "wontAdmit", kind: "scalar", tier: "enriches" },
-      { section: "aboutThem", field: "cannotAbide", kind: "scalar", tier: "enriches" },
-    ],
-  },
-  routine: {
-    "special-needs": [
-      ...ROUTINE_SHARED,
-      { section: "typicalDay", field: "morningRoutine", kind: "scalar", tier: "enriches" },
-      { section: "typicalDay", field: "eveningRoutine", kind: "scalar", tier: "enriches" },
-      { section: "typicalDay", field: "sleep", kind: "scalar", tier: "enriches" },
-    ],
-    general: [
-      ...ROUTINE_SHARED,
-      { section: "typicalWeek", field: "mornings", kind: "scalar", tier: "enriches" },
-      { section: "typicalWeek", field: "evenings", kind: "scalar", tier: "enriches" },
-      { section: "typicalWeek", field: "fixedPoints", kind: "scalar", tier: "enriches" },
-    ],
-  },
-  food: {
-    "special-needs": [
-      { section: "foods", field: "items", kind: "records", tier: "required" },
-      { section: "typicalDay", field: "food", kind: "scalar", tier: "legacy_fallback" },
-    ],
-    general: [
-      { section: "foods", field: "items", kind: "records", tier: "required" },
-      { section: "typicalWeek", field: "food", kind: "scalar", tier: "legacy_fallback" },
-    ],
-  },
-  care: {
-    "special-needs": [
-      { section: "careTasks", field: "items", kind: "records", tier: "required" },
-      { section: "medical", field: "equipment", kind: "scalar", tier: "enriches" },
-    ],
-    general: [
-      { section: "careTasks", field: "items", kind: "records", tier: "required" },
-      { section: "homeLiving", field: "personalCare", kind: "scalar", tier: "enriches" },
-      { section: "homeLiving", field: "safety", kind: "scalar", tier: "enriches" },
-    ],
-  },
+  // material the emergency sheet already lifts. The anchor is either
+  // direction of communication; everything else only enriches. Fields that
+  // pair a sharp source with a broader fallback (triggers/cannotAbide,
+  // pain/wontAdmit) list both; the builder takes the first with content.
+  behavior: [
+    { section: "communication", field: "how", kind: "scalar", tier: "required" },
+    { section: "communication", field: "howToSpeak", kind: "scalar", tier: "required" },
+    { section: "communication", field: "yesNo", kind: "scalar", tier: "enriches" },
+    { section: "communication", field: "pain", kind: "scalar", tier: "enriches" },
+    { section: "communication", field: "wontAdmit", kind: "scalar", tier: "enriches" },
+    { section: "communication", field: "whatHelps", kind: "scalar", tier: "enriches" },
+    { section: "communication", field: "whatToAvoid", kind: "scalar", tier: "enriches" },
+    { section: "person", field: "cannotAbide", kind: "scalar", tier: "enriches" },
+    { section: "behavior", field: "triggers", kind: "scalar", tier: "enriches" },
+    { section: "behavior", field: "deEscalation", kind: "scalar", tier: "enriches" },
+    { section: "behavior", field: "lawEnforcement", kind: "scalar", tier: "enriches" },
+  ],
+  routine: [
+    { section: "routines", field: "items", kind: "records", tier: "required" },
+    { section: "routines", field: "transitions", kind: "scalar", tier: "enriches" },
+    { section: "routine", field: "mornings", kind: "scalar", tier: "enriches" },
+    { section: "routine", field: "evenings", kind: "scalar", tier: "enriches" },
+    { section: "routine", field: "sleep", kind: "scalar", tier: "enriches" },
+    { section: "routine", field: "fixedPoints", kind: "scalar", tier: "enriches" },
+  ],
+  food: [
+    { section: "foods", field: "items", kind: "records", tier: "required" },
+    { section: "routine", field: "food", kind: "scalar", tier: "legacy_fallback" },
+  ],
+  care: [
+    { section: "careTasks", field: "items", kind: "records", tier: "required" },
+    { section: "health", field: "equipment", kind: "scalar", tier: "enriches" },
+    { section: "home", field: "personalCare", kind: "scalar", tier: "enriches" },
+    { section: "home", field: "safety", kind: "scalar", tier: "enriches" },
+  ],
 };
 
 /* ------------------------------------------------------ render requirements */
@@ -345,8 +280,6 @@ export const SOURCES: CardSources = {
 export interface SourceRef {
   section: SectionKey;
   field: string;
-  /** When set, this ref only counts for letters on that path. */
-  path?: LetterPath;
   recordFilter?: RecordFilter;
 }
 
@@ -374,36 +307,20 @@ export const RENDER_REQUIREMENTS: Record<CardKey, RenderRequirement> = {
     {
       anyOf: [
         { section: "allergies", field: "items" },
-        {
-          section: "medical",
-          field: "medications",
-          path: "special-needs",
-          recordFilter: "rescueOnly",
-        },
-        {
-          section: "healthMedical",
-          field: "medications",
-          path: "general",
-          recordFilter: "rescueOnly",
-        },
+        { section: "health", field: "medications", recordFilter: "rescueOnly" },
         { section: "emergencyPlan", field: "responseSteps" },
         { section: "emergencyPlan", field: "call911When" },
       ],
     },
   ],
-  meds: [
-    {
-      anyOf: [
-        { section: "medical", field: "medications", path: "special-needs" },
-        { section: "healthMedical", field: "medications", path: "general" },
-      ],
-    },
-  ],
+  meds: [{ anyOf: [{ section: "health", field: "medications" }] }],
+  // Either direction of communication anchors the card: how they express
+  // themselves, or how to talk with them.
   behavior: [
     {
       anyOf: [
-        { section: "communication", field: "how", path: "special-needs" },
-        { section: "dailyCommunication", field: "howToSpeak", path: "general" },
+        { section: "communication", field: "how" },
+        { section: "communication", field: "howToSpeak" },
       ],
     },
   ],
@@ -412,10 +329,8 @@ export const RENDER_REQUIREMENTS: Record<CardKey, RenderRequirement> = {
       anyOf: [
         { section: "routines", field: "items" },
         { section: "routines", field: "transitions" },
-        { section: "typicalDay", field: "morningRoutine", path: "special-needs" },
-        { section: "typicalDay", field: "eveningRoutine", path: "special-needs" },
-        { section: "typicalWeek", field: "mornings", path: "general" },
-        { section: "typicalWeek", field: "evenings", path: "general" },
+        { section: "routine", field: "mornings" },
+        { section: "routine", field: "evenings" },
       ],
     },
   ],
@@ -423,8 +338,7 @@ export const RENDER_REQUIREMENTS: Record<CardKey, RenderRequirement> = {
     {
       anyOf: [
         { section: "foods", field: "items" },
-        { section: "typicalDay", field: "food", path: "special-needs" },
-        { section: "typicalWeek", field: "food", path: "general" },
+        { section: "routine", field: "food" },
       ],
     },
   ],
@@ -432,9 +346,9 @@ export const RENDER_REQUIREMENTS: Record<CardKey, RenderRequirement> = {
     {
       anyOf: [
         { section: "careTasks", field: "items" },
-        { section: "medical", field: "equipment", path: "special-needs" },
-        { section: "homeLiving", field: "personalCare", path: "general" },
-        { section: "homeLiving", field: "safety", path: "general" },
+        { section: "health", field: "equipment" },
+        { section: "home", field: "personalCare" },
+        { section: "home", field: "safety" },
       ],
     },
   ],
@@ -490,7 +404,8 @@ export const PRIORITY_ORDER: Record<CardKey, readonly string[]> = {
     "otc_policy",
   ],
   // The escalate-when analog leads: the reader who only gets one block needs
-  // the warning signs before the biography.
+  // the warning signs before the biography. First-responder guidance closes
+  // the card — the block that exists for exactly one kind of reader.
   behavior: [
     "escalates_when",
     "what_helps",
@@ -498,6 +413,7 @@ export const PRIORITY_ORDER: Record<CardKey, readonly string[]> = {
     "yes_no_signals",
     "pain_signals",
     "what_not_to_say",
+    "first_responders",
   ],
   routine: ["user_order"],
   food: ["user_order"],

@@ -1,13 +1,16 @@
-import type { LetterPath } from "@/lib/schema";
-
 /**
  * The published example documents. One place, because the home page cards,
  * the viewer route, and its static params all have to agree.
+ *
+ * The two sample families exercise two CONFIGURATIONS of the one adaptive
+ * form — a high-support "both" letter and an aging-parent caregiver letter —
+ * not two different forms.
  */
 export interface SampleDoc {
   /** URL segment — /samples/<slug>. */
   slug: string;
-  path: LetterPath;
+  /** Which sample family (and so which configuration) this document shows. */
+  family: "high-support" | "aging-parent";
   /** What the family calls it, on the card. */
   label: string;
   /**
@@ -38,7 +41,7 @@ const NO_SECOND_FORM =
 export const SAMPLE_DOCS: SampleDoc[] = [
   {
     slug: "letter-of-intent-disabilities",
-    path: "special-needs",
+    family: "high-support",
     label: "The Letter of Intent",
     detail: "The full document",
     title: "Letter of Intent — for a loved one with disabilities",
@@ -52,7 +55,7 @@ export const SAMPLE_DOCS: SampleDoc[] = [
   },
   {
     slug: "emergency-sheet-disabilities",
-    path: "special-needs",
+    family: "high-support",
     label: "Emergency sheet",
     detail: "For the fridge",
     title: "Emergency information sheet — for a loved one with disabilities",
@@ -66,7 +69,7 @@ export const SAMPLE_DOCS: SampleDoc[] = [
   },
   {
     slug: "letter-of-intent-anyone",
-    path: "general",
+    family: "aging-parent",
     label: "The Letter of Intent",
     detail: "The full document",
     title: "Letter of Intent — for anyone you care for",
@@ -80,7 +83,7 @@ export const SAMPLE_DOCS: SampleDoc[] = [
   },
   {
     slug: "emergency-sheet-anyone",
-    path: "general",
+    family: "aging-parent",
     label: "Emergency sheet",
     detail: "For the fridge",
     title: "Emergency information sheet — for anyone you care for",
@@ -93,10 +96,6 @@ export const SAMPLE_DOCS: SampleDoc[] = [
     alt: "The sample one-page emergency information sheet, marked SAMPLE",
   },
 ];
-
-export function samplesForPath(path: LetterPath): SampleDoc[] {
-  return SAMPLE_DOCS.filter((s) => s.path === path);
-}
 
 export function sampleBySlug(slug: string): SampleDoc | undefined {
   return SAMPLE_DOCS.find((s) => s.slug === slug);

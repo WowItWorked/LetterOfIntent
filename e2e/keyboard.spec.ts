@@ -61,10 +61,31 @@ test("start the letter, answer a question, and move on — keyboard only", async
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/letter$/);
 
-  // The chooser: pick a path, still without touching the mouse.
+  // The onboarding: answer the ten questions, still without touching the
+  // mouse. Tab reaches each answer button; Enter picks it and advances.
+  const SINGLE_CHOICE = [
+    /both/i,
+    /an adult/i,
+    /hands-on help/i,
+    /^yes$/i, // communicates differently
+    /^yes$/i, // escalates
+    /^no$/i, // cognition
+    /^yes$/i, // trust
+    /^yes$/i, // benefits
+  ];
+  for (const answer of SINGLE_CHOICE) {
+    await tabUntil(page, async () => answer.test(await focusedText(page)));
+    await page.keyboard.press("Enter");
+  }
+  // The multi-select question: pick a chip, then its Continue button.
   await tabUntil(page, async () =>
-    /start the special needs letter/i.test(await focusedText(page))
+    /school or a day program/i.test(await focusedText(page))
   );
+  await page.keyboard.press("Enter");
+  await tabUntil(page, async () => /continue/i.test(await focusedText(page)));
+  await page.keyboard.press("Enter");
+  // The last question finishes the sequence on selection.
+  await tabUntil(page, async () => /with me/i.test(await focusedText(page)));
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/getting-started/);
 

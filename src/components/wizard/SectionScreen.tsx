@@ -3,15 +3,14 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import {
-  DEFAULT_PATH,
-  nextInPath,
-  prevInPath,
-  resolvePath,
-  sectionBySlugInPath,
-  sectionsFor,
-  type LetterPath,
-} from "@/lib/content/paths";
+  nextSection,
+  prevSection,
+  resolveSlug,
+  sectionInPlay,
+  sectionPosition,
+} from "@/lib/content/config";
 import type { SectionDef } from "@/lib/content/types";
+import { resolveSectionWording } from "@/lib/content/types";
 import { displayName, fillName } from "@/lib/derive";
 import { useLetterStore } from "@/lib/store";
 import { CardStatusPanel } from "@/components/wizard/CardStatusPanel";
@@ -24,26 +23,25 @@ export function SectionScreen({ slug }: { slug: string }) {
   const data = useLetterStore((s) => s.data);
   const meta = useLetterStore((s) => s.meta);
   const setLastVisited = useLetterStore((s) => s.setLastVisited);
-  const setLetterPath = useLetterStore((s) => s.setLetterPath);
 
-  const current = meta.letterPath ?? DEFAULT_PATH;
-  const path = resolvePath(slug, current);
-  const def = sectionBySlugInPath(slug, path);
-  const total = sectionsFor(path).length;
+  const def = resolveSlug(slug);
 
   useEffect(() => {
     if (!hydrated || !def) return;
     setLastVisited(def.slug);
-    // Opening a section that only belongs to the other set is how a family
-    // switches paths — the chooser's start buttons are exactly that link.
-    if (path !== current) setLetterPath(path);
-  }, [hydrated, def, path, current, setLastVisited, setLetterPath]);
+  }, [hydrated, def, setLastVisited]);
 
   if (!def) return null; // the server component already 404s unknown slugs
 
   const name = displayName(data);
-  const showGate = Boolean(def.emotional && hydrated && !meta.finalWishesAck);
-  const next = nextInPath(def.slug, path);
+  const wording = resolveSectionWording(def, meta);
+  const { index, total } = sectionPosition(def.slug, meta, data);
+  const acked =
+    meta.emotionalAcks?.includes(def.slug) ??
+    (def.slug === "final-wishes" && meta.finalWishesAck === true);
+  const showGate = Boolean(def.emotional && hydrated && !acked);
+  const next = nextSection(def.slug, meta, data);
+  const inPlay = sectionInPlay(def, meta, data);
 
   return (
     <article>
@@ -57,13 +55,12 @@ export function SectionScreen({ slug }: { slug: string }) {
         }}
       >
         <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">
-          Section {String(def.number).padStart(2, "0")} of {total} · about {def.minutes}{" "}
-          minutes
+          {index > 0 ? `Section ${String(index).padStart(2, "0")} of ${total}` : "Section"}
         </p>
         <h1 className="mt-3 font-serif text-[clamp(1.75rem,5vw,2.75rem)] font-semibold tracking-[-0.01em] text-onink">
-          {fillName(def.title, name)}
+          {fillName(wording.title, name)}
         </h1>
-        {fillName(def.intro, name)
+        {fillName(wording.intro, name)
           .split("\n\n")
           .map((p, i) => (
             <p key={i} className="mt-[18px] max-w-[62ch] text-lg leading-[1.7] text-oninkbody">
@@ -72,19 +69,32 @@ export function SectionScreen({ slug }: { slug: string }) {
           ))}
       </div>
 
+      {/* A section the current answers would not ask, opened anyway (an old
+          link, an old bookmark): the family's work still shows, with a quiet
+          note instead of a dead end. */}
+      {hydrated && !inPlay ? (
+        <aside className="mt-6 max-w-[66ch] rounded-[var(--radius-sm)] border border-line bg-paper2 p-4 text-[0.9375rem] text-body">
+          Your answers about {name} do not usually include this section. It is
+          still yours to write in, and anything here stays in the letter.{" "}
+          <Link href="/letter" className="font-semibold underline underline-offset-[3px]">
+            Change your answers
+          </Link>
+        </aside>
+      ) : null}
+
       {def.note ? (
         <aside className="mt-6 max-w-[66ch] rounded-[var(--radius-sm)] border border-goldline bg-goldtint p-4 text-[0.9375rem] text-body">
           {fillName(def.note, name)}
         </aside>
       ) : null}
 
-      {hydrated ? <LegacyEcho def={def} path={path} /> : null}
+      {hydrated ? <LegacyEcho def={def} /> : null}
 
       <div className="mt-[34px]">
         {!hydrated ? (
           <FormSkeleton />
         ) : showGate ? (
-          <EmotionalGate name={name} nextSlug={next?.slug} />
+          <EmotionalGate def={def} name={name} nextSlug={next?.slug} />
         ) : (
           <>
             <SectionForm key={def.slug} def={def} />
@@ -99,7 +109,7 @@ export function SectionScreen({ slug }: { slug: string }) {
 
       {/* After the form, before the nav: the letter comes first, and a card
           line is something noticed on the way out, not a bar to clear. */}
-      {hydrated && !showGate ? <CardStatusPanel section={def.key} path={path} /> : null}
+      {hydrated && !showGate ? <CardStatusPanel section={def.key} /> : null}
 
       {!showGate ? <NextPrev slug={def.slug} name={name} /> : null}
     </article>
@@ -107,16 +117,16 @@ export function SectionScreen({ slug }: { slug: string }) {
 }
 
 /**
- * Blob coexistence, made visible: when a structured card section shadows a
- * free-text answer the family already wrote (medical.allergies, the typical
- * day's food and routines), quote their own words back above the new form.
- * Nothing is parsed or moved for them — the quote just says where the prose
- * lives, so retyping an entry below never feels like their paragraph was
- * lost. Renders only when the older field actually holds something.
+ * Blob coexistence, made visible: when a structured section (or a sharper
+ * question) shadows a free-text answer the family already wrote, quote their
+ * own words back above the new form. Nothing is parsed or moved for them —
+ * the quote just says where the prose lives, so retyping an entry below never
+ * feels like their paragraph was lost. Renders only when the older field
+ * actually holds something.
  */
-function LegacyEcho({ def, path }: { def: SectionDef; path: LetterPath }) {
+function LegacyEcho({ def }: { def: SectionDef }) {
   const data = useLetterStore((s) => s.data);
-  const refs = def.legacyRefs?.[path] ?? [];
+  const refs = def.legacyRefs ?? [];
   const filled = refs
     .map((ref) => {
       const section = data[ref.sectionKey] as Record<string, unknown> | undefined;
@@ -130,7 +140,7 @@ function LegacyEcho({ def, path }: { def: SectionDef; path: LetterPath }) {
   return (
     <aside className="mt-6 max-w-[66ch] rounded-[var(--radius-sm)] border border-line bg-paper2 p-4">
       <p className="text-[0.9375rem] font-semibold text-ink">
-        You wrote this earlier — the entries below are what reach the cards.
+        You wrote this earlier — it stays in the letter exactly as written.
       </p>
       {filled.map(({ ref, text }) => (
         <blockquote
@@ -165,22 +175,48 @@ function FormSkeleton() {
   );
 }
 
-function EmotionalGate({ name, nextSlug }: { name: string; nextSlug?: string }) {
-  const ackFinalWishes = useLetterStore((s) => s.ackFinalWishes);
+/** Per-section interstitial copy. The default covers any emotional section
+ *  without its own words; nothing here rushes anyone. */
+const GATE_COPY: Record<string, (name: string) => string> = {
+  "final-wishes": (name) =>
+    `The next questions are about funerals, burial, and end-of-life wishes for ${name}. ` +
+    "Some families find it a relief to write these things down. Others aren't ready — " +
+    "and some choose to leave them out entirely. All of those are right.",
+  "behavioral-support": (name) =>
+    `The next questions ask about ${name}'s hardest moments — what sets them off, ` +
+    "what a crisis looks like, and what you would want a police officer to know. " +
+    "Writing it down is not a betrayal. It is the manual you had to learn the hard " +
+    "way, handed to someone who loves them next.",
+  "a-personal-message": () =>
+    "This page is not instructions. It is you, speaking to the people you love, " +
+    "in your own voice. Many families say it is the page that matters most — and " +
+    "the one that takes the most out of them. There is no hurry.",
+};
+
+function EmotionalGate({
+  def,
+  name,
+  nextSlug,
+}: {
+  def: SectionDef;
+  name: string;
+  nextSlug?: string;
+}) {
+  const ackEmotional = useLetterStore((s) => s.ackEmotional);
+  const body =
+    GATE_COPY[def.slug]?.(name) ??
+    `The next questions can be heavy to write. Take them at your own pace — a ` +
+      `single line is a real contribution, and skipping is always allowed.`;
   return (
     <div className="tw-card max-w-[66ch] p-6">
       <h2 className="font-serif text-[1.375rem]">A gentle note before this section</h2>
-      <p className="mt-3 text-body">
-        The next questions are about funerals, burial, and end-of-life wishes for {name}.
-        Some families find it a relief to write these things down. Others aren&rsquo;t
-        ready — and some choose to leave them out entirely. All of those are right.
-      </p>
+      <p className="mt-3 text-body">{body}</p>
       <p className="mt-3 text-body">
         If you skip this, the letter simply won&rsquo;t mention it. You can come back any
-        time.
+        time — deferring is not failing.
       </p>
       <div className="mt-5 flex flex-wrap gap-3">
-        <Button onClick={ackFinalWishes}>I&rsquo;m ready</Button>
+        <Button onClick={() => ackEmotional(def.slug)}>I&rsquo;m ready</Button>
         {nextSlug ? (
           <Link href={`/letter/${nextSlug}`} className={buttonClasses("secondary")}>
             Skip for now →
@@ -193,9 +229,9 @@ function EmotionalGate({ name, nextSlug }: { name: string; nextSlug?: string }) 
 
 function NextPrev({ slug, name }: { slug: string; name: string }) {
   const meta = useLetterStore((s) => s.meta);
-  const path = resolvePath(slug, meta.letterPath ?? DEFAULT_PATH);
-  const prev = prevInPath(slug, path);
-  const next = nextInPath(slug, path);
+  const data = useLetterStore((s) => s.data);
+  const prev = prevSection(slug, meta, data);
+  const next = nextSection(slug, meta, data);
 
   return (
     <div className="mt-11 flex flex-wrap items-center justify-between gap-3.5 border-t border-line pt-[26px]">

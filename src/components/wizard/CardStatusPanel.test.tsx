@@ -10,7 +10,7 @@ describe("CardStatusPanel", () => {
   });
 
   it("says warmly what a card still needs, from an empty letter", () => {
-    render(<CardStatusPanel section="gettingStarted" path="special-needs" />);
+    render(<CardStatusPanel section="gettingStarted" />);
 
     expect(screen.getByRole("complementary", { name: "Care cards" })).toBeInTheDocument();
     expect(
@@ -21,7 +21,7 @@ describe("CardStatusPanel", () => {
   });
 
   it("updates live through the same store the autosave writes to", () => {
-    render(<CardStatusPanel section="gettingStarted" path="special-needs" />);
+    render(<CardStatusPanel section="gettingStarted" />);
     expect(screen.getByText(/Identity & Contacts card needs/)).toBeInTheDocument();
 
     act(() => {
@@ -47,7 +47,7 @@ describe("CardStatusPanel", () => {
         familySupport: { contacts: [{ id: "c1", name: "Dana", keepOffCards: true }] },
       },
     });
-    render(<CardStatusPanel section="familySupport" path="special-needs" />);
+    render(<CardStatusPanel section="familySupport" />);
 
     expect(
       screen.getByText("The Identity & Contacts card needs at least one person to call.")
@@ -55,7 +55,7 @@ describe("CardStatusPanel", () => {
   });
 
   it("lists every card the section feeds, and only those", () => {
-    render(<CardStatusPanel section="medical" path="special-needs" />);
+    render(<CardStatusPanel section="health" />);
 
     const lines = screen.getAllByRole("listitem");
     expect(lines).toHaveLength(4); // identity, emergency, meds, care
@@ -64,7 +64,7 @@ describe("CardStatusPanel", () => {
 
   it("renders nothing at all for a section that feeds no card", () => {
     const { container } = render(
-      <CardStatusPanel section="finalWishes" path="special-needs" />
+      <CardStatusPanel section="finalWishes" />
     );
     expect(container).toBeEmptyDOMElement();
   });

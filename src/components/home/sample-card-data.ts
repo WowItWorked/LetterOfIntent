@@ -1,5 +1,5 @@
 import type { CardKey } from "@/lib/content/cards";
-import type { LetterData, LetterPath } from "@/lib/schema";
+import type { LetterData } from "@/lib/schema";
 
 /**
  * The sample letter behind the /care-cards page's previews.
@@ -37,8 +37,6 @@ import type { LetterData, LetterPath } from "@/lib/schema";
  *   room the two scenario blocks need.
  */
 
-export const SAMPLE_CARD_PATH: LetterPath = "special-needs";
-
 /** Every card, in display order — the gallery shows the whole set, care last. */
 export const HOME_CARD_KEYS: readonly CardKey[] = [
   "identity",
@@ -61,7 +59,7 @@ export const SAMPLE_CARD_LETTER: LetterData = {
     // moving date would make the previews differ between builds.
     letterDate: "2026-08-08",
   },
-  about: { dateOfBirth: "2015-06-19" },
+  person: { dateOfBirth: "2015-06-19" },
   familySupport: {
     contacts: [
       {
@@ -136,7 +134,7 @@ export const SAMPLE_CARD_LETTER: LetterData = {
     pain:
       "She does not report pain. She skips food she likes, presses a flat " +
       "hand on the spot, goes to bed early.",
-    whatNotToSay: "Never take Forky away as leverage. Never touch him without asking.",
+    whatToAvoid: "Never take Forky away as leverage. Never touch him without asking.",
   },
   behavior: {
     triggers:
@@ -264,7 +262,7 @@ export const SAMPLE_CARD_LETTER: LetterData = {
       },
     ],
   },
-  medical: {
+  health: {
     medications: [
       {
         id: "sample-epi",

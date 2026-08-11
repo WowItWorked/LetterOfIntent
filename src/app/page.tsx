@@ -223,8 +223,7 @@ export default function HomePage() {
             <PadlockIcon className="mt-1 size-[15px] fill-gold400" />
             <p className="text-[0.9375rem] leading-[1.65] text-[#D6DDE9]">
               <strong className="font-semibold text-white">
-                No account. No email required. About 45 minutes to two hours, in as many
-                sittings as you need.
+                No account. No email required. Start with ten minutes.
               </strong>{" "}
               Your data remains on your device and is never shared.{" "}
               <Link

@@ -1,34 +1,18 @@
 import type { SectionDef } from "@/lib/content/types";
 
-/** Shared by both paths; the general path renumbers it in general/index.ts. */
 export const foods: SectionDef = {
   slug: "food-and-eating",
   key: "foods",
-  number: 11,
   title: "Food and eating",
   navTitle: "Food & eating",
-  minutes: 5,
   optionalTag: true,
   intro:
     "Food is safety first, then comfort. One item per entry: the food itself " +
     "and the rule that goes with it. These print on the Eating & Food card, so " +
     "a sitter gets the rules without reading the whole letter.",
-  legacyRefs: {
-    "special-needs": [
-      {
-        sectionKey: "typicalDay",
-        fieldKey: "food",
-        label: "Food: favorites, dislikes, and rules",
-      },
-    ],
-    general: [
-      {
-        sectionKey: "typicalWeek",
-        fieldKey: "food",
-        label: "Food, appetite, and mealtimes",
-      },
-    ],
-  },
+  legacyRefs: [
+    { sectionKey: "routine", fieldKey: "food", label: "Food: favorites, dislikes, and rules" },
+  ],
   fields: [
     {
       id: "items",

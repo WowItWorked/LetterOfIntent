@@ -1,32 +1,19 @@
 import type { SectionDef } from "@/lib/content/types";
 
-/** Shared by both paths; the general path renumbers it in general/index.ts. */
 export const routines: SectionDef = {
   slug: "daily-routines",
   key: "routines",
-  number: 10,
   title: "Daily routines",
   navTitle: "Daily routines",
-  minutes: 5,
   optionalTag: true,
   intro:
     "The order matters more than the clock. Write each block of {name}'s day as " +
     "steps someone could follow tonight: waking up, after school, bedtime. " +
     "These print on the Daily Routine card, in the order you add them.",
-  legacyRefs: {
-    "special-needs": [
-      { sectionKey: "typicalDay", fieldKey: "morningRoutine", label: "Morning routine" },
-      {
-        sectionKey: "typicalDay",
-        fieldKey: "eveningRoutine",
-        label: "Evening and bedtime routine",
-      },
-    ],
-    general: [
-      { sectionKey: "typicalWeek", fieldKey: "mornings", label: "How a morning goes" },
-      { sectionKey: "typicalWeek", fieldKey: "evenings", label: "How an evening goes" },
-    ],
-  },
+  legacyRefs: [
+    { sectionKey: "routine", fieldKey: "mornings", label: "Morning routine" },
+    { sectionKey: "routine", fieldKey: "evenings", label: "Evening and bedtime routine" },
+  ],
   fields: [
     {
       id: "items",

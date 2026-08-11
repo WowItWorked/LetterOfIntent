@@ -1,29 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { DEFAULT_PATH, pathDef, sectionBySlugInPath } from "@/lib/content/paths";
-import { displayName, fillName, startedCount } from "@/lib/derive";
+import { resolveSlug, sectionsForMeta, startedCount } from "@/lib/content/config";
+import { displayName, fillName } from "@/lib/derive";
 import { useLetterStore } from "@/lib/store";
 import { buttonClasses } from "@/components/ui/Button";
 
 /**
  * Shown only when this device already holds a letter. New visitors see
- * nothing — the chooser below is their starting point.
+ * nothing — the onboarding below is their starting point.
  */
 export function ResumeCard() {
   const hydrated = useLetterStore((s) => s.hasHydrated);
   const data = useLetterStore((s) => s.data);
   const meta = useLetterStore((s) => s.meta);
 
-  const path = meta.letterPath ?? DEFAULT_PATH;
-  const def = pathDef(path);
-  const count = hydrated ? startedCount(data, path) : 0;
+  const count = hydrated ? startedCount(data, meta) : 0;
   if (!hydrated || count === 0) return null;
 
+  const sections = sectionsForMeta(meta, data);
+  const total = sections.length;
+  const lastVisited = meta.lastVisitedSlug ? resolveSlug(meta.lastVisitedSlug) : undefined;
+  // Never reopen a session on the heaviest page: if the family closed the tab
+  // in an emotional section, resume somewhere gentler, with the way back one
+  // click away in the rail.
   const resume =
-    (meta.lastVisitedSlug ? sectionBySlugInPath(meta.lastVisitedSlug, path) : undefined) ??
-    def.sections[0];
+    lastVisited && !lastVisited.emotional ? lastVisited : (sections[0] ?? lastVisited);
   const name = displayName(data);
+  if (!resume) return null;
 
   return (
     <div className="mt-8 rounded-[var(--radius-md)] border border-goldline bg-goldtint p-6">
@@ -31,11 +35,25 @@ export function ResumeCard() {
         Welcome back — your letter is saved on this device.
       </p>
       <p className="mt-2 text-[0.9375rem] text-body">
-        You&rsquo;ve added notes to {count} of {def.sections.length} sections of the{" "}
-        {def.tabLabel.toLowerCase()} letter. You were last in{" "}
-        <span className="font-semibold">
-          &ldquo;{fillName(resume.navTitle, name)}.&rdquo;
-        </span>
+        You&rsquo;ve added notes to {count} of {total} sections.
+        {lastVisited && lastVisited.slug !== resume.slug ? (
+          <>
+            {" "}
+            You were last in{" "}
+            <span className="font-semibold">
+              &ldquo;{fillName(lastVisited.navTitle, name)}&rdquo;
+            </span>
+            — a heavy page to land on first, so this picks up somewhere gentler.
+          </>
+        ) : (
+          <>
+            {" "}
+            You were last in{" "}
+            <span className="font-semibold">
+              &ldquo;{fillName(resume.navTitle, name)}.&rdquo;
+            </span>
+          </>
+        )}
       </p>
       {/* Equal columns, so neither of the two ways forward looks like the
           secondary one. */}

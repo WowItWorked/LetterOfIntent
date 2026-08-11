@@ -3,6 +3,12 @@ import { z } from "zod";
 /**
  * Persistence schema for the whole Letter of Intent.
  *
+ * ONE canonical schema. There are no per-path section variants: every family
+ * writes into the same fields, and the adaptive form decides which questions
+ * to ASK from the onboarding answers in `meta` — never which fields exist.
+ * The full rationale and the complete v1 → v2 field accounting live in
+ * docs/schema-migration.md; the v1 shapes themselves in lib/legacy/v1-schema.
+ *
  * Deliberately permissive: every field is optional and format rules are NOT
  * enforced here. A half-finished letter is a valid letter. Gentle format
  * hints (email/date) live in the UI layer only — see lib/validation.ts —
@@ -27,12 +33,12 @@ export const contactSchema = z.object({
   email: s,
   role: s,
   /**
-   * Card-role tokens: "primary" | "medical_decision" | "pickup" |
-   * "neighbor_backup" — kept as free strings so an imported backup is never
-   * rejected over an unknown token. The older `emergency` boolean below stays
-   * untouched: card derivations treat emergency === true as a legacy synonym
-   * for the primary/emergency role, so a letter written before roles existed
-   * still puts its people on the cards.
+   * Card-role tokens: "primary" | "medical_decision" | "legal_guardian" |
+   * "pickup" | "neighbor_backup" — kept as free strings so an imported backup
+   * is never rejected over an unknown token. The older `emergency` boolean
+   * below stays untouched: card derivations treat emergency === true as a
+   * legacy synonym for the primary/emergency role, so a letter written before
+   * roles existed still puts its people on the cards.
    */
   roles: z.array(z.string()).optional(),
   emergency: b,
@@ -50,10 +56,9 @@ export const providerSchema = z.object({
   notes: s,
   keepOffCards: b,
 });
-// preferredHospital deliberately stays a section scalar (medical and
-// healthMedical each already ask it once per letter) rather than moving onto
-// the provider record as the card model drew it — a family has one preferred
-// hospital, not one per doctor, and moving it would strand existing answers.
+// preferredHospital deliberately stays a section scalar (health asks it once
+// per letter) rather than moving onto the provider record — a family has one
+// preferred hospital, not one per doctor.
 
 export const medicationSchema = z.object({
   id: s,
@@ -76,31 +81,18 @@ export const medicationSchema = z.object({
   location: s,
   refusalStrategy: s,
   sideEffects: s,
-  // The card model nests these as prn: { trigger, maxPerDay }. Flattened here
-  // on purpose: the backup salvage path reads flat optional scalars robustly,
-  // and flat is the house style everywhere else in this schema.
   prnTrigger: s,
   prnMaxPerDay: s,
   keepOffCards: b,
 });
 
-/* ---------------------------------------------------- care-card record types
- *
- * Structured records behind the shareable care cards. Every field optional,
- * every token list a free string: the cards sort and group by the tokens they
- * know and render anything else verbatim, and an imported backup can never be
- * rejected over one.
- */
+/* ---------------------------------------------------- care-card record types */
 
 export const allergyRecordSchema = z.object({
   id: s,
   allergen: s,
   reaction: s,
-  /**
-   * Severity tokens: "life-threatening" | "serious" | "mild". The sort order
-   * (worst first on the emergency card) lives in content/cards.ts, not here —
-   * the schema stores what the family said, the card config decides urgency.
-   */
+  /** Severity tokens: "life-threatening" | "serious" | "mild". */
   severity: s,
   treatment: s,
   keepOffCards: b,
@@ -112,10 +104,7 @@ export const routineRecordSchema = z.object({
   timeOfDay: s,
   /** Free text like "7:00 AM" — the order matters more than the clock. */
   time: s,
-  /**
-   * Multiline: one step per line; the cards split on newline. A string[] would
-   * need a repeater inside a repeater the form is never going to grow.
-   */
+  /** Multiline: one step per line; the cards split on newline. */
   steps: s,
   notes: s,
   keepOffCards: b,
@@ -140,7 +129,15 @@ export const careTaskRecordSchema = z.object({
   keepOffCards: b,
 });
 
-/* ----------------------------------------------------------------- sections */
+export const emergencyScenarioSchema = z.object({
+  id: s,
+  /** The situation, in the family's words — "If she is stung", "If she bolts". */
+  trigger: s,
+  /** Multiline: one action per line; the card numbers them like responseSteps. */
+  steps: s,
+});
+
+/* ------------------------------------------------------- canonical sections */
 
 export const gettingStartedSchema = z.object({
   authorName: s,
@@ -155,11 +152,15 @@ export const gettingStartedSchema = z.object({
   letterDate: s,
 });
 
-export const aboutSchema = z.object({
+/** Who this person is — the portrait, not the paperwork. */
+export const personSchema = z.object({
   dateOfBirth: s,
-  diagnoses: s,
-  lifeHistory: s,
+  whoTheyAre: s,
+  history: s,
+  temperament: s,
   firstFiveMinutes: s,
+  strangersGetWrong: s,
+  cannotAbide: s,
   importantToKnow: s,
 });
 
@@ -169,36 +170,59 @@ export const familySupportSchema = z.object({
   doNotInvolve: s,
 });
 
-export const typicalDaySchema = z.object({
-  morningRoutine: s,
-  eveningRoutine: s,
+/** The shape of their days and week. */
+export const routineSchema = z.object({
+  mornings: s,
+  evenings: s,
   sleep: s,
   food: s,
   clothing: s,
   sensory: s,
   comfortObjects: s,
+  fixedPoints: s,
+  gettingAround: s,
   goodDay: s,
   hardDay: s,
 });
 
+/**
+ * Both directions of communication. `how` (how they express themselves) and
+ * `howToSpeak` (how to address them) look like duplicates and are not — the
+ * emergency sheet's old mis-wiring is what made them look alike. Same for
+ * pain (involuntary signs) vs. wontAdmit (deliberate non-disclosure).
+ */
 export const communicationSchema = z.object({
   how: s,
+  howToSpeak: s,
   yesNo: s,
+  hearingVisionMemory: s,
   pain: s,
+  wontAdmit: s,
   overwhelm: s,
-  whatToSay: s,
-  whatNotToSay: s,
+  hardConversations: s,
+  whatHelps: s,
+  whatToAvoid: s,
 });
 
-export const medicalSchema = z.object({
+/**
+ * emergencyProtocol and appointmentHelp are DIFFERENT questions and must
+ * never merge: printing appointment logistics where a first responder looks
+ * for a protocol is the shipped defect this schema exists to end. Likewise
+ * insurancePlans (plan names) vs. recordsLocation (where papers live).
+ */
+export const healthSchema = z.object({
   providers: z.array(providerSchema).optional(),
   medications: z.array(medicationSchema).optional(),
+  conditions: s,
   allergies: s,
+  pharmacy: s,
+  preferredHospital: s,
   emergencyProtocol: s,
+  appointmentHelp: s,
   therapies: s,
   equipment: s,
-  insurance: s,
-  preferredHospital: s,
+  insurancePlans: s,
+  recordsLocation: s,
   whatWorked: s,
   whatDidNot: s,
 });
@@ -212,54 +236,89 @@ export const behaviorSchema = z.object({
   lawEnforcement: s,
 });
 
-export const educationWorkSchema = z.object({
-  currentProgram: s,
-  iepHistory: s,
-  whatWorksLearning: s,
-  workHistory: s,
-  jobSupports: s,
-  hopes: s,
-});
-
-export const housingSchema = z.object({
+export const homeSchema = z.object({
   currentLiving: s,
+  theHome: s,
   supportLevel: s,
+  householdHelp: s,
+  personalCare: s,
+  petsAndPlants: s,
+  deferred: s,
+  safety: s,
   waiverStatus: s,
   futureHopes: s,
   hardLimits: s,
 });
 
-export const benefitsFinancesSchema = z.object({
+export const schoolWorkSchema = z.object({
+  currentProgram: s,
+  iepHistory: s,
+  whatWorksLearning: s,
+  workHistory: s,
+  currentWork: s,
+  jobSupports: s,
+  commitments: s,
+  keyContacts: s,
+  windDown: s,
+  hopes: s,
+});
+
+export const moneyBenefitsSchema = z.object({
   programs: s,
+  incomeSources: s,
+  whoHandlesBills: s,
+  howBillsArePaid: s,
   repPayee: s,
   ableAccount: s,
   trusts: s,
   pending: s,
   whereRecordsKept: s,
+  vulnerabilities: s,
 });
 
-export const socialFaithSchema = z.object({
-  friends: s,
-  activities: s,
-  faith: s,
-  traditions: s,
-  travel: s,
-  joy: s,
-});
-
-export const legalAdvocacySchema = z.object({
+export const legalSchema = z.object({
+  powersOfAttorney: s,
+  advanceDirectives: s,
+  guardianship: s,
+  whoDecidesWhat: s,
+  /**
+   * Legacy-carried: the old special-needs composite question. Its prose spans
+   * the four sharper fields above, so it is stored, printed, and quoted above
+   * them in the form ("you wrote this earlier") — never asked again, and
+   * never split by software.
+   */
   decisionStatus: s,
   advocates: s,
-  attorney: s,
   advocacyHistory: s,
+  professionals: s,
 });
 
-export const trusteeSchema = z.object({
+export const communityFaithSchema = z.object({
+  friends: s,
+  activities: s,
+  joy: s,
+  faith: s,
+  congregation: s,
+  traditions: s,
+  travel: s,
+});
+
+export const trusteeGuidanceSchema = z.object({
   moneyIsFor: s,
   easyYeses: s,
   spendVsPreserve: s,
   scrutinize: s,
   wishesVsSafety: s,
+  /** Who a trustee checks with before big money decisions — deliberately a
+   *  different question from caregiverGuidance.consultFirst. */
+  consultFirst: s,
+});
+
+export const caregiverGuidanceSchema = z.object({
+  firstWeek: s,
+  hindsight: s,
+  neverChange: s,
+  /** Who a caregiver convenes before anything irreversible. */
   consultFirst: s,
 });
 
@@ -278,112 +337,7 @@ export const personalMessageSchema = z.object({
   toPerson: s,
 });
 
-/* ------------------------------------------------- the general path's sections
- *
- * The second letter — for an aging parent, a spouse, a sibling you look after —
- * asks genuinely different questions, so it gets its own keys rather than
- * reusing the special-needs ones with different labels. Getting started,
- * family & support, final wishes, and the personal message are shared: they
- * ask the same thing either way, and a family that switches paths keeps them.
- */
-
-export const aboutThemSchema = z.object({
-  dateOfBirth: s,
-  whoTheyAre: s,
-  history: s,
-  temperament: s,
-  cannotAbide: s,
-  strangersGetWrong: s,
-});
-
-export const typicalWeekSchema = z.object({
-  mornings: s,
-  evenings: s,
-  fixedPoints: s,
-  gettingAround: s,
-  food: s,
-  goodDay: s,
-  hardDay: s,
-});
-
-export const dailyCommunicationSchema = z.object({
-  howToSpeak: s,
-  hearingVisionMemory: s,
-  wontAdmit: s,
-  hardConversations: s,
-  whatHelps: s,
-  whatToAvoid: s,
-});
-
-export const healthMedicalSchema = z.object({
-  providers: z.array(providerSchema).optional(),
-  medications: z.array(medicationSchema).optional(),
-  conditions: s,
-  allergies: s,
-  pharmacy: s,
-  preferredHospital: s,
-  appointmentHelp: s,
-  recordsLocation: s,
-});
-
-export const homeLivingSchema = z.object({
-  theHome: s,
-  deferred: s,
-  householdHelp: s,
-  personalCare: s,
-  petsAndPlants: s,
-  safety: s,
-});
-
-export const moneyDocumentsSchema = z.object({
-  whoHandlesBills: s,
-  howBillsArePaid: s,
-  incomeSources: s,
-  whereDocumentsKept: s,
-  vulnerabilities: s,
-  advisors: s,
-});
-
-export const workObligationsSchema = z.object({
-  currentWork: s,
-  commitments: s,
-  keyContacts: s,
-  windDown: s,
-});
-
-export const faithCommunitySchema = z.object({
-  faith: s,
-  congregation: s,
-  friendsAndNeighbors: s,
-  traditions: s,
-  pleasures: s,
-});
-
-export const legalDecisionsSchema = z.object({
-  powersOfAttorney: s,
-  advanceDirectives: s,
-  guardianship: s,
-  whoDecidesWhat: s,
-  professionals: s,
-});
-
-export const steppingInSchema = z.object({
-  firstWeek: s,
-  hindsight: s,
-  neverChange: s,
-  consultFirst: s,
-});
-
-/* ------------------------------------------------- shared card-data sections
- *
- * The structured collections the care cards draw from. They sit ALONGSIDE the
- * prose fields (medical.allergies, typicalDay.food, …) rather than replacing
- * them: nothing parses a family's prose into records, and a letter holding
- * only the prose is still whole. Shared by both paths, like familySupport.
- * Not yet in either wizard roster — the form cannot render their pickers until
- * Phase C — but registered in the trio below so a backup written by a newer
- * version restores instead of silently dropping them.
- */
+/* ------------------------------------------------- shared card-data sections */
 
 export const allergiesSchema = z.object({
   items: z.array(allergyRecordSchema).optional(),
@@ -403,82 +357,111 @@ export const careTasksSchema = z.object({
   items: z.array(careTaskRecordSchema).optional(),
 });
 
-export const emergencyScenarioSchema = z.object({
-  id: s,
-  /** The situation, in the family's words — "If she is stung", "If she bolts". */
-  trigger: s,
-  /** Multiline: one action per line; the card numbers them like responseSteps. */
-  steps: s,
-});
-
 export const emergencyPlanSchema = z.object({
   /** Multiline: one numbered step per line — "1 · Auto-injector…". */
   responseSteps: s,
-  /**
-   * Named what-if plans. Each renders on the Emergency card as its own block
-   * labeled by its trigger, steps numbered exactly like responseSteps — which
-   * stays, and still renders first as the unnamed "What to do" block.
-   */
+  /** Named what-if plans, each its own Emergency-card block. */
   scenarios: z.array(emergencyScenarioSchema).optional(),
   call911When: s,
   otherwiseCall: s,
   ifNoOneAnswers: s,
-  /**
-   * The medications card's "Nothing else" block — the family's rule on
-   * unapproved over-the-counter medicine. It lives here rather than on a
-   * medication record because it is a safety rule about medicines the person
-   * does NOT take; there is no record for it to hang on.
-   */
+  /** The medications card's "Nothing else" block. */
   otcPolicy: s,
 });
+
+/* ------------------------------------------------------------------- marks */
+
+/**
+ * Per-field and per-section markers, keyed "sectionKey" or
+ * "sectionKey.fieldId". Known values: "not_applicable" (the family said this
+ * does not apply — outputs skip it, the reading view never calls it a gap),
+ * "come_back" (deliberately deferred), "combined" (the v1 migration joined
+ * two answers here; the form shows a gentle reconcile notice until edited).
+ * A permissive record of strings so a newer backup can never be rejected.
+ */
+export const marksSchema = z.record(z.string(), z.string());
+
+export type MarkValue = "not_applicable" | "come_back" | "combined";
 
 /* -------------------------------------------------------------- whole letter */
 
 export const letterDataSchema = z.object({
   gettingStarted: gettingStartedSchema.optional(),
-  about: aboutSchema.optional(),
+  person: personSchema.optional(),
   familySupport: familySupportSchema.optional(),
-  typicalDay: typicalDaySchema.optional(),
+  routine: routineSchema.optional(),
   communication: communicationSchema.optional(),
-  medical: medicalSchema.optional(),
+  health: healthSchema.optional(),
   behavior: behaviorSchema.optional(),
-  educationWork: educationWorkSchema.optional(),
-  housing: housingSchema.optional(),
-  benefitsFinances: benefitsFinancesSchema.optional(),
-  socialFaith: socialFaithSchema.optional(),
-  legalAdvocacy: legalAdvocacySchema.optional(),
-  trustee: trusteeSchema.optional(),
+  home: homeSchema.optional(),
+  schoolWork: schoolWorkSchema.optional(),
+  moneyBenefits: moneyBenefitsSchema.optional(),
+  legal: legalSchema.optional(),
+  communityFaith: communityFaithSchema.optional(),
+  trusteeGuidance: trusteeGuidanceSchema.optional(),
+  caregiverGuidance: caregiverGuidanceSchema.optional(),
   finalWishes: finalWishesSchema.optional(),
   personalMessage: personalMessageSchema.optional(),
 
-  aboutThem: aboutThemSchema.optional(),
-  typicalWeek: typicalWeekSchema.optional(),
-  dailyCommunication: dailyCommunicationSchema.optional(),
-  healthMedical: healthMedicalSchema.optional(),
-  homeLiving: homeLivingSchema.optional(),
-  moneyDocuments: moneyDocumentsSchema.optional(),
-  workObligations: workObligationsSchema.optional(),
-  faithCommunity: faithCommunitySchema.optional(),
-  legalDecisions: legalDecisionsSchema.optional(),
-  steppingIn: steppingInSchema.optional(),
-
-  // Shared card-data sections (both paths, Phase C wizard registration).
+  // Structured card-data sections.
   allergies: allergiesSchema.optional(),
   routines: routinesSchema.optional(),
   foods: foodsSchema.optional(),
   careTasks: careTasksSchema.optional(),
   emergencyPlan: emergencyPlanSchema.optional(),
+
+  // Not a section: the marks record (see marksSchema).
+  marks: marksSchema.optional(),
 });
 
-export const letterPathSchema = z.enum(["special-needs", "general"]);
+/* --------------------------------------------------------------- routing meta */
 
+/**
+ * Onboarding answers are ROUTING STATE, not letter content: they decide which
+ * questions the form asks, and live in meta so the letter data stays purely
+ * the family's words. Tokens are free strings (never enums) so an imported
+ * backup with an unknown token is kept, not rejected. The full question set
+ * with wording and gating lives in docs/onboarding-questions.md.
+ */
 export const letterMetaSchema = z.object({
   startedAt: s,
   updatedAt: s,
   lastVisitedSlug: s,
+  /** v1 legacy: the final-wishes interstitial ack. Migrated into emotionalAcks. */
   finalWishesAck: b,
-  /** Which set of questions this letter is being written from. */
-  letterPath: letterPathSchema.optional(),
+  /** Slugs whose emotional interstitial the family has acknowledged. */
+  emotionalAcks: z.array(z.string()).optional(),
+  /** v1 legacy: which of the two old question sets this letter was written
+   *  from. Kept so old backups' meta parses; used only by the migration's
+   *  audience inference. Nothing else may read it. */
+  letterPath: s,
+
+  /** "trustee" | "caregiver" | "both" */
+  audience: s,
+  /** "child" | "adult" */
+  stage: s,
+  /** "mostlyIndependent" | "someDailyHelp" | "substantial" | "roundTheClock" */
+  supportLevel: s,
+  /** "yes" | "no" */
+  communicationDiffers: s,
+  /** "yes" | "no" */
+  behaviorEscalates: s,
+  /** "yes" | "early" | "no" */
+  cognitionChanging: s,
+  /** "yes" | "planned" | "no" | "notSure" */
+  hasTrust: s,
+  /** "yes" | "maybe" | "no" */
+  hasBenefits: s,
+  /** Multi-select: "school" | "work" | "neither" */
+  schoolWork: z.array(z.string()).optional(),
+  /** "withWriter" | "ownHome" | "withOthers" | "facility" */
+  livesWith: s,
+  /** True once the family has been through onboarding (or confirmed the
+   *  migration's inferred answers). */
+  onboardingDone: b,
+  /** True when the answers were inferred by the v1 migration and not yet
+   *  confirmed — the onboarding shows once, pre-filled. */
+  onboardingInferred: b,
 });
 
 /**
@@ -515,43 +498,34 @@ export type CareTaskRecord = z.infer<typeof careTaskRecordSchema>;
 export type EmergencyScenario = z.infer<typeof emergencyScenarioSchema>;
 export type LetterData = z.infer<typeof letterDataSchema>;
 export type LetterMeta = z.infer<typeof letterMetaSchema>;
-export type LetterPath = z.infer<typeof letterPathSchema>;
 export type BackupPhoto = z.infer<typeof backupPhotoSchema>;
 export type Backup = z.infer<typeof backupSchema>;
 
-export type SectionKey = keyof LetterData;
+/** Every key of LetterData that is a SECTION (marks is bookkeeping, not one). */
+export type SectionKey = Exclude<keyof LetterData, "marks">;
 
-export const sectionKeys = Object.keys(letterDataSchema.shape) as SectionKey[];
+export const sectionKeys = Object.keys(letterDataSchema.shape).filter(
+  (k) => k !== "marks"
+) as SectionKey[];
 
 /** Per-section schemas, addressable by key (used by tests and the form layer). */
 export const sectionSchemas = {
   gettingStarted: gettingStartedSchema,
-  about: aboutSchema,
+  person: personSchema,
   familySupport: familySupportSchema,
-  typicalDay: typicalDaySchema,
+  routine: routineSchema,
   communication: communicationSchema,
-  medical: medicalSchema,
+  health: healthSchema,
   behavior: behaviorSchema,
-  educationWork: educationWorkSchema,
-  housing: housingSchema,
-  benefitsFinances: benefitsFinancesSchema,
-  socialFaith: socialFaithSchema,
-  legalAdvocacy: legalAdvocacySchema,
-  trustee: trusteeSchema,
+  home: homeSchema,
+  schoolWork: schoolWorkSchema,
+  moneyBenefits: moneyBenefitsSchema,
+  legal: legalSchema,
+  communityFaith: communityFaithSchema,
+  trusteeGuidance: trusteeGuidanceSchema,
+  caregiverGuidance: caregiverGuidanceSchema,
   finalWishes: finalWishesSchema,
   personalMessage: personalMessageSchema,
-
-  aboutThem: aboutThemSchema,
-  typicalWeek: typicalWeekSchema,
-  dailyCommunication: dailyCommunicationSchema,
-  healthMedical: healthMedicalSchema,
-  homeLiving: homeLivingSchema,
-  moneyDocuments: moneyDocumentsSchema,
-  workObligations: workObligationsSchema,
-  faithCommunity: faithCommunitySchema,
-  legalDecisions: legalDecisionsSchema,
-  steppingIn: steppingInSchema,
-
   allergies: allergiesSchema,
   routines: routinesSchema,
   foods: foodsSchema,
@@ -560,4 +534,5 @@ export const sectionSchemas = {
 } as const;
 
 export const BACKUP_APP_ID = "twl-letter-of-intent" as const;
-export const BACKUP_VERSION = 1;
+/** v2: the canonical schema. The importer accepts v1 envelopes forever. */
+export const BACKUP_VERSION = 2;

@@ -4,11 +4,7 @@ import { useMemo, useSyncExternalStore } from "react";
 import { deriveCard } from "@/lib/cards/derive";
 import type { CardData } from "@/lib/cards/types";
 import { CareCard } from "@/components/cards/CareCard";
-import {
-  HOME_CARD_KEYS,
-  SAMPLE_CARD_LETTER,
-  SAMPLE_CARD_PATH,
-} from "@/components/home/sample-card-data";
+import { HOME_CARD_KEYS, SAMPLE_CARD_LETTER } from "@/components/home/sample-card-data";
 
 /**
  * The /care-cards page's gallery: every card, as a real CareCard component
@@ -43,9 +39,9 @@ export function HomeCareCards({ children }: { children?: React.ReactNode }) {
 
   const cards = useMemo(() => {
     if (!mounted) return [];
-    return HOME_CARD_KEYS.map((key) =>
-      deriveCard(SAMPLE_CARD_LETTER, SAMPLE_CARD_PATH, key)
-    ).filter((c): c is CardData => c !== null);
+    return HOME_CARD_KEYS.map((key) => deriveCard(SAMPLE_CARD_LETTER, key)).filter(
+      (c): c is CardData => c !== null
+    );
   }, [mounted]);
 
   return (

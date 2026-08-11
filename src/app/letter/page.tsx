@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PathChooser } from "@/components/letter/PathChooser";
+import { Onboarding } from "@/components/letter/Onboarding";
 import { StartButtons } from "@/components/letter/StartButtons";
 import { ResumeCard } from "@/components/home/ResumeCard";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -8,20 +8,20 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 export const metadata: Metadata = {
   title: "Create your letter",
   description:
-    "Two sets of questions: one for a loved one with disabilities, one for anyone " +
-    "you care for. Read every question before you write a word.",
+    "One set of questions that fits itself to the person you care for. A few " +
+    "answers up front shape the form; read every question before you write a word.",
   alternates: { canonical: "/letter" },
 };
 
 /** The three-step "how it works" trio — moved here from the home page. */
 const HOW_IT_WORKS = [
   {
-    numeral: "I",
+    numeral: "A.",
     title: "Answer what you can",
-    body: "Twenty short sections, every question optional. Jump around. A ten-minute sitting is a real contribution.",
+    body: "Short sections, every question optional. Jump around. A ten-minute sitting is a real contribution.",
   },
   {
-    numeral: "II",
+    numeral: "B.",
     title: "It saves only on your device",
     body: (
       <>
@@ -32,9 +32,9 @@ const HOW_IT_WORKS = [
     ),
   },
   {
-    numeral: "III",
+    numeral: "C.",
     title: "Download the documents and your backup file",
-    body: "A polished, printable Letter of Intent, the one-page emergency sheet, and your care cards, plus the backup file that lets you pick the letter up again later, or on another device.",
+    body: "The polished, printable letters, the one-page emergency sheet, and your care cards, plus the backup file that lets you pick the letter up again later, or on another device.",
   },
 ];
 
@@ -57,13 +57,13 @@ export default function LetterLandingPage() {
             Create your Letter of Intent
           </h1>
           <p className="mt-4 max-w-[72ch] text-lg leading-[1.7] text-oninkbody">
-            Two sets of questions, because two situations are not the same. Pick the one
-            that fits the person you care for, read exactly what it will ask, and begin.
-            Nothing is required, and you can start the other set at any time.
+            One set of questions that fits itself to the person you care for: a child
+            with disabilities, an adult finding their footing, a spouse, an aging
+            parent. A few answers up front shape the form. Nothing is required, and
+            every answer can change later without losing a word.
           </p>
           <p className="mt-5 border-t border-navy500 pt-[18px] text-[0.9375rem] text-oninkbody">
-            It saves as you go, on this device only. About 45 minutes to two hours in
-            total, in as many sittings as you need.
+            It saves as you go, on this device only.
           </p>
         </div>
       </div>
@@ -75,21 +75,16 @@ export default function LetterLandingPage() {
           padding: "clamp(10px, 2vw, 24px) var(--gutter) 80px",
         }}
       >
-      {/* Returning visitors land here from the header's Start now, so the
-          letter already on this device has to be reachable in one click. */}
-      <ResumeCard />
+        {/* Returning visitors land here from the header's Start now, so the
+            letter already on this device has to be reachable in one click. */}
+        <ResumeCard />
 
-      <PathChooser />
-
-      {/* The begin card that used to sit here folded into the how-it-works
-          band below: its copy repeated the band's intro, and the owner asked
-          for the buttons to close the page. */}
+        {/* The onboarding sequence (or, once answered, the answers card),
+            plus the live question-set preview beneath it. */}
+        <Onboarding />
       </div>
 
-      {/* ------------------------------------- how it works, closing the page.
-          Moved from the home page; full-bleed navy like the header band. The
-          begin card directly above holds the start buttons, so this band ends
-          on the steps rather than repeating a CTA. */}
+      {/* ------------------------------------- how it works, closing the page. */}
       <section
         style={{
           background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
@@ -140,7 +135,7 @@ export default function LetterLandingPage() {
           </ol>
 
           <div className="mx-auto mt-[30px] max-w-[640px]">
-            <StartButtons onInk />
+            <StartButtons />
             <p className="mt-[18px] text-center text-[0.9375rem] leading-[1.65] text-oninkbody">
               No account and no email address. It saves on this device as you go, and
               you can{" "}

@@ -172,10 +172,10 @@ export default function CareCardsPage() {
                 ))}
               </ul>
 
-              {/* The card forms the column's top and sides — flush against the
-                  box edges, its corners clipped by the box's own rounding —
-                  with the remaining ground below reserved for the caption. */}
-              <figure className="m-0 flex flex-col border-t border-line bg-paper2 lg:border-l lg:border-t-0">
+              {/* The card sits inside the column, matted: the box's own ground
+                  wraps it on every side, and the card keeps its edges — no
+                  caption, the card speaks for itself. */}
+              <figure className="m-0 flex items-center justify-center border-t border-line bg-surface p-[clamp(22px,2.5vw,34px)] lg:border-l lg:border-t-0">
                 <Image
                   src={INDEX_CARD.asset}
                   alt={
@@ -185,15 +185,9 @@ export default function CareCardsPage() {
                   }
                   width={1080}
                   height={1920}
-                  className="w-full border-b border-line"
+                  className="h-auto w-full max-w-[340px] rounded-[12px]"
+                  style={{ boxShadow: "var(--shadow-md)" }}
                 />
-                <figcaption className="flex flex-1 items-center justify-center px-[clamp(20px,3vw,34px)] py-6">
-                  <span className="max-w-[40ch] text-center text-[0.9375rem] leading-[1.6] text-muted">
-                    The eighth card, included in every download: this list in card
-                    form, the same for every family, so the guide rides in the album
-                    next to the cards themselves.
-                  </span>
-                </figcaption>
               </figure>
             </div>
           </div>

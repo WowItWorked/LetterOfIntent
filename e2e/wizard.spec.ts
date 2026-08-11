@@ -1,14 +1,14 @@
 import { expect, test } from "@playwright/test";
 import fs from "node:fs";
-import { GENERAL_SECTION_SLUGS, LETTER_KEY, SECTION_SLUGS } from "./fixture";
+import { LETTER_KEY, SECTION_SLUGS } from "./fixture";
 
-test("work survives a reload and the chooser offers to resume", async ({ page }) => {
+test("work survives a reload and the letter page offers to resume", async ({ page }) => {
   await page.goto("/letter/getting-started");
   await page.getByLabel("Your name").fill("Maria Alvarez");
   await page.getByLabel("What they like to be called").fill("Alex");
   await page.waitForTimeout(1000);
 
-  await page.goto("/letter/a-typical-day");
+  await page.goto("/letter/typical-days");
   await page.getByLabel("Describe a good day").fill("No surprises. Trains after program.");
   await page.waitForTimeout(1000);
 
@@ -18,50 +18,66 @@ test("work survives a reload and the chooser offers to resume", async ({ page })
   );
 
   // The app now speaks Alex's name (works on any viewport).
-  await page.goto("/letter/about");
+  await page.goto("/letter/about-them");
   await expect(page.getByRole("heading", { level: 1, name: "About Alex" })).toBeVisible();
   // Back to the section we were actually working in, so "last visited" is it.
-  await page.goto("/letter/a-typical-day");
+  await page.goto("/letter/typical-days");
 
   await page.goto("/letter");
   await expect(page.getByText(/welcome back/i)).toBeVisible();
-  await expect(page.getByText(/2 of 20 sections/)).toBeVisible();
+  await expect(page.getByText(/2 of \d+ sections/)).toBeVisible();
   await page.getByRole("link", { name: /pick up where you left off/i }).click();
-  await expect(page).toHaveURL(/a-typical-day/);
+  await expect(page).toHaveURL(/typical-days/);
 });
 
-test("every section is reachable with the Next button and empty fields draw no errors", async ({
+test("every active section is reachable with the Next button and empty fields draw no errors", async ({
   page,
 }) => {
   await page.goto("/letter/getting-started");
-  for (let i = 0; i < SECTION_SLUGS.length - 1; i++) {
-    await expect(page).toHaveURL(new RegExp(SECTION_SLUGS[i].replace(/\//g, "\\/")));
+  // Walk the whole configuration by Next (or the gentle gate's skip). The
+  // roster is finite; the bound only guards against a loop.
+  for (let i = 0; i < SECTION_SLUGS.length + 2; i++) {
     // No validation messages anywhere on an untouched form.
     await expect(page.getByText(/doesn't look/i)).toHaveCount(0);
+    if (page.url().includes("a-personal-message")) break;
     const next = page.getByRole("link", { name: /^Next:/ });
     if (await next.count()) {
       await next.click();
     } else {
-      // Final wishes shows its gentle gate instead of a Next button.
+      // An emotional section shows its gentle gate instead of a Next button.
       await page.getByRole("link", { name: /skip for now/i }).click();
     }
   }
   await expect(page).toHaveURL(/a-personal-message/);
-  // Scoped to the article: the rail has its own "Review & download" link.
+  // The last section is emotional too — acknowledge it, then leave via the
+  // article's own review link.
+  await page.getByRole("button", { name: /ready/i }).click();
   await page.locator("article").getByRole("link", { name: /review & download/i }).click();
   await expect(page.getByText(/nothing to review yet/i)).toBeVisible();
 });
 
-test("choosing the general path switches the rail to its nineteen sections", async ({
+test("the onboarding answers shape the form — an aging configuration drops the sharp sections", async ({
   page,
 }) => {
   await page.goto("/letter");
-  // Both the option card and the closing card offer this; take the card.
-  await page.getByRole("button", { name: /start the general letter/i }).first().click();
+
+  // The ten questions, one tap each (multi-select advances via Continue).
+  await page.getByRole("button", { name: /day-to-day care/i }).click();
+  await page.getByRole("button", { name: /^An adult$/ }).click();
+  await page.getByRole("button", { name: /they mostly manage/i }).click();
+  await page.getByRole("button", { name: /^No$/ }).click(); // communicates differently
+  await page.getByRole("button", { name: /^No$/ }).click(); // escalates
+  await page.getByRole("button", { name: /early signs/i }).click();
+  await page.getByRole("button", { name: /^No$/ }).click(); // trust
+  await page.getByRole("button", { name: /^No$/ }).click(); // benefits
+  await page.getByRole("button", { name: /neither right now/i }).click();
+  await page.getByRole("button", { name: /continue/i }).click();
+  await page.getByRole("button", { name: /in their own home/i }).click();
+
   await expect(page).toHaveURL(/getting-started/);
 
-  // The rail (or the mobile menu) now lists the general set. Both are in the
-  // DOM at every width — only one of them is visible.
+  // The rail (or the mobile menu) reflects the configuration: the week-shaped
+  // routine section, no trustee guidance, no behavior section.
   const menu = page.locator("details > summary").filter({ hasText: "Sections" });
   if (await menu.isVisible()) await menu.click();
   const nav = page
@@ -70,19 +86,63 @@ test("choosing the general path switches the rail to its nineteen sections", asy
     .first();
   await expect(nav.getByRole("link", { name: /a typical week/i })).toBeVisible();
   await expect(nav.getByRole("link", { name: /for the trustee/i })).toHaveCount(0);
+  await expect(nav.getByRole("link", { name: /behavior support/i })).toHaveCount(0);
 
-  await page.goto("/letter/a-typical-week");
+  // The adaptive section carries its aging wording.
+  await page.goto("/letter/typical-days");
   await expect(
     page.getByRole("heading", { level: 1, name: /a typical week/i })
   ).toBeVisible();
-  await expect(page.getByText(/of 19 ·/i).first()).toBeVisible();
 });
 
-test("every general-path section renders", async ({ page }) => {
-  for (const slug of GENERAL_SECTION_SLUGS) {
+test("changing an answer later re-gates the form without losing work", async ({ page }) => {
+  await page.goto("/letter/getting-started");
+  await page.getByLabel("What they like to be called").fill("Bob");
+  await page.waitForTimeout(1000);
+
+  // Behavior is gated off with no answers…
+  await page.goto("/letter");
+  const answersButton = page.getByRole("button", { name: /day-to-day care/i });
+  await expect(answersButton).toBeVisible();
+
+  // …until the escalation answer opens it. Walk the sequence with yes.
+  await answersButton.click();
+  await page.getByRole("button", { name: /^A child$/ }).click();
+  await page.getByRole("button", { name: /around the clock/i }).click();
+  await page.getByRole("button", { name: /^Yes$/ }).click(); // communicates differently
+  await page.getByRole("button", { name: /^Yes$/ }).click(); // escalates
+  await page.getByRole("button", { name: /^No$/ }).click(); // cognition
+  await page.getByRole("button", { name: /not sure/i }).click(); // trust
+  await page.getByRole("button", { name: /^Yes$/ }).click(); // benefits
+  await page.getByRole("button", { name: /school or a day program/i }).click();
+  await page.getByRole("button", { name: /continue/i }).click();
+  await page.getByRole("button", { name: /^With me$/ }).click();
+
+  await expect(page).toHaveURL(/getting-started/);
+  // The earlier work survived the re-gating.
+  await expect(page.getByLabel("What they like to be called")).toHaveValue("Bob");
+  // And the behavior section is now in the rail.
+  const menu = page.locator("details > summary").filter({ hasText: "Sections" });
+  if (await menu.isVisible()) await menu.click();
+  const nav = page
+    .getByRole("navigation", { name: "Letter sections" })
+    .filter({ visible: true })
+    .first();
+  await expect(nav.getByRole("link", { name: /behavior support/i })).toBeVisible();
+});
+
+test("every canonical section renders, and the retired two-path slugs redirect", async ({
+  page,
+}) => {
+  for (const slug of SECTION_SLUGS) {
     await page.goto(`/letter/${slug}`);
     await expect(page.locator("h1")).toBeVisible();
   }
+  // A bookmark from the two-path era lands on the canonical section.
+  await page.goto("/letter/medical");
+  await expect(page).toHaveURL(/health-and-medical/);
+  await page.goto("/letter/a-typical-week");
+  await expect(page).toHaveURL(/typical-days/);
 });
 
 test("the final-wishes interstitial is gentle, skippable, and remembered", async ({
@@ -116,6 +176,7 @@ test("export → delete-all → import round-trips the letter", async ({ page },
   await (await dl).saveAs(backupPath);
   const backup = JSON.parse(fs.readFileSync(backupPath, "utf8"));
   expect(backup.app).toBe("twl-letter-of-intent");
+  expect(backup.version).toBe(2);
   expect(backup.data.gettingStarted.subjectPreferredName).toBe("Alex");
 
   // Delete everything, and verify the tool checked its own work.
@@ -142,10 +203,10 @@ test("the wizard works at 375px: mobile section menu navigates", async ({ page, 
   await page.locator("details > summary").filter({ hasText: "Sections" }).click();
   await page
     .getByRole("navigation", { name: "Letter sections" })
-    .getByRole("link", { name: /^Medical$/i })
+    .getByRole("link", { name: /health & medical/i })
     .click();
-  await expect(page).toHaveURL(/medical/);
-  await expect(page.getByRole("heading", { level: 1, name: /medical/i })).toBeVisible();
+  await expect(page).toHaveURL(/health-and-medical/);
+  await expect(page.getByRole("heading", { level: 1, name: /health and medical/i })).toBeVisible();
 });
 
 test("the header collapses to a menu on a narrow screen", async ({ page, isMobile }) => {

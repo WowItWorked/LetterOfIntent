@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { firm } from "@/config/firm";
-import { DEFAULT_PATH, pathDef } from "@/lib/content/paths";
+import { sectionsForMeta, startedCount } from "@/lib/content/config";
 import type { FieldDef, SectionDef } from "@/lib/content/types";
 import {
   displayName,
@@ -15,7 +15,6 @@ import {
   letterDateIso,
   readerName,
   sectionHasContent,
-  startedCount,
 } from "@/lib/derive";
 import { serializeBackup } from "@/lib/backup";
 import { documentFilename } from "@/lib/filenames";
@@ -23,7 +22,7 @@ import { buildReviewReminderIcs, calendarLinks } from "@/lib/ics";
 import { triggerDownload } from "@/lib/download";
 import { photosForBackup } from "@/lib/photos";
 import { useLetterStore } from "@/lib/store";
-import type { LetterData, LetterPath } from "@/lib/schema";
+import type { LetterData, LetterMeta } from "@/lib/schema";
 import { Button, buttonClasses } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ReminderPanel } from "@/components/review/ReminderPanel";
@@ -40,19 +39,19 @@ export function ReviewScreen() {
   const [busy, setBusy] = useState<FileKind | "all" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const path = meta.letterPath ?? DEFAULT_PATH;
-  const def = pathDef(path);
-  const total = def.sections.length;
-  const count = hydrated ? startedCount(data, path) : 0;
+  const sections = sectionsForMeta(meta, data);
+  const total = sections.length;
+  const count = hydrated ? startedCount(data, meta) : 0;
   const name = displayName(data);
 
   /* ------------------------------------------------------------ downloads */
   const downloadBackup = async () => {
     const photos = await photosForBackup();
+    // The backup carries the routing answers in meta, so a restore re-fits
+    // the form without asking anything.
     triggerDownload(
-      documentFilename("backup", path),
-      // The file always says which letter it is — see DataControls.
-      serializeBackup(data, { ...meta, letterPath: path }, photos),
+      documentFilename("backup"),
+      serializeBackup(data, meta, photos),
       "application/json"
     );
   };
@@ -60,11 +59,11 @@ export function ReviewScreen() {
   const downloadPdf = async (kind: "letter" | "emergency") => {
     const mod = await import("@/lib/pdf/generate");
     if (kind === "letter") {
-      const blob = await mod.generateLetterPdfBlob(data, path);
-      triggerDownload(mod.letterPdfFilename(path), blob, "application/pdf");
+      const blob = await mod.generateLetterPdfBlob(data, meta);
+      triggerDownload(mod.letterPdfFilename(), blob, "application/pdf");
     } else {
-      const blob = await mod.generateEmergencyPdfBlob(data, path);
-      triggerDownload(mod.emergencyPdfFilename(path), blob, "application/pdf");
+      const blob = await mod.generateEmergencyPdfBlob(data);
+      triggerDownload(mod.emergencyPdfFilename(), blob, "application/pdf");
     }
   };
 
@@ -99,7 +98,7 @@ export function ReviewScreen() {
             to a future caregiver than the perfect letter that never got written.
           </p>
           <Link
-            href={`/letter/${def.sections[0].slug}`}
+            href={`/letter/${sections[0]?.slug ?? "getting-started"}`}
             className={buttonClasses("primary", "mt-4")}
           >
             Start with the first section
@@ -329,7 +328,7 @@ export function ReviewScreen() {
       </section>
 
       {/* ---------------------------------------------------- reading view */}
-      <ReadingView data={data} hydrated={hydrated} path={path} />
+      <ReadingView data={data} hydrated={hydrated} meta={meta} />
     </Shell>
   );
 }
@@ -526,14 +525,14 @@ function YearlyReview({ data }: { data: LetterData }) {
 function ReadingView({
   data,
   hydrated,
-  path,
+  meta,
 }: {
   data: LetterData;
   hydrated: boolean;
-  path: LetterPath;
+  meta: LetterMeta;
 }) {
   if (!hydrated) return null;
-  const sections = pathDef(path).sections;
+  const sections = sectionsForMeta(meta, data);
   const name = readerName(data);
   const included = sections.filter((d) => sectionHasContent(data, d));
   const missing = sections.filter((d) => !sectionHasContent(data, d));

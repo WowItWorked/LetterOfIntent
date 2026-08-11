@@ -1,11 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { deriveCard } from "@/lib/cards/derive";
 import { letterDataSchema } from "@/lib/schema";
-import {
-  HOME_CARD_KEYS,
-  SAMPLE_CARD_LETTER,
-  SAMPLE_CARD_PATH,
-} from "@/components/home/sample-card-data";
+import { HOME_CARD_KEYS, SAMPLE_CARD_LETTER } from "@/components/home/sample-card-data";
 
 /**
  * The home page renders real CareCards from this fixture with no fallback UI:
@@ -21,7 +17,7 @@ describe("the home page sample letter", () => {
   it.each(HOME_CARD_KEYS.map((key) => [key] as const))(
     "derives the %s card the section renders",
     (key) => {
-      const card = deriveCard(SAMPLE_CARD_LETTER, SAMPLE_CARD_PATH, key);
+      const card = deriveCard(SAMPLE_CARD_LETTER, key);
       expect(card).not.toBeNull();
       // A derived card with no blocks would be a header over nothing.
       expect(card!.blocks.length).toBeGreaterThan(0);
@@ -41,7 +37,7 @@ describe("the home page sample letter", () => {
     // real gate; a fixture edit that trips THESE ceilings has already lost
     // in a real browser.
     for (const key of HOME_CARD_KEYS) {
-      const card = deriveCard(SAMPLE_CARD_LETTER, SAMPLE_CARD_PATH, key);
+      const card = deriveCard(SAMPLE_CARD_LETTER, key);
       expect(card!.blocks.length).toBeLessThanOrEqual(6);
       for (const block of card!.blocks) {
         expect(block.lines.length).toBeLessThanOrEqual(4);

@@ -2,7 +2,7 @@
 
 import { sectionCardStatuses } from "@/lib/cards/status";
 import { useLetterStore } from "@/lib/store";
-import type { LetterPath, SectionKey } from "@/lib/schema";
+import type { SectionKey } from "@/lib/schema";
 
 /**
  * One quiet line per care card this section feeds, judged by the same derive
@@ -12,15 +12,9 @@ import type { LetterPath, SectionKey } from "@/lib/schema";
  * no error tone, no red, nothing blocks — the cards are a bonus on top of
  * the letter, not homework.
  */
-export function CardStatusPanel({
-  section,
-  path,
-}: {
-  section: SectionKey;
-  path: LetterPath;
-}) {
+export function CardStatusPanel({ section }: { section: SectionKey }) {
   const data = useLetterStore((s) => s.data);
-  const statuses = sectionCardStatuses(data, path, section);
+  const statuses = sectionCardStatuses(data, section);
   if (statuses.length === 0) return null;
 
   return (

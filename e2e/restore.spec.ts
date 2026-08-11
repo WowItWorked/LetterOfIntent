@@ -3,8 +3,9 @@ import { FULL_LETTER, seedLetter } from "./fixture";
 
 /**
  * Loading a backup is the one place a family can lose work, so every branch
- * gets exercised: the happy path, the file that predates the second letter,
- * the file we cannot tell apart, and the file we cannot read at all.
+ * gets exercised: the happy path, the v1 file from the two-path era (which
+ * must import cleanly forever), the damaged file, and the file we cannot
+ * read at all.
  */
 
 const json = (value: unknown) => ({
@@ -18,7 +19,9 @@ async function upload(page: Page, file: ReturnType<typeof json>) {
   await page.locator('input[type="file"]').setInputFiles(file);
 }
 
-test("a backup that names its letter loads without asking anything", async ({ page }) => {
+test("a v1 general-era backup loads cleanly, its answers carried into the letter", async ({
+  page,
+}) => {
   await upload(
     page,
     json({
@@ -33,13 +36,14 @@ test("a backup that names its letter loads without asking anything", async ({ pa
   );
 
   await expect(page.getByText(/backup loaded/i)).toBeVisible();
+  await expect(page.getByText(/older version of this tool/i)).toBeVisible();
   await page.goto("/letter/for-whoever-steps-in");
   await expect(page.getByLabel(/what the first week should look like/i)).toHaveValue(
     "Call Hannah first."
   );
 });
 
-test("a backup from before the second letter existed is matched by its sections", async ({
+test("a v1 special-needs backup with no letterPath at all still lands canonical", async ({
   page,
 }) => {
   await upload(
@@ -47,7 +51,7 @@ test("a backup from before the second letter existed is matched by its sections"
     json({
       app: "twl-letter-of-intent",
       version: 1,
-      // No meta.letterPath at all — the shape of an older export.
+      // No meta.letterPath — the shape of an older export.
       data: {
         gettingStarted: { subjectPreferredName: "Alex" },
         trustee: { moneyIsFor: "A life, not a ledger." },
@@ -56,14 +60,15 @@ test("a backup from before the second letter existed is matched by its sections"
   );
 
   await expect(page.getByText(/backup loaded/i)).toBeVisible();
-  await expect(page.getByText(/did not say which letter/i)).toBeVisible();
   await page.goto("/letter/guidance-for-the-trustee");
   await expect(page.getByLabel(/what is it paying for/i)).toHaveValue(
     "A life, not a ledger."
   );
 });
 
-test("a backup that cannot be told apart asks which letter it is", async ({ page }) => {
+test("a shared-sections-only v1 file loads silently — nobody is asked which letter it was", async ({
+  page,
+}) => {
   await upload(
     page,
     json({
@@ -72,18 +77,34 @@ test("a backup that cannot be told apart asks which letter it is", async ({ page
     })
   );
 
-  const dialog = page.getByRole("dialog");
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByText(/which letter is this/i)).toBeVisible();
-
-  await dialog.getByRole("button", { name: /aging & general care/i }).click();
+  await expect(page.getByRole("dialog")).toBeHidden();
   await expect(page.getByText(/backup loaded/i)).toBeVisible();
+  await page.goto("/letter/family-and-support");
+  await expect(page.getByLabel(/who would you call first/i)).toHaveValue("Dana");
+});
 
-  // It went into the set the person picked. Asserted on the section header
-  // rather than the rail, which is inside a collapsed menu on a narrow screen.
-  await page.goto("/letter/a-typical-week");
-  await expect(page.locator("h1")).toBeVisible();
-  await expect(page.getByText(/Section \d+ of 19/i)).toBeVisible();
+test("a v1 file holding BOTH old shapes keeps both answers, joined for review", async ({
+  page,
+}) => {
+  await upload(
+    page,
+    json({
+      app: "twl-letter-of-intent",
+      version: 1,
+      meta: { letterPath: "special-needs" },
+      data: {
+        typicalDay: { goodDay: "He hums at dinner." },
+        typicalWeek: { goodDay: "The garden is in it." },
+      },
+    })
+  );
+
+  await expect(page.getByText(/backup loaded/i)).toBeVisible();
+  await expect(page.getByText(/both were kept together/i)).toBeVisible();
+  await page.goto("/letter/typical-days");
+  const value = await page.getByLabel(/good day/i).inputValue();
+  expect(value).toContain("hums");
+  expect(value).toContain("garden");
 });
 
 test("a damaged backup restores what it can and says what it could not", async ({
@@ -107,7 +128,7 @@ test("a damaged backup restores what it can and says what it could not", async (
   await expect(page.getByText(/backup loaded/i)).toBeVisible();
   await expect(page.getByText(/could not be read/i)).toBeVisible();
 
-  await page.goto("/letter/medical");
+  await page.goto("/letter/health-and-medical");
   await expect(page.getByLabel(/allergies/i).first()).toHaveValue("Penicillin");
 });
 
@@ -139,8 +160,6 @@ test("a backup carrying a __proto__ key cannot pollute the page", async ({ page 
   await page.locator('input[type="file"]').setInputFiles({
     name: "hostile.json",
     mimeType: "application/json",
-    // Includes a special-needs-only section so the file identifies itself and
-    // loads straight through — this test is about the payload, not the chooser.
     buffer: Buffer.from(
       '{"gettingStarted":{"subjectPreferredName":"Alex"},' +
         '"trustee":{"moneyIsFor":"A life"},' +
@@ -155,7 +174,7 @@ test("a backup carrying a __proto__ key cannot pollute the page", async ({ page 
   expect(polluted).toBeNull();
 });
 
-test("downloaded files are named by document and date, never by person", async ({
+test("downloaded files are named by document and date, never by person or question set", async ({
   page,
 }) => {
   await seedLetter(page, FULL_LETTER);
@@ -173,39 +192,26 @@ test("downloaded files are named by document and date, never by person", async (
 
   expect(names).toEqual(
     expect.arrayContaining([
-      `Letter-of-Intent-Disabilities-${iso}.pdf`,
+      `Letter-of-Intent-${iso}.pdf`,
       `Emergency-Information-Sheet-${iso}.pdf`,
-      `Letter-of-Intent-Disabilities-Backup-${iso}.json`,
+      `Letter-of-Intent-Backup-${iso}.json`,
     ])
   );
-  // FULL_LETTER is about "Alex"; no filename may say so.
-  for (const n of names) expect(n.toLowerCase()).not.toContain("alex");
+  // FULL_LETTER is about "Alex"; no filename may say so — and with one form,
+  // no filename qualifies a question set either.
+  for (const n of names) {
+    expect(n.toLowerCase()).not.toContain("alex");
+    expect(n).not.toMatch(/Disabilities|Anyone/);
+  }
 });
 
-test("the letter chooser offers watermarked samples, drawn in the page", async ({
+test("the sample documents still render watermarked, drawn in the page", async ({
   page,
 }) => {
   const downloads: string[] = [];
   page.on("download", (d) => downloads.push(d.suggestedFilename()));
 
-  // The letter samples moved from the home page to the chooser, beside the
-  // decision they inform — one per path. The emergency-sheet sample lives on
-  // /emergency-sheet now, so it no longer repeats here.
-  await page.goto("/letter");
-  const links = page.locator('main a[href^="/samples/letter-of-intent"]');
-  await expect(links).toHaveCount(2);
-  await expect(page.locator('main a[href^="/samples/emergency"]')).toHaveCount(0);
-
-  for (const link of await links.all()) {
-    // Same tab, same masthead — a sample is part of browsing the site, not a
-    // hand-off to a separate window.
-    expect(await link.getAttribute("target")).toBeNull();
-    // The viewer, not the raw file — whether a browser opens or downloads a
-    // PDF is a per-browser setting we do not control.
-    expect(await link.getAttribute("href")).not.toMatch(/\.pdf$/);
-  }
-
-  // Following one renders the document rather than handing over a file.
+  // The sample viewer renders the document rather than handing over a file.
   await page.goto("/samples/letter-of-intent-disabilities");
   await expect(page.locator("canvas").first()).toBeVisible({ timeout: 60_000 });
   expect(downloads).toEqual([]);

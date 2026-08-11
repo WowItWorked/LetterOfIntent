@@ -15,6 +15,7 @@ import {
 import {
   fillName,
   formatDateLong,
+  isNotApplicable,
   itemHasContent,
   letterDateIso,
   preferredName,
@@ -28,7 +29,6 @@ import type {
   EmergencyScenario,
   FoodRecord,
   LetterData,
-  LetterPath,
   Medication,
   Provider,
   RoutineRecord,
@@ -114,30 +114,28 @@ export const TOKEN_MINUTES: Readonly<Record<string, number>> = {
   bedtime: 21 * 60 + 30,
 };
 
-/** Behavior card blocks per path, in PRIORITY_ORDER.behavior's token terms. */
+/**
+ * Behavior card blocks, in PRIORITY_ORDER.behavior's token terms. One
+ * canonical list: where a sharp source has a broader stand-in (triggers /
+ * cannotAbide, pain / wontAdmit), `fields` lists both and the builder takes
+ * the first with content. Labels stay reader-neutral so either source reads
+ * true under them.
+ */
 interface BehaviorItemDef {
   item: string;
-  field: string;
+  fields: readonly string[];
   label: string;
 }
 
-const BEHAVIOR_ITEMS: Record<LetterPath, readonly BehaviorItemDef[]> = {
-  "special-needs": [
-    { item: "escalates_when", field: "triggers", label: "It goes sideways when" },
-    { item: "what_helps", field: "deEscalation", label: "What helps" },
-    { item: "how_they_communicate", field: "how", label: "How they communicate" },
-    { item: "yes_no_signals", field: "yesNo", label: "Yes and no" },
-    { item: "pain_signals", field: "pain", label: "Pain looks like" },
-    { item: "what_not_to_say", field: "whatNotToSay", label: "Do not say" },
-  ],
-  general: [
-    { item: "escalates_when", field: "cannotAbide", label: "What they cannot stand" },
-    { item: "what_helps", field: "whatHelps", label: "What helps" },
-    { item: "how_they_communicate", field: "howToSpeak", label: "How to talk with them" },
-    { item: "pain_signals", field: "wontAdmit", label: "What they will not admit" },
-    { item: "what_not_to_say", field: "whatToAvoid", label: "What to avoid" },
-  ],
-};
+const BEHAVIOR_ITEMS: readonly BehaviorItemDef[] = [
+  { item: "escalates_when", fields: ["triggers", "cannotAbide"], label: "It goes sideways when" },
+  { item: "what_helps", fields: ["deEscalation", "whatHelps"], label: "What helps" },
+  { item: "how_they_communicate", fields: ["how", "howToSpeak"], label: "How they communicate" },
+  { item: "yes_no_signals", fields: ["yesNo"], label: "Yes and no" },
+  { item: "pain_signals", fields: ["pain", "wontAdmit"], label: "Pain looks like" },
+  { item: "what_not_to_say", fields: ["whatToAvoid"], label: "Do not say" },
+  { item: "first_responders", fields: ["lawEnforcement"], label: "For first responders" },
+];
 
 /** Food groups in emission order: the dangerous block is pinned to the top. */
 const FOOD_GROUPS: ReadonlyArray<{ type: string; itemKey: string; label: string }> = [
@@ -227,8 +225,8 @@ export function ageFrom(dobIso: string | undefined, onDateIso: string): number |
 
 /* ------------------------------------------------- config-driven accessors */
 
-function findSource(key: CardKey, path: LetterPath, field: string): CardSource | undefined {
-  return SOURCES[key][path].find((s) => s.field === field);
+function findSource(key: CardKey, field: string): CardSource | undefined {
+  return SOURCES[key].find((s) => s.field === field);
 }
 
 function rawSectionValue(data: LetterData, section: keyof LetterData, field: string): unknown {
@@ -294,32 +292,33 @@ function resolveRecords(data: LetterData, src: CardSource): AnyRecord[] {
  * field lives in — different per path for most cards — is stated once, in
  * content/cards.ts, and derive can never disagree with it.
  */
-function srcScalar(data: LetterData, key: CardKey, path: LetterPath, field: string): string | undefined {
-  const src = findSource(key, path, field);
+function srcScalar(data: LetterData, key: CardKey, field: string): string | undefined {
+  const src = findSource(key, field);
   if (!src || src.kind !== "scalar") return undefined;
+  if (isNotApplicable(data, src.section, src.field)) return undefined;
   const v = rawSectionValue(data, src.section, src.field);
   return typeof v === "string" ? trimmed(v) : undefined;
 }
 
-function srcRecords<T>(data: LetterData, key: CardKey, path: LetterPath, field: string): T[] {
-  const src = findSource(key, path, field);
+function srcRecords<T>(data: LetterData, key: CardKey, field: string): T[] {
+  const src = findSource(key, field);
   if (!src || src.kind !== "records") return [];
+  if (isNotApplicable(data, src.section, src.field)) return [];
   // The zod schema guarantees these shapes; the cast narrows what liveRecords
   // had to treat as unknown.
   return resolveRecords(data, src) as unknown as T[];
 }
 
 /** True when every record source on the card is empty — the legacy blob's gate. */
-function recordSourcesEmpty(data: LetterData, key: CardKey, path: LetterPath): boolean {
-  return SOURCES[key][path]
+function recordSourcesEmpty(data: LetterData, key: CardKey): boolean {
+  return SOURCES[key]
     .filter((s) => s.kind === "records")
     .every((s) => resolveRecords(data, s).length === 0);
 }
 
 /* ------------------------------------------------------ render requirements */
 
-function refHasContent(data: LetterData, path: LetterPath, ref: SourceRef): boolean {
-  if (ref.path && ref.path !== path) return false;
+function refHasContent(data: LetterData, ref: SourceRef): boolean {
   const v = rawSectionValue(data, ref.section, ref.field);
   if (Array.isArray(v)) return applyRecordFilter(liveRecords(v), ref.recordFilter).length > 0;
   return typeof v === "string" && v.trim() !== "";
@@ -332,10 +331,9 @@ function refHasContent(data: LetterData, path: LetterPath, ref: SourceRef): bool
  */
 export function needMet(
   data: LetterData,
-  path: LetterPath,
   need: { anyOf: readonly SourceRef[] }
 ): boolean {
-  return need.anyOf.some((ref) => refHasContent(data, path, ref));
+  return need.anyOf.some((ref) => refHasContent(data, ref));
 }
 
 /**
@@ -343,8 +341,8 @@ export function needMet(
  * deriveCard — a card that is only a header is worse than no card, because
  * someone might trust it.
  */
-export function requirementsMet(data: LetterData, path: LetterPath, key: CardKey): boolean {
-  return RENDER_REQUIREMENTS[key].every((need) => needMet(data, path, need));
+export function requirementsMet(data: LetterData, key: CardKey): boolean {
+  return RENDER_REQUIREMENTS[key].every((need) => needMet(data, need));
 }
 
 /* ------------------------------------------------------------ block helpers */
@@ -510,10 +508,10 @@ interface BuiltBody {
   blocks: CardBlock[];
 }
 
-function buildIdentity(data: LetterData, path: LetterPath): BuiltBody {
+function buildIdentity(data: LetterData): BuiltBody {
   const full = trimmed(data.gettingStarted?.subjectFullName);
   const pref = trimmed(data.gettingStarted?.subjectPreferredName);
-  const dob = srcScalar(data, "identity", path, "dateOfBirth");
+  const dob = srcScalar(data, "identity", "dateOfBirth");
 
   const sub = [
     full && pref && pref !== full ? `Goes by ${pref}` : undefined,
@@ -525,17 +523,17 @@ function buildIdentity(data: LetterData, path: LetterPath): BuiltBody {
   const person: CardPerson = {
     name: full ?? pref ?? readerName(data),
     sub: sub || undefined,
-    sub2: srcScalar(data, "identity", path, "subjectAddress"),
+    sub2: srcScalar(data, "identity", "subjectAddress"),
   };
 
   const blocks: CardBlock[] = [];
 
-  const contacts = srcRecords<Contact>(data, "identity", path, "contacts");
+  const contacts = srcRecords<Contact>(data, "identity", "contacts");
   pushBlock(blocks, makeBlock("identity", "primary_contact", "Who to call", contacts.map(contactLine)));
 
-  const providers = srcRecords<Provider>(data, "identity", path, "providers");
+  const providers = srcRecords<Provider>(data, "identity", "providers");
   const careLines = providers.map(providerLine);
-  const hospital = srcScalar(data, "identity", path, "preferredHospital");
+  const hospital = srcScalar(data, "identity", "preferredHospital");
   if (hospital) careLines.push({ k: "Preferred hospital — ", v: hospital });
   pushBlock(blocks, makeBlock("identity", "provider", "Care team", careLines));
 
@@ -545,20 +543,20 @@ function buildIdentity(data: LetterData, path: LetterPath): BuiltBody {
       "identity",
       "if_no_one_answers",
       "If no one answers",
-      paragraphLines(srcScalar(data, "identity", path, "ifNoOneAnswers"))
+      paragraphLines(srcScalar(data, "identity", "ifNoOneAnswers"))
     )
   );
 
   return { person, blocks };
 }
 
-function buildEmergency(data: LetterData, path: LetterPath): BuiltBody {
+function buildEmergency(data: LetterData): BuiltBody {
   const blocks: CardBlock[] = [];
 
-  const allergies = sortAllergies(srcRecords<AllergyRecord>(data, "emergency", path, "items"));
+  const allergies = sortAllergies(srcRecords<AllergyRecord>(data, "emergency", "items"));
   pushBlock(blocks, makeBlock("emergency", "allergies_by_severity", "Allergies", allergies.map(allergyLine)));
 
-  const rescue = srcRecords<Medication>(data, "emergency", path, "medications");
+  const rescue = srcRecords<Medication>(data, "emergency", "medications");
   pushBlock(
     blocks,
     makeBlock("emergency", "rescue_meds_with_location", "Rescue medication", rescue.map(rescueMedLine))
@@ -570,7 +568,7 @@ function buildEmergency(data: LetterData, path: LetterPath): BuiltBody {
       "emergency",
       "response_steps",
       "What to do",
-      numberedLines(srcScalar(data, "emergency", path, "responseSteps"))
+      numberedLines(srcScalar(data, "emergency", "responseSteps"))
     )
   );
 
@@ -578,7 +576,7 @@ function buildEmergency(data: LetterData, path: LetterPath): BuiltBody {
   // exactly as the family wrote it ("If she is stung" — the frozen card visual
   // uppercases every block label). Not critical-toned: the flags stay on
   // allergies and the 911 line.
-  const scenarios = srcRecords<EmergencyScenario>(data, "emergency", path, "scenarios");
+  const scenarios = srcRecords<EmergencyScenario>(data, "emergency", "scenarios");
   for (const sc of scenarios) {
     pushBlock(
       blocks,
@@ -586,15 +584,15 @@ function buildEmergency(data: LetterData, path: LetterPath): BuiltBody {
     );
   }
 
-  const call911 = srcScalar(data, "emergency", path, "call911When");
-  const otherwise = srcScalar(data, "emergency", path, "otherwiseCall");
+  const call911 = srcScalar(data, "emergency", "call911When");
+  const otherwise = srcScalar(data, "emergency", "otherwiseCall");
   const callText = sentenceJoin(call911, otherwise ? `otherwise, call ${otherwise}` : undefined);
   pushBlock(
     blocks,
     makeBlock("emergency", "call_911_when", "Call 911", callText ? [{ v: callText }] : [])
   );
 
-  const contacts = srcRecords<Contact>(data, "emergency", path, "contacts");
+  const contacts = srcRecords<Contact>(data, "emergency", "contacts");
   pushBlock(blocks, makeBlock("emergency", "rest", "Then call", contacts.map(contactLine)));
 
   pushBlock(
@@ -603,16 +601,16 @@ function buildEmergency(data: LetterData, path: LetterPath): BuiltBody {
       "emergency",
       "rest",
       "If no one answers",
-      paragraphLines(srcScalar(data, "emergency", path, "ifNoOneAnswers"))
+      paragraphLines(srcScalar(data, "emergency", "ifNoOneAnswers"))
     )
   );
 
   return { blocks };
 }
 
-function buildMeds(data: LetterData, path: LetterPath): BuiltBody {
+function buildMeds(data: LetterData): BuiltBody {
   const blocks: CardBlock[] = [];
-  const meds = srcRecords<Medication>(data, "meds", path, "medications");
+  const meds = srcRecords<Medication>(data, "meds", "medications");
 
   // A rescue med entered once shows up here AND on the emergency card — the
   // family never types it twice, and the two cards can never disagree.
@@ -664,23 +662,25 @@ function buildMeds(data: LetterData, path: LetterPath): BuiltBody {
   // "Nothing else": the family's rule on unapproved over-the-counter medicine.
   pushBlock(
     blocks,
-    makeBlock("meds", "otc_policy", "Nothing else", paragraphLines(srcScalar(data, "meds", path, "otcPolicy")))
+    makeBlock("meds", "otc_policy", "Nothing else", paragraphLines(srcScalar(data, "meds", "otcPolicy")))
   );
 
   return { blocks };
 }
 
-function buildBehavior(data: LetterData, path: LetterPath): BuiltBody {
+function buildBehavior(data: LetterData): BuiltBody {
   const blocks: CardBlock[] = [];
   // PRIORITY_ORDER decides emission: the reader who only gets one block needs
   // the warning signs before the biography.
   for (const item of PRIORITY_ORDER.behavior) {
-    const def = BEHAVIOR_ITEMS[path].find((b) => b.item === item);
+    const def = BEHAVIOR_ITEMS.find((b) => b.item === item);
     if (!def) continue;
-    pushBlock(
-      blocks,
-      makeBlock("behavior", item, def.label, paragraphLines(srcScalar(data, "behavior", path, def.field)))
-    );
+    let text: string | undefined;
+    for (const field of def.fields) {
+      text = srcScalar(data, "behavior", field);
+      if (text) break;
+    }
+    pushBlock(blocks, makeBlock("behavior", item, def.label, paragraphLines(text)));
   }
   return { blocks };
 }
@@ -699,9 +699,9 @@ function routineItemLines(r: RoutineRecord): CardLine[] {
   return lines;
 }
 
-function buildRoutine(data: LetterData, path: LetterPath): BuiltBody {
+function buildRoutine(data: LetterData): BuiltBody {
   const blocks: CardBlock[] = [];
-  const items = srcRecords<RoutineRecord>(data, "routine", path, "items");
+  const items = srcRecords<RoutineRecord>(data, "routine", "items");
 
   // Group into day-order blocks; within a group the family's sequence IS the
   // content (PRIORITY_ORDER.routine is "user_order"), so no re-sorting.
@@ -733,26 +733,20 @@ function buildRoutine(data: LetterData, path: LetterPath): BuiltBody {
       "routine",
       "transitions",
       "Between activities",
-      paragraphLines(srcScalar(data, "routine", path, "transitions"))
+      paragraphLines(srcScalar(data, "routine", "transitions"))
     )
   );
 
-  const prose: ReadonlyArray<{ field: string; label: string }> =
-    path === "general"
-      ? [
-          { field: "mornings", label: "Mornings" },
-          { field: "evenings", label: "Evenings" },
-          { field: "fixedPoints", label: "Fixed points of the week" },
-        ]
-      : [
-          { field: "morningRoutine", label: "Mornings" },
-          { field: "eveningRoutine", label: "Evenings" },
-          { field: "sleep", label: "Sleep" },
-        ];
+  const prose: ReadonlyArray<{ field: string; label: string }> = [
+    { field: "mornings", label: "Mornings" },
+    { field: "evenings", label: "Evenings" },
+    { field: "sleep", label: "Sleep" },
+    { field: "fixedPoints", label: "Fixed points of the week" },
+  ];
   for (const p of prose) {
     pushBlock(
       blocks,
-      makeBlock("routine", `routine_${p.field}`, p.label, paragraphLines(srcScalar(data, "routine", path, p.field)))
+      makeBlock("routine", `routine_${p.field}`, p.label, paragraphLines(srcScalar(data, "routine", p.field)))
     );
   }
 
@@ -768,9 +762,9 @@ function foodLine(f: FoodRecord): CardLine {
   return v ? { k: `${item} — `, v } : { v: item };
 }
 
-function buildFood(data: LetterData, path: LetterPath): BuiltBody {
+function buildFood(data: LetterData): BuiltBody {
   const blocks: CardBlock[] = [];
-  const items = srcRecords<FoodRecord>(data, "food", path, "items");
+  const items = srcRecords<FoodRecord>(data, "food", "items");
 
   for (const group of FOOD_GROUPS) {
     const inGroup = items.filter((f) => (trimmed(f.type) ?? "").toLowerCase() === group.type);
@@ -783,16 +777,16 @@ function buildFood(data: LetterData, path: LetterPath): BuiltBody {
   // The pre-cards prose renders ONLY when there are no structured records:
   // once records exist they win, and nothing auto-parses the family's prose
   // into records behind their back.
-  if (recordSourcesEmpty(data, "food", path)) {
-    pushBlock(blocks, makeBlock("food", "food_legacy", "Food", paragraphLines(srcScalar(data, "food", path, "food"))));
+  if (recordSourcesEmpty(data, "food")) {
+    pushBlock(blocks, makeBlock("food", "food_legacy", "Food", paragraphLines(srcScalar(data, "food", "food"))));
   }
 
   return { blocks };
 }
 
-function buildCare(data: LetterData, path: LetterPath): BuiltBody {
+function buildCare(data: LetterData): BuiltBody {
   const blocks: CardBlock[] = [];
-  const items = srcRecords<CareTaskRecord>(data, "care", path, "items");
+  const items = srcRecords<CareTaskRecord>(data, "care", "items");
 
   // Categories appear in the order the family first used them (user_order).
   const groups = new Map<string, CardLine[]>();
@@ -812,7 +806,7 @@ function buildCare(data: LetterData, path: LetterPath): BuiltBody {
   // The medical equipment prose joins the equipment category's block instead
   // of standing beside it — two blocks both named "Equipment" would read as a
   // mistake.
-  const equipmentProse = paragraphLines(srcScalar(data, "care", path, "equipment"));
+  const equipmentProse = paragraphLines(srcScalar(data, "care", "equipment"));
   if (equipmentProse.length) {
     if (groups.has("equipment")) {
       groups.get("equipment")?.push(...equipmentProse);
@@ -833,18 +827,18 @@ function buildCare(data: LetterData, path: LetterPath): BuiltBody {
       "care",
       "personal_care",
       "Personal care",
-      paragraphLines(srcScalar(data, "care", path, "personalCare"))
+      paragraphLines(srcScalar(data, "care", "personalCare"))
     )
   );
   pushBlock(
     blocks,
-    makeBlock("care", "home_safety", "Around the home", paragraphLines(srcScalar(data, "care", path, "safety")))
+    makeBlock("care", "home_safety", "Around the home", paragraphLines(srcScalar(data, "care", "safety")))
   );
 
   return { blocks };
 }
 
-const BUILDERS: Record<CardKey, (data: LetterData, path: LetterPath) => BuiltBody> = {
+const BUILDERS: Record<CardKey, (data: LetterData) => BuiltBody> = {
   identity: buildIdentity,
   emergency: buildEmergency,
   meds: buildMeds,
@@ -857,12 +851,12 @@ const BUILDERS: Record<CardKey, (data: LetterData, path: LetterPath) => BuiltBod
 /* ------------------------------------------------------------------ deriveCard */
 
 /** "Bonnie, 11" — the header eyebrow. Empty when the letter has no name yet. */
-function buildPersonLine(data: LetterData, path: LetterPath): string {
+function buildPersonLine(data: LetterData): string {
   const name = preferredName(data);
   if (!name) return "";
-  // The per-path date of birth is registered once, on the identity card's
-  // source list — every card's header reads it from there.
-  const age = ageFrom(srcScalar(data, "identity", path, "dateOfBirth"), todayIso());
+  // The date of birth is registered once, on the identity card's source
+  // list — every card's header reads it from there.
+  const age = ageFrom(srcScalar(data, "identity", "dateOfBirth"), todayIso());
   return age !== undefined ? `${name}, ${age}` : name;
 }
 
@@ -877,11 +871,11 @@ function buildFooterMeta(data: LetterData): string {
  * The whole derivation: one card from one letter, or null when the letter
  * does not yet hold enough for this card to be worth trusting.
  */
-export function deriveCard(data: LetterData, path: LetterPath, key: CardKey): CardData | null {
-  if (!requirementsMet(data, path, key)) return null;
+export function deriveCard(data: LetterData, key: CardKey): CardData | null {
+  if (!requirementsMet(data, key)) return null;
 
   const def = CARD_DEFS[key];
-  const built = BUILDERS[key](data, path);
+  const built = BUILDERS[key](data);
 
   return {
     key,
@@ -894,7 +888,7 @@ export function deriveCard(data: LetterData, path: LetterPath, key: CardKey): Ca
     spineLabel: [def.t1, def.t2].filter(Boolean).join(" "),
     purpose: fillName(def.purpose, readerName(data)),
     iconPath: def.iconPath,
-    personLine: buildPersonLine(data, path),
+    personLine: buildPersonLine(data),
     footerMeta: buildFooterMeta(data),
     person: built.person,
     blocks: enforceCriticalCap(built.blocks),

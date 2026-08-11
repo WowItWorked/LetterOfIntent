@@ -53,14 +53,14 @@ test("the process section walks pick, fill, download, share", async ({ page }) =
 test("opening a sample from mid-page lands at the top of the viewer", async ({
   page,
 }) => {
-  // The chooser's sample strip sits mid-page — the regression left the sample
-  // page sitting at the previous page's scroll offset because the lazily
-  // mounted viewer gave the router nothing to scroll to.
-  await page.goto("/letter");
-  const sample = page.locator('main a[href^="/samples/letter-of-intent"]').first();
+  // The sample link sits mid-page — the regression left the sample page
+  // sitting at the previous page's scroll offset because the lazily mounted
+  // viewer gave the router nothing to scroll to.
+  await page.goto("/emergency-sheet");
+  const sample = page.locator('main a[href^="/samples/"]').first();
   await sample.scrollIntoViewIfNeeded();
   await sample.click();
-  await expect(page).toHaveURL(/letter-of-intent-disabilities/);
+  await expect(page).toHaveURL(/\/samples\//);
   await expect(page.locator("h1")).toBeVisible();
   await expect
     .poll(() => page.evaluate(() => window.scrollY), { timeout: 10_000 })
@@ -140,13 +140,9 @@ test("how it works closes the letter chooser page", async ({ page }) => {
   ]) {
     await expect(section.getByRole("heading", { name: step })).toBeVisible();
   }
-  // No CTA in the band — the begin card with the real start buttons sits
-  // directly above it. (.first(): the option card offers the same action.)
+  // The band closes with the one start button of the one form.
   await expect(
-    page
-      .locator("main")
-      .getByRole("button", { name: /start the special needs letter/i })
-      .first()
+    section.getByRole("button", { name: /start your letter|continue your letter/i })
   ).toBeVisible();
 });
 

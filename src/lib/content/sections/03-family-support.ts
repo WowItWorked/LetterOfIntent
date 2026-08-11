@@ -3,10 +3,8 @@ import type { SectionDef } from "@/lib/content/types";
 export const familySupport: SectionDef = {
   slug: "family-and-support",
   key: "familySupport",
-  number: 3,
   title: "Family and support network",
   navTitle: "Family & support",
-  minutes: 10,
   intro:
     "List the people in {name}'s life: family, friends, current caregivers, and " +
     "paid supports. A future caregiver should be able to look at this page and " +
@@ -20,7 +18,7 @@ export const familySupport: SectionDef = {
       itemNoun: "person",
       addLabel: "Add a person",
       itemFields: [
-        { id: "name", kind: "text", label: "Name", width: "half" },
+        { id: "name", kind: "text", label: "Name", width: "half", autoComplete: "name" },
         {
           id: "relationship",
           kind: "text",
@@ -28,9 +26,15 @@ export const familySupport: SectionDef = {
           width: "half",
           placeholder: "e.g., Aunt, neighbor, support worker",
         },
-        { id: "phone", kind: "tel", label: "Phone", width: "half" },
-        { id: "altPhone", kind: "tel", label: "Backup phone", width: "half" },
-        { id: "email", kind: "email", label: "Email", width: "half" },
+        { id: "phone", kind: "tel", label: "Phone", width: "half", autoComplete: "tel" },
+        {
+          id: "altPhone",
+          kind: "tel",
+          label: "Backup phone",
+          width: "half",
+          autoComplete: "tel",
+        },
+        { id: "email", kind: "email", label: "Email", width: "half", autoComplete: "email" },
         {
           id: "roles",
           kind: "multiselect",
@@ -75,6 +79,7 @@ export const familySupport: SectionDef = {
       kind: "text",
       label: "Who would you call first in an emergency?",
       placeholder: "e.g., My sister Dana (she can be there in 15 minutes)",
+      cardLengthHint: 90,
     },
     {
       id: "doNotInvolve",

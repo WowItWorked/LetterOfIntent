@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { firm } from "@/config/firm";
-import { allSectionSlugs } from "@/lib/content/paths";
+import { allSectionSlugs } from "@/lib/content/config";
 
 /** Every public page. Section pages carry real guidance copy, so they index. */
 export default function sitemap(): MetadataRoute.Sitemap {

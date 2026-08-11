@@ -1,45 +1,31 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { LETTER_PATHS, type LetterPath, pathDef } from "@/lib/content/paths";
 import { useLetterStore } from "@/lib/store";
 import { Button } from "@/components/ui/Button";
 
 /**
- * Both start buttons. Each one records which set of questions the letter is
- * being written from before opening the first section.
- *
- * `onInk` restyles the outline button for a navy ground — the default outline
- * draws navy-on-navy there.
+ * The one start button. A new family goes to the onboarding questions; a
+ * family whose answers are already in place goes straight into the form.
  */
-export function StartButtons({ onInk = false }: { onInk?: boolean }) {
+export function StartButtons() {
   const router = useRouter();
-  const setLetterPath = useLetterStore((s) => s.setLetterPath);
+  const meta = useLetterStore((s) => s.meta);
 
-  const begin = (path: LetterPath) => {
-    setLetterPath(path);
-    router.push(`/letter/${pathDef(path).sections[0].slug}`);
+  const begin = () => {
+    if (meta.onboardingDone) router.push("/letter/getting-started");
+    else {
+      const el = document.getElementById("start");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      else router.push("/letter#start");
+    }
   };
 
   return (
-    // Equal columns rather than a flex row: the two labels are different
-    // lengths, and a pair of start buttons that disagree about their width
-    // reads as one being the real choice.
-    <div
-      className="mt-6 grid max-w-[640px] gap-3.5"
-      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))" }}
-    >
-      {LETTER_PATHS.map((p, i) => (
-        <Button
-          key={p.id}
-          size="lg"
-          variant={i === 0 ? "accent" : onInk ? "outlineOnInk" : "outline"}
-          className="w-full px-4 text-center"
-          onClick={() => begin(p.id)}
-        >
-          {p.startLabel}
-        </Button>
-      ))}
+    <div className="mt-6 flex justify-center">
+      <Button size="lg" variant="accent" className="px-8" onClick={begin}>
+        {meta.onboardingDone ? "Continue your letter" : "Start your letter"}
+      </Button>
     </div>
   );
 }

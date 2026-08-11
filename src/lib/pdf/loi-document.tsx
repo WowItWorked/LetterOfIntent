@@ -3,7 +3,7 @@ import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/render
 import type { Style } from "@react-pdf/types";
 import type { ReactNode } from "react";
 import { firm } from "@/config/firm";
-import { DEFAULT_PATH, sectionsFor } from "@/lib/content/paths";
+import { sectionsForMeta } from "@/lib/content/config";
 import type { FieldDef, RepeaterItemField, SectionDef } from "@/lib/content/types";
 import {
   fieldHasContent,
@@ -17,7 +17,7 @@ import {
   readerName,
   sectionHasContent,
 } from "@/lib/derive";
-import type { LetterData, LetterPath } from "@/lib/schema";
+import type { LetterData, LetterMeta } from "@/lib/schema";
 import {
   CREAM,
   DANGER,
@@ -202,7 +202,8 @@ export interface LoadedImage {
 
 export interface LoiDocumentProps {
   data: LetterData;
-  path?: LetterPath;
+  /** The letter's routing answers — they decide which sections print. */
+  meta?: LetterMeta;
   /** Firm monogram with its measured aspect ratio, if it loaded. */
   logo?: LoadedImage;
   /** The tool's own lockup, shown on the cover. */
@@ -217,7 +218,7 @@ export interface LoiDocumentProps {
 
 export function LoiDocument({
   data,
-  path = DEFAULT_PATH,
+  meta = {},
   logo,
   appLogo,
   familyPhoto,
@@ -229,22 +230,25 @@ export function LoiDocument({
   const author = data.gettingStarted?.authorName?.trim();
   const relationship = data.gettingStarted?.authorRelationship?.trim();
   const dateLong = formatDateLong(letterDateIso(data)) ?? letterDateIso(data);
-  const included = sectionsFor(path).filter((def) => sectionHasContent(data, def));
+  // The letter prints every in-play section that holds content — one roster,
+  // gated by the letter's own answers, content always winning (config.ts).
+  const included = sectionsForMeta(meta, data).filter((def) => sectionHasContent(data, def));
   const numberOf = new Map(included.map((def, i) => [def.key, i + 1]));
 
-  const points = keyPoints(data, path);
+  const points = keyPoints(data);
   const showKeyPoints = keyPointsHaveContent(points);
 
   const footerLine = `This Letter of Intent is not a legal document and is not legally binding. It is intended to guide those who care for ${name}. Last updated ${dateLong}.`;
 
-  const firstWeekPointer =
-    path === "general"
-      ? `If you are new to ${name}, start with "A typical week" and "For whoever steps in." They will carry you through the first week.`
-      : `If you are new to ${name}, start with "A typical day" and "Communication." They will carry you through the first week.`;
-  const crisisPointer =
-    path === "general"
-      ? `In a crisis, go straight to "Health and medical." There is also a separate one-page emergency sheet that pairs with this letter — keep copies where family and the hospital can grab them.`
-      : `In a crisis, go straight to "Medical" and "Behavioral support." There is also a separate one-page emergency sheet that pairs with this letter — keep copies where sitters, school, and the ER can grab them.`;
+  const hasBehavior = included.some((def) => def.key === "behavior");
+  const firstWeekPointer = `If you are new to ${name}, start with "${
+    included.find((d) => d.key === "routine")?.navTitle.includes("week")
+      ? "A typical week"
+      : "A typical day"
+  }" and "Communication." They will carry you through the first week.`;
+  const crisisPointer = hasBehavior
+    ? `In a crisis, go straight to "Health and medical" and "Behavioral support." There is also a separate one-page emergency sheet that pairs with this letter — keep copies where sitters, school, and the ER can grab them.`
+    : `In a crisis, go straight to "Health and medical." There is also a separate one-page emergency sheet that pairs with this letter — keep copies where family and the hospital can grab them.`;
 
   return (
     <Document
@@ -453,13 +457,22 @@ export function LoiDocument({
             </View>
           ))}
 
+          {/* Two distinct boxes on purpose: "never change" (the caregiver's
+              ask) and "hard limits" (housing red lines) are different
+              questions — the old build piped both into one slot, which was a
+              bug, not a merge. */}
           {points.neverChange ? (
             <View style={s.neverBox} wrap={false}>
               <Text style={s.pointTitle}>What we ask never to be changed</Text>
-              <Text style={s.pointSource}>
-                FROM “{path === "general" ? "FOR WHOEVER STEPS IN" : "HOUSING"}”
-              </Text>
+              <Text style={s.pointSource}>FROM “FOR WHOEVER STEPS IN”</Text>
               <MultilineValue text={points.neverChange} style={s.pointText} />
+            </View>
+          ) : null}
+          {points.hardLimits ? (
+            <View style={s.neverBox} wrap={false}>
+              <Text style={s.pointTitle}>Living situations we would not want</Text>
+              <Text style={s.pointSource}>FROM “HOME AND DAILY LIVING”</Text>
+              <MultilineValue text={points.hardLimits} style={s.pointText} />
             </View>
           ) : null}
 
@@ -541,7 +554,7 @@ function SectionPage({
         <View style={s.sectionRule} />
       </View>
 
-      {def.key === "benefitsFinances" || def.key === "moneyDocuments" ? (
+      {def.key === "moneyBenefits" ? (
         <View style={s.noteBox}>
           <Text style={s.noteBoxText}>
             On purpose, this letter contains no Social Security, account, or policy

@@ -96,7 +96,30 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     // The working picker moved onto /care-cards; saved links keep working.
-    return [{ source: "/letter/cards", destination: "/care-cards", permanent: true }];
+    // The wizard slugs below are the two-path era's section URLs, retired
+    // when the canonical schema landed — the map mirrors RETIRED_SLUGS in
+    // src/lib/content/config.ts, so a bookmark never dead-ends a letter.
+    const retired: Record<string, string> = {
+      about: "about-them",
+      "a-typical-day": "typical-days",
+      "a-typical-week": "typical-days",
+      "talking-with-them": "communication",
+      medical: "health-and-medical",
+      housing: "home-and-daily-living",
+      "work-and-obligations": "school-and-work",
+      "benefits-and-finances": "money-and-benefits",
+      "money-and-documents": "money-and-benefits",
+      "legal-and-advocacy": "legal-and-decisions",
+      "faith-joy-and-community": "friends-joy-and-faith",
+    };
+    return [
+      { source: "/letter/cards", destination: "/care-cards", permanent: true },
+      ...Object.entries(retired).map(([from, to]) => ({
+        source: `/letter/${from}`,
+        destination: `/letter/${to}`,
+        permanent: true,
+      })),
+    ];
   },
 };
 

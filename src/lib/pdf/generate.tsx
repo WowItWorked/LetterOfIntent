@@ -1,10 +1,9 @@
 import { pdf } from "@react-pdf/renderer";
 import { firm } from "@/config/firm";
-import { DEFAULT_PATH } from "@/lib/content/paths";
 import { documentFilename } from "@/lib/filenames";
 import { emergencyInfo } from "@/lib/derive";
 import { blobToDataUrl, getPhoto } from "@/lib/photos";
-import type { LetterData, LetterPath } from "@/lib/schema";
+import type { LetterData, LetterMeta } from "@/lib/schema";
 import { LoiDocument } from "./loi-document";
 import { EmergencyDocument } from "./emergency-document";
 
@@ -65,10 +64,12 @@ async function loadPhoto(
  * Two-pass render: pass 1 records which page each section lands on (via
  * render-prop side effects during layout), pass 2 prints those numbers in the
  * table of contents. Layout is identical between passes, so numbers hold.
+ * The letter prints the sections this letter's configuration put in play —
+ * the meta answers travel with the data.
  */
 export async function generateLetterPdfBlob(
   data: LetterData,
-  path: LetterPath = DEFAULT_PATH
+  meta: LetterMeta = {}
 ): Promise<Blob> {
   const [logo, appLogo, familyPhoto] = await Promise.all([
     loadLogo(firm.logoPath),
@@ -79,7 +80,7 @@ export async function generateLetterPdfBlob(
   await pdf(
     <LoiDocument
       data={data}
-      path={path}
+      meta={meta}
       logo={logo}
       appLogo={appLogo}
       familyPhoto={familyPhoto}
@@ -90,7 +91,7 @@ export async function generateLetterPdfBlob(
   return pdf(
     <LoiDocument
       data={data}
-      path={path}
+      meta={meta}
       logo={logo}
       appLogo={appLogo}
       familyPhoto={familyPhoto}
@@ -100,16 +101,13 @@ export async function generateLetterPdfBlob(
   ).toBlob();
 }
 
-export async function generateEmergencyPdfBlob(
-  data: LetterData,
-  path: LetterPath = DEFAULT_PATH
-): Promise<Blob> {
+export async function generateEmergencyPdfBlob(data: LetterData): Promise<Blob> {
   const [appLogo, photo] = await Promise.all([
     loadLogo(firm.appLogoPath),
     loadPhoto("recent"),
   ]);
   return pdf(
-    <EmergencyDocument info={emergencyInfo(data, path)} appLogo={appLogo} photo={photo} />
+    <EmergencyDocument info={emergencyInfo(data)} appLogo={appLogo} photo={photo} />
   ).toBlob();
 }
 
@@ -117,10 +115,10 @@ export async function generateEmergencyPdfBlob(
  * Filenames carry the document type and the date, never the person's name —
  * see lib/filenames.ts for why.
  */
-export function letterPdfFilename(path: LetterPath = DEFAULT_PATH): string {
-  return documentFilename("letter", path);
+export function letterPdfFilename(): string {
+  return documentFilename("letter");
 }
 
-export function emergencyPdfFilename(path: LetterPath = DEFAULT_PATH): string {
-  return documentFilename("emergency", path);
+export function emergencyPdfFilename(): string {
+  return documentFilename("emergency");
 }

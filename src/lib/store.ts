@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { LetterData, LetterMeta, LetterPath, SectionKey } from "@/lib/schema";
+import type { LetterData, LetterMeta, MarkValue, SectionKey } from "@/lib/schema";
+import { migrateV1 } from "@/lib/migrate";
 
 export const LETTER_STORAGE_KEY = "twl-loi-letter-v1";
 
@@ -11,9 +12,13 @@ interface LetterState {
   hasHydrated: boolean;
   setSection: <K extends SectionKey>(key: K, values: NonNullable<LetterData[K]>) => void;
   setLastVisited: (slug: string) => void;
-  /** Chosen on /letter; decides which section set the wizard and PDFs use. */
-  setLetterPath: (path: LetterPath) => void;
-  ackFinalWishes: () => void;
+  /** Patch onboarding/routing answers. Never touches `data` — changing an
+   *  answer re-gates the form and loses nothing. */
+  setMetaAnswers: (patch: Partial<LetterMeta>) => void;
+  /** Set or clear a not-applicable / come-back marker ("section" or "section.field"). */
+  setMark: (key: string, value: MarkValue | null) => void;
+  /** Acknowledge the gentle interstitial before an emotional section. */
+  ackEmotional: (slug: string) => void;
   /** Used by backup import. Replaces everything. */
   replaceAll: (data: LetterData, meta?: LetterMeta) => void;
   clearAll: () => void;
@@ -38,9 +43,21 @@ export const useLetterStore = create<LetterState>()(
         set((s) =>
           s.meta.lastVisitedSlug === slug ? s : { meta: { ...s.meta, lastVisitedSlug: slug } }
         ),
-      setLetterPath: (path) =>
-        set((s) => (s.meta.letterPath === path ? s : { meta: { ...s.meta, letterPath: path } })),
-      ackFinalWishes: () => set((s) => ({ meta: { ...s.meta, finalWishesAck: true } })),
+      setMetaAnswers: (patch) =>
+        set((s) => ({ meta: { ...s.meta, ...patch } })),
+      setMark: (key, value) =>
+        set((s) => {
+          const marks = { ...(s.data.marks ?? {}) };
+          if (value === null) delete marks[key];
+          else marks[key] = value;
+          return { data: { ...s.data, marks } };
+        }),
+      ackEmotional: (slug) =>
+        set((s) => {
+          const acks = s.meta.emotionalAcks ?? [];
+          if (acks.includes(slug)) return s;
+          return { meta: { ...s.meta, emotionalAcks: [...acks, slug] } };
+        }),
       replaceAll: (data, meta) =>
         set({ data, meta: { ...(meta ?? {}), updatedAt: new Date().toISOString() } }),
       clearAll: () => set({ data: {}, meta: {} }),
@@ -53,7 +70,18 @@ export const useLetterStore = create<LetterState>()(
       // Hydration is triggered manually from a client effect so the server
       // render and first client render always match (see StoreHydrator).
       skipHydration: true,
-      version: 1,
+      version: 2,
+      /**
+       * v1 → v2: both old path shapes onto the canonical schema, no words
+       * lost, routing answers inferred as PRE-FILLS for a one-time
+       * onboarding pass (lib/migrate.ts). Runs once, on first load after
+       * the update.
+       */
+      migrate: (persisted, version) => {
+        if (version >= 2) return persisted as { data: LetterData; meta: LetterMeta };
+        const state = (persisted ?? {}) as { data?: unknown; meta?: unknown };
+        return migrateV1(state);
+      },
     }
   )
 );

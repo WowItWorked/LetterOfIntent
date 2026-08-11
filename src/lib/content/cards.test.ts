@@ -7,7 +7,6 @@ import {
   PRIORITY_ORDER,
   RENDER_REQUIREMENTS,
   SOURCES,
-  type CardSource,
   type SourceRef,
 } from "@/lib/content/cards";
 import { sectionSchemas, type SectionKey } from "@/lib/schema";
@@ -22,16 +21,14 @@ import { sectionSchemas, type SectionKey } from "@/lib/schema";
 /** Every section.field pair the config references, wherever it appears. */
 function allRefs(): Array<{ where: string; section: SectionKey; field: string; kind?: string }> {
   const refs: Array<{ where: string; section: SectionKey; field: string; kind?: string }> = [];
-  for (const [card, byPath] of Object.entries(SOURCES)) {
-    for (const [path, sources] of Object.entries(byPath)) {
-      for (const src of sources as readonly CardSource[]) {
-        refs.push({
-          where: `SOURCES.${card}.${path}`,
-          section: src.section,
-          field: src.field,
-          kind: src.kind,
-        });
-      }
+  for (const [card, sources] of Object.entries(SOURCES)) {
+    for (const src of sources) {
+      refs.push({
+        where: `SOURCES.${card}`,
+        section: src.section,
+        field: src.field,
+        kind: src.kind,
+      });
     }
   }
   for (const [card, needs] of Object.entries(RENDER_REQUIREMENTS)) {
@@ -73,33 +70,36 @@ describe("card config and the schema agree", () => {
     for (const key of CARD_KEYS) {
       expect(CARD_DEFS[key], `CARD_DEFS.${key}`).toBeDefined();
       expect(CARD_DEFS[key].key, `CARD_DEFS.${key} names itself`).toBe(key);
-      expect(SOURCES[key], `SOURCES.${key}`).toBeDefined();
+      expect(SOURCES[key].length, `SOURCES.${key}`).toBeGreaterThan(0);
       expect(RENDER_REQUIREMENTS[key], `RENDER_REQUIREMENTS.${key}`).toBeDefined();
       expect(PRIORITY_ORDER[key], `PRIORITY_ORDER.${key}`).toBeDefined();
       expect(PRIORITY_ORDER[key].length, `PRIORITY_ORDER.${key} is empty`).toBeGreaterThan(0);
-    }
-  });
-
-  it("both letter paths get a source list and a non-empty requirement for every card", () => {
-    for (const key of CARD_KEYS) {
-      expect(SOURCES[key]["special-needs"].length, `SOURCES.${key}.special-needs`).toBeGreaterThan(0);
-      expect(SOURCES[key].general.length, `SOURCES.${key}.general`).toBeGreaterThan(0);
-      expect(RENDER_REQUIREMENTS[key].length, `RENDER_REQUIREMENTS.${key}`).toBeGreaterThan(0);
       for (const need of RENDER_REQUIREMENTS[key]) {
         expect(need.anyOf.length, `RENDER_REQUIREMENTS.${key} has an unmeetable need`).toBeGreaterThan(0);
       }
     }
   });
 
-  it("the emergency card reads the scenario records on both paths", () => {
-    for (const path of ["special-needs", "general"] as const) {
-      expect(
-        SOURCES.emergency[path].some(
-          (s) => s.section === "emergencyPlan" && s.field === "scenarios" && s.kind === "records"
-        ),
-        `SOURCES.emergency.${path} is missing emergencyPlan.scenarios`
-      ).toBe(true);
+  it("a card's sources never point at a v1 section key — the config is canonical", () => {
+    const canonical = new Set(Object.keys(sectionSchemas));
+    for (const ref of allRefs()) {
+      expect(canonical.has(ref.section), `${ref.where}: "${ref.section}"`).toBe(true);
     }
+  });
+
+  it("the emergency card reads the scenario records", () => {
+    expect(
+      SOURCES.emergency.some(
+        (s) => s.section === "emergencyPlan" && s.field === "scenarios" && s.kind === "records"
+      )
+    ).toBe(true);
+  });
+
+  it("the behavior card carries the first-responder guidance (output-matrix addition)", () => {
+    expect(
+      SOURCES.behavior.some((s) => s.section === "behavior" && s.field === "lawEnforcement")
+    ).toBe(true);
+    expect(PRIORITY_ORDER.behavior).toContain("first_responders");
   });
 
   it("every bundle is made of real cards", () => {

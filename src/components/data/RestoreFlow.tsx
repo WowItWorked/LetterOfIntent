@@ -7,11 +7,11 @@ import {
   type SalvageReport,
   parseBackup,
 } from "@/lib/backup";
-import { LETTER_PATHS, pathDef } from "@/lib/content/paths";
-import { displayName, preferredName, startedCount } from "@/lib/derive";
+import { startedCount } from "@/lib/content/config";
+import { displayName, preferredName } from "@/lib/derive";
 import { restorePhotos } from "@/lib/photos";
 import { useLetterStore } from "@/lib/store";
-import type { BackupPhoto, LetterData, LetterMeta, LetterPath } from "@/lib/schema";
+import type { BackupPhoto, LetterData } from "@/lib/schema";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 
@@ -43,24 +43,25 @@ function failureMessage(reason: Extract<ParseBackupResult, { ok: false }>["reaso
     case "empty":
       return (
         "Sorry — that is a backup from this tool, but there was nothing in it we could " +
-        "read back. It may have been written by a much older version, or saved before " +
-        "anything was filled in. Nothing on this device was changed, so your current " +
-        "letter is safe. If you have another copy of the file, try that one."
+        "read back. It may have been saved before anything was filled in. Nothing on " +
+        "this device was changed, so your current letter is safe. If you have another " +
+        "copy of the file, try that one."
       );
     default:
       return (
         "Sorry — that does not look like a Letter of Intent backup, so nothing was " +
         "changed. Look for the .json file this tool downloaded, named something like " +
-        "Letter-of-Intent-Disabilities-Backup-2026-08-08.json."
+        "Letter-of-Intent-Backup-2026-08-08.json."
       );
   }
 }
 
 /** Plain-language account of what came back and what did not. */
-function salvageMessage(loaded: Loaded, path: LetterPath): string {
-  const total = pathDef(path).sections.length;
-  const filled = startedCount(loaded.data, path);
-  const parts = [`Backup loaded — ${filled} of ${total} sections have notes.`];
+function salvageMessage(loaded: Loaded): string {
+  const filled = startedCount(loaded.data, loaded.meta);
+  const parts = [
+    `Backup loaded — ${filled} section${filled === 1 ? " has" : "s have"} notes.`,
+  ];
 
   if (loaded.salvage.skipped.length > 0) {
     parts.push(
@@ -71,11 +72,13 @@ function salvageMessage(loaded: Loaded, path: LetterPath): string {
       } left out; everything else came back.`
     );
   }
-  if (loaded.pathSource === "inferred") {
+  if (loaded.migratedFromV1) {
     parts.push(
-      `That backup did not say which letter it was, so we matched it to the ${pathDef(
-        path
-      ).tabLabel.toLowerCase()} set from the sections it contained.`
+      "That file was written by an older version of this tool, so its answers were " +
+        "carried into the current letter. Nothing was lost" +
+        (loaded.combined.length > 0
+          ? `, and where the old letter held two answers to the same question, both were kept together for you to tidy.`
+          : ".")
     );
   }
   parts.push("Everything is saved on this device now.");
@@ -94,11 +97,9 @@ export function RestoreFlow({
   const replaceAll = useLetterStore((s) => s.replaceAll);
 
   const [loaded, setLoaded] = useState<Loaded | null>(null);
-  const [chosenPath, setChosenPath] = useState<LetterPath | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const currentPath = meta.letterPath ?? "special-needs";
-  const existing = startedCount(data, currentPath);
+  const existing = startedCount(data, meta);
 
   /* --------------------------------------------------------------- read */
   const handleFile = async (file: File) => {
@@ -123,39 +124,25 @@ export function RestoreFlow({
       return;
     }
 
-    // A readable file, a known template, and nothing here to overwrite: no
-    // question worth asking, so load it.
-    const nothingToLose = startedCount(useLetterStore.getState().data, currentPath) === 0;
-    if (result.path && nothingToLose) {
-      await applyLoaded(result, result.path);
+    // Nothing on this device to overwrite: no question worth asking, load it.
+    const state = useLetterStore.getState();
+    if (startedCount(state.data, state.meta) === 0) {
+      await applyLoaded(result);
       return;
     }
 
     setLoaded(result);
-    setChosenPath(result.path);
   };
 
   /* --------------------------------------------------------------- apply */
-  const applyLoaded = async (source: Loaded, path: LetterPath) => {
-    const nextMeta: LetterMeta = { ...source.meta, letterPath: path };
-    replaceAll(source.data as LetterData, nextMeta);
+  const applyLoaded = async (source: Loaded) => {
+    replaceAll(source.data as LetterData, source.meta);
     if (source.photos?.length) await restorePhotos(source.photos as BackupPhoto[]);
-    onNotice({ tone: "success", text: salvageMessage(source, path) });
+    onNotice({ tone: "success", text: salvageMessage(source) });
     setLoaded(null);
-    setChosenPath(null);
   };
 
-  const apply = async (path: LetterPath) => {
-    if (loaded) await applyLoaded(loaded, path);
-  };
-
-  const cancel = () => {
-    setLoaded(null);
-    setChosenPath(null);
-  };
-
-  const needsPath = loaded !== null && loaded.path === null;
-  const needsConfirm = loaded !== null && loaded.path !== null;
+  const cancel = () => setLoaded(null);
 
   return (
     <div className={className}>
@@ -177,38 +164,9 @@ export function RestoreFlow({
         Choose a backup file…
       </Button>
 
-      {/* ------------------------------------------------ which letter is it */}
-      <Dialog open={needsPath} onClose={cancel} title="Which letter is this?">
-        <p className="max-w-[66ch] text-body">
-          That backup was written before this tool had two sets of questions, and the
-          sections in it are ones both sets share — so we cannot tell which letter it
-          belongs to. Pick the one you were writing and everything in the file will be
-          loaded into it.
-        </p>
-        <div className="mt-5 flex flex-col gap-3">
-          {LETTER_PATHS.map((p) => (
-            <Button
-              key={p.id}
-              variant={chosenPath === p.id ? "primary" : "outline"}
-              className="justify-start text-left"
-              onClick={() => void apply(p.id)}
-            >
-              {p.tabLabel} — {p.sections.length} sections
-            </Button>
-          ))}
-          <Button variant="quiet" className="self-start" onClick={cancel}>
-            Cancel
-          </Button>
-        </div>
-        <p className="mt-4 max-w-[66ch] text-[0.9375rem] text-muted">
-          If you pick the wrong one, nothing is lost — the answers are all still there,
-          and you can load the file again and choose the other.
-        </p>
-      </Dialog>
-
       {/* ------------------------------------------------- replace what's here */}
       <Dialog
-        open={needsConfirm}
+        open={loaded !== null}
         onClose={cancel}
         title="Replace what's on this device?"
       >
@@ -220,7 +178,7 @@ export function RestoreFlow({
         </p>
         {loaded ? <SalvageSummary report={loaded.salvage} /> : null}
         <div className="mt-5 flex flex-wrap gap-3">
-          <Button onClick={() => loaded?.path && void apply(loaded.path)}>
+          <Button onClick={() => loaded && void applyLoaded(loaded)}>
             Replace with the backup
           </Button>
           <Button variant="quiet" onClick={cancel}>

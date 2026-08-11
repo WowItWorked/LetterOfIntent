@@ -1,19 +1,20 @@
 import type { SectionDef } from "@/lib/content/types";
 
-/** Shared by both paths; the general path renumbers it in general/index.ts. */
 export const careTasks: SectionDef = {
   slug: "personal-care",
   key: "careTasks",
-  number: 12,
   title: "Personal care tasks",
   navTitle: "Personal care",
-  minutes: 5,
   optionalTag: true,
+  showWhen: [{ supportLevel: ["someDailyHelp", "substantial", "roundTheClock"] }],
   intro:
     "The hands-on help nobody thinks to write down: toileting, dressing, " +
     "bathing, getting around. Write steps, not descriptions, for someone " +
     "doing this with {name} for the first time. These print on the Personal " +
     "Care & Mobility card.",
+  legacyRefs: [
+    { sectionKey: "home", fieldKey: "personalCare", label: "Personal care" },
+  ],
   fields: [
     {
       id: "items",

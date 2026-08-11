@@ -84,10 +84,18 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
     .getByRole("link", { name: /start your letter · it/i })
     .click();
   await expect(page).toHaveURL(/\/letter$/);
-  await page
-    .getByRole("button", { name: /start the special needs letter/i })
-    .first()
-    .click();
+  // Through the onboarding — every tap is local state, nothing may leave.
+  await page.getByRole("button", { name: /day-to-day care/i }).click();
+  await page.getByRole("button", { name: /^A child$/ }).click();
+  await page.getByRole("button", { name: /around the clock/i }).click();
+  await page.getByRole("button", { name: /^Yes$/ }).click();
+  await page.getByRole("button", { name: /^Yes$/ }).click();
+  await page.getByRole("button", { name: /^No$/ }).click();
+  await page.getByRole("button", { name: /not sure/i }).click();
+  await page.getByRole("button", { name: /^Yes$/ }).click();
+  await page.getByRole("button", { name: /school or a day program/i }).click();
+  await page.getByRole("button", { name: /continue/i }).click();
+  await page.getByRole("button", { name: /^With me$/ }).click();
   await expect(page).toHaveURL(/getting-started/);
 
   await page.getByLabel("Your name").fill("Maria Alvarez");
@@ -112,7 +120,7 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
   expect(buf.length).toBeGreaterThan(5_000);
   // Names the document and the date, never the person — see lib/filenames.ts.
   expect(download.suggestedFilename()).toMatch(
-    /^Letter-of-Intent-Disabilities-\d{4}-\d{2}-\d{2}\.pdf$/
+    /^Letter-of-Intent-\d{4}-\d{2}-\d{2}\.pdf$/
   );
 
   expect(traffic.leaks, "letter content found in a request").toEqual([]);

@@ -1,34 +1,22 @@
 import type { SectionDef } from "@/lib/content/types";
 
 /**
- * Shared by both paths (like family & support): allergy records feed the same
- * Emergency card whichever letter a family writes. The general path renumbers
- * it in general/index.ts.
+ * Structured allergy records feed the Emergency card; the prose field in
+ * `health` is the older answer this section shadows.
  */
 export const allergies: SectionDef = {
   slug: "allergies",
   key: "allergies",
-  number: 8,
   title: "Allergies and reactions",
   navTitle: "Allergies",
-  minutes: 5,
   optionalTag: true,
   intro:
     "One allergy per entry, so nothing hides inside a paragraph. These print at " +
     "the top of the Emergency card (the card a sitter can show a paramedic), " +
     "with the most serious first. If {name} has no allergies, skip this section.",
-  legacyRefs: {
-    "special-needs": [
-      { sectionKey: "medical", fieldKey: "allergies", label: "Allergies and reactions" },
-    ],
-    general: [
-      {
-        sectionKey: "healthMedical",
-        fieldKey: "allergies",
-        label: "Allergies and bad reactions",
-      },
-    ],
-  },
+  legacyRefs: [
+    { sectionKey: "health", fieldKey: "allergies", label: "Allergies and reactions" },
+  ],
   fields: [
     {
       id: "items",

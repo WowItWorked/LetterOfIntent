@@ -1,62 +1,56 @@
 import type { Page } from "@playwright/test";
-import type { LetterData } from "../src/lib/schema";
+import type { LetterData, LetterMeta } from "../src/lib/schema";
 
 /** Mirrors LETTER_STORAGE_KEY in src/lib/store.ts (kept literal so this file
  *  stays import-light; the seeded tests fail loudly if the key ever drifts). */
 export const LETTER_KEY = "twl-loi-letter-v1";
 
+/** The canonical roster's slugs, in reading order (one roster, one form). */
 export const SECTION_SLUGS = [
   "getting-started",
-  "about",
+  "about-them",
   "family-and-support",
-  "a-typical-day",
+  "typical-days",
   "communication",
-  "medical",
+  "health-and-medical",
   "behavioral-support",
   "allergies",
   "emergency-plan",
   "daily-routines",
   "food-and-eating",
   "personal-care",
-  "school-and-work",
-  "housing",
-  "benefits-and-finances",
-  "friends-joy-and-faith",
-  "legal-and-advocacy",
-  "guidance-for-the-trustee",
-  "final-wishes",
-  "a-personal-message",
-] as const;
-
-/** The general path — nine sections are shared with the list above. */
-export const GENERAL_SECTION_SLUGS = [
-  "getting-started",
-  "about-them",
-  "family-and-support",
-  "a-typical-week",
-  "talking-with-them",
-  "health-and-medical",
-  "allergies",
-  "emergency-plan",
-  "daily-routines",
-  "food-and-eating",
-  "personal-care",
   "home-and-daily-living",
-  "money-and-documents",
-  "work-and-obligations",
-  "faith-joy-and-community",
+  "school-and-work",
+  "money-and-benefits",
   "legal-and-decisions",
+  "friends-joy-and-faith",
+  "guidance-for-the-trustee",
   "for-whoever-steps-in",
   "final-wishes",
   "a-personal-message",
 ] as const;
 
-/** Every distinct section route across both paths. */
-export const ALL_SECTION_SLUGS = [
-  ...new Set([...SECTION_SLUGS, ...GENERAL_SECTION_SLUGS]),
-] as const;
+export const ALL_SECTION_SLUGS = SECTION_SLUGS;
 
-/** A letter with content in all 20 sections, including repeaters. */
+/**
+ * The routing answers of the full fixture: the "both" configuration at high
+ * support — every section in play.
+ */
+export const FULL_META: LetterMeta = {
+  audience: "both",
+  stage: "adult",
+  supportLevel: "substantial",
+  communicationDiffers: "yes",
+  behaviorEscalates: "yes",
+  cognitionChanging: "no",
+  hasTrust: "yes",
+  hasBenefits: "yes",
+  schoolWork: ["school", "work"],
+  livesWith: "withWriter",
+  onboardingDone: true,
+};
+
+/** A letter with content in every canonical section, including repeaters. */
 export const FULL_LETTER: LetterData = {
   gettingStarted: {
     authorName: "Maria Alvarez",
@@ -65,10 +59,10 @@ export const FULL_LETTER: LetterData = {
     subjectPreferredName: "Alex",
     letterDate: "2026-08-07",
   },
-  about: {
+  person: {
     dateOfBirth: "2004-03-14",
-    diagnoses: "Autism spectrum disorder; epilepsy (focal seizures); anxiety",
-    lifeHistory: "Born in Fairfax in 2004.\n\nDiagnosed at three. Loves the Metro map.",
+    whoTheyAre: "Alex is 22, funny, precise, and prouder of his library job than of anything.",
+    history: "Born in Fairfax in 2004.\n\nDiagnosed at three. Loves the Metro map.",
     firstFiveMinutes: "Say 'Hi Alex' first. Wave, don't shake hands.",
     importantToKnow: "He remembers every birthday he's ever been told.",
   },
@@ -95,26 +89,28 @@ export const FULL_LETTER: LetterData = {
     firstCall: "Dana — (703) 555-0142",
     doNotInvolve: "Ray should not handle money decisions.",
   },
-  typicalDay: {
-    morningRoutine: "Wakes 6:30. Ten minutes of radio first. Meds in the blue cup.",
-    eveningRoutine: "Shower, two books, lights out 9:30.",
+  routine: {
+    mornings: "Wakes 6:30. Ten minutes of radio first. Meds in the blue cup.",
+    evenings: "Shower, two books, lights out 9:30.",
     sleep: "Needs the hallway light on.",
     food: "Waffles cut in strips. No foods touching.",
     clothing: "No tags. Soft seams only.",
     sensory: "Fire alarms are very hard. Headphones in the go-bag.",
     comfortObjects: "Blue train blanket — backup in the hall closet.",
+    fixedPoints: "Program weekdays 9–2; library Saturdays; pizza Fridays with Marcus.",
     goodDay: "No surprises, program 9–2, train videos after.",
     hardDay: "Starts with a schedule change. Gets quiet, then loud.",
   },
   communication: {
     how: "Speaks in short sentences; uses an AAC app when overwhelmed.",
+    howToSpeak: "Lead with his name. 'First… then…' sentences, real times.",
     yesNo: "Yes is a nod plus 'yeah'. No is walking away.",
     pain: "Goes quiet and presses on the spot. Skipped meals mean something hurts.",
     overwhelm: "Hums louder and rocks. That's the ten-minute warning.",
-    whatToSay: "'First… then…' sentences. Real times, not 'later'.",
-    whatNotToSay: "Never 'calm down'. Never 'maybe'.",
+    whatHelps: "'First… then…' sentences. Real times, not 'later'.",
+    whatToAvoid: "Never 'calm down'. Never 'maybe'.",
   },
-  medical: {
+  health: {
     providers: [
       { id: "p1", name: "Dr. Sarah Kim", specialty: "Neurology", phone: "(703) 555-0199" },
       { id: "p2", name: "Dr. James Okafor", specialty: "Primary care", phone: "(703) 555-0110" },
@@ -123,12 +119,13 @@ export const FULL_LETTER: LetterData = {
       { id: "m1", name: "Levetiracetam", dose: "500 mg, morning and night", purpose: "Seizure control" },
       { id: "m2", name: "Sertraline", dose: "50 mg, morning", purpose: "Anxiety" },
     ],
+    conditions: "Autism spectrum disorder; epilepsy (focal seizures); anxiety",
     allergies: "Penicillin — hives and swelling.",
     emergencyProtocol:
       "Seizure: start timing. On his side, nothing in his mouth. Over 3 minutes: rescue med in the red pouch, call 911.",
     therapies: "Speech Tuesdays 4pm with Ms. Kim.",
     equipment: "Noise-canceling headphones; backup charger in go-bag.",
-    insurance: "Anthem HealthKeepers through Dad's employer; Virginia Medicaid — CCC Plus waiver.",
+    insurancePlans: "Anthem HealthKeepers through Dad's employer; Virginia Medicaid — CCC Plus waiver.",
     preferredHospital: "Inova Fairfax — they have his records.",
     whatWorked: "Keppra stopped the drop seizures within a month.",
     whatDidNot: "Risperidone — weight gain, no benefit.",
@@ -141,50 +138,72 @@ export const FULL_LETTER: LetterData = {
     crisisPlan: "Call Dana first, then us. REACH crisis line is on the fridge.",
     lawEnforcement: "May not respond to commands; may run. One officer, slow voice, no restraint.",
   },
-  educationWork: {
+  schoolWork: {
     currentProgram: "Fairfax day program, 9–2 weekdays. Contact: Ms. Lopez.",
     iepHistory: "Small classes worked. Music-based learning worked. Timed tests never did.",
     whatWorksLearning: "Show, don't tell. One step at a time.",
     workHistory: "Library shelving volunteer since 2023 — extremely proud of it.",
+    currentWork: "Library shelving, Saturday mornings.",
     jobSupports: "Job coach through ServiceSource: Mr. Bell.",
+    commitments: "The library depends on him for the Saturday cart.",
+    keyContacts: "Ms. Patel at the Vienna branch.",
+    windDown: "The library shift passes to the volunteer coordinator.",
     hopes: "Part-time work around trains or libraries.",
   },
-  housing: {
+  home: {
     currentLiving: "At home with us.",
     supportLevel: "Needs someone present overnight; manages hygiene with prompts.",
+    personalCare: "Manages with prompts; bathing needs the checklist.",
+    petsAndPlants: "Feeds the goldfish, proudly. Backup: Sofia.",
+    safety: "Stove locks on. Front door chimes.",
     waiverStatus: "On the DD waiver waitlist since 2021, priority 2. Dana has the paperwork.",
     futureHopes: "A small group home near his sister, with his own room.",
     hardLimits: "Never a large institution. Never far from his sister.",
   },
-  benefitsFinances: {
+  moneyBenefits: {
     programs: "SSI since 18. Virginia Medicaid.",
     repPayee: "Mother is representative payee.",
     ableAccount: "ABLE account managed by Mother.",
     trusts: "Special needs trust (2022). Trustee: Dana Alvarez. Drafted by Trusts & Wealth.",
     pending: "Waiver slot appeal pending — Dana is handling it.",
     whereRecordsKept: "Gray fireproof box, bedroom closet. Key taped in the kitchen junk drawer.",
+    incomeSources: "SSI on the 1st; library stipend quarterly.",
+    whoHandlesBills: "Mother handles all bills.",
+    howBillsArePaid: "Everything on autopay from the household account.",
+    vulnerabilities: "Anyone who talks about trains can talk him into anything.",
   },
-  socialFaith: {
+  communityFaith: {
     friends: "Marcus from program — pizza Fridays.",
     activities: "Trainspotting at the Vienna platform, Saturdays.",
     faith: "St. Mark's — Deacon Reyes knows him well.",
+    congregation: "St. Mark's, 10am Mass. Call the parish office.",
     traditions: "Christmas Eve: pajamas, one gift, Muppet Christmas Carol (the DVD).",
     travel: "Window seat, direct flights only.",
     joy: "Trains. Always trains.",
   },
-  legalAdvocacy: {
+  legal: {
     decisionStatus: "Supported decision-making agreement (2023); healthcare POA held by Mother.",
+    powersOfAttorney: "Healthcare POA held by Mother, signed 2023.",
+    advanceDirectives: "None yet — on the list with the attorney.",
+    guardianship: "Deliberately avoided; supported decision-making instead.",
+    whoDecidesWhat: "Daily choices are his. Medical and money are shared with Mother.",
     advocates: "Support coordinator: Ms. Green, Fairfax CSB.",
-    attorney: "Claire Kelly, Trusts & Wealth — trust and POA work.",
+    professionals: "Claire Kelly, Trusts & Wealth — trust and POA work.",
     advocacyHistory: "Won the 2021 waiver appeal with the neurologist's letter.",
   },
-  trustee: {
+  trusteeGuidance: {
     moneyIsFor: "A life, not a ledger. Concert aides, the good mattress, direct flights.",
     easyYeses: "Anything for the train hobby under $200. Respite for caregivers.",
     spendVsPreserve: "Spend for quality of life now; the house covers the far future.",
     scrutinize: "Any request routed through Ray.",
     wishesVsSafety: "Risks that bruise, yes. Risks that break, no.",
     consultFirst: "Dana, then his sister. Dr. Kim for anything medical.",
+  },
+  caregiverGuidance: {
+    firstWeek: "Call the program first — Ms. Lopez will hold his spot. Keep Saturday library no matter what.",
+    hindsight: "We waited too long to write things down. Start the binder on day one.",
+    neverChange: "Pizza Fridays with Marcus. It looks small. It is the week's anchor.",
+    consultFirst: "Dana and Sofia, before any move or program change.",
   },
   finalWishes: {
     funeral: "Small, at St. Mark's. His playlist, not hymns.",
@@ -272,17 +291,40 @@ export const FULL_LETTER: LetterData = {
   },
 };
 
-/** Wraps letter data in zustand-persist's stored shape. */
-export function persistedState(data: LetterData, meta: Record<string, unknown> = {}) {
+/** Wraps letter data in zustand-persist's stored shape, at the current version. */
+export function persistedState(data: LetterData, meta: LetterMeta = FULL_META) {
+  return JSON.stringify({ state: { data, meta }, version: 2 });
+}
+
+/** A v1-era payload, exactly as the two-path app persisted it — for the
+ *  migration e2e tests, which load it and let the store migrate live. */
+export function persistedStateV1(
+  data: Record<string, unknown>,
+  meta: Record<string, unknown> = {}
+) {
   return JSON.stringify({ state: { data, meta }, version: 1 });
 }
 
 /** Seeds localStorage before the app boots. */
-export async function seedLetter(page: Page, data: LetterData) {
+export async function seedLetter(page: Page, data: LetterData, meta: LetterMeta = FULL_META) {
   await page.addInitScript(
     ([key, value]) => {
       window.localStorage.setItem(key, value);
     },
-    [LETTER_KEY, persistedState(data)] as const
+    [LETTER_KEY, persistedState(data, meta)] as const
+  );
+}
+
+/** Seeds a v1 letter, so the app's own migration runs on first load. */
+export async function seedV1Letter(
+  page: Page,
+  data: Record<string, unknown>,
+  meta: Record<string, unknown> = {}
+) {
+  await page.addInitScript(
+    ([key, value]) => {
+      window.localStorage.setItem(key, value);
+    },
+    [LETTER_KEY, persistedStateV1(data, meta)] as const
   );
 }

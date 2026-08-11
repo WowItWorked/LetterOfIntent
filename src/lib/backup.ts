@@ -3,17 +3,16 @@ import {
   BACKUP_VERSION,
   backupPhotoSchema,
   letterMetaSchema,
-  letterPathSchema,
   sectionKeys,
   sectionSchemas,
+  marksSchema,
   type Backup,
   type BackupPhoto,
   type LetterData,
   type LetterMeta,
-  type LetterPath,
   type SectionKey,
 } from "@/lib/schema";
-import { LETTER_PATHS } from "@/lib/content/paths";
+import { inferMetaFromV1, migrateLetterData, V1_ONLY_SECTION_KEYS } from "@/lib/migrate";
 
 /* -------------------------------------------------------------------------- */
 /*                                   limits                                   */
@@ -85,13 +84,12 @@ function sanitize(value: unknown, depth = 0): unknown {
 export interface SalvageReport {
   /** Sections read back intact. */
   restored: SectionKey[];
-  /** Sections that were present but could not be read. */
-  skipped: SectionKey[];
-  /** Top-level keys that are not sections of either letter. */
+  /** Sections that were present but could not be read — canonical keys, or
+   *  legacy v1 keys whose value was junk before migration could read it. */
+  skipped: string[];
+  /** Top-level keys that are not (and never were) sections of the letter. */
   unknown: string[];
 }
-
-export type PathSource = "declared" | "inferred" | "unknown";
 
 export type ParseBackupResult =
   | {
@@ -99,9 +97,11 @@ export type ParseBackupResult =
       data: LetterData;
       meta: LetterMeta;
       photos?: BackupPhoto[];
-      /** Null when the file does not say and its sections do not give it away. */
-      path: LetterPath | null;
-      pathSource: PathSource;
+      /** True when the file predates the canonical schema and was migrated.
+       *  A v1 file imports cleanly forever — permanent commitment. */
+      migratedFromV1: boolean;
+      /** "section.field" keys where the migration preserved two answers. */
+      combined: string[];
       salvage: SalvageReport;
     }
   | {
@@ -109,55 +109,10 @@ export type ParseBackupResult =
       reason: "too-large" | "not-json" | "not-a-backup" | "empty";
     };
 
-/** Sections unique to one path — the fingerprint used to infer the template. */
-const EXCLUSIVE: Record<LetterPath, SectionKey[]> = {
-  "special-needs": [],
-  general: [],
-};
-{
-  const bySide = LETTER_PATHS.map((p) => ({
-    id: p.id,
-    keys: new Set(p.sections.map((s) => s.key)),
-  }));
-  for (const side of bySide) {
-    const others = bySide.filter((o) => o.id !== side.id);
-    EXCLUSIVE[side.id] = [...side.keys].filter((k) => !others.some((o) => o.keys.has(k)));
-  }
-}
-
-/**
- * Which letter a restored file belongs to.
- *
- * A file written by this version says so outright. One written before the
- * second path existed does not, so we look at which sections it actually
- * contains: `trustee` and `behavior` only exist in one set, `steppingIn` and
- * `homeLiving` only in the other. A file holding nothing but the four shared
- * sections genuinely cannot be told apart — that is what `null` means, and the
- * caller has to ask.
- */
-export function detectLetterPath(
-  data: LetterData,
-  meta: LetterMeta | undefined
-): { path: LetterPath | null; source: PathSource } {
-  const declared = letterPathSchema.safeParse(meta?.letterPath);
-  if (declared.success) return { path: declared.data, source: "declared" };
-
-  const present = new Set(Object.keys(data) as SectionKey[]);
-  const scores = LETTER_PATHS.map((p) => ({
-    id: p.id,
-    hits: EXCLUSIVE[p.id].filter((k) => present.has(k)).length,
-  }));
-  const best = [...scores].sort((a, b) => b.hits - a.hits);
-
-  if (best[0].hits > 0 && best[0].hits > best[1].hits) {
-    return { path: best[0].id, source: "inferred" };
-  }
-  return { path: null, source: "unknown" };
-}
-
 /**
  * Reads each section on its own so one malformed answer cannot cost a family
  * the rest of the letter. A whole-object parse would reject the file outright.
+ * Runs on CANONICAL data — v1 shapes are migrated before they get here.
  */
 function salvageSections(raw: unknown): { data: LetterData; report: SalvageReport } {
   const report: SalvageReport = { restored: [], skipped: [], unknown: [] };
@@ -167,19 +122,20 @@ function salvageSections(raw: unknown): { data: LetterData; report: SalvageRepor
   }
 
   for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
+    if (key === "marks") {
+      const parsed = marksSchema.safeParse(value);
+      if (parsed.success) data.marks = parsed.data;
+      continue;
+    }
     if (!(sectionKeys as string[]).includes(key)) {
       report.unknown.push(key);
       continue;
     }
     const schema = sectionSchemas[key as SectionKey];
     const parsed = schema.safeParse(value);
-    if (parsed.success && Object.keys(parsed.data).length > 0) {
+    if (parsed.success) {
       data[key] = parsed.data;
       report.restored.push(key as SectionKey);
-    } else if (parsed.success) {
-      // Present but empty — nothing to restore and nothing to apologise for.
-      report.restored.push(key as SectionKey);
-      data[key] = parsed.data;
     } else {
       report.skipped.push(key as SectionKey);
     }
@@ -202,10 +158,25 @@ function salvagePhotos(raw: unknown): BackupPhoto[] | undefined {
   return out.length ? out : undefined;
 }
 
+/** True when a raw data object carries any section key only v1 ever wrote. */
+function looksLikeV1(raw: unknown): boolean {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return false;
+  const keys = Object.keys(raw as Record<string, unknown>);
+  if (keys.some((k) => V1_ONLY_SECTION_KEYS.includes(k))) return true;
+  // Old `communication` shape: fields the canonical section renamed.
+  const comm = (raw as Record<string, unknown>).communication;
+  if (comm && typeof comm === "object" && !Array.isArray(comm)) {
+    const c = comm as Record<string, unknown>;
+    if ("whatToSay" in c || "whatNotToSay" in c) return true;
+  }
+  return false;
+}
+
 /**
  * Reads a backup file. Deliberately forgiving about shape and unforgiving
  * about size and type: a family should never lose a letter to a typo, and the
- * file is still untrusted input.
+ * file is still untrusted input. v1 envelopes (and bare v1 data with no
+ * envelope at all) migrate to canonical on the way in — forever.
  */
 export function parseBackup(text: string): ParseBackupResult {
   if (text.length > MAX_BACKUP_BYTES) return { ok: false, reason: "too-large" };
@@ -230,7 +201,32 @@ export function parseBackup(text: string): ParseBackupResult {
   }
 
   const rawData = envelope ? root.data : root;
-  const { data, report } = salvageSections(rawData);
+  const rawMeta = envelope ? root.meta : undefined;
+  const declaredVersion = typeof root.version === "number" ? root.version : undefined;
+  const isV1 =
+    (envelope && declaredVersion !== undefined && declaredVersion < 2) ||
+    looksLikeV1(rawData);
+
+  let combined: string[] = [];
+  let dataForSalvage = rawData;
+  if (isV1) {
+    const migrated = migrateLetterData(rawData, rawMeta);
+    dataForSalvage = migrated.data;
+    combined = migrated.combined;
+  }
+
+  const { data, report } = salvageSections(dataForSalvage);
+
+  // Migration can only read a legacy section that is an object; a v1 key
+  // holding junk vanishes before salvage sees it. Report it rather than
+  // silently dropping — the promise is that nothing disappears unannounced.
+  if (isV1 && rawData && typeof rawData === "object" && !Array.isArray(rawData)) {
+    for (const [k, v] of Object.entries(rawData as Record<string, unknown>)) {
+      const legacyKey = V1_ONLY_SECTION_KEYS.includes(k) || (sectionKeys as string[]).includes(k);
+      const unreadable = v === null || typeof v !== "object" || Array.isArray(v);
+      if (legacyKey && unreadable && !report.skipped.includes(k)) report.skipped.push(k);
+    }
+  }
 
   if (report.restored.length === 0) {
     // Nothing recognisable. If it never looked like ours, say so; if it did,
@@ -238,19 +234,21 @@ export function parseBackup(text: string): ParseBackupResult {
     return { ok: false, reason: envelope ? "empty" : "not-a-backup" };
   }
 
-  const meta = envelope
-    ? (letterMetaSchema.safeParse(root.meta).data ?? {})
+  let meta: LetterMeta = envelope
+    ? (letterMetaSchema.safeParse(rawMeta).data ?? {})
     : ({} as LetterMeta);
-  const { path, source } = detectLetterPath(data, meta);
+  if (isV1) {
+    meta = { ...meta, ...inferMetaFromV1(data, rawMeta) };
+  }
   const photos = envelope ? salvagePhotos(root.photos) : undefined;
 
   return {
     ok: true,
     data,
-    meta: path ? { ...meta, letterPath: path } : meta,
+    meta,
     photos,
-    path,
-    pathSource: source,
+    migratedFromV1: isV1,
+    combined,
     salvage: report,
   };
 }
@@ -260,6 +258,16 @@ export function backupVersion(text: string): number | undefined {
   try {
     const v = (JSON.parse(text) as { version?: unknown }).version;
     return typeof v === "number" ? v : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** exportedAt from the envelope, for the replace-warning dialog's comparison. */
+export function backupExportedAt(text: string): string | undefined {
+  try {
+    const v = (JSON.parse(text) as { exportedAt?: unknown }).exportedAt;
+    return typeof v === "string" ? v : undefined;
   } catch {
     return undefined;
   }

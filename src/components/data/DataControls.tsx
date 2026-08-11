@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { firm } from "@/config/firm";
 import { serializeBackup } from "@/lib/backup";
-import { DEFAULT_PATH, pathDef } from "@/lib/content/paths";
-import { startedCount } from "@/lib/derive";
+import { sectionsForMeta, startedCount } from "@/lib/content/config";
 import { documentFilename } from "@/lib/filenames";
 import { triggerDownload } from "@/lib/download";
 import { deleteAllPhotos, photosForBackup } from "@/lib/photos";
@@ -68,19 +67,17 @@ export function DataControls() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [busy, setBusy] = useState<"letter" | "emergency" | null>(null);
 
-  const path = meta.letterPath ?? DEFAULT_PATH;
-  const total = pathDef(path).sections.length;
-  const count = hydrated ? startedCount(data, path) : 0;
+  const total = sectionsForMeta(meta, data).length;
+  const count = hydrated ? startedCount(data, meta) : 0;
 
   /* ------------------------------------------------------------- export */
   const handleExport = async () => {
     const photos = await photosForBackup();
+    // The routing answers travel in meta, so a restore re-fits the form
+    // without asking the family anything.
     triggerDownload(
-      documentFilename("backup", path),
-      // Always record which letter this is, even if the family never visited
-      // the chooser — otherwise a file of only shared sections comes back
-      // ambiguous and we have to ask them a question we could have answered.
-      serializeBackup(data, { ...meta, letterPath: path }, photos),
+      documentFilename("backup"),
+      serializeBackup(data, meta, photos),
       "application/json"
     );
     setNotice({
@@ -98,11 +95,11 @@ export function DataControls() {
     try {
       const mod = await import("@/lib/pdf/generate");
       if (kind === "letter") {
-        const blob = await mod.generateLetterPdfBlob(data, path);
-        triggerDownload(mod.letterPdfFilename(path), blob, "application/pdf");
+        const blob = await mod.generateLetterPdfBlob(data, meta);
+        triggerDownload(mod.letterPdfFilename(), blob, "application/pdf");
       } else {
-        const blob = await mod.generateEmergencyPdfBlob(data, path);
-        triggerDownload(mod.emergencyPdfFilename(path), blob, "application/pdf");
+        const blob = await mod.generateEmergencyPdfBlob(data);
+        triggerDownload(mod.emergencyPdfFilename(), blob, "application/pdf");
       }
     } catch (e) {
       console.error(e);
@@ -228,10 +225,9 @@ export function DataControls() {
           download a copy of that first if you want to keep it.
         </p>
         <p className="mt-3 text-[0.9375rem] text-muted">
-          If the file was written before this tool had two sets of questions, we work out
-          which letter it belongs to from the sections inside it, and ask you if it
-          genuinely cannot be told apart. Anything in the file that cannot be read is
-          reported rather than silently dropped.
+          Backup files from earlier releases load cleanly: everything they hold comes
+          forward into the letter, and anything unreadable is reported rather than
+          silently dropped.
         </p>
       </ActionCard>
 

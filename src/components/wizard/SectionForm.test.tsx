@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { SectionForm } from "@/components/wizard/SectionForm";
 import { communication } from "@/lib/content/sections/05-communication";
 import { familySupport } from "@/lib/content/sections/03-family-support";
-import { medical } from "@/lib/content/sections/06-medical";
+import { health } from "@/lib/content/sections/06-health";
 import { useLetterStore } from "@/lib/store";
 
 describe("SectionForm", () => {
@@ -15,6 +15,13 @@ describe("SectionForm", () => {
 
   it("associates a real <label> with every input and autosaves to the store", async () => {
     const user = userEvent.setup();
+    // The sharp communication questions are gated; open the gate so the
+    // field under test is asked.
+    useLetterStore.setState({
+      data: {},
+      meta: { communicationDiffers: "yes" },
+      hasHydrated: true,
+    });
     render(<SectionForm def={communication} />);
 
     const input = screen.getByLabelText("How they communicate");
@@ -103,7 +110,7 @@ describe("SectionForm", () => {
 
   it("joins checked schedule tokens and a typed custom time into one array", async () => {
     const user = userEvent.setup();
-    render(<SectionForm def={medical} />);
+    render(<SectionForm def={health} />);
 
     await user.click(screen.getByLabelText("Morning"));
     await user.type(screen.getByLabelText("Custom time"), "14:30");
@@ -111,7 +118,7 @@ describe("SectionForm", () => {
 
     await waitFor(
       () => {
-        const meds = useLetterStore.getState().data.medical?.medications;
+        const meds = useLetterStore.getState().data.health?.medications;
         expect(meds?.[0]?.schedule).toEqual(["morning", "14:30"]);
       },
       { timeout: 3000 }

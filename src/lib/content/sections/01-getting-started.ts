@@ -3,16 +3,13 @@ import type { SectionDef } from "@/lib/content/types";
 export const gettingStarted: SectionDef = {
   slug: "getting-started",
   key: "gettingStarted",
-  number: 1,
   title: "Getting started",
   navTitle: "Getting started",
-  minutes: 5,
   intro:
     "A Letter of Intent is a plain-language guide to caring for your loved one: " +
     "everything a future caregiver, trustee, or guardian would need to know but " +
     "could never guess. It is not a legal document, and that is its strength: " +
     "no forms, no signatures, just the notes only you could write.\n\n" +
-    "Most families finish in 45 minutes to two hours, usually across a few sittings. " +
     "Everything saves automatically on this device as you type. Every question " +
     "is optional. Skip anything. Come back anytime. There is no wrong way to do this.",
   fields: [
@@ -22,6 +19,7 @@ export const gettingStarted: SectionDef = {
       label: "Your name",
       help: "The person writing this letter.",
       placeholder: "e.g., Maria Alvarez",
+      autoComplete: "name",
     },
     {
       id: "authorRelationship",

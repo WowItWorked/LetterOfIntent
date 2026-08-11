@@ -3,30 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
-import { DEFAULT_PATH, pathDef, resolvePath } from "@/lib/content/paths";
-import { displayName, fillName, sectionHasContent, startedCount } from "@/lib/derive";
+import { sectionsForMeta, startedCount } from "@/lib/content/config";
+import { resolveSectionWording } from "@/lib/content/types";
+import { displayName, fillName, sectionHasContent } from "@/lib/derive";
 import { useLetterStore } from "@/lib/store";
-
-/** The path the rail should show: whichever letter this section belongs to. */
-function useRailPath() {
-  const pathname = usePathname();
-  const stored = useLetterStore((s) => s.meta.letterPath) ?? DEFAULT_PATH;
-  const slug = pathname.startsWith("/letter/") ? pathname.slice("/letter/".length) : "";
-  return resolvePath(slug, stored);
-}
 
 export function ProgressNote() {
   const hydrated = useLetterStore((s) => s.hasHydrated);
   const data = useLetterStore((s) => s.data);
-  const path = useRailPath();
-  const def = pathDef(path);
-  const total = def.sections.length;
-  const count = hydrated ? startedCount(data, path) : 0;
+  const meta = useLetterStore((s) => s.meta);
+  // Scope is communicated through structure, never through the clock: how
+  // many sections THIS configuration asks, and how far along the family is.
+  const total = sectionsForMeta(meta, data).length;
+  const count = hydrated ? startedCount(data, meta) : 0;
 
   return (
     <div>
       <p className="tw-engraved mb-2.5 text-xs tracking-[0.2em] text-faint">
-        {def.audience}
+        {displayName(data) === "your loved one" ? "Your letter" : `For ${displayName(data)}`}
       </p>
       <p className="text-[0.9375rem] text-muted">
         {count === 0
@@ -37,12 +31,12 @@ export function ProgressNote() {
         <div
           className="h-1 rounded-full transition-[width] motion-reduce:transition-none"
           style={{
-            width: `${Math.round((count / total) * 100)}%`,
+            width: `${total > 0 ? Math.round((count / total) * 100) : 0}%`,
             background: "var(--gradient-gold)",
           }}
         />
       </div>
-      {count === total ? (
+      {count === total && total > 0 ? (
         <p className="mt-2 text-[0.9375rem] text-success">
           Every section has notes. A yearly review keeps it trustworthy.
         </p>
@@ -55,13 +49,14 @@ export function SectionNav() {
   const pathname = usePathname();
   const hydrated = useLetterStore((s) => s.hasHydrated);
   const data = useLetterStore((s) => s.data);
-  const path = useRailPath();
+  const meta = useLetterStore((s) => s.meta);
   const name = displayName(data);
+  const sections = sectionsForMeta(meta, data);
 
   return (
     <nav aria-label="Letter sections" className="mt-[22px]">
       <ol className="flex list-none flex-col gap-0.5 p-0">
-        {pathDef(path).sections.map((def, i) => {
+        {sections.map((def, i) => {
           const href = `/letter/${def.slug}`;
           const current = pathname === href;
           const started = hydrated && sectionHasContent(data, def);
@@ -87,7 +82,7 @@ export function SectionNav() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="min-w-0 flex-1">
-                  {fillName(def.navTitle, name)}
+                  {fillName(resolveSectionWording(def, meta).navTitle, name)}
                   {def.optionalTag ? <span className="text-muted"> (optional)</span> : null}
                 </span>
                 {started ? (
@@ -111,6 +106,14 @@ export function SectionNav() {
 function RailLinks() {
   return (
     <div className="mt-5 flex flex-col gap-0.5 border-t border-line pt-4">
+      {/* The way back to the onboarding answers: changing one re-gates the
+          form and never loses a word of written work. */}
+      <Link
+        href="/letter#answers"
+        className="flex min-h-11 items-center rounded-[var(--radius-sm)] px-2.5 text-[0.9375rem] text-muted hover:bg-paper2 hover:text-ink"
+      >
+        Your answers (change any time)
+      </Link>
       <Link
         href="/letter/review"
         className="flex min-h-11 items-center rounded-[var(--radius-sm)] px-2.5 text-[0.9375rem] font-bold text-accent hover:bg-paper2"

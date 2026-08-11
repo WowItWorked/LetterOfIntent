@@ -3,10 +3,9 @@ import type { SectionDef } from "@/lib/content/types";
 export const personalMessage: SectionDef = {
   slug: "a-personal-message",
   key: "personalMessage",
-  number: 20,
   title: "A personal message",
   navTitle: "Your message",
-  minutes: 15,
+  emotional: true,
   intro:
     "The rest of this letter is instructions. This part is you.\n\n" +
     "Many families say this is the page that matters most: the one that gets " +

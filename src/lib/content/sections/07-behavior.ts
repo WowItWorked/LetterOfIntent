@@ -1,12 +1,17 @@
 import type { SectionDef } from "@/lib/content/types";
 
+/**
+ * Gated on the behavior-escalation follow-up, never on support level: a
+ * mostly-independent adult can have crises, and an around-the-clock life can
+ * be entirely without them. The topical question is the only honest gate.
+ */
 export const behavior: SectionDef = {
   slug: "behavioral-support",
   key: "behavior",
-  number: 7,
   title: "Behavioral support",
   navTitle: "Behavior support",
-  minutes: 15,
+  emotional: true,
+  showWhen: [{ behaviorEscalates: ["yes"] }],
   intro:
     "This may be the hardest section to write. It is also the one a future " +
     "caregiver will reach for on the worst day.\n\n" +
@@ -25,6 +30,7 @@ export const behavior: SectionDef = {
         "Fire alarms and any sudden loud noise. Being told \"no\" without an " +
         "alternative. Plans changing without warning. The word \"later\": give him " +
         "a real time instead.",
+      cardLengthHint: 220,
     },
     {
       id: "earlyWarnings",
@@ -32,6 +38,7 @@ export const behavior: SectionDef = {
       rows: 3,
       label: "Early warning signs",
       help: "What do the first two minutes look like, before things escalate? What would a stranger miss?",
+      cardLengthHint: 200,
     },
     {
       id: "deEscalation",
@@ -44,6 +51,8 @@ export const behavior: SectionDef = {
         "steps back. Offer the weighted blanket and his headphones. Say \"You're " +
         "safe. I'm here. We can wait.\" Then actually wait (it takes about ten " +
         "minutes). Don't discuss what happened until at least an hour after.",
+      openers: ["What helps most is…", "Start by…"],
+      cardLengthHint: 260,
     },
     {
       id: "makesWorse",
@@ -51,6 +60,7 @@ export const behavior: SectionDef = {
       rows: 3,
       label: "What makes things worse",
       help: "The things a well-meaning stranger might try that backfire: touch, crowding, raised voices, rapid questions, blocking the doorway.",
+      cardLengthHint: 200,
     },
     {
       id: "crisisPlan",
@@ -72,6 +82,7 @@ export const behavior: SectionDef = {
         "he does not understand handcuffs. One officer, slow voice, lights and " +
         "sirens off. Ask \"Where is your card?\" He carries an autism ID card in " +
         "his left pocket.",
+      cardLengthHint: 260,
     },
   ],
 };

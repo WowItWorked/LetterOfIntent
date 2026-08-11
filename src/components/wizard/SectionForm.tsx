@@ -16,9 +16,10 @@ import type {
   ScalarField,
   SectionDef,
 } from "@/lib/content/types";
-import type { SectionKey } from "@/lib/schema";
+import { resolveWording } from "@/lib/content/types";
+import type { LetterMeta, SectionKey } from "@/lib/schema";
 import { fieldMarkerText } from "@/lib/cards/status";
-import { DEFAULT_PATH, resolvePath } from "@/lib/content/paths";
+import { fieldsForMeta } from "@/lib/content/config";
 import {
   defaultValuesForSection,
   displayName,
@@ -48,12 +49,13 @@ const AUTOSAVE_MS = 600;
 
 export function SectionForm({ def }: { def: SectionDef }) {
   const data = useLetterStore((s) => s.data);
+  const meta = useLetterStore((s) => s.meta);
   const setSection = useLetterStore((s) => s.setSection);
-  const letterPath = useLetterStore((s) => s.meta.letterPath);
   const setStatus = useSaveStatusStore((s) => s.setStatus);
   const name = displayName(data);
-  // Markers are path-aware: the same field can feed different cards per path.
-  const path = resolvePath(def.slug, letterPath ?? DEFAULT_PATH);
+  // Which of this section's questions the onboarding answers put in play. A
+  // gated-off field that already holds content still renders (config.ts).
+  const visibleFields = fieldsForMeta(def, meta, data);
 
   // Initial values come from the store once (the form is the source of truth
   // while mounted; the component remounts per section via key={def.slug}).
@@ -101,18 +103,28 @@ export function SectionForm({ def }: { def: SectionDef }) {
   }, [def.key]);
 
   return (
+    // No form-level autoComplete="off": the policy is per-field, deliberate
+    // in both directions — mechanical identity typing (names, phones, emails)
+    // opts IN with real tokens, and everything narrative or medical stays off
+    // so a browser never offers to remember a seizure protocol.
     <form
-      autoComplete="off"
       onSubmit={(e) => e.preventDefault()}
       aria-label={fillName(def.title, name)}
       className="space-y-7"
     >
-      {def.fields.map((field) => {
-        const marker = fieldMarkerText(path, def.key, field.id);
+      {visibleFields.map((field) => {
+        const marker = fieldMarkerText(def.key, field.id);
         return field.kind === "repeater" ? (
           <RepeaterControl key={field.id} field={field} form={form} name={name} marker={marker} />
         ) : (
-          <ScalarControl key={field.id} field={field} form={form} name={name} marker={marker} />
+          <ScalarControl
+            key={field.id}
+            field={field}
+            form={form}
+            name={name}
+            meta={meta}
+            marker={marker}
+          />
         );
       })}
     </form>
@@ -125,11 +137,13 @@ function ScalarControl({
   field,
   form,
   name,
+  meta,
   marker,
 }: {
   field: ScalarField;
   form: UseFormReturn<FieldValues>;
   name: string;
+  meta: LetterMeta;
   marker?: string;
 }) {
   const id = `f-${field.id}`;
@@ -137,11 +151,21 @@ function ScalarControl({
   const helpId = `${id}-help`;
   const hintId = `${id}-hint`;
   const hint = errMessage(form.formState.errors, [field.id]);
-  const label = fillName(field.label, name);
-  const help = field.help ? fillName(field.help, name) : undefined;
-  const placeholder = field.placeholder ? fillName(field.placeholder, name) : undefined;
-  const example = field.example ? fillName(field.example, name) : undefined;
+  // Adaptive wording: one stored field, the register this configuration
+  // deserves — and the example always matches the label the family sees.
+  const wording = resolveWording(field, meta);
+  const label = fillName(wording.label, name);
+  const help = wording.help ? fillName(wording.help, name) : undefined;
+  const placeholder = wording.placeholder ? fillName(wording.placeholder, name) : undefined;
+  const example = wording.example ? fillName(wording.example, name) : undefined;
   const aria = describedBy(help && helpId, marker && markerId, hint && hintId);
+
+  /** Appends chip/opener text to the field, never replacing what is there. */
+  const appendText = (text: string, separator: string) => {
+    const current = String(form.getValues(field.id) ?? "");
+    const next = current.trim() ? `${current.replace(/\s+$/, "")}${separator}${text}` : text;
+    form.setValue(field.id, next, { shouldDirty: true, shouldTouch: true });
+  };
 
   return (
     <FieldShell
@@ -160,6 +184,7 @@ function ScalarControl({
           id={id}
           rows={field.rows ?? 3}
           placeholder={placeholder}
+          autoComplete={field.autoComplete ?? "off"}
           aria-describedby={aria}
           className={textareaClasses}
           {...form.register(field.id)}
@@ -170,11 +195,43 @@ function ScalarControl({
           type={field.kind === "tel" ? "text" : field.kind}
           inputMode={field.kind === "tel" ? "tel" : field.kind === "email" ? "email" : undefined}
           placeholder={placeholder}
+          autoComplete={field.autoComplete ?? "off"}
           aria-describedby={aria}
           className={inputClasses}
           {...form.register(field.id)}
         />
       )}
+      {field.chips?.length ? (
+        // Suggestions, never a closed list: tapping appends, the family edits
+        // freely, and a chip with a definition teaches the term as it offers it.
+        <div className="mt-2 flex flex-wrap gap-2">
+          {field.chips.map((chip) => (
+            <button
+              key={chip.value}
+              type="button"
+              onClick={() => appendText(chip.value, "; ")}
+              title={chip.teach}
+              className="min-h-9 rounded-full border border-line bg-paper2 px-3 text-[0.8125rem] font-medium text-body hover:border-gold500 hover:text-ink"
+            >
+              + {chip.value}
+            </button>
+          ))}
+        </div>
+      ) : null}
+      {field.openers?.length ? (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {field.openers.map((opener) => (
+            <button
+              key={opener}
+              type="button"
+              onClick={() => appendText(fillName(opener, name), "\n")}
+              className="min-h-9 rounded-full border border-dashed border-line px-3 text-[0.8125rem] italic text-muted hover:border-gold500 hover:text-ink"
+            >
+              {fillName(opener, name)}
+            </button>
+          ))}
+        </div>
+      ) : null}
     </FieldShell>
   );
 }
@@ -442,6 +499,7 @@ function ItemFieldControl({
             placeholder={
               itemField.placeholder ? fillName(itemField.placeholder, name) : undefined
             }
+            autoComplete="off"
             aria-describedby={describedBy(itemHelp && helpId, hint && hintId)}
             className={textareaClasses}
             {...form.register(path)}
@@ -460,6 +518,7 @@ function ItemFieldControl({
             placeholder={
               itemField.placeholder ? fillName(itemField.placeholder, name) : undefined
             }
+            autoComplete={itemField.autoComplete ?? "off"}
             aria-describedby={describedBy(itemHelp && helpId, hint && hintId)}
             className={inputClasses}
             {...form.register(path)}

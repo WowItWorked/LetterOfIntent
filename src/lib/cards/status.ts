@@ -8,7 +8,7 @@ import {
 } from "@/lib/content/cards";
 import { needMet, requirementsMet } from "@/lib/cards/derive";
 import { displayName, fillName } from "@/lib/derive";
-import type { LetterData, LetterPath, SectionKey } from "@/lib/schema";
+import type { LetterData, SectionKey } from "@/lib/schema";
 
 /**
  * The wizard's view of the care cards: which fields feed which card, and
@@ -28,9 +28,6 @@ export function cardTitle(key: CardKey): string {
 
 /* ------------------------------------------------------------- reverse index */
 
-// Paths come from the config too, so a third letter path would index itself.
-const CONFIG_PATHS = Object.keys(SOURCES.identity) as LetterPath[];
-
 const fieldCards = new Map<string, CardKey[]>();
 const sectionCards = new Map<string, CardKey[]>();
 
@@ -46,27 +43,21 @@ function pushUnique(map: Map<string, CardKey[]>, key: string, card: CardKey): vo
 // mislead the moment the family adds their first record — the LegacyEcho
 // aside already explains that handover where it happens.
 for (const card of CARD_KEYS) {
-  for (const path of CONFIG_PATHS) {
-    for (const src of SOURCES[card][path]) {
-      if (src.tier === "legacy_fallback") continue;
-      pushUnique(fieldCards, `${path}|${src.section}|${src.field}`, card);
-      pushUnique(sectionCards, `${path}|${src.section}`, card);
-    }
+  for (const src of SOURCES[card]) {
+    if (src.tier === "legacy_fallback") continue;
+    pushUnique(fieldCards, `${src.section}|${src.field}`, card);
+    pushUnique(sectionCards, src.section, card);
   }
 }
 
 /** The cards a single form field feeds, in CARD_KEYS order. */
-export function cardsForField(
-  path: LetterPath,
-  section: SectionKey,
-  fieldId: string
-): readonly CardKey[] {
-  return fieldCards.get(`${path}|${section}|${fieldId}`) ?? [];
+export function cardsForField(section: SectionKey, fieldId: string): readonly CardKey[] {
+  return fieldCards.get(`${section}|${fieldId}`) ?? [];
 }
 
 /** The cards a whole section feeds, in CARD_KEYS order. */
-export function cardsForSection(path: LetterPath, section: SectionKey): readonly CardKey[] {
-  return sectionCards.get(`${path}|${section}`) ?? [];
+export function cardsForSection(section: SectionKey): readonly CardKey[] {
+  return sectionCards.get(section) ?? [];
 }
 
 /* ------------------------------------------------------------- field markers */
@@ -82,12 +73,8 @@ function listJoin(items: readonly string[]): string {
  * card." Undefined when the field feeds nothing, so the form stays silent
  * for the many questions that are letter-only.
  */
-export function fieldMarkerText(
-  path: LetterPath,
-  section: SectionKey,
-  fieldId: string
-): string | undefined {
-  const cards = cardsForField(path, section, fieldId);
+export function fieldMarkerText(section: SectionKey, fieldId: string): string | undefined {
+  const cards = cardsForField(section, fieldId);
   if (cards.length === 0) return undefined;
   const word = cards.length === 1 ? "card" : "cards";
   return `Appears on the ${listJoin(cards.map(cardTitle))} ${word}.`;
@@ -96,20 +83,15 @@ export function fieldMarkerText(
 /* ------------------------------------------------------------ requirement copy */
 
 /**
- * A need's stable identity: its refs, each as section.field plus any path and
- * record filter, sorted so ref order never matters. Copy is keyed by this, so
- * ANY change to a requirement — a new need, a new ref, a changed filter —
+ * A need's stable identity: its refs, each as section.field plus any record
+ * filter, sorted so ref order never matters. Copy is keyed by this, so ANY
+ * change to a requirement — a new need, a new ref, a changed filter —
  * orphans its phrase and fails the completeness test instead of silently
  * showing nothing.
  */
 export function needKey(need: { anyOf: readonly SourceRef[] }): string {
   return need.anyOf
-    .map(
-      (r) =>
-        `${r.section}.${r.field}` +
-        (r.path ? `@${r.path}` : "") +
-        (r.recordFilter ? `#${r.recordFilter}` : "")
-    )
+    .map((r) => `${r.section}.${r.field}` + (r.recordFilter ? `#${r.recordFilter}` : ""))
     .sort()
     .join(" | ");
 }
@@ -124,22 +106,20 @@ export const MISSING_COPY: Readonly<Record<string, string>> = {
   // …and someone responsible.
   "familySupport.contacts": "at least one person to call",
   // emergency: any one anchor a stranger could act on.
-  "allergies.items | emergencyPlan.call911When | emergencyPlan.responseSteps | healthMedical.medications@general#rescueOnly | medical.medications@special-needs#rescueOnly":
+  "allergies.items | emergencyPlan.call911When | emergencyPlan.responseSteps | health.medications#rescueOnly":
     "an allergy, a rescue medication, or what to do first",
   // meds
-  "healthMedical.medications@general | medical.medications@special-needs":
-    "at least one medication",
-  // behavior
-  "communication.how@special-needs | dailyCommunication.howToSpeak@general":
-    "a note on how {name} communicates",
+  "health.medications": "at least one medication",
+  // behavior: either direction of communication anchors the card.
+  "communication.how | communication.howToSpeak":
+    "a note on how {name} communicates, or how to talk with them",
   // routine
-  "routines.items | routines.transitions | typicalDay.eveningRoutine@special-needs | typicalDay.morningRoutine@special-needs | typicalWeek.evenings@general | typicalWeek.mornings@general":
+  "routine.evenings | routine.mornings | routines.items | routines.transitions":
     "one routine, or a note about mornings or evenings",
   // food
-  "foods.items | typicalDay.food@special-needs | typicalWeek.food@general":
-    "at least one note about food",
+  "foods.items | routine.food": "at least one note about food",
   // care
-  "careTasks.items | homeLiving.personalCare@general | homeLiving.safety@general | medical.equipment@special-needs":
+  "careTasks.items | health.equipment | home.personalCare | home.safety":
     "a care task, or a note on equipment, personal care, or safety",
 };
 
@@ -153,9 +133,9 @@ const FALLBACK_PHRASE = "a little more detail";
  * needMet is derive.ts's own per-need gate — the same check requirementsMet
  * ANDs — so the phrasing can never disagree with whether the card renders.
  */
-export function needsMissing(data: LetterData, path: LetterPath, key: CardKey): string[] {
+export function needsMissing(data: LetterData, key: CardKey): string[] {
   return RENDER_REQUIREMENTS[key]
-    .filter((need) => !needMet(data, path, need))
+    .filter((need) => !needMet(data, need))
     .map((need) => MISSING_COPY[needKey(need)] ?? FALLBACK_PHRASE);
 }
 
@@ -173,13 +153,13 @@ export interface CardStatus {
  * screen would refuse. Not-ready is a plain statement of what would complete
  * it, never an error: the cards are a bonus, not homework.
  */
-export function cardStatus(data: LetterData, path: LetterPath, key: CardKey): CardStatus {
+export function cardStatus(data: LetterData, key: CardKey): CardStatus {
   const title = cardTitle(key);
-  if (requirementsMet(data, path, key)) {
+  if (requirementsMet(data, key)) {
     return { key, title, ready: true, text: `The ${title} card has what it needs.` };
   }
   // Non-empty whenever requirementsMet is false: both run the same needMet.
-  const phrases = needsMissing(data, path, key);
+  const phrases = needsMissing(data, key);
   return {
     key,
     title,
@@ -189,10 +169,6 @@ export function cardStatus(data: LetterData, path: LetterPath, key: CardKey): Ca
 }
 
 /** Statuses for every card this section feeds, in CARD_KEYS order. */
-export function sectionCardStatuses(
-  data: LetterData,
-  path: LetterPath,
-  section: SectionKey
-): CardStatus[] {
-  return cardsForSection(path, section).map((key) => cardStatus(data, path, key));
+export function sectionCardStatuses(data: LetterData, section: SectionKey): CardStatus[] {
+  return cardsForSection(section).map((key) => cardStatus(data, key));
 }

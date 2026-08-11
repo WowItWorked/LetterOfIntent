@@ -1,6 +1,5 @@
-import { DEFAULT_PATH, sectionsFor } from "@/lib/content/paths";
 import type { FieldDef, RepeaterItemField, SectionDef } from "@/lib/content/types";
-import type { Contact, LetterData, LetterPath, Medication, SectionKey } from "@/lib/schema";
+import type { Contact, LetterData, Medication, SectionKey } from "@/lib/schema";
 
 /* ------------------------------------------------------------------ naming */
 
@@ -27,6 +26,27 @@ export function readerName(data: LetterData): string {
 /** Replaces {name} tokens in content strings. */
 export function fillName(text: string, name: string): string {
   return text.split("{name}").join(name);
+}
+
+/* ------------------------------------------------------------------- marks */
+
+/** The family's marker for a field ("not_applicable" | "come_back" | "combined"). */
+export function fieldMark(
+  data: LetterData,
+  section: SectionKey,
+  fieldId: string
+): string | undefined {
+  return data.marks?.[`${section}.${fieldId}`] ?? data.marks?.[section];
+}
+
+/** True when the family said this question does not apply to them. Outputs
+ *  skip such fields entirely; the reading view never calls them gaps. */
+export function isNotApplicable(
+  data: LetterData,
+  section: SectionKey,
+  fieldId: string
+): boolean {
+  return fieldMark(data, section, fieldId) === "not_applicable";
 }
 
 /* ------------------------------------------------------------ content checks */
@@ -63,19 +83,6 @@ export function fieldHasContent(
 export function sectionHasContent(data: LetterData, def: SectionDef): boolean {
   const values = data[def.key] as Record<string, unknown> | undefined;
   return def.fields.some((f) => fieldHasContent(values, f));
-}
-
-export function startedSectionKeys(
-  data: LetterData,
-  path: LetterPath = DEFAULT_PATH
-): SectionKey[] {
-  return sectionsFor(path)
-    .filter((d) => sectionHasContent(data, d))
-    .map((d) => d.key);
-}
-
-export function startedCount(data: LetterData, path: LetterPath = DEFAULT_PATH): number {
-  return startedSectionKeys(data, path).length;
 }
 
 /* ---------------------------------------------------------------- dates */
@@ -222,61 +229,64 @@ const trimmed = (v: string | undefined) => {
 };
 
 /**
- * Pulls the emergency one-pager's content out of the full letter. The two
- * paths keep this information in different sections, so the source depends on
- * which letter is being written.
+ * Pulls the emergency one-pager's content out of the letter. ONE canonical
+ * source per heading — no path conditionals, and every mapping is a row in
+ * docs/output-matrix.md. Three of these lines are the fix for shipped
+ * defects, each pinned by a regression test:
+ *
+ *   protocol   ← emergencyPlan.responseSteps, else health.emergencyProtocol.
+ *                NEVER health.appointmentHelp.
+ *   insurance  ← health.insurancePlans. NEVER health.recordsLocation.
+ *   triggers   ← behavior.triggers, whenever it has content. Never hardcoded
+ *                absent.
+ *
+ * A field the family marked not-applicable prints nothing (no empty heading).
  */
-export function emergencyInfo(
-  data: LetterData,
-  path: LetterPath = DEFAULT_PATH
-): EmergencyInfo {
+export function emergencyInfo(data: LetterData): EmergencyInfo {
+  const na = (section: SectionKey, field: string) => isNotApplicable(data, section, field);
+  const take = (section: SectionKey, field: string, v: string | undefined) =>
+    na(section, field) ? undefined : trimmed(v);
+
   const contacts = (data.familySupport?.contacts ?? []).filter(
     (c) => c.emergency === true && itemHasContent(c as Record<string, unknown>)
   );
-  const med = path === "general" ? data.healthMedical : data.medical;
-  const medications = (med?.medications ?? []).filter((m) =>
-    itemHasContent(m as Record<string, unknown>)
-  );
-
-  const shared = {
-    fullName: trimmed(data.gettingStarted?.subjectFullName),
-    preferred: preferredName(data),
-    allergies: trimmed(med?.allergies),
-    medications,
-    contacts,
-    firstCall: trimmed(data.familySupport?.firstCall),
-    hospital: trimmed(med?.preferredHospital),
-    updatedIso: letterDateIso(data),
-  };
-
-  if (path === "general") {
-    return {
-      ...shared,
-      dateOfBirth: trimmed(data.aboutThem?.dateOfBirth),
-      diagnoses: trimmed(data.healthMedical?.conditions),
-      communication: trimmed(data.dailyCommunication?.howToSpeak),
-      yesNo: trimmed(data.dailyCommunication?.hearingVisionMemory),
-      pain: trimmed(data.dailyCommunication?.wontAdmit),
-      protocol: trimmed(data.healthMedical?.appointmentHelp),
-      triggers: undefined,
-      deEscalation: trimmed(data.dailyCommunication?.whatHelps),
-      makesWorse: trimmed(data.dailyCommunication?.whatToAvoid),
-      insurance: trimmed(data.healthMedical?.recordsLocation),
-    };
-  }
+  const medications = na("health", "medications")
+    ? []
+    : (data.health?.medications ?? []).filter((m) =>
+        itemHasContent(m as Record<string, unknown>)
+      );
 
   return {
-    ...shared,
-    dateOfBirth: trimmed(data.about?.dateOfBirth),
-    diagnoses: trimmed(data.about?.diagnoses),
-    communication: trimmed(data.communication?.how),
-    yesNo: trimmed(data.communication?.yesNo),
-    pain: trimmed(data.communication?.pain),
-    protocol: trimmed(data.medical?.emergencyProtocol),
-    triggers: trimmed(data.behavior?.triggers),
-    deEscalation: trimmed(data.behavior?.deEscalation),
-    makesWorse: trimmed(data.behavior?.makesWorse),
-    insurance: trimmed(data.medical?.insurance),
+    fullName: take("gettingStarted", "subjectFullName", data.gettingStarted?.subjectFullName),
+    preferred: preferredName(data),
+    dateOfBirth: take("person", "dateOfBirth", data.person?.dateOfBirth),
+    diagnoses: take("health", "conditions", data.health?.conditions),
+    communication:
+      take("communication", "how", data.communication?.how) ??
+      take("communication", "howToSpeak", data.communication?.howToSpeak),
+    yesNo:
+      take("communication", "yesNo", data.communication?.yesNo) ??
+      take("communication", "hearingVisionMemory", data.communication?.hearingVisionMemory),
+    pain:
+      take("communication", "pain", data.communication?.pain) ??
+      take("communication", "wontAdmit", data.communication?.wontAdmit),
+    allergies: take("health", "allergies", data.health?.allergies),
+    medications,
+    protocol:
+      take("emergencyPlan", "responseSteps", data.emergencyPlan?.responseSteps) ??
+      take("health", "emergencyProtocol", data.health?.emergencyProtocol),
+    triggers: take("behavior", "triggers", data.behavior?.triggers),
+    deEscalation:
+      take("behavior", "deEscalation", data.behavior?.deEscalation) ??
+      take("communication", "whatHelps", data.communication?.whatHelps),
+    makesWorse:
+      take("behavior", "makesWorse", data.behavior?.makesWorse) ??
+      take("communication", "whatToAvoid", data.communication?.whatToAvoid),
+    contacts,
+    firstCall: take("familySupport", "firstCall", data.familySupport?.firstCall),
+    insurance: take("health", "insurancePlans", data.health?.insurancePlans),
+    hospital: take("health", "preferredHospital", data.health?.preferredHospital),
+    updatedIso: letterDateIso(data),
   };
 }
 
@@ -294,7 +304,14 @@ export interface KeyPoint {
 export interface KeyPoints {
   callOrder: string[];
   points: KeyPoint[];
+  /** The caregiver's "never change this" ask (caregiverGuidance.neverChange). */
   neverChange?: string;
+  /**
+   * Housing red lines (home.hardLimits). A separate box from neverChange on
+   * purpose: the old code piped both questions into one slot, which was a
+   * bug, not a merge — they are different questions with different readers.
+   */
+  hardLimits?: string;
 }
 
 /**
@@ -332,9 +349,10 @@ export function clampToWord(text: string, max: number): string {
  * Page four of the letter: the handful of things a reader needs in the first
  * five minutes, lifted from sections they would otherwise have to hunt for.
  * Every point cites its source section so nothing here is a second source of
- * truth.
+ * truth. Canonical sources only — the letter's configuration decides what has
+ * content, never which mapping applies.
  */
-export function keyPoints(data: LetterData, path: LetterPath = DEFAULT_PATH): KeyPoints {
+export function keyPoints(data: LetterData): KeyPoints {
   const callOrder: string[] = [];
   const first = trimmed(data.familySupport?.firstCall);
   if (first) callOrder.push(first);
@@ -353,52 +371,46 @@ export function keyPoints(data: LetterData, path: LetterPath = DEFAULT_PATH): Ke
     if (text) points.push({ title, source, text: clampToWord(text, MAX_KEY_POINT_CHARS), warning });
   };
 
-  if (path === "general") {
-    add("How to talk with them", "Communication", trimmed(data.dailyCommunication?.howToSpeak));
-    add(
-      "Medical facts that cannot wait",
-      "Health & medical",
-      [trimmed(data.healthMedical?.allergies), trimmed(data.healthMedical?.conditions)]
-        .filter(Boolean)
-        .join("\n\n")|| undefined
-    );
-    add("What helps", "Communication", trimmed(data.dailyCommunication?.whatHelps));
-    add(
-      "What makes it worse",
-      "Communication",
-      trimmed(data.dailyCommunication?.whatToAvoid),
-      true
-    );
-    return { callOrder, points, neverChange: clampKeyPoint(data.steppingIn?.neverChange) };
-  }
-
-  add("How to talk with them", "Communication", trimmed(data.communication?.how));
+  add(
+    "How to talk with them",
+    "Communication",
+    trimmed(data.communication?.how) ?? trimmed(data.communication?.howToSpeak)
+  );
   add(
     "Medical facts that cannot wait",
-    "Medical",
-    [trimmed(data.medical?.allergies), trimmed(data.medical?.emergencyProtocol)]
+    "Health & medical",
+    [
+      trimmed(data.health?.allergies),
+      trimmed(data.health?.emergencyProtocol) ?? trimmed(data.health?.conditions),
+    ]
       .filter(Boolean)
       .join("\n\n") || undefined
   );
-  add("What calms them", "Behavior support", trimmed(data.behavior?.deEscalation));
-  add("What makes it worse", "Behavior support", trimmed(data.behavior?.makesWorse), true);
-  return { callOrder, points, neverChange: clampKeyPoint(data.housing?.hardLimits) };
+  add(
+    "What helps",
+    "Behavior & communication",
+    trimmed(data.behavior?.deEscalation) ?? trimmed(data.communication?.whatHelps)
+  );
+  add(
+    "What makes it worse",
+    "Behavior & communication",
+    trimmed(data.behavior?.makesWorse) ?? trimmed(data.communication?.whatToAvoid),
+    true
+  );
+
+  return {
+    callOrder,
+    points,
+    neverChange: clampKeyPoint(data.caregiverGuidance?.neverChange),
+    hardLimits: clampKeyPoint(data.home?.hardLimits),
+  };
 }
 
 export function keyPointsHaveContent(k: KeyPoints): boolean {
-  return k.points.length > 0 || k.callOrder.length > 0 || Boolean(k.neverChange);
-}
-
-export function emergencyHasContent(info: EmergencyInfo): boolean {
-  return Boolean(
-    info.diagnoses ||
-      info.allergies ||
-      info.medications.length > 0 ||
-      info.protocol ||
-      info.triggers ||
-      info.deEscalation ||
-      info.communication ||
-      info.contacts.length > 0 ||
-      info.firstCall
+  return (
+    k.points.length > 0 ||
+    k.callOrder.length > 0 ||
+    Boolean(k.neverChange) ||
+    Boolean(k.hardLimits)
   );
 }

@@ -4,15 +4,24 @@ import { SectionForm } from "@/components/wizard/SectionForm";
 import { communication } from "@/lib/content/sections/05-communication";
 import { emergencyPlan } from "@/lib/content/sections/09-emergency-plan";
 import { familySupport } from "@/lib/content/sections/03-family-support";
-import { dailyCommunication } from "@/lib/content/sections/general/05-communication";
 import { useLetterStore } from "@/lib/store";
 
 /**
  * The markers are config-driven (see lib/cards/status.test.ts for the index
  * itself); these tests pin the wiring — that the line renders near the label
  * and reaches the input through the same aria-describedby channel as help
- * text, on both letter paths, without ever being hand-listed in a component.
+ * text, without ever being hand-listed in a component.
  */
+
+/** Answers that put every communication question in play. */
+const FULL_COMM_META = {
+  communicationDiffers: "yes",
+  behaviorEscalates: "yes",
+  cognitionChanging: "yes",
+  stage: "adult",
+  supportLevel: "mostlyIndependent",
+} as const;
+
 describe("card-field markers", () => {
   beforeEach(() => {
     localStorage.clear();
@@ -44,10 +53,12 @@ describe("card-field markers", () => {
   });
 
   it("marks exactly the fields SOURCES names, and no others", () => {
+    useLetterStore.setState({ data: {}, meta: { ...FULL_COMM_META }, hasHydrated: true });
     render(<SectionForm def={communication} />);
 
-    // communication feeds the behavior card through how/yesNo/pain/whatNotToSay.
-    expect(screen.getAllByText(/^Appears on the/)).toHaveLength(4);
+    // communication feeds the behavior card through how, howToSpeak, yesNo,
+    // pain, wontAdmit, whatHelps, and whatToAvoid — seven markers, no more.
+    expect(screen.getAllByText(/^Appears on the/)).toHaveLength(7);
     expect(screen.getByLabelText("How they communicate")).toHaveAccessibleDescription(
       /Appears on the Behavior & Communication card\./
     );
@@ -56,15 +67,14 @@ describe("card-field markers", () => {
     ).not.toHaveAccessibleDescription(/Appears on/);
   });
 
-  it("follows the letter path — the general set gets its own markers", () => {
-    useLetterStore.setState({ data: {}, meta: { letterPath: "general" }, hasHydrated: true });
-    render(<SectionForm def={dailyCommunication} />);
-
+  it("a gated-off field's marker disappears with the field, not separately", () => {
+    // With no onboarding answers, the sharp communication questions are not
+    // asked — so neither they nor their markers render.
+    render(<SectionForm def={communication} />);
+    expect(screen.queryByLabelText("How they communicate")).not.toBeInTheDocument();
+    // The ungated direction still carries its marker.
     expect(
       screen.getByLabelText("How they prefer to be spoken to, and by whom")
     ).toHaveAccessibleDescription(/Appears on the Behavior & Communication card\./);
-    expect(
-      screen.getByLabelText("The conversations that are still unfinished")
-    ).not.toHaveAccessibleDescription(/Appears on/);
   });
 });

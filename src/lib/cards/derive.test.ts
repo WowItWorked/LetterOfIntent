@@ -26,7 +26,7 @@ function snLetter(overrides: Partial<LetterData> = {}): LetterData {
       subjectAddress: "12 Maple Street, Rome, GA",
       letterDate: "2026-08-08",
     },
-    about: { dateOfBirth: "2015-01-15" },
+    person: { dateOfBirth: "2015-01-15" },
     familySupport: {
       contacts: [
         {
@@ -45,7 +45,7 @@ function snLetter(overrides: Partial<LetterData> = {}): LetterData {
         },
       ],
     },
-    medical: {
+    health: {
       medications: [
         {
           id: "m1",
@@ -131,27 +131,27 @@ function generalLetter(overrides: Partial<LetterData> = {}): LetterData {
       subjectPreferredName: "Walt",
       letterDate: "2026-08-08",
     },
-    aboutThem: { dateOfBirth: "1948-03-02", cannotAbide: "Being talked over." },
+    person: { dateOfBirth: "1948-03-02", cannotAbide: "Being talked over." },
     familySupport: {
       contacts: [
         { id: "c1", name: "Pat", relationship: "Son", phone: "555-0300", emergency: true },
       ],
     },
-    healthMedical: {
+    health: {
       medications: [
         { id: "m1", name: "Metoprolol", dose: "50", unit: "mg", schedule: ["morning"] },
       ],
       preferredHospital: "St. Mary's",
     },
-    dailyCommunication: {
+    communication: {
       howToSpeak: "Speak facing them, a little slower than feels natural.",
       whatHelps: "A cup of tea and a change of subject.",
     },
-    typicalWeek: {
+    routine: {
       mornings: "Slow. Coffee before conversation.",
       food: "Toast and jam most mornings.",
     },
-    homeLiving: {
+    home: {
       personalCare: "A steadying hand on the stairs.",
       safety: "The bathroom rug slips.",
     },
@@ -177,8 +177,8 @@ afterEach(() => {
 describe("deriveCard shared rules", () => {
   it("a rescue medication entered once appears on both the emergency and meds cards", () => {
     const data = snLetter();
-    const emergency = deriveCard(data, "special-needs", "emergency");
-    const meds = deriveCard(data, "special-needs", "meds");
+    const emergency = deriveCard(data, "emergency");
+    const meds = deriveCard(data, "meds");
 
     const onEmergency = block(emergency, "Rescue medication");
     const onMeds = block(meds, "Rescue medication");
@@ -197,7 +197,7 @@ describe("deriveCard shared rules", () => {
       roles: ["primary"],
       keepOffCards: true,
     });
-    data.medical?.medications?.push({
+    data.health?.medications?.push({
       id: "m3",
       name: "Secret Med",
       isRescue: true,
@@ -210,9 +210,9 @@ describe("deriveCard shared rules", () => {
       keepOffCards: true,
     });
 
-    const identity = deriveCard(data, "special-needs", "identity");
-    const emergency = deriveCard(data, "special-needs", "emergency");
-    const meds = deriveCard(data, "special-needs", "meds");
+    const identity = deriveCard(data, "identity");
+    const emergency = deriveCard(data, "emergency");
+    const meds = deriveCard(data, "meds");
     const everything = JSON.stringify([identity, emergency, meds]);
     expect(everything).not.toContain("Private Cousin");
     expect(everything).not.toContain("Secret Med");
@@ -225,28 +225,25 @@ describe("deriveCard shared rules", () => {
         contacts: [{ id: "c1", name: "Jessie", phone: "555-0101", keepOffCards: true }],
       },
     });
-    expect(requirementsMet(data, "special-needs", "identity")).toBe(false);
-    expect(deriveCard(data, "special-needs", "identity")).toBeNull();
+    expect(requirementsMet(data, "identity")).toBe(false);
+    expect(deriveCard(data, "identity")).toBeNull();
   });
 
-  it("never emits an empty block on any card, either path", () => {
-    for (const [data, path] of [
-      [snLetter(), "special-needs"],
-      [generalLetter(), "general"],
-    ] as const) {
+  it("never emits an empty block on any card, for either sample configuration", () => {
+    for (const data of [snLetter(), generalLetter()]) {
       for (const key of CARD_KEYS) {
-        const card = deriveCard(data, path, key);
+        const card = deriveCard(data, key);
         for (const b of card?.blocks ?? []) {
-          expect(b.lines.length, `${path}/${key}/${b.label}`).toBeGreaterThan(0);
+          expect(b.lines.length, `${key}/${b.label}`).toBeGreaterThan(0);
         }
       }
     }
   });
 
-  it("derives all seven cards on both paths from a full letter", () => {
+  it("derives all seven cards from a full letter of either register", () => {
     for (const key of CARD_KEYS) {
-      expect(deriveCard(snLetter(), "special-needs", key), `special-needs ${key}`).not.toBeNull();
-      expect(deriveCard(generalLetter(), "general", key), `general ${key}`).not.toBeNull();
+      expect(deriveCard(snLetter(), key), `high-support ${key}`).not.toBeNull();
+      expect(deriveCard(generalLetter(), key), `aging ${key}`).not.toBeNull();
     }
   });
 });
@@ -265,14 +262,14 @@ describe("ordering", () => {
         ],
       },
     });
-    const card = deriveCard(data, "special-needs", "emergency");
+    const card = deriveCard(data, "emergency");
     const ks = block(card, "Allergies")?.lines.map((ln) => ln.k);
     expect(ks).toEqual(["Bee stings — ", "Shellfish — ", "Amoxicillin — ", "Latex — "]);
   });
 
   it("scheduled meds follow the day: tokens and typed clock times interleave", () => {
     const data = snLetter({
-      medical: {
+      health: {
         medications: [
           { id: "1", name: "Dusk", schedule: ["bedtime"] },
           { id: "2", name: "Dawn", schedule: ["morning"] },
@@ -282,7 +279,7 @@ describe("ordering", () => {
         ],
       },
     });
-    const card = deriveCard(data, "special-needs", "meds");
+    const card = deriveCard(data, "meds");
     const ks = block(card, "On a schedule")?.lines.map((ln) => ln.k);
     expect(ks).toEqual(["Dawn — ", "Midday — ", "Afternoon — ", "Dusk — ", "Sometime — "]);
   });
@@ -302,15 +299,15 @@ describe("ordering", () => {
         ],
       },
     });
-    const identity = deriveCard(data, "special-needs", "identity");
+    const identity = deriveCard(data, "identity");
     expect(block(identity, "Who to call")?.lines[0].k).toBe("Jessie — ");
 
-    const emergency = deriveCard(data, "special-needs", "emergency");
+    const emergency = deriveCard(data, "emergency");
     expect(block(emergency, "Then call")?.lines.map((ln) => ln.k)).toEqual(["Jessie — "]);
   });
 
   it("routine groups run in day order regardless of entry order", () => {
-    const card = deriveCard(snLetter(), "special-needs", "routine");
+    const card = deriveCard(snLetter(), "routine");
     const labels = blockLabels(card);
     expect(labels.indexOf("Morning")).toBeLessThan(labels.indexOf("Evening"));
     expect(block(card, "Morning")?.lines[0].k).toBe("7:30 · ");
@@ -322,7 +319,7 @@ describe("ordering", () => {
 
 describe("emergency scenarios", () => {
   it("renders each scenario as its own block, labeled by its trigger, after What to do", () => {
-    const card = deriveCard(snLetter(), "special-needs", "emergency");
+    const card = deriveCard(snLetter(), "emergency");
     const labels = blockLabels(card);
     expect(labels.indexOf("What to do")).toBeGreaterThan(-1);
     expect(labels.indexOf("If she is stung")).toBeGreaterThan(labels.indexOf("What to do"));
@@ -343,7 +340,6 @@ describe("emergency scenarios", () => {
       snLetter({
         emergencyPlan: { responseSteps: "Call 911\nCall Jessie" },
       }),
-      "special-needs",
       "emergency"
     );
     expect(block(stepsOnly, "What to do")?.lines.map((ln) => ln.v)).toEqual([
@@ -358,7 +354,6 @@ describe("emergency scenarios", () => {
           scenarios: [{ id: "s1", trigger: "If she bolts", steps: "Check closets" }],
         },
       }),
-      "special-needs",
       "emergency"
     );
     expect(block(scenariosOnly, "What to do")).toBeUndefined();
@@ -376,7 +371,6 @@ describe("emergency scenarios", () => {
           ],
         },
       }),
-      "special-needs",
       "emergency"
     );
     expect(block(card, "What to do")?.lines).toEqual([{ k: "1 · ", v: "Call Jessie" }]);
@@ -384,13 +378,13 @@ describe("emergency scenarios", () => {
   });
 
   it("the critical cap still holds with scenarios present: allergies and Call 911 stay the flags", () => {
-    const card = deriveCard(snLetter(), "special-needs", "emergency");
+    const card = deriveCard(snLetter(), "emergency");
     const critical = card?.blocks.filter((b) => b.tone === "critical").map((b) => b.label);
     expect(critical).toEqual(["Allergies", "Call 911"]);
   });
 
   it("the emergency card still refuses to paginate with scenarios aboard", () => {
-    const card = deriveCard(snLetter(), "special-needs", "emergency");
+    const card = deriveCard(snLetter(), "emergency");
     expect(card).not.toBeNull();
     if (!card) return;
     // Synthetic heights well past one page: the body stays whole and flagged.
@@ -427,7 +421,7 @@ describe("contact role phrases", () => {
         ],
       },
     });
-    const lines = block(deriveCard(data, "special-needs", "identity"), "Who to call")?.lines;
+    const lines = block(deriveCard(data, "identity"), "Who to call")?.lines;
     expect(lines?.[0]).toEqual({
       k: "Jessie Anderson — ",
       v: "Aunt, first call, legal guardian · (555) 017-2264",
@@ -445,19 +439,18 @@ describe("contact role phrases", () => {
       },
     });
     // A short role word stands in for missing tokens…
-    const short = deriveCard(snLetter(contact("backup")), "special-needs", "identity");
+    const short = deriveCard(snLetter(contact("backup")), "identity");
     expect(block(short, "Who to call")?.lines[0].v).toBe("Aunt, backup · 555-0142");
     // …but a description stays in the letter: poured into the compact line it
     // wraps the contact two or three deep and can overflow the emergency card.
     const long = deriveCard(
       snLetter(contact("Backup caregiver; knows the routines")),
-      "special-needs",
       "identity"
     );
     expect(block(long, "Who to call")?.lines[0].v).toBe("Aunt · 555-0142");
   });
 
-  it("uses the same phrasing on the emergency card's Then call, either path", () => {
+  it("uses the same phrasing on the emergency card's Then call", () => {
     const data = generalLetter({
       familySupport: {
         contacts: [
@@ -471,7 +464,7 @@ describe("contact role phrases", () => {
         ],
       },
     });
-    const card = deriveCard(data, "general", "emergency");
+    const card = deriveCard(data, "emergency");
     expect(block(card, "Then call")?.lines[0]).toEqual({
       k: "Pat — ",
       v: "Son, first call · 555-0300",
@@ -497,7 +490,7 @@ describe("routine per-line times", () => {
         ],
       },
     });
-    const card = deriveCard(data, "special-needs", "routine");
+    const card = deriveCard(data, "routine");
     const morning = block(card, "Morning")?.lines;
     expect(morning?.[0]).toEqual({ v: "7:00 - Wake. Lights low, no radio." });
     expect(morning?.[1]).toEqual({ v: "7:30 - Breakfast — same bowl, same seat." });
@@ -525,7 +518,7 @@ describe("food grouping", () => {
         ],
       },
     });
-    const card = deriveCard(data, "special-needs", "food");
+    const card = deriveCard(data, "food");
     const labels = blockLabels(card);
     expect(labels.indexOf("Choking risk")).toBeLessThan(labels.indexOf("Always works"));
     expect(block(card, "Always works")?.lines).toEqual([
@@ -554,7 +547,7 @@ describe("care categories", () => {
         ],
       },
     });
-    const card = deriveCard(data, "special-needs", "care");
+    const card = deriveCard(data, "care");
     const labels = blockLabels(card);
     expect(labels).toEqual(
       expect.arrayContaining(["Toileting", "Dressing", "Getting around", "Equipment"])
@@ -570,15 +563,15 @@ describe("legacy blob coexistence", () => {
   it("the food prose renders only while there are no food records", () => {
     const proseOnly = snLetter({
       foods: undefined,
-      typicalDay: { food: "Buttered noodles always work." },
+      routine: { food: "Buttered noodles always work." },
     });
-    const fallback = deriveCard(proseOnly, "special-needs", "food");
+    const fallback = deriveCard(proseOnly, "food");
     expect(block(fallback, "Food")?.lines[0].v).toBe("Buttered noodles always work.");
 
     const withRecords = snLetter({
-      typicalDay: { food: "Buttered noodles always work." },
+      routine: { food: "Buttered noodles always work." },
     });
-    const records = deriveCard(withRecords, "special-needs", "food");
+    const records = deriveCard(withRecords, "food");
     expect(block(records, "Food")).toBeUndefined();
     expect(block(records, "Choking risk")?.lines[0].k).toBe("Grapes — ");
   });
@@ -588,31 +581,49 @@ describe("legacy blob coexistence", () => {
 
 describe("render requirements", () => {
   it("returns null below the render floor — a header with nothing under it", () => {
-    const noMeds = snLetter({ medical: { providers: [], medications: [] } });
-    expect(deriveCard(noMeds, "special-needs", "meds")).toBeNull();
+    const noMeds = snLetter({ health: { providers: [], medications: [] } });
+    expect(deriveCard(noMeds, "meds")).toBeNull();
 
     // Behavior requires its anchor (how they communicate); triggers alone
     // do not clear the bar.
     const noAnchor = snLetter({ communication: undefined });
-    expect(deriveCard(noAnchor, "special-needs", "behavior")).toBeNull();
+    expect(deriveCard(noAnchor, "behavior")).toBeNull();
 
     // otherwiseCall only enriches — it cannot carry the emergency card alone.
     const enrichOnly = snLetter({
       allergies: undefined,
-      medical: undefined,
+      health: undefined,
       emergencyPlan: { otherwiseCall: "Jessie" },
     });
-    expect(deriveCard(enrichOnly, "special-needs", "emergency")).toBeNull();
+    expect(deriveCard(enrichOnly, "emergency")).toBeNull();
   });
 
-  it("path-scoped requirements do not leak across paths", () => {
-    // A general-path letter whose only behavior content sits in the
-    // special-needs sections must not light the general behavior card.
-    const data = generalLetter({
-      dailyCommunication: undefined,
-      communication: { how: "Short sentences." },
-    });
-    expect(deriveCard(data, "general", "behavior")).toBeNull();
+  it("either direction of communication anchors the behavior card, and fallbacks fill the blocks", () => {
+    // howToSpeak alone lights the card…
+    const speakOnly = deriveCard(
+      generalLetter({ communication: { howToSpeak: "Directly, once." } }),
+      "behavior"
+    );
+    expect(speakOnly).not.toBeNull();
+    expect(block(speakOnly, "How they communicate")?.lines[0].v).toBe("Directly, once.");
+    // …and where the sharp source is empty, the broader stand-in fills the
+    // block: cannotAbide behind triggers, wontAdmit behind pain.
+    const aging = deriveCard(generalLetter(), "behavior");
+    expect(block(aging, "It goes sideways when")?.lines[0].v).toBe("Being talked over.");
+  });
+
+  it("the behavior card closes with first-responder guidance when it exists", () => {
+    const withLE = deriveCard(
+      snLetter({
+        behavior: {
+          triggers: "Loud noises.",
+          lawEnforcement: "He may run. That is fear, not defiance.",
+        },
+      }),
+      "behavior"
+    );
+    const labels = blockLabels(withLE);
+    expect(labels[labels.length - 1]).toBe("For first responders");
   });
 });
 
@@ -632,27 +643,26 @@ describe("personLine, footer, and age", () => {
   it("personLine is preferred name plus current age; the age simply drops without a DOB", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 7, 10)); // Aug 10, 2026
-    const card = deriveCard(snLetter(), "special-needs", "emergency");
+    const card = deriveCard(snLetter(), "emergency");
     expect(card?.personLine).toBe("Bonnie, 11");
 
-    const noDob = deriveCard(snLetter({ about: undefined }), "special-needs", "emergency");
+    const noDob = deriveCard(snLetter({ person: undefined }), "emergency");
     expect(noDob?.personLine).toBe("Bonnie");
   });
 
   it("footerMeta carries the letter's own date, not the download date", () => {
-    const card = deriveCard(snLetter(), "special-needs", "emergency");
+    const card = deriveCard(snLetter(), "emergency");
     expect(card?.footerMeta).toBe("Updated August 8, 2026 · Not a medical document");
   });
 
   it("fills {name} in the purpose line, with a neutral fallback", () => {
-    const named = deriveCard(snLetter(), "special-needs", "identity");
+    const named = deriveCard(snLetter(), "identity");
     expect(named?.purpose).toBe("Who Bonnie is, who is responsible for them, and who to reach.");
 
     const anonymous = deriveCard(
       snLetter({
         gettingStarted: { subjectFullName: "", subjectPreferredName: "" },
       }),
-      "special-needs",
       "meds"
     );
     // Identity needs a name, but meds does not — its purpose falls back.
@@ -662,7 +672,7 @@ describe("personLine, footer, and age", () => {
   });
 
   it("the identity person block carries name, goes-by, birth date, and address", () => {
-    const card = deriveCard(snLetter(), "special-needs", "identity");
+    const card = deriveCard(snLetter(), "identity");
     expect(card?.person?.name).toBe("Bonnie Marie Kelly");
     expect(card?.person?.sub).toBe("Goes by Bonnie · born January 15, 2015");
     expect(card?.person?.sub2).toBe("12 Maple Street, Rome, GA");
@@ -673,19 +683,19 @@ describe("personLine, footer, and age", () => {
 
 describe("critical blocks", () => {
   it("flags the export's pattern: allergies and call-911 on emergency, transitions on routine", () => {
-    const emergency = deriveCard(snLetter(), "special-needs", "emergency");
+    const emergency = deriveCard(snLetter(), "emergency");
     expect(block(emergency, "Allergies")?.tone).toBe("critical");
     expect(block(emergency, "Call 911")?.tone).toBe("critical");
     expect(block(emergency, "What to do")?.tone).toBeUndefined();
 
-    const routine = deriveCard(snLetter(), "special-needs", "routine");
+    const routine = deriveCard(snLetter(), "routine");
     expect(block(routine, "Between activities")?.tone).toBe("critical");
 
-    const care = deriveCard(snLetter(), "special-needs", "care");
+    const care = deriveCard(snLetter(), "care");
     expect(block(care, "Equipment")?.tone).toBe("critical");
 
-    const generalCare = deriveCard(generalLetter(), "general", "care");
-    expect(block(generalCare, "Around the home")?.tone).toBe("critical");
+    const agingCare = deriveCard(generalLetter(), "care");
+    expect(block(agingCare, "Around the home")?.tone).toBe("critical");
   });
 
   it("enforceCriticalCap demotes the lowest-priority critical past two, keeping its content", () => {

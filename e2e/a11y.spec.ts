@@ -1,8 +1,10 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { ALL_SECTION_SLUGS, FULL_LETTER, seedLetter } from "./fixture";
+import { ALL_SECTION_SLUGS, FULL_LETTER, FULL_META, seedLetter } from "./fixture";
+import type { LetterMeta } from "../src/lib/schema";
 
-/** Acceptance: axe reports zero WCAG 2.1 A/AA violations on every step. */
+/** Acceptance: axe reports zero WCAG 2.1 A/AA violations on every step,
+ *  across the configurations the adaptive form can produce. */
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
 
@@ -16,6 +18,21 @@ async function expectNoViolations(page: import("@playwright/test").Page) {
     }))
   ).toEqual([]);
 }
+
+/** The aging caregiver-only configuration — the other pole of the form. */
+const AGING_META: LetterMeta = {
+  audience: "caregiver",
+  stage: "adult",
+  supportLevel: "mostlyIndependent",
+  communicationDiffers: "no",
+  behaviorEscalates: "no",
+  cognitionChanging: "early",
+  hasTrust: "no",
+  hasBenefits: "no",
+  schoolWork: ["work"],
+  livesWith: "ownHome",
+  onboardingDone: true,
+};
 
 for (const path of [
   "/",
@@ -33,23 +50,58 @@ for (const path of [
   });
 }
 
-test("axe clean: the chooser with a section row open", async ({ page }) => {
+test("axe clean: the onboarding mid-sequence, and the question preview open", async ({
+  page,
+}) => {
   await page.goto("/letter");
-  await page.getByRole("tab", { name: /aging & general care/i }).click();
-  await page.getByRole("button", { name: /a typical week/i }).click();
+  // Answer the first question so the sequence is genuinely mid-flight.
+  await page.getByRole("button", { name: /day-to-day care/i }).click();
+  await page.getByText(/question 2 of/i).waitFor();
+  await expectNoViolations(page);
+
+  // The question-set preview below, with a row open.
+  await page.getByRole("button", { name: /getting started/i }).click();
   await page.getByText(/be ready to write about/i).waitFor();
   await expectNoViolations(page);
 });
 
+test("axe clean: the answers card once onboarding is done", async ({ page }) => {
+  await seedLetter(page, {}, FULL_META);
+  await page.goto("/letter");
+  await page.getByRole("heading", { name: /shaped around/i }).waitFor();
+  await expectNoViolations(page);
+});
+
+// The maximal configuration: every section in play, every field asked.
 for (const slug of ALL_SECTION_SLUGS) {
-  test(`axe clean: /letter/${slug}`, async ({ page }) => {
+  test(`axe clean: /letter/${slug} (full configuration)`, async ({ page }) => {
+    await seedLetter(page, {}, FULL_META);
     await page.goto(`/letter/${slug}`);
     await page.waitForSelector("h1");
-    // Wait for the hydrated form (or the final-wishes gate) to be on screen.
+    // Wait for the hydrated form (or an emotional section's gate) to land.
     await page
       .locator("form, :text('A gentle note before this section')")
       .first()
       .waitFor({ timeout: 15_000 });
+    await expectNoViolations(page);
+  });
+}
+
+// The aging configuration exercises the adaptive wording variants.
+for (const slug of [
+  "about-them",
+  "typical-days",
+  "communication",
+  "health-and-medical",
+  "home-and-daily-living",
+  "money-and-benefits",
+  "friends-joy-and-faith",
+] as const) {
+  test(`axe clean: /letter/${slug} (aging configuration)`, async ({ page }) => {
+    await seedLetter(page, {}, AGING_META);
+    await page.goto(`/letter/${slug}`);
+    await page.waitForSelector("h1");
+    await page.locator("form").first().waitFor({ timeout: 15_000 });
     await expectNoViolations(page);
   });
 }

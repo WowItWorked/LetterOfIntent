@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { sectionBySlug } from "@/lib/content/sections";
+import { sectionBySlug, startedCount } from "@/lib/content/config";
 import {
   defaultValuesForSection,
   displayName,
@@ -11,7 +11,6 @@ import {
   preferredName,
   readerName,
   sectionHasContent,
-  startedCount,
 } from "@/lib/derive";
 import type { LetterData } from "@/lib/schema";
 
@@ -37,9 +36,9 @@ describe("content detection", () => {
   const familySupport = sectionBySlug("family-and-support")!;
 
   it("whitespace-only answers don't count as content", () => {
-    const data: LetterData = { typicalDay: { goodDay: "   " } };
-    expect(sectionHasContent(data, sectionBySlug("a-typical-day")!)).toBe(false);
-    expect(startedCount(data)).toBe(0);
+    const data: LetterData = { routine: { goodDay: "   " } };
+    expect(sectionHasContent(data, sectionBySlug("typical-days")!)).toBe(false);
+    expect(startedCount(data, {})).toBe(0);
   });
 
   it("a repeater with one real item counts; an empty or checkbox-only item doesn't", () => {
@@ -52,7 +51,7 @@ describe("content detection", () => {
       familySupport: { contacts: [{ id: "1", name: "Dana", emergency: true }] },
     };
     expect(sectionHasContent(real, familySupport)).toBe(true);
-    expect(startedCount(real)).toBe(1);
+    expect(startedCount(real, {})).toBe(1);
   });
 
   it("fieldHasContent handles missing section values", () => {
@@ -63,9 +62,9 @@ describe("content detection", () => {
 
 describe("form defaults", () => {
   it("gives every scalar a string and every repeater an array with ids", () => {
-    const def = sectionBySlug("medical")!;
+    const def = sectionBySlug("health-and-medical")!;
     const values = defaultValuesForSection(def, {
-      medical: { medications: [{ name: "Keppra" }] },
+      health: { medications: [{ name: "Keppra" }] },
     });
     expect(values.allergies).toBe("");
     const meds = values.medications as Array<Record<string, unknown>>;
@@ -118,7 +117,6 @@ describe("repeater value display", () => {
 describe("emergency sheet data", () => {
   const data: LetterData = {
     gettingStarted: { subjectFullName: "Alexander Alvarez", subjectPreferredName: "Alex" },
-    about: { diagnoses: "Autism; epilepsy" },
     familySupport: {
       firstCall: "Dana — 703-555-0142",
       contacts: [
@@ -127,12 +125,13 @@ describe("emergency sheet data", () => {
         { id: "3", emergency: true }, // no content — must be dropped
       ],
     },
-    medical: {
+    health: {
       medications: [
         { id: "m1", name: "Keppra", dose: "500 mg", purpose: "Seizures" },
         { id: "m2" }, // empty — dropped
       ],
       allergies: "Penicillin",
+      conditions: "Autism; epilepsy",
       emergencyProtocol: "Time the seizure; rescue med after 3 minutes; call 911.",
     },
     behavior: { triggers: "Fire alarms" },
@@ -146,5 +145,71 @@ describe("emergency sheet data", () => {
     expect(info.diagnoses).toContain("Autism");
     expect(info.triggers).toBe("Fire alarms");
     expect(info.protocol).toContain("911");
+  });
+
+  /* -------------------------------------------- the three fixed defects.
+     Each of these was SHIPPING: the general path printed appointment
+     logistics under "protocol", a records location under "Insurance", and
+     could never print triggers at all. The canonical mappings make the wrong
+     source unreachable — these regressions pin it. */
+
+  it("DEFECT 1 — protocol never reads appointmentHelp", () => {
+    const info = emergencyInfo({
+      health: {
+        appointmentHelp: "Someone has to go in with him and write it down.",
+        conditions: "Afib",
+      },
+    });
+    expect(info.protocol).toBeUndefined();
+
+    // And the real sources win, structured steps first.
+    const withBoth = emergencyInfo({
+      health: { emergencyProtocol: "Prose protocol.", appointmentHelp: "Logistics." },
+      emergencyPlan: { responseSteps: "Step one\nStep two" },
+    });
+    expect(withBoth.protocol).toBe("Step one\nStep two");
+    const prosOnly = emergencyInfo({
+      health: { emergencyProtocol: "Prose protocol.", appointmentHelp: "Logistics." },
+    });
+    expect(prosOnly.protocol).toBe("Prose protocol.");
+  });
+
+  it("DEFECT 2 — the Insurance heading never reads recordsLocation", () => {
+    const info = emergencyInfo({
+      health: { recordsLocation: "Grey file box in the hall closet." },
+    });
+    expect(info.insurance).toBeUndefined();
+
+    const withPlans = emergencyInfo({
+      health: {
+        insurancePlans: "Anthem; Virginia Medicaid.",
+        recordsLocation: "Grey file box.",
+      },
+    });
+    expect(withPlans.insurance).toBe("Anthem; Virginia Medicaid.");
+  });
+
+  it("DEFECT 3 — triggers print whenever they exist, for every configuration", () => {
+    // The old general path hardcoded triggers: undefined. There is no
+    // configuration anymore — behavior.triggers is the one source.
+    const info = emergencyInfo({ behavior: { triggers: "Fire alarms." } });
+    expect(info.triggers).toBe("Fire alarms.");
+  });
+
+  it("skips a field the family marked not-applicable — no empty heading, no ghost", () => {
+    const info = emergencyInfo({
+      health: { insurancePlans: "Anthem." },
+      marks: { "health.insurancePlans": "not_applicable" },
+    });
+    expect(info.insurance).toBeUndefined();
+  });
+
+  it("falls back across communication directions, sharp source first", () => {
+    const both = emergencyInfo({
+      communication: { how: "Uses an AAC app.", howToSpeak: "Say it straight." },
+    });
+    expect(both.communication).toBe("Uses an AAC app.");
+    const onlySpeak = emergencyInfo({ communication: { howToSpeak: "Say it straight." } });
+    expect(onlySpeak.communication).toBe("Say it straight.");
   });
 });

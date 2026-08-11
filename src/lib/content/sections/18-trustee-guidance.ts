@@ -1,12 +1,11 @@
 import type { SectionDef } from "@/lib/content/types";
 
-export const trustee: SectionDef = {
+export const trusteeGuidance: SectionDef = {
   slug: "guidance-for-the-trustee",
-  key: "trustee",
-  number: 18,
+  key: "trusteeGuidance",
   title: "Guidance for the trustee",
   navTitle: "For the trustee",
-  minutes: 10,
+  showWhen: [{ audience: ["trustee", "both"] }],
   intro:
     "A trust says what the money is. This section says what the money is for.\n\n" +
     "One day a trustee (maybe a relative, maybe a professional who never met " +
@@ -25,6 +24,7 @@ export const trustee: SectionDef = {
         "concerts, the good mattress, the direct flight instead of two layovers. " +
         "It's so his sister never has to choose between his dental work and her own " +
         "kids' shoes.",
+      openers: ["The money is for…", "Money should never be the reason to skip…"],
     },
     {
       id: "easyYeses",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { RepeaterField, RepeaterItemMultiselect } from "@/lib/content/types";
-import { medical } from "@/lib/content/sections/06-medical";
+import { health } from "@/lib/content/sections/06-health";
 import { allergies } from "@/lib/content/sections/08-allergies";
 import { defaultValuesForSection } from "@/lib/derive";
 import {
@@ -11,7 +11,7 @@ import {
   toggleToken,
 } from "@/components/wizard/repeater-logic";
 
-const medsField = medical.fields.find(
+const medsField = health.fields.find(
   (f): f is RepeaterField => f.kind === "repeater" && f.id === "medications"
 )!;
 const scheduleField = medsField.itemFields.find(
@@ -23,8 +23,8 @@ const allergyItems = allergies.fields.find(
 
 describe("select and multiselect form defaults", () => {
   it("gives selects a string and multiselects a string[]", () => {
-    const values = defaultValuesForSection(medical, {
-      medical: { medications: [{ name: "Keppra" }] },
+    const values = defaultValuesForSection(health, {
+      health: { medications: [{ name: "Keppra" }] },
     });
     const meds = values.medications as Array<Record<string, unknown>>;
     expect(meds[0].schedule).toEqual([]);
@@ -40,8 +40,8 @@ describe("select and multiselect form defaults", () => {
   });
 
   it("keeps stored schedule tokens, dropping only non-strings", () => {
-    const values = defaultValuesForSection(medical, {
-      medical: {
+    const values = defaultValuesForSection(health, {
+      health: {
         medications: [
           // A hand-edited or older backup could hold junk among the tokens.
           { name: "Keppra", schedule: ["morning", 7, "14:30"] as unknown as string[] },

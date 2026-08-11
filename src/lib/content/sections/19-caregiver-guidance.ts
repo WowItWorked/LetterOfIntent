@@ -1,12 +1,16 @@
 import type { SectionDef } from "@/lib/content/types";
 
-export const steppingIn: SectionDef = {
+/**
+ * The old `steppingIn` section, canonical. Its consultFirst is deliberately a
+ * different question from the trustee's: who a caregiver convenes before
+ * anything irreversible, not who a trustee checks with about money.
+ */
+export const caregiverGuidance: SectionDef = {
   slug: "for-whoever-steps-in",
-  key: "steppingIn",
-  number: 17,
+  key: "caregiverGuidance",
   title: "For whoever steps in",
   navTitle: "For whoever steps in",
-  minutes: 10,
+  showWhen: [{ audience: ["caregiver", "both"] }],
   intro:
     "Write this part to a person. It might be a sibling, a son or daughter, a " +
     "neighbor, or someone none of you have met yet. They will be reading it on a " +
@@ -23,6 +27,7 @@ export const steppingIn: SectionDef = {
         "medication list. Then the neighbor Ellen, who has a key and has been " +
         "checking. Do not cancel the cleaning service, it is the only visitor she " +
         "looks forward to. Everything financial can wait two weeks.",
+      openers: ["On the first day…", "Before anything else, call…"],
     },
     {
       id: "hindsight",
@@ -30,6 +35,7 @@ export const steppingIn: SectionDef = {
       rows: 4,
       label: "What you would do differently, in hindsight",
       help: "The thing you wish you had done sooner, and the thing you wish you had not done at all. This is the most valuable paragraph in the letter.",
+      openers: ["I wish I had started sooner on…", "If I could do one thing over…"],
     },
     {
       id: "neverChange",

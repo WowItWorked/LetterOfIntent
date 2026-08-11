@@ -3,10 +3,8 @@ import type { SectionDef } from "@/lib/content/types";
 export const finalWishes: SectionDef = {
   slug: "final-wishes",
   key: "finalWishes",
-  number: 19,
   title: "Final wishes",
   navTitle: "Final wishes",
-  minutes: 10,
   emotional: true,
   optionalTag: true,
   intro:

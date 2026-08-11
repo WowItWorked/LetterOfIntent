@@ -17,6 +17,7 @@ export const familySupport: SectionDef = {
       help: "Add as many as you like. Check the emergency box for the few people who belong on the one-page emergency sheet.",
       itemNoun: "person",
       addLabel: "Add a person",
+      contactImport: true,
       itemFields: [
         { id: "name", kind: "text", label: "Name", width: "half", autoComplete: "name" },
         {

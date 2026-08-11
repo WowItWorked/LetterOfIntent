@@ -36,6 +36,8 @@ import {
   repeaterItemSummary,
   toggleToken,
 } from "@/components/wizard/repeater-logic";
+import { Button } from "@/components/ui/Button";
+import { Dialog } from "@/components/ui/Dialog";
 import { Disclosure } from "@/components/ui/Disclosure";
 import {
   describedBy,
@@ -281,19 +283,81 @@ function RepeaterControl({
   const mainFields = field.itemFields.filter((f) => f.group !== "more");
   const moreFields = field.itemFields.filter((f) => f.group === "more");
 
-  const handleRemove = (index: number) => {
-    const values = form.getValues(field.id) as Array<Record<string, unknown>> | undefined;
-    const item = values?.[index];
-    if (item && itemHasContent(item)) {
-      const ok = window.confirm(
-        `Remove this ${noun}? What you typed here will be removed. (The rest of the letter is untouched.)`
-      );
-      if (!ok) return;
+  /**
+   * The Contact Picker API — Chrome/Edge on Android only, so strictly
+   * feature-detected: invisible everywhere else, and a declined permission
+   * (an empty selection) is handled silently, with no scolding. The picker
+   * is entirely local; the privacy e2e gate covers the flow.
+   */
+  interface PickedContact {
+    name?: string[];
+    tel?: string[];
+    email?: string[];
+  }
+  type ContactsNavigator = Navigator & {
+    contacts?: {
+      select: (
+        props: string[],
+        opts?: { multiple?: boolean }
+      ) => Promise<PickedContact[]>;
+    };
+  };
+  const contactsApi =
+    typeof navigator !== "undefined"
+      ? (navigator as ContactsNavigator).contacts
+      : undefined;
+  const canPickContacts = Boolean(field.contactImport && contactsApi);
+
+  const pickContacts = async () => {
+    if (!contactsApi) return;
+    try {
+      const picked = await contactsApi.select(["name", "tel", "email"], {
+        multiple: true,
+      });
+      const values =
+        (form.getValues(field.id) as Array<Record<string, unknown>> | undefined) ?? [];
+      for (const c of picked) {
+        const record = emptyRepeaterItem(field);
+        if (c.name?.[0]) record.name = c.name[0];
+        if (c.tel?.[0]) record.phone = c.tel[0];
+        if (c.tel?.[1]) record.altPhone = c.tel[1];
+        if (c.email?.[0]) record.email = c.email[0];
+        // Fill the blank seeded record first; append after that.
+        const blankIndex = values.findIndex((v) => !itemHasContent(v));
+        if (blankIndex >= 0 && picked.indexOf(c) === 0) {
+          form.setValue(`${field.id}.${blankIndex}`, record, {
+            shouldDirty: true,
+            shouldTouch: true,
+          });
+        } else {
+          append(record);
+        }
+      }
+    } catch {
+      // Cancelled or declined — nothing to say, nothing to change.
     }
+  };
+
+  // The remove confirmation is a real Dialog (focus-managed, keyboard
+  // operable, axe-clean), never window.confirm.
+  const [removing, setRemoving] = useState<number | null>(null);
+
+  const doRemove = (index: number) => {
+    const values = form.getValues(field.id) as Array<Record<string, unknown>> | undefined;
     remove(index);
     // Never zero records: removing the last one leaves a fresh blank in its
     // place, so the section always ends the way it began — with a form.
     if ((values?.length ?? 0) <= 1) append(emptyRepeaterItem(field));
+  };
+
+  const handleRemove = (index: number) => {
+    const values = form.getValues(field.id) as Array<Record<string, unknown>> | undefined;
+    const item = values?.[index];
+    if (item && itemHasContent(item)) {
+      setRemoving(index);
+      return;
+    }
+    doRemove(index);
   };
 
   return (
@@ -406,6 +470,40 @@ function RepeaterControl({
       >
         + {fillName(field.addLabel, name)}
       </button>
+      {canPickContacts ? (
+        <button
+          type="button"
+          onClick={() => void pickContacts()}
+          className="mt-2 flex min-h-11 w-full items-center justify-center rounded-lg border border-control font-medium text-body hover:bg-paper2"
+        >
+          Add from your phone&rsquo;s contacts
+        </button>
+      ) : null}
+
+      <Dialog
+        open={removing !== null}
+        onClose={() => setRemoving(null)}
+        title={`Remove this ${noun}?`}
+      >
+        <p className="max-w-[60ch] text-body">
+          What you typed in this {noun} will be removed. The rest of the letter is
+          untouched.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Button
+            variant="danger"
+            onClick={() => {
+              if (removing !== null) doRemove(removing);
+              setRemoving(null);
+            }}
+          >
+            Remove it
+          </Button>
+          <Button variant="quiet" onClick={() => setRemoving(null)}>
+            Keep it
+          </Button>
+        </div>
+      </Dialog>
     </fieldset>
   );
 }

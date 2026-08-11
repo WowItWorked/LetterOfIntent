@@ -462,6 +462,9 @@ export const letterMetaSchema = z.object({
   /** True when the answers were inferred by the v1 migration and not yet
    *  confirmed — the onboarding shows once, pre-filled. */
   onboardingInferred: b,
+  /** The started-section count at the moment the family dismissed the backup
+   *  nudge — it returns only after meaningful new work accumulates. */
+  backupNudgeCount: s,
 });
 
 /**

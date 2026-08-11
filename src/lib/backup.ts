@@ -97,6 +97,9 @@ export type ParseBackupResult =
       data: LetterData;
       meta: LetterMeta;
       photos?: BackupPhoto[];
+      /** When the file was written, from its envelope — the replace-warning
+       *  dialog compares it against the letter on the device. */
+      exportedAt?: string;
       /** True when the file predates the canonical schema and was migrated.
        *  A v1 file imports cleanly forever — permanent commitment. */
       migratedFromV1: boolean;
@@ -247,6 +250,8 @@ export function parseBackup(text: string): ParseBackupResult {
     data,
     meta,
     photos,
+    exportedAt:
+      envelope && typeof root.exportedAt === "string" ? root.exportedAt : undefined,
     migratedFromV1: isV1,
     combined,
     salvage: report,

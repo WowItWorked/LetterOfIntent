@@ -3,13 +3,16 @@
 import { useRef, useState } from "react";
 import {
   MAX_BACKUP_BYTES,
+  serializeBackup,
   type ParseBackupResult,
   type SalvageReport,
   parseBackup,
 } from "@/lib/backup";
 import { startedCount } from "@/lib/content/config";
-import { displayName, preferredName } from "@/lib/derive";
-import { restorePhotos } from "@/lib/photos";
+import { displayName, formatDateLong, preferredName } from "@/lib/derive";
+import { documentFilename } from "@/lib/filenames";
+import { triggerDownload } from "@/lib/download";
+import { photosForBackup, restorePhotos } from "@/lib/photos";
 import { useLetterStore } from "@/lib/store";
 import type { BackupPhoto, LetterData } from "@/lib/schema";
 import { Button } from "@/components/ui/Button";
@@ -142,6 +145,19 @@ export function RestoreFlow({
     setLoaded(null);
   };
 
+  /** The safe path: what is on this device leaves as a backup file BEFORE the
+   *  replace, so nothing can be lost by accident. */
+  const backupThenReplace = async (source: Loaded) => {
+    const state = useLetterStore.getState();
+    const photos = await photosForBackup();
+    triggerDownload(
+      documentFilename("backup"),
+      serializeBackup(state.data, state.meta, photos),
+      "application/json"
+    );
+    await applyLoaded(source);
+  };
+
   const cancel = () => setLoaded(null);
 
   return (
@@ -164,28 +180,101 @@ export function RestoreFlow({
         Choose a backup file…
       </Button>
 
-      {/* ------------------------------------------------- replace what's here */}
+      {/* --------------------------------------------- replace what's here.
+          "Replace", never "import": the heading says what actually happens.
+          Both sides are computed before anything is written, the dangerous
+          direction is flagged plainly, and the safe path is the primary
+          action — one click to safety, deliberate effort to destroy. */}
       <Dialog
         open={loaded !== null}
         onClose={cancel}
-        title="Replace what's on this device?"
+        title="Replace the letter on this device?"
       >
-        <p className="max-w-[66ch] text-body">
-          This device already has a letter with notes in {existing} section
-          {existing === 1 ? "" : "s"}
-          {preferredName(data) ? ` (about ${displayName(data)})` : ""}. Loading this
-          backup will replace it completely, and that cannot be undone.
-        </p>
+        {loaded ? <ReplaceComparison loaded={loaded} existing={existing} data={data} /> : null}
         {loaded ? <SalvageSummary report={loaded.salvage} /> : null}
         <div className="mt-5 flex flex-wrap gap-3">
-          <Button onClick={() => loaded && void applyLoaded(loaded)}>
-            Replace with the backup
+          <Button onClick={() => loaded && void backupThenReplace(loaded)}>
+            Save this device&rsquo;s letter first, then replace
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => loaded && void applyLoaded(loaded)}
+          >
+            Replace without saving
           </Button>
           <Button variant="quiet" onClick={cancel}>
             Cancel
           </Button>
         </div>
+        <p className="mt-4 max-w-[66ch] text-[0.9375rem] text-muted">
+          You have done nothing wrong — this is just the one action here that
+          cannot be undone, so it gets a careful moment.
+        </p>
       </Dialog>
+    </div>
+  );
+}
+
+/**
+ * The two letters, side by side, so the family can compare before choosing.
+ * Specific on purpose: vagueness is what makes people click through.
+ */
+function ReplaceComparison({
+  loaded,
+  existing,
+  data,
+}: {
+  loaded: Loaded;
+  existing: number;
+  data: LetterData;
+}) {
+  const meta = useLetterStore.getState().meta;
+  const incoming = startedCount(loaded.data, loaded.meta);
+  const deviceUpdated = meta.updatedAt?.slice(0, 10);
+  const fileExported = loaded.exportedAt?.slice(0, 10);
+  const fileOlder = Boolean(
+    deviceUpdated && fileExported && fileExported < deviceUpdated
+  );
+  const fileSmaller = incoming < existing;
+
+  return (
+    <div className="max-w-[66ch]">
+      <p className="text-body">
+        Loading this file <strong className="font-semibold">replaces</strong> the
+        letter on this device completely. There is no undo and no merge.
+      </p>
+      <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-[var(--radius-sm)] border border-line bg-paper2 p-3.5">
+          <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-faint">
+            On this device now
+          </dt>
+          <dd className="mt-1 text-[0.9375rem] leading-[1.6] text-body">
+            Notes in {existing} section{existing === 1 ? "" : "s"}
+            {preferredName(data) ? ` (about ${displayName(data)})` : ""}.
+            {deviceUpdated ? ` Last edited ${formatDateLong(deviceUpdated)}.` : ""}
+          </dd>
+        </div>
+        <div className="rounded-[var(--radius-sm)] border border-line bg-paper2 p-3.5">
+          <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-faint">
+            In the backup file
+          </dt>
+          <dd className="mt-1 text-[0.9375rem] leading-[1.6] text-body">
+            Notes in {incoming} section{incoming === 1 ? "" : "s"}
+            {preferredName(loaded.data) ? ` (about ${displayName(loaded.data)})` : ""}.
+            {fileExported ? ` Saved ${formatDateLong(fileExported)}.` : ""}
+          </dd>
+        </div>
+      </dl>
+      {fileOlder || fileSmaller ? (
+        <p className="mt-3 rounded-[var(--radius-sm)] border border-goldline bg-goldtint p-3.5 text-[0.9375rem] leading-[1.65] text-body">
+          Worth a second look:{" "}
+          {fileOlder && fileSmaller
+            ? "this file is older than the letter on this device and holds less — replacing means losing the newer work."
+            : fileOlder
+              ? "this file is older than the letter on this device — replacing means losing the newer work."
+              : "this file holds fewer sections with notes than this device does."}
+        </p>
+      ) : null}
     </div>
   );
 }

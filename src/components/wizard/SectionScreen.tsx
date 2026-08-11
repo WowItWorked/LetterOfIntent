@@ -107,12 +107,74 @@ export function SectionScreen({ slug }: { slug: string }) {
         )}
       </div>
 
+      {/* A blank can mean two things. These markers let the family say which,
+          so a return visit — and the progress count — can tell "doesn't apply
+          to us" from "haven't got there yet". */}
+      {hydrated && !showGate && def.key !== "gettingStarted" ? (
+        <SectionMarks def={def} name={name} />
+      ) : null}
+
       {/* After the form, before the nav: the letter comes first, and a card
           line is something noticed on the way out, not a bar to clear. */}
       {hydrated && !showGate ? <CardStatusPanel section={def.key} /> : null}
 
       {!showGate ? <NextPrev slug={def.slug} name={name} /> : null}
     </article>
+  );
+}
+
+/**
+ * The not-applicable / come-back markers, per section. Marking never blocks
+ * and never hides anything — a not-applicable section simply stops counting
+ * as outstanding, prints no empty heading in any output, and is never named
+ * as a gap by the reading view.
+ */
+function SectionMarks({ def, name }: { def: SectionDef; name: string }) {
+  const data = useLetterStore((s) => s.data);
+  const setMark = useLetterStore((s) => s.setMark);
+  const mark = data.marks?.[def.key];
+
+  const toggle = (value: "not_applicable" | "come_back") =>
+    setMark(def.key, mark === value ? null : value);
+
+  return (
+    <div className="mt-7 flex flex-wrap items-center gap-2.5 border-t border-line pt-5">
+      <span className="text-[0.9375rem] text-muted">This section:</span>
+      <button
+        type="button"
+        aria-pressed={mark === "not_applicable"}
+        onClick={() => toggle("not_applicable")}
+        className={
+          mark === "not_applicable"
+            ? "min-h-10 rounded-full border border-navy600 bg-paper2 px-3.5 text-[0.875rem] font-semibold text-ink"
+            : "min-h-10 rounded-full border border-line px-3.5 text-[0.875rem] text-body hover:border-gold500"
+        }
+      >
+        Doesn&rsquo;t apply to {name}
+      </button>
+      <button
+        type="button"
+        aria-pressed={mark === "come_back"}
+        onClick={() => toggle("come_back")}
+        className={
+          mark === "come_back"
+            ? "min-h-10 rounded-full border border-navy600 bg-paper2 px-3.5 text-[0.875rem] font-semibold text-ink"
+            : "min-h-10 rounded-full border border-line px-3.5 text-[0.875rem] text-body hover:border-gold500"
+        }
+      >
+        Come back to this
+      </button>
+      {mark === "not_applicable" ? (
+        <span className="text-[0.875rem] text-muted">
+          Nothing here will print, and this section stops counting as unfinished.
+        </span>
+      ) : null}
+      {mark === "come_back" ? (
+        <span className="text-[0.875rem] text-muted">
+          Saved as a deliberate later — deferring is not failing.
+        </span>
+      ) : null}
+    </div>
   );
 }
 

@@ -582,7 +582,11 @@ function ReadingView({
   const sections = sectionsForMeta(meta, data);
   const name = readerName(data);
   const included = sections.filter((d) => sectionHasContent(data, d));
-  const missing = sections.filter((d) => !sectionHasContent(data, d));
+  // A section the family marked not-applicable is not a gap — it is a
+  // decision, and nagging about it would call their answer unfinished.
+  const missing = sections.filter(
+    (d) => !sectionHasContent(data, d) && data.marks?.[d.key] !== "not_applicable"
+  );
   const author = data.gettingStarted?.authorName?.trim();
   const fullName = data.gettingStarted?.subjectFullName?.trim() || name;
   const dateLong = formatDateLong(letterDateIso(data));

@@ -23,7 +23,8 @@ import {
 import { ENGRAVED, FAINT, GOLD, GOLD_DEEP, GRAY, INK, NAVY, SANS, SERIF } from "./theme";
 
 /**
- * The Letter for the Caregiver: the second of the two letters. Daily life,
+ * The Letter for the Caregiver: the companion document to the Letter of
+ * Intent. Daily life,
  * routine, communication, behavior, health as it is lived, the home, and the
  * words written to whoever steps in. It prints the CAREGIVER_PROJECTION of
  * the canonical schema (docs/output-matrix.md), and it opens with the

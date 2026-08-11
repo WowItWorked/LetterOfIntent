@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import fs from "node:fs";
 import { FULL_LETTER, seedLetter } from "./fixture";
 
 /**
@@ -130,6 +131,81 @@ test("a damaged backup restores what it can and says what it could not", async (
 
   await page.goto("/letter/health-and-medical");
   await expect(page.getByLabel(/allergies/i).first()).toHaveValue("Penicillin");
+});
+
+test("replacing a populated letter warns with specifics, and dismissing changes nothing", async ({
+  page,
+}) => {
+  await seedLetter(page, FULL_LETTER);
+  await upload(
+    page,
+    json({
+      app: "twl-letter-of-intent",
+      version: 2,
+      exportedAt: "2025-01-05T10:00:00.000Z",
+      data: { gettingStarted: { subjectPreferredName: "Someone Else" } },
+    })
+  );
+
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  // Specific on both sides, and it says "replace", not "import".
+  await expect(dialog.getByText(/replace/i).first()).toBeVisible();
+  await expect(dialog.getByText(/on this device now/i)).toBeVisible();
+  await expect(dialog.getByText(/in the backup file/i)).toBeVisible();
+  // The dangerous direction is named: this file is older and holds less.
+  await expect(dialog.getByText(/worth a second look/i)).toBeVisible();
+
+  await dialog.getByRole("button", { name: /^cancel$/i }).click();
+  await expect(dialog).toBeHidden();
+
+  // Nothing changed — read storage directly, since the seeding init-script
+  // would re-seed the fixture on any navigation and mask a failure.
+  const storedName = await page.evaluate(() => {
+    const raw = window.localStorage.getItem("twl-loi-letter-v1");
+    return raw
+      ? (JSON.parse(raw).state?.data?.gettingStarted?.subjectPreferredName ?? null)
+      : null;
+  });
+  expect(storedName).toBe("Alex");
+});
+
+test("the safe path saves this device's letter before replacing it", async ({
+  page,
+}, testInfo) => {
+  await seedLetter(page, FULL_LETTER);
+  await upload(
+    page,
+    json({
+      app: "twl-letter-of-intent",
+      version: 2,
+      data: { gettingStarted: { subjectPreferredName: "Someone Else" } },
+    })
+  );
+
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+
+  const dl = page.waitForEvent("download");
+  await dialog.getByRole("button", { name: /save this device/i }).click();
+  const backupPath = testInfo.outputPath("pre-replace-backup.json");
+  await (await dl).saveAs(backupPath);
+
+  // The offered backup holds the letter exactly as it stood…
+  const saved = JSON.parse(fs.readFileSync(backupPath, "utf8"));
+  expect(saved.data.gettingStarted.subjectPreferredName).toBe("Alex");
+  expect(saved.data.behavior.triggers).toContain("Fire alarms");
+
+  // …and only then was the letter replaced. (Read storage directly: the
+  // seeding init-script would re-seed the fixture on any navigation.)
+  await expect(page.getByText(/backup loaded/i)).toBeVisible();
+  const storedName = await page.evaluate(() => {
+    const raw = window.localStorage.getItem("twl-loi-letter-v1");
+    return raw
+      ? (JSON.parse(raw).state?.data?.gettingStarted?.subjectPreferredName ?? null)
+      : null;
+  });
+  expect(storedName).toBe("Someone Else");
 });
 
 test("an unreadable file apologises and changes nothing", async ({ page }) => {

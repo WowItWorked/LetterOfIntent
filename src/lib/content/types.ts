@@ -172,6 +172,13 @@ export interface RepeaterField extends BaseField {
   /** Singular noun for one entry, e.g. "person", "medication". */
   itemNoun: string;
   addLabel: string;
+  /**
+   * Offer the Contact Picker API (Chrome/Edge on Android only) to fill
+   * name/tel/email in one tap. Strict progressive enhancement: invisible
+   * where unsupported, silent on a declined permission, and the manual path
+   * stays the equal first-class way in.
+   */
+  contactImport?: boolean;
   itemFields: RepeaterItemField[];
 }
 

@@ -31,9 +31,23 @@ export const emergencyPlan: SectionDef = {
       label: "What to do, in order",
       help: "One step per line, in order. The card numbers them for you.",
       placeholder: "e.g.,\nStart timing\nTurn them on their side\nGet the red pouch from the go-bag",
+      // The example must model the exact shape the help asks for: one step
+      // per line, never a paragraph. It prints on the card that way.
       example:
-        "Start timing the seizure. Turn her on her side — nothing in her mouth. " +
-        "Over 3 minutes: give the rescue med from the red pouch. Then call us, any hour.",
+        "Start timing the seizure\n" +
+        "Turn her on her side, nothing in her mouth\n" +
+        "Over 3 minutes: rescue med from the red pouch\n" +
+        "Then call us, any hour",
+      variants: [
+        {
+          when: { supportLevel: ["mostlyIndependent"] },
+          example:
+            "If she falls, do not lift her yourself\n" +
+            "Check for pain in the hip or wrist before she moves\n" +
+            "She takes a blood thinner, so any knock to the head is an ER trip\n" +
+            "Call me while you wait",
+        },
+      ],
     },
     {
       id: "scenarios",
@@ -45,9 +59,13 @@ export const emergencyPlan: SectionDef = {
         "heading, steps numbered.",
       itemNoun: "scenario",
       addLabel: "Add a scenario",
+      // Models both halves of a scenario, heading then steps, instead of
+      // restating the item placeholders as one sentence.
       example:
-        "If they are stung: auto-injector, outer thigh, through clothing. " +
-        "Call 911, then call us. Keep them lying down — stay in their sight.",
+        "If {name} walks off:\n" +
+        "Check the quiet places first, the porch, the bus bench on Elm\n" +
+        "Call me while you look\n" +
+        "After 20 minutes, call 911 and say they may not answer to their name",
       itemFields: [
         {
           id: "trigger",

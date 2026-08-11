@@ -27,6 +27,19 @@ export const caregiverGuidance: SectionDef = {
         "medication list. Then the neighbor Ellen, who has a key and has been " +
         "checking. Do not cancel the cleaning service, it is the only visitor she " +
         "looks forward to. Everything financial can wait two weeks.",
+      // The base is aging-voiced; the high-support pole gets the mirror, so
+      // neither family reads the other's life as the model answer.
+      variants: [
+        {
+          when: { supportLevel: ["substantial", "roundTheClock"] },
+          example:
+            "Keep his routine exactly as the daily-routines section says for the " +
+            "first two weeks, even where it seems fussy. Call the day program on " +
+            "day one so the faces he knows stay in his week. His aide Marcus " +
+            "knows the hard moments better than anyone, keep him. Paperwork can " +
+            "wait a fortnight.",
+        },
+      ],
       openers: ["On the first day…", "Before anything else, call…"],
     },
     {
@@ -47,6 +60,15 @@ export const caregiverGuidance: SectionDef = {
         "Do not move her to a bedroom downstairs, however sensible it looks. The " +
         "stairs are the only exercise she gets and the room upstairs is the one she " +
         "shared with Dad.",
+      variants: [
+        {
+          when: { supportLevel: ["substantial", "roundTheClock"] },
+          example:
+            "The hour alone in his room after program is not isolation, it is " +
+            "how he recovers from the day. Taking it away to be sociable will " +
+            "cost you the whole evening. It stays, wherever he lives.",
+        },
+      ],
     },
     {
       id: "consultFirst",

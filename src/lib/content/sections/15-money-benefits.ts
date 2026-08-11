@@ -95,6 +95,20 @@ export const moneyBenefits: SectionDef = {
       example:
         "A special needs trust created in 2022. His aunt Dana Alvarez is trustee; " +
         "Claire Kelly at Trusts & Wealth drafted it and has the original.",
+      // The OR gate lets a caregiver-audience writer who answered yes to the
+      // trust question land here too, and for an aging parent that trust is
+      // usually a living trust, not a special needs trust. The help and the
+      // example switch together.
+      variants: [
+        {
+          when: { supportLevel: ["mostlyIndependent"] },
+          help: "If a trust exists, a living trust or any other kind: when it was created, who the trustee or successor trustee is, and which attorney drafted it.",
+          example:
+            "Mom's revocable living trust, set up in 2019, holds the house. She " +
+            "is her own trustee; I am successor trustee. The attorney who " +
+            "drafted it has the original and my number.",
+        },
+      ],
       showWhen: [
         { hasTrust: ["yes", "planned", "notSure"] },
         { audience: ["trustee", "both"] },

@@ -24,6 +24,21 @@ export const personalMessage: SectionDef = {
         "slowly, and then have it absolutely. When he is difficult, he is scared. " +
         "When he brings you a train schedule, he is telling you he loves you. " +
         "Please be patient with my son. He is the best thing I ever did.",
+      // The base is a parent's voice about a young autistic man. The
+      // mostly-independent configuration is usually an adult child writing
+      // about a parent, and this page must not hand them someone else's
+      // grief in the wrong voice.
+      variants: [
+        {
+          when: { supportLevel: ["mostlyIndependent"] },
+          example:
+            "She spent forty years taking care of everyone else, so she will " +
+            "try to take care of you too, and hide whatever is hard. Let her. " +
+            "Then check anyway. Ask about the library years, and you will get " +
+            "the real her back for an afternoon. She is still in there. Look " +
+            "for her.",
+        },
+      ],
     },
     {
       id: "toSiblings",
@@ -31,6 +46,15 @@ export const personalMessage: SectionDef = {
       rows: 7,
       label: "To their siblings",
       help: "Gratitude, permission, hopes, and anything they'll need to be released from. Many parents use this space to say: your own life matters too.",
+      // In the aging configuration the writer IS a sibling among siblings:
+      // the parent-voice help would address the wrong person.
+      variants: [
+        {
+          when: { supportLevel: ["mostlyIndependent"] },
+          label: "To the rest of the family",
+          help: "What you want your siblings and family to know about the care, the load, and each other. Many writers use this space to say: no one carries this alone, and no one gets to disappear.",
+        },
+      ],
     },
     {
       id: "toPerson",

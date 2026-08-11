@@ -85,6 +85,20 @@ export const communication: SectionDef = {
         "Marcus can't tell you something hurts. He goes quiet, presses on the spot, " +
         "and stops eating. If he skips a meal, something is wrong: check ears and " +
         "teeth first. It has been one of those every single time.",
+      // The other pole hides pain by choice, not by ability: the base example
+      // reads as a nonverbal profile, so the mostly-independent configuration
+      // gets the minimizer instead (the natural pair to "What they will not
+      // admit to needing" just below).
+      variants: [
+        {
+          when: { supportLevel: ["mostlyIndependent"] },
+          example:
+            "She will tell you she is fine while holding the counter with both " +
+            "hands. Watch for the things she stops doing: the crossword left " +
+            "half done, dinner skipped, the stairs taken one at a time. Ask " +
+            "about her day, not about the pain.",
+        },
+      ],
       cardLengthHint: 200,
     },
     {

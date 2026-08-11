@@ -90,6 +90,19 @@ export const legal: SectionDef = {
         "his neurologist and won in four months. The phrase that mattered was " +
         "\"institutional level of care.\" Get every denial in writing. Never accept " +
         "a no by phone.",
+      // The OR gate means hasBenefits alone (Medicare, Social Security)
+      // surfaces this for the aging pole too, where the fight looks like a
+      // coverage denial, not a waiver slot.
+      variants: [
+        {
+          when: { supportLevel: ["mostlyIndependent"] },
+          example:
+            "Medicare denied her walker as \"not medically necessary\" in 2024. " +
+            "Her doctor wrote one paragraph citing the fall in March and it was " +
+            "approved on resubmission. Ask the doctor's office to use the words " +
+            "\"medically necessary\" and keep every denial letter.",
+        },
+      ],
       showWhen: [{ hasBenefits: ["yes", "maybe"] }, { schoolWork: ["school"] }],
     },
     {

@@ -155,6 +155,8 @@ export function ReviewScreen() {
           <p className="mt-3 max-w-[68ch] leading-[1.7]">
             The documents this letter produces for the people who will care for {name},
             and one file for you. Take the whole set now, because it only works together.
+            And when life changes later, a new medication, a move, a change in who
+            helps, come back and download a fresh set the same week.
           </p>
 
           <ul className="mt-[22px] list-none p-0">
@@ -471,15 +473,21 @@ function YearlyReview({ data }: { data: LetterData }) {
             "clamp(26px, 3vw, 36px) clamp(24px, 2.6vw, 36px) clamp(28px, 3vw, 38px)",
         }}
       >
-        <Eyebrow>One year from today</Eyebrow>
+        <Eyebrow>Keeping it current</Eyebrow>
         <h2 className="mt-3 font-serif text-[clamp(1.7rem,3vw,2.2rem)] font-semibold tracking-[-0.01em] text-ink">
-          Come back in a year.
+          Update it when life changes.
         </h2>
         <p className="mt-3 max-w-[74ch] leading-[1.7]">
-          A Letter of Intent is trustworthy only while it is current. Next year, load your
-          backup file, change what has changed, and download a fresh set. That yearly pass
-          is what keeps the letter worth trusting, so set the reminder now, while you are
-          thinking about it.
+          A Letter of Intent is trustworthy only while it is current, and what dates it
+          is events, not anniversaries: a move, a new diagnosis or medication, a new
+          school, program, or job, a change in who provides care, an illness or death in
+          the support network, a change in benefits or legal authority, a hospital stay.
+          When one of those happens, load your backup, change what changed, and download
+          a fresh set that same week.
+        </p>
+        <p className="mt-3 max-w-[74ch] leading-[1.7]">
+          The reminder below is the backstop for the quiet years, so set it now, while
+          you are thinking about it.
         </p>
 
         <div

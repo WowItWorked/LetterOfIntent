@@ -102,7 +102,9 @@ export function FieldShell({
       {example ? (
         <Disclosure label="See an example" className="mt-2.5">
           <blockquote className="max-w-[66ch] rounded-r-[var(--radius-sm)] border-l-2 border-gold400 bg-paper2 px-[18px] py-3.5">
-            <p className="font-serif text-lg italic leading-[1.6] text-ink">
+            {/* pre-wrap: a step-per-line example must SHOW its lines — the
+                shape is the thing it teaches. */}
+            <p className="whitespace-pre-wrap font-serif text-lg italic leading-[1.6] text-ink">
               &ldquo;{example}&rdquo;
             </p>
             <footer className="mt-2.5 text-xs not-italic text-muted">

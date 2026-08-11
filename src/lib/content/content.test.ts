@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { sectionDefs } from "@/lib/content/sections";
 import { previewPrompts } from "@/lib/content/preview-prompts";
+import { readingGaps } from "@/lib/content/reading-gaps";
 import type { MetaCond } from "@/lib/content/types";
 import { sectionKeys, sectionSchemas } from "@/lib/schema";
 
@@ -187,6 +188,28 @@ describe("content ↔ schema sync", () => {
     const slugs = new Set(sectionDefs.map((d) => d.slug));
     for (const slug of Object.keys(previewPrompts)) {
       expect(slugs.has(slug), `orphan preview prompt "${slug}"`).toBe(true);
+    }
+  });
+
+  it("every section has a reading gap line, phrased for the reader", () => {
+    for (const def of sectionDefs) {
+      const line = readingGaps[def.slug];
+      expect(line, `reading gap for "${def.slug}"`).toBeDefined();
+      expect(line.trim().length).toBeGreaterThan(0);
+      expect(line.length, `gap for "${def.slug}" runs long`).toBeLessThanOrEqual(120);
+      // Site prose carries no em dashes (owner style rule).
+      expect(line, `em dash in gap for "${def.slug}"`).not.toContain("—");
+      // Consequence phrasing, never the writer's shortfall.
+      expect(line.toLowerCase(), `gap for "${def.slug}" blames the writer`).not.toMatch(
+        /you have not|you haven't|you didn't|incomplete|unfinished/
+      );
+    }
+  });
+
+  it("has no orphan reading gap lines", () => {
+    const slugs = new Set(sectionDefs.map((d) => d.slug));
+    for (const slug of Object.keys(readingGaps)) {
+      expect(slugs.has(slug), `orphan reading gap "${slug}"`).toBe(true);
     }
   });
 });

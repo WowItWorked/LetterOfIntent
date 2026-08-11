@@ -115,6 +115,19 @@ test("axe clean: review page with a full letter, including the reading view", as
   await expectNoViolations(page);
 });
 
+test("axe clean: the live reading view with gaps showing", async ({ page }) => {
+  // A letter mid-writing, so the view holds both kinds of content: written
+  // sections and the gentle gap cards between them.
+  await seedLetter(page, {
+    gettingStarted: FULL_LETTER.gettingStarted,
+    person: FULL_LETTER.person,
+  });
+  await page.goto("/letter/read");
+  await page.getByRole("heading", { name: /your letter so far/i }).waitFor();
+  await page.getByText(/would not yet know/i).first().waitFor();
+  await expectNoViolations(page);
+});
+
 test("axe clean: care cards with a bundle picked and previews showing", async ({
   page,
 }) => {

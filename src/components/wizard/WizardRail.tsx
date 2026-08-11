@@ -188,6 +188,13 @@ function RailLinks() {
       >
         Your answers (change any time)
       </Link>
+      {/* The step-back: the answers so far, already reading as a letter. */}
+      <Link
+        href="/letter/read"
+        className="flex min-h-11 items-center rounded-[var(--radius-sm)] px-2.5 text-[0.9375rem] text-muted hover:bg-paper2 hover:text-ink"
+      >
+        Read it as a letter
+      </Link>
       <Link
         href="/letter/review"
         className="flex min-h-11 items-center rounded-[var(--radius-sm)] px-2.5 text-[0.9375rem] font-bold text-accent hover:bg-paper2"

@@ -1,11 +1,16 @@
 import { pdf } from "@react-pdf/renderer";
 import { firm } from "@/config/firm";
 import { documentFilename } from "@/lib/filenames";
-import { emergencyInfo } from "@/lib/derive";
+import { emergencyInfo, preferredName } from "@/lib/derive";
+import { deriveCard } from "@/lib/cards/derive";
+import type { CardData } from "@/lib/cards/types";
+import { CARD_KEYS, INDEX_CARD } from "@/lib/content/cards";
 import { blobToDataUrl, getPhoto } from "@/lib/photos";
 import type { LetterData, LetterMeta } from "@/lib/schema";
 import { LoiDocument } from "./loi-document";
+import { CaregiverDocument } from "./caregiver-document";
 import { EmergencyDocument } from "./emergency-document";
+import { CardsPrintDocument } from "./cards-print-document";
 
 /**
  * Everything in this module runs in the browser, on demand (the review screen
@@ -101,6 +106,41 @@ export async function generateLetterPdfBlob(
   ).toBlob();
 }
 
+/**
+ * The Letter for the Caregiver — same two-pass TOC dance as the trustee
+ * letter, its own cover and at-a-glance front matter.
+ */
+export async function generateCaregiverPdfBlob(
+  data: LetterData,
+  meta: LetterMeta = {}
+): Promise<Blob> {
+  const [appLogo, familyPhoto] = await Promise.all([
+    loadLogo(firm.appLogoPath),
+    loadPhoto("family"),
+  ]);
+  const registry: Record<string, number> = {};
+  await pdf(
+    <CaregiverDocument
+      data={data}
+      meta={meta}
+      appLogo={appLogo}
+      familyPhoto={familyPhoto}
+      registry={registry}
+      toc={null}
+    />
+  ).toBlob();
+  return pdf(
+    <CaregiverDocument
+      data={data}
+      meta={meta}
+      appLogo={appLogo}
+      familyPhoto={familyPhoto}
+      registry={null}
+      toc={registry}
+    />
+  ).toBlob();
+}
+
 export async function generateEmergencyPdfBlob(data: LetterData): Promise<Blob> {
   const [appLogo, photo] = await Promise.all([
     loadLogo(firm.appLogoPath),
@@ -112,6 +152,62 @@ export async function generateEmergencyPdfBlob(data: LetterData): Promise<Blob> 
 }
 
 /**
+ * The print-at-home card sheet: the SAME derived cards as the phone PNGs
+ * (one derivation, two renderers), on US Letter with crop marks, plus the
+ * static index card on the final sheet.
+ *
+ * A card that runs long degrades gracefully rather than clipping: trailing
+ * blocks past the face's line budget are replaced by a plain pointer to the
+ * full letter — the family chooses what to trim, software never silently
+ * cuts mid-sentence.
+ */
+const PRINT_LINE_BUDGET = 26;
+
+function clampCardForPrint(card: CardData): CardData {
+  const lineCount = (i: number) => card.blocks[i].lines.length + 1;
+  let used = 0;
+  let keep = card.blocks.length;
+  for (let i = 0; i < card.blocks.length; i++) {
+    used += lineCount(i);
+    if (used > PRINT_LINE_BUDGET) {
+      keep = i;
+      break;
+    }
+  }
+  if (keep >= card.blocks.length) return card;
+  return {
+    ...card,
+    blocks: [
+      ...card.blocks.slice(0, Math.max(1, keep)),
+      {
+        label: "There is more",
+        lines: [{ v: "This card runs long in print. The full detail is in the letter, and on the phone version of this card." }],
+      },
+    ],
+  };
+}
+
+export async function generateCardsPrintPdfBlob(data: LetterData): Promise<Blob> {
+  const cards = CARD_KEYS.map((key) => deriveCard(data, key))
+    .filter((c): c is CardData => c !== null)
+    .map(clampCardForPrint);
+
+  // The static index card, fetched from this site's own public folder —
+  // same-origin, no family data in the request.
+  let indexCard: { dataUrl: string } | undefined;
+  try {
+    const res = await fetch(INDEX_CARD.asset);
+    if (res.ok) indexCard = { dataUrl: await blobToDataUrl(await res.blob()) };
+  } catch {
+    // The pack still prints without it.
+  }
+
+  return pdf(
+    <CardsPrintDocument cards={cards} indexCard={indexCard} personName={preferredName(data)} />
+  ).toBlob();
+}
+
+/**
  * Filenames carry the document type and the date, never the person's name —
  * see lib/filenames.ts for why.
  */
@@ -119,6 +215,14 @@ export function letterPdfFilename(): string {
   return documentFilename("letter");
 }
 
+export function caregiverPdfFilename(): string {
+  return documentFilename("caregiver");
+}
+
 export function emergencyPdfFilename(): string {
   return documentFilename("emergency");
+}
+
+export function cardsPrintPdfFilename(): string {
+  return documentFilename("cards");
 }

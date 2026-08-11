@@ -182,8 +182,8 @@ test("downloaded files are named by document and date, never by person or questi
 
   const names: string[] = [];
   page.on("download", (d) => names.push(d.suggestedFilename()));
-  await page.getByRole("button", { name: /download all three together/i }).click();
-  await expect.poll(() => names.length, { timeout: 60_000 }).toBeGreaterThanOrEqual(3);
+  await page.getByRole("button", { name: /download the full set/i }).click();
+  await expect.poll(() => names.length, { timeout: 120_000 }).toBeGreaterThanOrEqual(5);
 
   const today = new Date();
   const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(
@@ -193,7 +193,9 @@ test("downloaded files are named by document and date, never by person or questi
   expect(names).toEqual(
     expect.arrayContaining([
       `Letter-of-Intent-${iso}.pdf`,
+      `Letter-for-the-Caregiver-${iso}.pdf`,
       `Emergency-Information-Sheet-${iso}.pdf`,
+      `Care-Cards-Print-${iso}.pdf`,
       `Letter-of-Intent-Backup-${iso}.json`,
     ])
   );

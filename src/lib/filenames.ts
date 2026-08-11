@@ -15,7 +15,7 @@
  *    inside the document, where the family chose to put it.
  */
 
-export type DocumentKind = "letter" | "caregiver" | "emergency" | "backup";
+export type DocumentKind = "letter" | "caregiver" | "emergency" | "cards" | "backup";
 
 /** Local calendar date — the day the family pressed the button. */
 export function isoDate(now: Date): string {
@@ -33,6 +33,11 @@ export function documentFilename(kind: DocumentKind, now: Date = new Date()): st
       return `Letter-for-the-Caregiver-${date}.pdf`;
     case "emergency":
       return `Emergency-Information-Sheet-${date}.pdf`;
+    // The print-at-home sheet of the same cards the phone PNGs carry. Unlike
+    // the PNGs (whose faces show the name in 70px type), the print file's
+    // name stays non-identifying like every other document.
+    case "cards":
+      return `Care-Cards-Print-${date}.pdf`;
     case "backup":
       return `Letter-of-Intent-Backup-${date}.json`;
   }

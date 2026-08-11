@@ -11,13 +11,11 @@ import {
   formatDateLong,
   formatItemValue,
   itemHasContent,
-  keyPoints,
-  keyPointsHaveContent,
   letterDateIso,
   readerName,
-  sectionHasContent,
 } from "@/lib/derive";
 import type { LetterData, LetterMeta } from "@/lib/schema";
+import { TRUSTEE_PROJECTION, projects, type LetterProjection } from "./projections";
 import {
   CREAM,
   DANGER,
@@ -39,7 +37,7 @@ import {
 
 registerBrandFonts();
 
-const s = StyleSheet.create({
+export const s = StyleSheet.create({
   page: {
     paddingTop: 56,
     paddingHorizontal: 64,
@@ -230,25 +228,25 @@ export function LoiDocument({
   const author = data.gettingStarted?.authorName?.trim();
   const relationship = data.gettingStarted?.authorRelationship?.trim();
   const dateLong = formatDateLong(letterDateIso(data)) ?? letterDateIso(data);
-  // The letter prints every in-play section that holds content — one roster,
-  // gated by the letter's own answers, content always winning (config.ts).
-  const included = sectionsForMeta(meta, data).filter((def) => sectionHasContent(data, def));
+  // The trustee letter prints its PROJECTION of the in-play sections — the
+  // matrix in projections.ts decides what belongs here; the caregiver letter
+  // carries the daily-care material. Content still gates: an empty section
+  // never prints a heading.
+  const included = sectionsForMeta(meta, data).filter(
+    (def) =>
+      TRUSTEE_PROJECTION[def.key] &&
+      def.fields.some(
+        (f) =>
+          projects(TRUSTEE_PROJECTION, def.key, f.id) &&
+          fieldHasContent(data[def.key] as Record<string, unknown> | undefined, f)
+      )
+  );
   const numberOf = new Map(included.map((def, i) => [def.key, i + 1]));
-
-  const points = keyPoints(data);
-  const showKeyPoints = keyPointsHaveContent(points);
 
   const footerLine = `This Letter of Intent is not a legal document and is not legally binding. It is intended to guide those who care for ${name}. Last updated ${dateLong}.`;
 
-  const hasBehavior = included.some((def) => def.key === "behavior");
-  const firstWeekPointer = `If you are new to ${name}, start with "${
-    included.find((d) => d.key === "routine")?.navTitle.includes("week")
-      ? "A typical week"
-      : "A typical day"
-  }" and "Communication." They will carry you through the first week.`;
-  const crisisPointer = hasBehavior
-    ? `In a crisis, go straight to "Health and medical" and "Behavioral support." There is also a separate one-page emergency sheet that pairs with this letter — keep copies where sitters, school, and the ER can grab them.`
-    : `In a crisis, go straight to "Health and medical." There is also a separate one-page emergency sheet that pairs with this letter — keep copies where family and the hospital can grab them.`;
+  const firstWeekPointer = `If you are new to ${name}, start with "About ${name}" and "Guidance for the trustee." Together they hand you the person and the judgment.`;
+  const crisisPointer = `Day-to-day care lives in a companion document, the Letter for the Caregiver, and a one-page emergency sheet pairs with both — keep copies where family and the hospital can grab them.`;
 
   return (
     <Document
@@ -426,64 +424,9 @@ export function LoiDocument({
         </Page>
       ) : null}
 
-      {/* --------------------------------------------- key points (page 4) */}
-      {showKeyPoints ? (
-        <Page size="LETTER" style={s.page}>
-          <PdfFooter line={footerLine} />
-          <Text style={s.sectionEyebrow}>IF YOU READ ONE PAGE</Text>
-          <Text style={s.sectionTitle}>Key points at a glance</Text>
-          <View style={s.sectionRule} />
-
-          {points.callOrder.length > 0 ? (
-            <View style={s.callBand}>
-              <Text style={s.callBandLabel}>CALL IN THIS ORDER</Text>
-              {points.callOrder.map((line, i) => (
-                <Text key={i} style={s.callBandLine}>
-                  {i + 1}. {line}
-                </Text>
-              ))}
-            </View>
-          ) : null}
-
-          {points.points.map((p) => (
-            <View
-              key={p.title}
-              style={p.warning ? { ...s.pointBox, ...s.pointBoxWarn } : s.pointBox}
-              wrap={false}
-            >
-              <Text style={s.pointTitle}>{p.title}</Text>
-              <Text style={s.pointSource}>FROM “{p.source.toUpperCase()}”</Text>
-              <MultilineValue text={p.text} style={s.pointText} />
-            </View>
-          ))}
-
-          {/* Two distinct boxes on purpose: "never change" (the caregiver's
-              ask) and "hard limits" (housing red lines) are different
-              questions — the old build piped both into one slot, which was a
-              bug, not a merge. */}
-          {points.neverChange ? (
-            <View style={s.neverBox} wrap={false}>
-              <Text style={s.pointTitle}>What we ask never to be changed</Text>
-              <Text style={s.pointSource}>FROM “FOR WHOEVER STEPS IN”</Text>
-              <MultilineValue text={points.neverChange} style={s.pointText} />
-            </View>
-          ) : null}
-          {points.hardLimits ? (
-            <View style={s.neverBox} wrap={false}>
-              <Text style={s.pointTitle}>Living situations we would not want</Text>
-              <Text style={s.pointSource}>FROM “HOME AND DAILY LIVING”</Text>
-              <MultilineValue text={points.hardLimits} style={s.pointText} />
-            </View>
-          ) : null}
-
-          <Text
-            style={{ fontFamily: SANS, fontSize: 8.5, color: GRAY, marginTop: 12, lineHeight: 1.5 }}
-          >
-            Every point above is a summary. The full answer, in the family&apos;s own
-            words, is in the section named beneath each heading.
-          </Text>
-        </Page>
-      ) : null}
+      {/* The at-a-glance page moved to the Letter for the Caregiver, whose
+          reader it was always written for — this letter's how-to points a
+          trustee at the emergency sheet for the first-five-minutes material. */}
 
       {/* ------------------------------------------------------- sections */}
       {included.map((def) => (
@@ -495,6 +438,7 @@ export function LoiDocument({
           name={name}
           registry={registry}
           footerLine={footerLine}
+          projection={TRUSTEE_PROJECTION}
           familyPhoto={def.photoSlot ? familyPhoto : undefined}
         />
       ))}
@@ -504,7 +448,7 @@ export function LoiDocument({
 
 /* ------------------------------------------------------------------ pieces */
 
-function PdfFooter({ line }: { line: string }) {
+export function PdfFooter({ line }: { line: string }) {
   return (
     <View style={s.footer} fixed>
       <Text style={s.footerText}>{line}</Text>
@@ -516,13 +460,14 @@ function PdfFooter({ line }: { line: string }) {
   );
 }
 
-function SectionPage({
+export function SectionPage({
   def,
   number,
   data,
   name,
   registry,
   footerLine,
+  projection,
   familyPhoto,
 }: {
   def: SectionDef;
@@ -531,10 +476,14 @@ function SectionPage({
   name: string;
   registry: Record<string, number> | null;
   footerLine: string;
+  /** Which of this section's fields THIS letter prints (the matrix as data). */
+  projection: LetterProjection;
   familyPhoto?: LoadedImage & { caption?: string };
 }) {
   const values = (data[def.key] ?? {}) as Record<string, unknown>;
-  const filled = def.fields.filter((f) => fieldHasContent(values, f));
+  const filled = def.fields.filter(
+    (f) => projects(projection, def.key, f.id) && fieldHasContent(values, f)
+  );
 
   return (
     <Page size="LETTER" style={s.page}>
@@ -633,7 +582,7 @@ function PdfField({
 }
 
 /** Preserves the writer's line breaks; blank lines become paragraph gaps. */
-function MultilineValue({ text, style }: { text: string; style?: Style }) {
+export function MultilineValue({ text, style }: { text: string; style?: Style }) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
   const nodes: ReactNode[] = [];
   lines.forEach((line, i) => {

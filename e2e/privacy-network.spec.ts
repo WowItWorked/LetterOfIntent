@@ -85,7 +85,8 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
     .click();
   await expect(page).toHaveURL(/\/letter$/);
   // Through the onboarding — every tap is local state, nothing may leave.
-  await page.getByRole("button", { name: /day-to-day care/i }).click();
+  // "Both" keeps the trustee letter in the set this journey downloads.
+  await page.getByRole("button", { name: /^Both$/ }).click();
   await page.getByRole("button", { name: /^A child$/ }).click();
   await page.getByRole("button", { name: /around the clock/i }).click();
   await page.getByRole("button", { name: /^Yes$/ }).click();
@@ -237,20 +238,33 @@ test("the reminder email panel sends nothing, and says so", async ({ page }) => 
   ).toEqual([]);
 });
 
-test("downloading all three produces two PDFs and a backup", async ({ page }, testInfo) => {
+test("downloading the full set produces all four PDFs and a backup — with zero external requests", async ({
+  page,
+}, testInfo) => {
+  const traffic = trackExternal(page);
   await seedLetter(page, FULL_LETTER);
   await page.goto("/letter/review");
 
   const downloads: string[] = [];
   page.on("download", (d) => downloads.push(d.suggestedFilename()));
 
-  await page.getByRole("button", { name: /download all three together/i }).click();
+  await page.getByRole("button", { name: /download the full set/i }).click();
   await expect
-    .poll(() => downloads.length, { timeout: 60_000 })
-    .toBeGreaterThanOrEqual(3);
+    .poll(() => downloads.length, { timeout: 120_000 })
+    .toBeGreaterThanOrEqual(5);
 
-  expect(downloads.some((f) => /^Letter-of-Intent.*\.pdf$/.test(f))).toBe(true);
+  expect(downloads.some((f) => /^Letter-of-Intent-\d.*\.pdf$/.test(f))).toBe(true);
+  expect(downloads.some((f) => /^Letter-for-the-Caregiver.*\.pdf$/.test(f))).toBe(true);
   expect(downloads.some((f) => /^Emergency-Information-Sheet.*\.pdf$/.test(f))).toBe(true);
+  expect(downloads.some((f) => /^Care-Cards-Print.*\.pdf$/.test(f))).toBe(true);
   expect(downloads.some((f) => /\.json$/.test(f))).toBe(true);
+
+  // The two NEW outputs generate under the same privacy gate as everything
+  // else: no request may leave localhost, and none may carry letter content.
+  expect(traffic.leaks, "letter content found in a request").toEqual([]);
+  expect(
+    traffic.external,
+    `unexpected third-party requests: ${traffic.external.join(", ")}`
+  ).toEqual([]);
   testInfo.attach("downloads", { body: downloads.join("\n") });
 });

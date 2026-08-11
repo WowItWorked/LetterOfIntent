@@ -17,6 +17,8 @@ import {
   sectionHasContent,
 } from "@/lib/derive";
 import { serializeBackup } from "@/lib/backup";
+import { requirementsMet } from "@/lib/cards/derive";
+import { CARD_KEYS } from "@/lib/content/cards";
 import { documentFilename } from "@/lib/filenames";
 import { buildReviewReminderIcs, calendarLinks } from "@/lib/ics";
 import { triggerDownload } from "@/lib/download";
@@ -27,7 +29,7 @@ import { Button, buttonClasses } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ReminderPanel } from "@/components/review/ReminderPanel";
 
-type FileKind = "letter" | "emergency" | "backup";
+type FileKind = "letter" | "caregiver" | "emergency" | "cards" | "backup";
 
 const CARD_GAP = "mt-[22px]";
 
@@ -56,16 +58,38 @@ export function ReviewScreen() {
     );
   };
 
-  const downloadPdf = async (kind: "letter" | "emergency") => {
+  const downloadPdf = async (kind: "letter" | "caregiver" | "emergency" | "cards") => {
     const mod = await import("@/lib/pdf/generate");
     if (kind === "letter") {
       const blob = await mod.generateLetterPdfBlob(data, meta);
       triggerDownload(mod.letterPdfFilename(), blob, "application/pdf");
+    } else if (kind === "caregiver") {
+      const blob = await mod.generateCaregiverPdfBlob(data, meta);
+      triggerDownload(mod.caregiverPdfFilename(), blob, "application/pdf");
+    } else if (kind === "cards") {
+      const blob = await mod.generateCardsPrintPdfBlob(data);
+      triggerDownload(mod.cardsPrintPdfFilename(), blob, "application/pdf");
     } else {
       const blob = await mod.generateEmergencyPdfBlob(data);
       triggerDownload(mod.emergencyPdfFilename(), blob, "application/pdf");
     }
   };
+
+  // Which documents THIS letter produces: the audience decides the letters,
+  // the data decides the cards; the sheet and the backup are always in the
+  // set. An unanswered audience gets both letters — never fewer documents
+  // than the family may need.
+  const audience = meta.audience;
+  const wantTrustee = audience !== "caregiver";
+  const wantCaregiver = audience !== "trustee";
+  const cardsReady = hydrated && CARD_KEYS.some((k) => requirementsMet(data, k));
+  const pdfKinds: FileKind[] = [
+    ...(wantTrustee ? (["letter"] as const) : []),
+    ...(wantCaregiver ? (["caregiver"] as const) : []),
+    "emergency",
+    ...(cardsReady ? (["cards"] as const) : []),
+  ];
+  const setCount = pdfKinds.length + 1; // + the backup file
 
   const run = async (kind: FileKind | "all") => {
     setBusy(kind);
@@ -73,8 +97,9 @@ export function ReviewScreen() {
     try {
       if (kind === "backup") await downloadBackup();
       else if (kind === "all") {
-        await downloadPdf("letter");
-        await downloadPdf("emergency");
+        for (const k of pdfKinds) {
+          await downloadPdf(k as "letter" | "caregiver" | "emergency" | "cards");
+        }
         await downloadBackup();
       } else await downloadPdf(kind);
     } catch (e) {
@@ -135,21 +160,32 @@ export function ReviewScreen() {
         <div style={{ padding: "30px clamp(24px, 3vw, 34px) 32px" }}>
           <Eyebrow>Start here</Eyebrow>
           <h2 className="mt-3 font-serif text-[clamp(1.6rem,3.4vw,2rem)] font-semibold text-ink">
-            Download all three
+            Download your set
           </h2>
           <p className="mt-3 max-w-[68ch] leading-[1.7]">
-            Two documents for the people who will care for {name}, and one file for you.
-            Take all three now, because the set only works together.
+            The documents this letter produces for the people who will care for {name},
+            and one file for you. Take the whole set now, because it only works together.
           </p>
 
           <ul className="mt-[22px] list-none p-0">
-            <FileRow
-              onClick={() => void run("letter")}
-              disabled={!hydrated || busy !== null}
-              label={busy === "letter" ? busyLabel : "Download"}
-              title="The Letter of Intent (PDF)"
-              blurb="to print, put in a binder, and hand to a trustee or sibling."
-            />
+            {wantTrustee ? (
+              <FileRow
+                onClick={() => void run("letter")}
+                disabled={!hydrated || busy !== null}
+                label={busy === "letter" ? busyLabel : "Download"}
+                title="The Letter of Intent (PDF)"
+                blurb="for whoever will manage money and decisions: the trustee, and the advisors around them."
+              />
+            ) : null}
+            {wantCaregiver ? (
+              <FileRow
+                onClick={() => void run("caregiver")}
+                disabled={!hydrated || busy !== null}
+                label={busy === "caregiver" ? busyLabel : "Download"}
+                title="The Letter for the Caregiver (PDF)"
+                blurb="daily life, routines, and what helps: written for whoever is holding it in a kitchen at 7am."
+              />
+            ) : null}
             <FileRow
               onClick={() => void run("emergency")}
               disabled={!hydrated || busy !== null}
@@ -157,6 +193,15 @@ export function ReviewScreen() {
               title="The emergency sheet (PDF)"
               blurb="one page for the fridge, the school office, the sitter, the ER."
             />
+            {cardsReady ? (
+              <FileRow
+                onClick={() => void run("cards")}
+                disabled={!hydrated || busy !== null}
+                label={busy === "cards" ? busyLabel : "Download"}
+                title="Care cards, print at home (PDF)"
+                blurb="the same cards as the phone set, sized for a wallet and the fridge, with cut marks."
+              />
+            ) : null}
             <FileRow
               last
               onClick={() => void run("backup")}
@@ -173,10 +218,12 @@ export function ReviewScreen() {
               onClick={() => void run("all")}
               disabled={!hydrated || busy !== null}
             >
-              {busy === "all" ? "Preparing your files…" : "Download all three together"}
+              {busy === "all"
+                ? "Preparing your files…"
+                : `Download the full set (${setCount} files)`}
             </Button>
             <span className="text-[0.9375rem] text-muted">
-              Two PDFs and one backup file. Nothing is uploaded.
+              {pdfKinds.length} PDFs and one backup file. Nothing is uploaded.
             </span>
           </div>
           <p aria-live="polite" className="sr-only">

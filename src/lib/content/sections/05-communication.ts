@@ -60,6 +60,12 @@ export const communication: SectionDef = {
       rows: 3,
       label: "How they say yes and no",
       help: "Words, sounds, signs, or body language: how do you know which is which?",
+      // Card-sized on purpose: this lands on the Behavior & Communication
+      // card, where a sitter reads it standing up. Two sentences, concrete,
+      // no preamble — the shape a card can hold.
+      example:
+        "Yes is a nod plus \"yeah.\" No is walking away, and so is going quiet — " +
+        "silence is never agreement.",
       showWhen: [{ communicationDiffers: ["yes"] }],
       cardLengthHint: 180,
     },
@@ -81,10 +87,11 @@ export const communication: SectionDef = {
       rows: 3,
       label: "How they show pain, or that they feel sick",
       help: "One of the most important answers in this whole letter. How would a new person know {name} is hurting?",
+      // Trimmed to sit inside cardLengthHint: the example a family copies the
+      // shape of should itself be a length the card can hold.
       example:
-        "Marcus can't tell you something hurts. He goes quiet, presses on the spot, " +
-        "and stops eating. If he skips a meal, something is wrong: check ears and " +
-        "teeth first. It has been one of those every single time.",
+        "He cannot tell you something hurts. He goes quiet, presses the spot, and " +
+        "stops eating. A skipped meal means check ears and teeth first.",
       // The other pole hides pain by choice, not by ability: the base example
       // reads as a nonverbal profile, so the mostly-independent configuration
       // gets the minimizer instead (the natural pair to "What they will not
@@ -93,10 +100,9 @@ export const communication: SectionDef = {
         {
           when: { supportLevel: ["mostlyIndependent"] },
           example:
-            "She will tell you she is fine while holding the counter with both " +
-            "hands. Watch for the things she stops doing: the crossword left " +
-            "half done, dinner skipped, the stairs taken one at a time. Ask " +
-            "about her day, not about the pain.",
+            "She says she is fine while holding the counter with both hands. Watch " +
+            "what she stops doing: the crossword half done, dinner skipped, the " +
+            "stairs one at a time.",
         },
       ],
       cardLengthHint: 200,
@@ -107,8 +113,12 @@ export const communication: SectionDef = {
       rows: 3,
       label: "What they will not admit to needing",
       help: "Pain, help in the shower, trouble on the stairs, money running short. What are the signs, if they will not say it?",
+      example:
+        "She will never say she needs help washing. The sign is the same blouse two " +
+        "days running.",
       showWhen: [{ cognitionChanging: ["yes", "early"] }, { supportLevel: ["mostlyIndependent"] }],
       openers: ["They will never say it, but…", "The sign to watch for is…"],
+      cardLengthHint: 180,
     },
     {
       id: "overwhelm",
@@ -132,12 +142,20 @@ export const communication: SectionDef = {
       rows: 3,
       label: "What to say: words and approaches that work",
       placeholder: "Phrases, tone, pacing, humor: what lands well with them",
+      example:
+        "Short sentences, one at a time, then wait. \"First shoes, then bus\" works " +
+        "where a question does not.",
       openers: ["What helps most is…"],
       variants: [
         {
           when: { supportLevel: ["mostlyIndependent"] },
           label: "What helps a conversation go well",
           placeholder: "Sitting down first, no television on, giving them the decision to make",
+          // Its own example: the base one is first-then scaffolding for a
+          // supported adult, which reads as condescension under this label.
+          example:
+            "Sit down first, television off. Give her the decision to make, not the " +
+            "answer. Standing in a doorway she agrees to anything and means none of it.",
         },
       ],
       cardLengthHint: 200,
@@ -148,6 +166,9 @@ export const communication: SectionDef = {
       rows: 3,
       label: "What not to say",
       placeholder: "Words, topics, or tones to avoid, and what happens if they come up",
+      example:
+        "Never \"maybe\" or \"later\" — he hears a promise. Never \"calm down.\" Do not " +
+        "touch the backpack without asking.",
       variants: [
         {
           when: { supportLevel: ["mostlyIndependent"] },

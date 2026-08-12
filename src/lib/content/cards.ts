@@ -147,6 +147,23 @@ export const CARD_DEFS: Record<CardKey, CardDef> = {
   },
 };
 
+/**
+ * Short tag names, one per card. Deliberately shorter than the card titles in
+ * CARD_DEFS: a tag has to scan as one of a set, at chip size, beside a form
+ * label — "Personal Care", not "Personal Care & Mobility". The Which Cards To
+ * Send index card uses these same names, so the tag a family sees against a
+ * question is the tag they later look for on the card.
+ */
+export const CARD_CHIP_LABELS: Record<CardKey, string> = {
+  identity: "Identity",
+  emergency: "Emergency",
+  meds: "Medications",
+  behavior: "Behavior",
+  routine: "Routine",
+  food: "Food",
+  care: "Personal Care",
+};
+
 /* ------------------------------------------------------------------ sources */
 
 /**

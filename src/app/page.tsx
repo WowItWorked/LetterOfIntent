@@ -37,11 +37,11 @@ const ANCHOR_OFFSET =
 const PROCESS = [
   {
     numeral: "A.",
-    title: "Pick your letter",
+    title: "Answer eight questions",
     bullets: [
-      "One written for disabilities and special needs",
-      "One for anyone you care for: an aging parent, a spouse",
-      "All are free; start the other at any time",
+      "Who the letter has to reach, and a few facts about the person",
+      "They shape the form, so you are never asked what does not fit",
+      "One question each, one tap; the whole set takes about a minute",
     ],
   },
   {
@@ -50,27 +50,27 @@ const PROCESS = [
     bullets: [
       "Short sections, every question optional",
       "Saves on your device after every answer",
-      "Ten minutes at a time is enough",
+      "Ten minutes at a time is enough to get started",
     ],
   },
   {
     numeral: "C.",
-    title: "Download all four",
+    title: "Download the set",
     bullets: [
-      "The Letter of Intent",
-      "The Emergency Information Sheet",
-      "Your Care Cards",
+      "The Letter of Intent, the Letter for the Caregiver, or both",
+      "The one-page Emergency Information Sheet",
+      "Your care cards, as phone-ready images in a zip",
       "Your backup file, so you can come back and edit anytime",
-      "Print them, file them, save them to your phone",
     ],
   },
   {
     numeral: "D.",
     title: "Hand them to the right people",
     bullets: [
-      "The letter goes to the trustee, the guardian, the sibling who steps in",
+      "The Letter of Intent goes to whoever will manage the money",
+      "The Letter for the Caregiver goes to whoever has the day",
       "The emergency sheet goes on the fridge, to the school office, to the ER",
-      "The cards go to the sitter, the respite worker, the family group chat",
+      "The cards go into your photos, then to the sitter or the family group chat",
       "Update annually",
     ],
   },
@@ -89,6 +89,14 @@ const DELIVERABLES = [
     href: "/letter-of-intent",
     cta: "Learn more",
     art: "letter" as const,
+    // The second letter is easy to miss: this tile reads as THE letter, and a
+    // family writing for someone who provides daily care would never guess a
+    // separate document exists. A line in the blurb rather than a fourth tile,
+    // because the section's promise is three things — and plain text rather
+    // than its own link, because the tile is already one, and an anchor inside
+    // an anchor is invalid and unreachable by keyboard. The page this tile
+    // opens carries the link.
+    also: "A separate Letter for the Caregiver covers the day-to-day care.",
   },
   {
     title: "The Emergency Information Sheet",
@@ -223,7 +231,7 @@ export default function HomePage() {
             <PadlockIcon className="mt-1 size-[15px] fill-gold400" />
             <p className="text-[0.9375rem] leading-[1.65] text-[#D6DDE9]">
               <strong className="font-semibold text-white">
-                No account. No email required. Start with ten minutes.
+                No online account. No email required. Start with ten minutes.
               </strong>{" "}
               Your data remains on your device and is never shared.{" "}
               <Link
@@ -264,6 +272,11 @@ export default function HomePage() {
           >
             {DELIVERABLES.map((d) => (
               <li key={d.title} className="flex">
+                {/* One Link for the whole tile again: with the caregiver note
+                    now plain text inside the body, there is no second
+                    destination to keep out of it. That also puts every tile
+                    back on the grid's own stretch, so the three end level
+                    whatever their copy does. */}
                 <Link
                   href={d.href}
                   className="group flex flex-1 flex-col overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface transition-[transform,box-shadow,border-color] duration-[var(--dur-base)] hover:-translate-y-[3px] hover:border-gold400 focus-visible:outline-offset-4 motion-reduce:transform-none motion-reduce:transition-none"
@@ -282,6 +295,12 @@ export default function HomePage() {
                     <span className="mt-2 text-[0.9375rem] leading-[1.7] text-body">
                       {d.blurb}
                     </span>
+                    {d.also ? (
+                      <span className="mt-3 flex gap-2.5 text-[0.875rem] leading-[1.55] text-muted">
+                        <span className="tw-diamond mt-[7px] flex-none" aria-hidden="true" />
+                        <span className="flex-1">{d.also}</span>
+                      </span>
+                    ) : null}
                     <span className="mt-auto flex items-center gap-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
                       {d.cta}
                       <svg
@@ -316,7 +335,11 @@ export default function HomePage() {
               The process
             </Eyebrow>
           </div>
-          <SectionHeading align="center" title="Pick. Fill. Download. Share." />
+          {/* "Answer", not "Pick": there is one adaptive form now, and the
+              first step is the eight questions that shape it — not a choice
+              between two versions of the letter (that era ended with the
+              canonical schema). */}
+          <SectionHeading align="center" title="Answer. Write. Download. Hand over." />
           <p className="mx-auto mt-4 max-w-[860px] text-center text-lg leading-[1.7] text-muted">
             Four steps, at your own pace. Nothing is due, and nothing leaves your
             device until you choose to share it.

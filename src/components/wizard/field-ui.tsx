@@ -2,6 +2,8 @@
 
 import type { ReactNode } from "react";
 import type { FieldErrors } from "react-hook-form";
+import type { CardKey } from "@/lib/content/cards";
+import { CardTag } from "@/components/cards/CardTag";
 import { Disclosure } from "@/components/ui/Disclosure";
 
 /*
@@ -44,13 +46,22 @@ export function errMessage(
 interface FieldShellProps {
   htmlFor: string;
   label: string;
-  /** "Appears on the … card" line from lib/cards/status — config-driven. */
+  /**
+   * The "… card" sentence from lib/cards/status. Rendered for screen readers
+   * only: the visible form is the tags below, and a colour plus a two-word
+   * chip does not describe anything on its own.
+   */
   marker?: string;
   markerId?: string;
+  /** Which cards this answer feeds — shown as tags on the question line. */
+  cardKeys?: readonly CardKey[];
   help?: string;
   helpId?: string;
   hint?: string;
   hintId?: string;
+  /** "Longer than the … card shows" — advisory, from lib/cards/status. */
+  cardNote?: string;
+  cardNoteId?: string;
   example?: string;
   children: ReactNode;
 }
@@ -65,20 +76,33 @@ export function FieldShell({
   label,
   marker,
   markerId,
+  cardKeys,
   help,
   helpId,
   hint,
   hintId,
+  cardNote,
+  cardNoteId,
   example,
   children,
 }: FieldShellProps) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="block font-semibold text-ink">
-        {label}
-      </label>
+      {/* Tags ride ON the question line, not under it. They answer "where does
+          this end up?" at the moment the eye is already on the label, and a
+          chip is a quarter the height of the sentence it replaces — across a
+          section with six card-bound questions that is real vertical space
+          back. items-baseline so a wrapped label still sits with its tags. */}
+      <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1.5">
+        <label htmlFor={htmlFor} className="font-semibold text-ink">
+          {label}
+        </label>
+        {cardKeys?.map((key) => (
+          <CardTag key={key} cardKey={key} />
+        ))}
+      </div>
       {marker ? (
-        <p id={markerId} className="mt-1 text-[0.8125rem] text-muted">
+        <p id={markerId} className="sr-only">
           {marker}
         </p>
       ) : null}
@@ -96,6 +120,19 @@ export function FieldShell({
           >
             <span aria-hidden="true">✻</span>
             {hint}
+          </p>
+        ) : null}
+        {/* Same polite region and the same quiet register as the format hint:
+            this arrives WHILE someone is typing about their child, so it must
+            never read as an error. The diamond, not the asterisk, because it
+            is a note about the cards rather than about the answer. */}
+        {cardNote ? (
+          <p
+            id={cardNoteId}
+            className="mt-1.5 flex max-w-[66ch] gap-2 text-[0.8125rem] leading-[1.6] text-muted"
+          >
+            <span className="tw-diamond mt-[7px] flex-none" aria-hidden="true" />
+            <span className="flex-1">{cardNote}</span>
           </p>
         ) : null}
       </div>

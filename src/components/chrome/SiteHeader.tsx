@@ -30,6 +30,9 @@ const COMPACT_BELOW = 1200;
 /** The three document pages, shared by the dropdown and the mobile menu. */
 const DOCUMENT_LINKS = [
   ["Letter of Intent", "/letter-of-intent"],
+  // "Caregiver Letter", not the document's full name: four items in one
+  // dropdown, and the masthead collapses at 1200px as it is.
+  ["Caregiver Letter", "/letter-for-the-caregiver"],
   ["Emergency Sheet", "/emergency-sheet"],
   ["Care Cards", "/care-cards"],
 ] as const;
@@ -213,6 +216,13 @@ export function SiteHeader() {
               className="flex min-h-[52px] items-center border-b border-line px-1 text-[0.9375rem] font-semibold uppercase tracking-[0.09em] text-navy700 hover:text-gold700"
             >
               Letter of Intent
+            </Link>
+            <Link
+              href="/letter-for-the-caregiver"
+              onClick={closeMenu}
+              className="flex min-h-[52px] items-center border-b border-line px-1 text-[0.9375rem] font-semibold uppercase tracking-[0.09em] text-navy700 hover:text-gold700"
+            >
+              Caregiver Letter
             </Link>
             <Link
               href="/care-cards"

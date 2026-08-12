@@ -35,11 +35,13 @@ export const routine: SectionDef = {
       label: "Morning routine",
       placeholder:
         "Wake time, how they like to be woken, bathroom, meds, breakfast, getting dressed, in the order it happens",
+      // Trimmed to the Daily Routine card's budget: the order is what a
+      // stranger needs, so the example keeps the sequence and drops the aside.
       example:
-        "Alex wakes at 6:30 on his own. Don't rush him. He needs ten minutes under " +
-        "the covers listening to the radio before anything else. Meds go in the blue " +
-        "cup with orange juice, never water. Breakfast is the same every day: two " +
+        "Wakes at 6:30 on his own — don't rush him. Ten minutes under the covers " +
+        "with the radio first. Meds in the blue cup with juice, never water. Two " +
         "waffles cut in strips, syrup on the side.",
+      cardLengthHint: 240,
       variants: [
         {
           when: { supportLevel: ["mostlyIndependent"] },
@@ -59,11 +61,21 @@ export const routine: SectionDef = {
       rows: 4,
       label: "Evening and bedtime routine",
       placeholder: "Dinner, wind-down, bath or shower, the bedtime steps, what helps them settle",
+      example:
+        "Dinner at 6. Shower at 8:30 or not at all — towel on the left hook. Lights " +
+        "out at 10 with the fan on; it is the sound, not the air.",
+      cardLengthHint: 240,
       variants: [
         {
           when: { supportLevel: ["mostlyIndependent"] },
           label: "How an evening goes",
           placeholder: "Dinner, television, calls, the wind-down, bedtime and what helps sleep",
+          // Its own example, per the rule in content/types.ts: the base one is
+          // a supported adult's bedtime sequence, and a daughter writing about
+          // her mother should not be shown that under this label.
+          example:
+            "Dinner at 5:30, news at six. She calls my sister most nights. Pills at " +
+            "eight with the tea, then the crossword. Lights out by half nine.",
         },
       ],
     },
@@ -74,6 +86,10 @@ export const routine: SectionDef = {
       label: "Sleep",
       placeholder:
         "Usual hours, what wakes them, what helps them fall back asleep, anything about how their room is set up",
+      example:
+        "Asleep by 10:30, up once around 2. The fan stays on all night. If he is up, " +
+        "the bus timetable settles him faster than talking does.",
+      cardLengthHint: 200,
     },
     {
       id: "food",
@@ -99,6 +115,7 @@ export const routine: SectionDef = {
         "Monday: aide comes 9–1. Wednesday: cardiology every third month. Thursday: " +
         "grocery run, always Giant, always the same list. Sunday: my sister calls at " +
         "4pm and he waits by the phone from 3:45.",
+      cardLengthHint: 220,
     },
     {
       id: "gettingAround",

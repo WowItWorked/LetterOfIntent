@@ -74,6 +74,7 @@ export const routines: SectionDef = {
       help: "How to get from one thing to the next without a fight. The Daily Routine card flags this block.",
       placeholder:
         "e.g., A five-minute warning, then a two-minute warning. “First shoes, then the park.” Never spring a change.",
+      cardLengthHint: 180,
     },
   ],
 };

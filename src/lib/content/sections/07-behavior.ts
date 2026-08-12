@@ -46,11 +46,13 @@ export const behavior: SectionDef = {
       rows: 5,
       label: "What helps most when things escalate",
       help: "Step by step if you can: what to do first, what to say, what space or object helps, and how long it usually takes.",
+      // Trimmed inside cardLengthHint. This one lands on the card a stranger
+      // reads DURING a hard moment, so the example has to model something
+      // scannable, not a paragraph.
       example:
-        "Lower your voice. Never match his volume. One person talks; everyone else " +
-        "steps back. Offer the weighted blanket and his headphones. Say \"You're " +
-        "safe. I'm here. We can wait.\" Then actually wait (it takes about ten " +
-        "minutes). Don't discuss what happened until at least an hour after.",
+        "Lower your voice; never match his. One person talks, everyone else steps " +
+        "back. Offer the weighted blanket and headphones. Say \"You're safe. I'm " +
+        "here.\" Then wait — about ten minutes.",
       openers: ["What helps most is…", "Start by…"],
       cardLengthHint: 260,
     },
@@ -75,13 +77,12 @@ export const behavior: SectionDef = {
       rows: 5,
       label: "Guidance for police and first responders",
       help: "How {name} may react to uniforms, sirens, flashing lights, loud commands, or being touched, and what an officer should do instead. If you've registered with your local police department's voluntary disability registry, say so here.",
+      // Trimmed inside cardLengthHint — 378 characters was half again what the
+      // card holds, and this is the block an officer reads in a doorway.
       example:
-        "Jordan may not respond to verbal commands and may run: that is fear, not " +
-        "defiance. He cannot answer \"What's your name?\" under stress. Please don't " +
-        "touch or restrain him unless lives depend on it; he will fight a hold, and " +
-        "he does not understand handcuffs. One officer, slow voice, lights and " +
-        "sirens off. Ask \"Where is your card?\" He carries an autism ID card in " +
-        "his left pocket.",
+        "He may not answer and may run: that is fear, not defiance. Do not restrain " +
+        "him unless lives depend on it. One officer, slow voice, no lights or " +
+        "sirens. His autism ID card is in his left pocket.",
       cardLengthHint: 260,
     },
   ],

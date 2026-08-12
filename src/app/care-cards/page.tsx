@@ -1,25 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { BUNDLES, INDEX_CARD, type CardKey } from "@/lib/content/cards";
+import { BUNDLES, INDEX_CARD } from "@/lib/content/cards";
+import { CardTag } from "@/components/cards/CardTag";
 import { CardsScreen } from "@/components/cards/CardsScreen";
 import { buttonClasses, buttonStyle } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { HomeCareCards } from "@/components/home/HomeCareCards";
-
-/**
- * Chip labels for the bundle rows — shorter than the full card titles so a
- * row of chips scans as a set, with the topic color carrying identity.
- */
-const CHIP_LABELS: Record<CardKey, string> = {
-  identity: "Identity",
-  emergency: "Emergency",
-  meds: "Medications",
-  behavior: "Behavior",
-  routine: "Routine",
-  food: "Food",
-  care: "Personal Care",
-};
 
 export const metadata: Metadata = {
   title: "Care cards: pocket-size help for your phone",
@@ -48,7 +35,7 @@ export default function CareCardsPage() {
       >
         <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
           <p className="tw-engraved text-xs tracking-[0.22em] text-gold400">
-            Care Cards for your Phone
+            Care cards for your phone
           </p>
           <h1 className="mt-3 font-serif text-[clamp(1.85rem,5.5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
             The letter for the trustee. The cards for the sitter.
@@ -91,16 +78,19 @@ export default function CareCardsPage() {
                 you have already written. Save them to your phone (an album of
                 their own, or marked as favorites) and they are always on hand:
                 message one to tonight&rsquo;s sitter, or send the set to the family
-                group chat. No app, no account, nothing to install.
+                group chat. No app, no online account, nothing to install.
               </p>
               <p className="mt-5 max-w-[62ch] leading-[1.75] text-muted">
                 Like the letter, the cards are free and made entirely on your
                 device. Nothing is uploaded, and we never see a word.
               </p>
             </HomeCareCards>
-            <p className="mx-auto mt-4 max-w-[64ch] text-center text-[0.9375rem] leading-[1.6] text-muted">
-              Shown filled in for Danny, the same example family as the sample
-              documents (invented details, not a real person).
+            {/* The cards themselves are stamped SAMPLE now, so the caption no
+                longer has to explain that they are examples — only that the
+                person is invented. */}
+            <p className="mt-4 flex items-center justify-center gap-2.5 text-[0.9375rem] leading-[1.6] text-muted">
+              <span className="tw-diamond flex-none" aria-hidden="true" />
+              Invented details, not a real person.
             </p>
           </div>
         </div>
@@ -117,8 +107,9 @@ export default function CareCardsPage() {
           </h2>
           <p className="mx-auto mt-4 max-w-[62ch] text-center text-lg leading-[1.7] text-muted">
             A bundle is a list of card keys and nothing more, so a new one is a line of
-            configuration. Families can also hand-pick. Each file downloads as Bonnie
-            &mdash; Emergency Protocol.png, so the camera roll stays legible.
+            configuration. Families can also hand-pick. Each file downloads named for
+            the person &mdash; Danny &mdash; Emergency Protocol.png &mdash; so the
+            camera roll stays legible.
           </p>
 
           {/* One box holding both: the bundle rows on the left, and on the
@@ -150,18 +141,10 @@ export default function CareCardsPage() {
                     </div>
                     <div className="min-w-0">
                       <span className="flex flex-wrap gap-2">
+                        {/* Not decorative here: these chips ARE the row's
+                            content, so they must reach a screen reader. */}
                         {bundle.cards.map((k) => (
-                          <span
-                            key={k}
-                            className="inline-flex items-center gap-2 rounded-full border border-line bg-paper2 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-ink"
-                          >
-                            <span
-                              aria-hidden="true"
-                              className="size-2.5 flex-none rounded-[2px]"
-                              style={{ background: `var(--card-${k})` }}
-                            />
-                            {CHIP_LABELS[k]}
-                          </span>
+                          <CardTag key={k} cardKey={k} decorative={false} />
                         ))}
                       </span>
                       <span className="mt-3 block text-[0.9375rem] leading-[1.6] text-muted">

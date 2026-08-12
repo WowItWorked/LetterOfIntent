@@ -123,6 +123,10 @@ export const person: SectionDef = {
       rows: 3,
       label: "What they cannot abide",
       help: "Being talked about in the third person, being rushed, baby talk, the television at that volume. Say it plainly. It saves everyone a bad first week.",
+      example:
+        "Being talked about while he is standing right there. Baby talk. Anyone " +
+        "touching the backpack.",
+      cardLengthHint: 180,
     },
     {
       id: "importantToKnow",

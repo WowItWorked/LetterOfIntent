@@ -66,8 +66,9 @@ export function HomeCareCards({ children }: { children?: React.ReactNode }) {
         ) : null}
         {cards.length > 0
           ? cards.map((card) => (
-              <div key={card.key} className="flex-none">
+              <div key={card.key} className="relative flex-none">
                 <CareCard card={card} scale={SCALE} />
+                <SampleStamp />
               </div>
             ))
           : HOME_CARD_KEYS.map((key) => (
@@ -80,5 +81,42 @@ export function HomeCareCards({ children }: { children?: React.ReactNode }) {
             ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * The same promise the sample PDFs make, on the same terms: these cards are
+ * real renders of invented data, and a visitor who screenshots one should not
+ * be able to mistake it for their own.
+ *
+ * Matches SampleWatermark in lib/pdf/loi-document.tsx — navy, rotated -30°,
+ * letter-spaced — but sits over the card's pale body rather than its coloured
+ * header, where a low-opacity navy would disappear.
+ *
+ * Drawn as a background image rather than a text node, and that is not a
+ * style preference. axe evaluates colour-contrast on rendered text even when
+ * an ancestor is aria-hidden, so a real <span>SAMPLE</span> at watermark
+ * opacity failed the WCAG gate on every card (measured: 5 serious violations
+ * on /care-cards). A watermark cannot be both legible-at-4.5:1 and a
+ * watermark. Painting it means there is no text to evaluate — and it cannot
+ * be selected or copied out of the card either, which suits a stamp.
+ */
+const STAMP_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324 576">' +
+  '<text x="162" y="300" transform="rotate(-30 162 300)" text-anchor="middle" ' +
+  'font-family="Mulish, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" ' +
+  'letter-spacing="6" fill="#1F2A44" fill-opacity="0.17">SAMPLE</text></svg>';
+
+function SampleStamp() {
+  return (
+    <span
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0"
+      style={{
+        backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(STAMP_SVG)}")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%",
+      }}
+    />
   );
 }

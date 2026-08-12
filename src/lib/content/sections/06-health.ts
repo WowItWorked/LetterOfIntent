@@ -277,6 +277,10 @@ export const health: SectionDef = {
         { value: "Communication device" },
         { value: "Glasses" },
       ],
+      example:
+        "Ear defenders in the front pocket of the backpack — offer them, never put " +
+        "them on him. Picture-card ring on the same clip.",
+      cardLengthHint: 200,
     },
     {
       id: "insurancePlans",

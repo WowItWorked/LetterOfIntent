@@ -7,7 +7,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 export const metadata: Metadata = {
   title: "Privacy & how your data works",
   description:
-    "Everything you type stays on your device. No account, and nothing you write is " +
+    "Everything you type stays on your device. No online account, and nothing you write is " +
     "ever captured. We count page visits and nothing else. Here is exactly how that " +
     "works, in plain words.",
   alternates: { canonical: "/privacy" },
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
             "Your letter is written to this browser's own storage. There is no server that receives it.",
           ],
           [
-            "No account, and no reading",
+            "No online account, and no reading",
             "No sign-in anywhere. We count visits with Google Analytics to see how the tool is used and improve it, but nothing you type into the letter is ever captured.",
           ],
           [

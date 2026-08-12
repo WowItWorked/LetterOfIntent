@@ -119,8 +119,8 @@ export function SiteFooter() {
           <p>{firm.disclaimerShort}</p>
           {firm.advertisingNotice ? <p>{firm.advertisingNotice}</p> : null}
           <p>
-            This tool is free. No account and no email address required, and nothing you
-            type ever leaves your device.
+            This tool is free. No online account and no email address required, and nothing you
+            type ever leaves your device until you decide to share.
           </p>
         </div>
       </div>

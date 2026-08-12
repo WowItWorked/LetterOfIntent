@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   useFieldArray,
   useForm,
+  useWatch,
   type FieldValues,
   type UseFormReturn,
 } from "react-hook-form";
@@ -18,7 +19,9 @@ import type {
 } from "@/lib/content/types";
 import { resolveWording } from "@/lib/content/types";
 import type { LetterMeta, SectionKey } from "@/lib/schema";
-import { fieldMarkerText } from "@/lib/cards/status";
+import { cardLengthNotice, cardsForField, fieldMarkerText } from "@/lib/cards/status";
+import type { CardKey } from "@/lib/content/cards";
+import { CardTag } from "@/components/cards/CardTag";
 import { fieldsForMeta } from "@/lib/content/config";
 import {
   defaultValuesForSection,
@@ -116,8 +119,16 @@ export function SectionForm({ def }: { def: SectionDef }) {
     >
       {visibleFields.map((field) => {
         const marker = fieldMarkerText(def.key, field.id);
+        const cardKeys = cardsForField(def.key, field.id);
         return field.kind === "repeater" ? (
-          <RepeaterControl key={field.id} field={field} form={form} name={name} marker={marker} />
+          <RepeaterControl
+            key={field.id}
+            field={field}
+            form={form}
+            name={name}
+            marker={marker}
+            cardKeys={cardKeys}
+          />
         ) : (
           <ScalarControl
             key={field.id}
@@ -126,6 +137,8 @@ export function SectionForm({ def }: { def: SectionDef }) {
             name={name}
             meta={meta}
             marker={marker}
+            cardKeys={cardKeys}
+            sectionKey={def.key}
           />
         );
       })}
@@ -141,18 +154,36 @@ function ScalarControl({
   name,
   meta,
   marker,
+  cardKeys,
+  sectionKey,
 }: {
   field: ScalarField;
   form: UseFormReturn<FieldValues>;
   name: string;
   meta: LetterMeta;
   marker?: string;
+  cardKeys?: readonly CardKey[];
+  sectionKey: SectionKey;
 }) {
   const id = `f-${field.id}`;
   const markerId = `${id}-card`;
   const helpId = `${id}-help`;
   const hintId = `${id}-hint`;
+  const cardNoteId = `${id}-cardnote`;
   const hint = errMessage(form.formState.errors, [field.id]);
+  // useWatch rather than form.watch: watch() hands back a new function every
+  // render, which the React Compiler refuses to memoize around (the warning
+  // already standing on this file). Subscribing to this one field also keeps
+  // typing in one answer from re-rendering the whole section.
+  const typed = useWatch({ control: form.control, name: field.id });
+  const cardNote = field.cardLengthHint
+    ? cardLengthNotice(
+        sectionKey,
+        field.id,
+        String(typed ?? "").trim().length,
+        field.cardLengthHint
+      )
+    : undefined;
   // Adaptive wording: one stored field, the register this configuration
   // deserves — and the example always matches the label the family sees.
   const wording = resolveWording(field, meta);
@@ -160,7 +191,12 @@ function ScalarControl({
   const help = wording.help ? fillName(wording.help, name) : undefined;
   const placeholder = wording.placeholder ? fillName(wording.placeholder, name) : undefined;
   const example = wording.example ? fillName(wording.example, name) : undefined;
-  const aria = describedBy(help && helpId, marker && markerId, hint && hintId);
+  const aria = describedBy(
+    help && helpId,
+    marker && markerId,
+    hint && hintId,
+    cardNote && cardNoteId
+  );
 
   /** Appends chip/opener text to the field, never replacing what is there. */
   const appendText = (text: string, separator: string) => {
@@ -175,10 +211,13 @@ function ScalarControl({
       label={label}
       marker={marker}
       markerId={markerId}
+      cardKeys={cardKeys}
       help={help}
       helpId={helpId}
       hint={hint}
       hintId={hintId}
+      cardNote={cardNote}
+      cardNoteId={cardNoteId}
       example={example}
     >
       {field.kind === "textarea" ? (
@@ -245,11 +284,13 @@ function RepeaterControl({
   form,
   name,
   marker,
+  cardKeys,
 }: {
   field: RepeaterField;
   form: UseFormReturn<FieldValues>;
   name: string;
   marker?: string;
+  cardKeys?: readonly CardKey[];
 }) {
   const { fields: items, append, remove } = useFieldArray({
     control: form.control,
@@ -362,10 +403,18 @@ function RepeaterControl({
 
   return (
     <fieldset>
-      <legend className="font-medium text-ink">{label}</legend>
-      {/* Once for the whole group: SOURCES sends records to cards whole, so
-          repeating the same line inside every record would only add noise. */}
-      {marker ? <p className="mt-1 text-[0.8125rem] text-muted">{marker}</p> : null}
+      {/* Tags on the legend line, as on a scalar question. Once for the whole
+          group: SOURCES sends records to cards whole, so repeating the tags
+          inside every record would only add noise. */}
+      <legend className="font-medium text-ink">
+        <span className="inline-flex flex-wrap items-baseline gap-x-2.5 gap-y-1.5">
+          <span>{label}</span>
+          {cardKeys?.map((key) => (
+            <CardTag key={key} cardKey={key} />
+          ))}
+        </span>
+      </legend>
+      {marker ? <p className="sr-only">{marker}</p> : null}
       {help ? <p className="mt-1 max-w-prose text-sm text-muted">{help}</p> : null}
 
       <div className="mt-3 space-y-4">

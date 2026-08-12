@@ -130,10 +130,40 @@ describe("the sample registry", () => {
     }
   });
 
-  it("keeps the legacy slugs the site links to", () => {
-    expect(sampleBySlug("letter-of-intent-disabilities")).toBeDefined();
-    expect(sampleBySlug("emergency-sheet-disabilities")).toBeDefined();
-    expect(sampleBySlug("letter-of-intent-anyone")).toBeDefined();
+  /**
+   * Every slug the site's own pages link to must resolve. These are the five
+   * live names, in {document}-{family} form.
+   *
+   * Three older names — "letter-for-the-caregiver", "letter-of-intent-anyone",
+   * and "emergency-sheet-anyone" — deliberately do NOT resolve here. They are
+   * handled a layer up, by permanent redirects in next.config.ts, so the
+   * registry holds one name per document rather than a growing pile of
+   * aliases. Two of them had also stopped being true:
+   * "letter-of-intent-anyone" served the caregiver letter.
+   */
+  it("resolves every slug the site links to", () => {
+    for (const slug of [
+      "letter-of-intent-disabilities",
+      "letter-for-the-caregiver-disabilities",
+      "emergency-sheet-disabilities",
+      "letter-for-the-caregiver-aging-parent",
+      "emergency-sheet-aging-parent",
+    ]) {
+      expect(sampleBySlug(slug), slug).toBeDefined();
+    }
+    expect(SAMPLE_DOCS).toHaveLength(5);
+  });
+
+  it("does not keep the renamed slugs as registry aliases", () => {
+    // next.config.ts redirects these; resolving them here too would mean two
+    // URLs serving one document, which is what the rename was undoing.
+    for (const old of [
+      "letter-for-the-caregiver",
+      "letter-of-intent-anyone",
+      "emergency-sheet-anyone",
+    ]) {
+      expect(sampleBySlug(old), old).toBeUndefined();
+    }
   });
 
   it("the caregiver-only family never offers a trustee letter", () => {

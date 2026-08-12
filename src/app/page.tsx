@@ -99,15 +99,24 @@ const DELIVERABLES = [
     blurb:
       "The day-to-day letter: routines, communication, behavior, and health as it is actually lived. For the aide, the sitter, or the relative who steps in.",
     href: "/letter-for-the-caregiver",
-    cta: "Learn more",
+    // Each tile names what is on the other side of the click. Three identical
+    // "Learn more" links in a row tell a reader nothing about which one to
+    // follow, and a screen-reader user pulling up a list of links hears the
+    // same phrase three times with no way to tell them apart.
+    cta: "See what it covers",
     art: "caregiver" as const,
+    // Two letter tiles side by side invite exactly one wrong conclusion: that
+    // this is a second form to fill out. It is the same form — the answers
+    // are written twice, for two readers. Only this tile carries the note,
+    // because only this tile creates the doubt.
+    note: "Same form, different audience.",
   },
   {
     title: "The Emergency Information Sheet",
     blurb:
       "One page with the essentials: allergies, medications, who to call. For the fridge, the school office, the sitter, the ER.",
     href: "/emergency-sheet",
-    cta: "Learn more",
+    cta: "Read the one page",
     art: "sheet" as const,
   },
   {
@@ -302,6 +311,12 @@ export default function HomePage() {
                     <span className="mt-2 text-[0.9375rem] leading-[1.7] text-body">
                       {d.blurb}
                     </span>
+                    {d.note ? (
+                      <span className="mt-3 flex gap-2.5 text-[0.875rem] leading-[1.55] text-muted">
+                        <span className="tw-diamond mt-[7px] flex-none" aria-hidden="true" />
+                        <span className="flex-1">{d.note}</span>
+                      </span>
+                    ) : null}
                     <span className="mt-auto flex items-center gap-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
                       {d.cta}
                       <svg

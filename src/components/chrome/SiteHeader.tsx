@@ -27,7 +27,7 @@ const COMPACT_BELOW = 1200;
  * collapse into a hamburger menu, which does list Privacy: a menu is a site
  * map, not a row of competing buttons.
  */
-/** The three document pages, shared by the dropdown and the mobile menu. */
+/** The four document pages, shared by the dropdown and the mobile menu. */
 const DOCUMENT_LINKS = [
   ["Letter of Intent", "/letter-of-intent"],
   // "Caregiver Letter", not the document's full name: four items in one
@@ -35,6 +35,23 @@ const DOCUMENT_LINKS = [
   ["Caregiver Letter", "/letter-for-the-caregiver"],
   ["Emergency Sheet", "/emergency-sheet"],
   ["Care Cards", "/care-cards"],
+] as const;
+
+/**
+ * What you can do with what you have already written, as opposed to what the
+ * pages above explain.
+ *
+ * Review & Download goes to /letter/review, not to the your-data card that
+ * also hands out files: review is where the documents are built and seen
+ * before they are saved, and it is where every other route into them already
+ * points (the wizard, the reading view, the cards screen, the resume card).
+ *
+ * "Back up or delete" is the phrase the footer already uses for /your-data —
+ * one name for one destination, rather than a second wording to reconcile.
+ */
+const DATA_LINKS = [
+  ["Back up or delete", "/your-data"],
+  ["Review & Download", "/letter/review"],
 ] as const;
 
 export function SiteHeader() {
@@ -162,6 +179,20 @@ export function SiteHeader() {
                         {label}
                       </Link>
                     ))}
+                    {/* A rule, not a heading: the two groups answer different
+                        questions — what these documents are, and what to do
+                        with the one you have written. */}
+                    <hr className="my-1.5 h-px border-0 bg-line" />
+                    {DATA_LINKS.map(([label, href]) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setDocsOpen(false)}
+                        className="block px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.09em] text-navy700 hover:bg-paper2 hover:text-gold700"
+                      >
+                        {label}
+                      </Link>
+                    ))}
                   </div>
                 ) : null}
               </div>
@@ -238,6 +269,19 @@ export function SiteHeader() {
             >
               Emergency sheet
             </Link>
+            {/* Same two data links as the desktop dropdown. This menu spells
+                its items out rather than mapping the arrays, so anything added
+                to DATA_LINKS has to be added here too. */}
+            {DATA_LINKS.map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={closeMenu}
+                className="flex min-h-[52px] items-center border-b border-line px-1 text-[0.9375rem] font-semibold uppercase tracking-[0.09em] text-navy700 hover:text-gold700"
+              >
+                {label}
+              </Link>
+            ))}
             <Link
               href="/#pass-it-along"
               onClick={closeMenu}

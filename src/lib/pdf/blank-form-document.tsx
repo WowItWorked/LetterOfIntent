@@ -176,6 +176,88 @@ function chunkRows(
   return chunks;
 }
 
+/* ------------------------------------------- wording the paper path cannot keep */
+
+/**
+ * Item fields that exist only to steer a document this form does not make.
+ * "Keep off shareable cards" has nothing to keep anything off: filling in a
+ * PDF produces the letter and nothing else.
+ */
+const OMIT_ITEM_IDS = new Set(["keepOffCards"]);
+
+/**
+ * The two labels that name another document. Everything else is handled by
+ * scrubbing whole sentences out of the help text, but a label is a single
+ * phrase with nowhere to cut, so these are rewritten by hand.
+ */
+const ITEM_LABEL_OVERRIDES: Record<string, string> = {
+  "contacts.roles": "This person is",
+  "contacts.emergency": "Emergency contact",
+};
+
+/**
+ * Keyed by section and field. Only one entry, and it is a disambiguation
+ * rather than a removal: "Where the cards, records, and directives are kept"
+ * means the insurance cards, which is obvious in a builder that has just been
+ * talking about insurance and not obvious at all on a blank form that has been
+ * talking about care cards. Naming them is clearer for every reader.
+ */
+const FIELD_LABEL_OVERRIDES: Record<string, string> = {
+  "health.recordsLocation": "Where the insurance cards, records, and directives are kept",
+};
+
+/**
+ * Prose that promises something only the builder does.
+ *
+ * The catalogue is written for the web form, where "this prints on the
+ * Emergency card" is simply true. On a form somebody fills in by hand it is a
+ * promise about a document that will never exist, and it sends a reader
+ * looking for cards they were never going to get.
+ *
+ * Deliberately narrow rather than /card/i, because the catalogue also contains
+ * cards that have nothing to do with this app — "the card game" in a weekly
+ * routine, "the insurance cards" in where-records-are-kept — and losing those
+ * would quietly damage real questions. The lookahead spares the card game; the
+ * insurance cards survive because "the cards" only matches as a bare phrase.
+ */
+const NAMES_ANOTHER_DOCUMENT =
+  /\b(?:emergency|medications|identity\s*&\s*contacts|daily routine|allergies|personal care|communication)\s+cards?\b|\bshareable cards?\b|\bcare cards?\b|\bthe cards?\b(?!\s+game)|\bemergency sheet\b/i;
+
+/**
+ * Drops whole sentences that name another document, keeping the rest of the
+ * guidance. Sentence-level because most of this help is one useful sentence
+ * plus one about where the answer prints.
+ */
+export function scrubHelp(text: string | undefined): string | undefined {
+  if (!text) return undefined;
+  const kept = text
+    .split(/(?<=[.!?])\s+/)
+    .filter((sentence) => !NAMES_ANOTHER_DOCUMENT.test(sentence));
+  const out = kept.join(" ").trim();
+  return out.length > 0 ? out : undefined;
+}
+
+/** Every label and help string a blank form will print, for the guard test. */
+export function blankFormStrings(projection: LetterProjection): string[] {
+  const out: string[] = [];
+  for (const def of projectedSections(projection)) {
+    out.push(def.title, def.navTitle);
+    for (const field of def.fields) {
+      out.push(FIELD_LABEL_OVERRIDES[`${def.key}.${field.id}`] ?? field.label);
+      const help = scrubHelp(field.help);
+      if (help) out.push(help);
+      if (field.kind !== "repeater") continue;
+      for (const item of field.itemFields) {
+        if (OMIT_ITEM_IDS.has(item.id)) continue;
+        out.push(ITEM_LABEL_OVERRIDES[`${field.id}.${item.id}`] ?? item.label);
+        const itemHelp = optionHint(item) ?? scrubHelp(item.help);
+        if (itemHelp) out.push(itemHelp);
+      }
+    }
+  }
+  return out;
+}
+
 /* ----------------------------------------------------------------- styles */
 
 const s = StyleSheet.create({
@@ -370,20 +452,22 @@ function ItemField({
   item,
   name,
   textareaLines,
+  label,
 }: {
   item: RepeaterItemField;
   name: string;
   textareaLines: number;
+  label: string;
 }) {
   if (item.kind === "checkbox") {
     return (
       <View style={s.checkRow}>
         <View style={s.checkSquare} />
-        <Text style={s.itemLabel}>{item.label}</Text>
+        <Text style={s.itemLabel}>{label}</Text>
       </View>
     );
   }
-  const hint = optionHint(item) ?? item.help;
+  const hint = optionHint(item) ?? scrubHelp(item.help);
   const boxH = itemBoxHeight(item, textareaLines);
   return (
     // wrap={false} keeps the label with its box; minPresenceAhead is what
@@ -395,7 +479,7 @@ function ItemField({
     // invisible, impossible to click. Reserving the height up front means the
     // break happens first and the item is laid out once, in its final place.
     <View style={{ marginTop: 6 }} wrap={false}>
-      <Text style={s.itemLabel}>{item.label}</Text>
+      <Text style={s.itemLabel}>{label}</Text>
       {hint ? <Text style={s.itemHelp}>{hint}</Text> : null}
       <Box name={name} height={boxH} multiline={item.kind === "textarea"} />
     </View>
@@ -408,7 +492,7 @@ function Repeater({ field, sectionKey }: { field: FieldDef; sectionKey: string }
   // Half-width item fields pair up, exactly as they do in the web form.
   const rows: RepeaterItemField[][] = [];
   let pending: RepeaterItemField | null = null;
-  for (const item of field.itemFields) {
+  for (const item of field.itemFields.filter((f) => !OMIT_ITEM_IDS.has(f.id))) {
     if (item.width === "half" && item.kind !== "checkbox") {
       if (pending) {
         rows.push([pending, item]);
@@ -476,8 +560,8 @@ function Repeater({ field, sectionKey }: { field: FieldDef; sectionKey: string }
   return (
     <>
       <View style={s.field} wrap={false}>
-        <Text style={s.label}>{field.label}</Text>
-        {field.help ? <Text style={s.help}>{field.help}</Text> : null}
+        <Text style={s.label}>{FIELD_LABEL_OVERRIDES[`${sectionKey}.${field.id}`] ?? field.label}</Text>
+        {scrubHelp(field.help) ? <Text style={s.help}>{scrubHelp(field.help)}</Text> : null}
       </View>
       {Array.from({ length: count }, (_, i) =>
         chunks.map((chunk, c) => (
@@ -494,6 +578,9 @@ function Repeater({ field, sectionKey }: { field: FieldDef; sectionKey: string }
                       item={item}
                       name={widgetName([sectionKey, field.id, i, item.id])}
                       textareaLines={textareaLines}
+                      label={
+                        ITEM_LABEL_OVERRIDES[`${field.id}.${item.id}`] ?? item.label
+                      }
                     />
                   </View>
                 ))}
@@ -513,8 +600,8 @@ function Field({ field, sectionKey }: { field: FieldDef; sectionKey: string }) {
   const boxH = boxHeight(field);
   return (
     <View style={s.field} wrap={false}>
-      <Text style={s.label}>{field.label}</Text>
-      {field.help ? <Text style={s.help}>{field.help}</Text> : null}
+      <Text style={s.label}>{FIELD_LABEL_OVERRIDES[`${sectionKey}.${field.id}`] ?? field.label}</Text>
+      {scrubHelp(field.help) ? <Text style={s.help}>{scrubHelp(field.help)}</Text> : null}
       <Box
         name={widgetName([sectionKey, field.id])}
         height={boxH}

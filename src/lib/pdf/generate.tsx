@@ -214,14 +214,21 @@ export type BlankFormKind = "letter" | "caregiver" | "emergency";
  * No watermark: unlike the samples, this document is meant to be used.
  */
 export async function generateBlankFormPdfBlob(kind: BlankFormKind): Promise<Blob> {
+  // Loaded here rather than inside the document: the PDF layout engine cannot
+  // await a fetch mid-render, so the image has to arrive as data already.
+  const logo = await loadLogo(firm.appLogoPath);
   if (kind === "emergency") {
     return pdf(
-      <BlankEmergencyForm footer="Emergency Information Sheet · blank form" />
+      <BlankEmergencyForm
+        logo={logo}
+        footer="Emergency Information Sheet · blank form"
+      />
     ).toBlob();
   }
   if (kind === "caregiver") {
     return pdf(
       <BlankLetterForm
+        logo={logo}
         projection={CAREGIVER_PROJECTION}
         eyebrow="Blank fillable form"
         title="The Letter for the Caregiver"
@@ -235,6 +242,7 @@ export async function generateBlankFormPdfBlob(kind: BlankFormKind): Promise<Blo
   }
   return pdf(
     <BlankLetterForm
+      logo={logo}
       projection={TRUSTEE_PROJECTION}
       eyebrow="Blank fillable form"
       title="The Letter of Intent"

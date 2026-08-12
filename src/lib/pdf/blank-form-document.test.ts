@@ -76,6 +76,17 @@ describe("what the blank forms print", () => {
       );
     });
 
+    it(`${name} never prints the {name} placeholder`, () => {
+      // The catalogue writes "{name}'s typical day" because the builder knows
+      // the name by then. A form does not, and the token reached the page as
+      // literal braces. Prose says "their" now, and the name is asked once in
+      // a header field repeated on every page.
+      const offenders = blankFormStrings(projection).filter((line) =>
+        /\{name\}/.test(line)
+      );
+      expect(offenders).toEqual([]);
+    });
+
     it(`${name} asks nothing whose only purpose is steering the cards`, () => {
       // "Keep off shareable cards" cannot mean anything here: there are no
       // cards to keep it off. A checkbox that does nothing is worse than a

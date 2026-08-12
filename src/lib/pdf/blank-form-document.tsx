@@ -1,11 +1,15 @@
 import {
+  Checkbox,
   Document,
+  Image,
   Page,
+  Select,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "@react-pdf/renderer";
+import type { LoadedImage } from "./generate";
 import { allSections } from "@/lib/content/config";
 import type { FieldDef, RepeaterItemField, SectionDef } from "@/lib/content/types";
 import type { LetterProjection } from "./projections";
@@ -97,10 +101,14 @@ function itemBoxHeight(item: RepeaterItemField, textareaLines: number): number {
   return item.kind === "textarea" ? textareaLines * LINE_H + 10 : SINGLE_LINE;
 }
 
-/** Height of one item row: label, optional hint, and the box. */
+/** Height of one item row: label, optional hint, and whatever answers it. */
 function itemHeight(item: RepeaterItemField, textareaLines: number): number {
   if (item.kind === "checkbox") return 17;
-  return 6 + 11 + 10 + 4 + itemBoxHeight(item, textareaLines);
+  const head = 6 + 11 + 10; // margin, label, hint
+  // A checkbox per option, so the question grows with the number of answers.
+  if (item.kind === "multiselect") return head + 3 + item.options.length * 13;
+  if (item.kind === "select") return head + 4 + SINGLE_LINE;
+  return head + 4 + itemBoxHeight(item, textareaLines);
 }
 
 /**
@@ -183,7 +191,37 @@ function chunkRows(
  * "Keep off shareable cards" has nothing to keep anything off: filling in a
  * PDF produces the letter and nothing else.
  */
-const OMIT_ITEM_IDS = new Set(["keepOffCards"]);
+const OMIT_ITEM_IDS = new Set([
+  "keepOffCards",
+  // "Emergency contact: include on the emergency sheet" — the whole question
+  // is a routing instruction for a document this form does not make. Who to
+  // call first is asked directly in Family & support.
+  "emergency",
+]);
+
+/**
+ * The person's name, asked once and repeated everywhere.
+ *
+ * The catalogue writes questions as "{name}'s typical day", because the
+ * builder knows the name by the time it asks. A form does not, and printing
+ * the placeholder raw is how "{name}'s" ended up on the page.
+ *
+ * Two PDF-native answers, together. Prose drops to "their", which reads
+ * correctly with no name at all; and every section page carries a small
+ * name box in its header. All those boxes share one field name — which in
+ * PDF means one value — so typing the name on any page writes it on all of
+ * them at once. It is the closest a static document gets to the builder
+ * knowing who it is asking about.
+ */
+const NAME_FIELD = "person.preferredName";
+
+/** Replaces the catalogue's {name} token with wording that needs no name. */
+function withoutNameToken(text: string): string {
+  return text
+    .replace(/\{name\}'s/g, "their")
+    .replace(/\{name\}’s/g, "their")
+    .replace(/\{name\}/g, "them");
+}
 
 /**
  * The two labels that name another document. Everything else is handled by
@@ -240,18 +278,24 @@ export function scrubHelp(text: string | undefined): string | undefined {
 /** Every label and help string a blank form will print, for the guard test. */
 export function blankFormStrings(projection: LetterProjection): string[] {
   const out: string[] = [];
+  const push = (text: string | undefined) => {
+    if (text) out.push(withoutNameToken(text));
+  };
   for (const def of projectedSections(projection)) {
-    out.push(def.title, def.navTitle);
+    push(def.title);
+    push(def.navTitle);
     for (const field of def.fields) {
-      out.push(FIELD_LABEL_OVERRIDES[`${def.key}.${field.id}`] ?? field.label);
-      const help = scrubHelp(field.help);
-      if (help) out.push(help);
+      push(FIELD_LABEL_OVERRIDES[`${def.key}.${field.id}`] ?? field.label);
+      push(scrubHelp(field.help));
+      push(scrubHelp(field.example));
       if (field.kind !== "repeater") continue;
       for (const item of field.itemFields) {
         if (OMIT_ITEM_IDS.has(item.id)) continue;
-        out.push(ITEM_LABEL_OVERRIDES[`${field.id}.${item.id}`] ?? item.label);
-        const itemHelp = optionHint(item) ?? scrubHelp(item.help);
-        if (itemHelp) out.push(itemHelp);
+        push(ITEM_LABEL_OVERRIDES[`${field.id}.${item.id}`] ?? item.label);
+        push(itemHint(item));
+        if (item.kind === "select" || item.kind === "multiselect") {
+          for (const option of item.options) push(option.label);
+        }
       }
     }
   }
@@ -375,8 +419,32 @@ const s = StyleSheet.create({
   itemHelp: { fontSize: 7.5, color: FAINT, marginTop: 1 },
   row: { flexDirection: "row", gap: 8 },
   half: { flex: 1 },
-  checkRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 6 },
-  checkSquare: { width: 9, height: 9, borderWidth: 1, borderColor: NAVY },
+  checkRow: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 6 },
+  optionRow: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 3 },
+  optionBox: { width: 10, height: 10 },
+  optionLabel: { fontSize: 8.5, color: INK, flex: 1 },
+  example: { marginTop: 3, fontSize: 8, color: FAINT, lineHeight: 1.5 },
+  exampleTag: { fontFamily: SANS, fontWeight: 600, color: GOLD_DEEP },
+
+  /* the person's name, repeated in every section header */
+  nameBar: { flexDirection: "row", alignItems: "center", gap: 7, marginBottom: 10 },
+  nameLabel: {
+    fontFamily: SANS,
+    fontSize: 7.5,
+    letterSpacing: 1.2,
+    color: FAINT,
+    textTransform: "uppercase",
+  },
+  nameBox: {
+    flex: 1,
+    height: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: RULE_ON_PAPER,
+    paddingHorizontal: 4,
+  },
+
+  /* branding */
+  masthead: { alignItems: "center", marginBottom: 20 },
 
   /* footer */
   footer: {
@@ -389,17 +457,45 @@ const s = StyleSheet.create({
     fontSize: 7.5,
     color: FAINT,
   },
+  footerSite: { color: GOLD_DEEP },
 });
 
 /* ------------------------------------------------------------------ parts */
+
+/**
+ * The site address on every page, because these pages travel.
+ *
+ * A blank form gets printed, photocopied, and handed to a sibling who was not
+ * in the conversation where it came up. Whoever ends up holding page 31 should
+ * be able to find where it came from — and, if the fixed boxes are not working
+ * for them, the builder that has no such limit.
+ */
+const SITE = "www.myletterofintent.com";
 
 function Footer({ label }: { label: string }) {
   return (
     <View style={s.footer} fixed>
       <Text>{label}</Text>
+      <Text style={s.footerSite}>{SITE}</Text>
       <Text
         render={({ pageNumber, totalPages }) => `${pageNumber} of ${totalPages}`}
       />
+    </View>
+  );
+}
+
+/**
+ * The masthead, on the cover only. The logo is passed in rather than fetched
+ * here: this component renders inside the PDF layout engine, which has no way
+ * to await a network round trip mid-render, so generate.tsx loads it first —
+ * the same arrangement the letters use.
+ */
+function Masthead({ logo }: { logo?: LoadedImage }) {
+  if (!logo) return null;
+  return (
+    <View style={s.masthead}>
+      {/* eslint-disable-next-line jsx-a11y/alt-text */}
+      <Image src={logo.dataUrl} style={{ width: 150 }} />
     </View>
   );
 }
@@ -440,12 +536,46 @@ function Box({
   );
 }
 
-/** A select's options are printed rather than made a dropdown widget. */
-function optionHint(item: RepeaterItemField): string | undefined {
-  if (item.kind === "select" || item.kind === "multiselect") {
-    return item.options.map((o) => o.label).join("  ·  ");
-  }
-  return undefined;
+/** Help for an item, minus anything naming a document this form cannot make. */
+function itemHint(item: RepeaterItemField): string | undefined {
+  return scrubHelp(item.help);
+}
+
+/**
+ * A closed set of answers, one real checkbox each.
+ *
+ * The catalogue's options used to be printed as a run of prose — "First call ·
+ * Can make medical decisions · Legal guardian" — which is a list of things a
+ * reader can see and not one they can answer. On paper an option needs a box
+ * beside it, and in a PDF that box should be a widget, not a drawing.
+ *
+ * Every option gets its own field, named for the option, because that is what
+ * a checkbox is in PDF: one field with an on state and an off state. A single
+ * "roles" field could only ever hold one answer, and several of these
+ * questions are genuinely multiple-answer.
+ */
+function OptionBoxes({
+  options,
+  name,
+}: {
+  options: readonly { value: string; label: string }[];
+  name: string;
+}) {
+  return (
+    <View style={{ marginTop: 3 }}>
+      {options.map((o) => (
+        <View key={o.value} style={s.optionRow}>
+          <Checkbox
+            name={`${name}.${o.value}`}
+            style={s.optionBox}
+            borderColor={NAVY}
+            xMark
+          />
+          <Text style={s.optionLabel}>{o.label}</Text>
+        </View>
+      ))}
+    </View>
+  );
 }
 
 function ItemField({
@@ -459,25 +589,52 @@ function ItemField({
   textareaLines: number;
   label: string;
 }) {
+  // A real widget, not a drawn square. The square printed, which made it look
+  // like a form; it could not be clicked, which meant it was not one.
   if (item.kind === "checkbox") {
     return (
-      <View style={s.checkRow}>
-        <View style={s.checkSquare} />
+      <View style={s.checkRow} wrap={false}>
+        <Checkbox name={name} style={s.optionBox} borderColor={NAVY} xMark />
         <Text style={s.itemLabel}>{label}</Text>
       </View>
     );
   }
-  const hint = optionHint(item) ?? scrubHelp(item.help);
+
+  const hint = itemHint(item);
+
+  if (item.kind === "multiselect") {
+    return (
+      <View style={{ marginTop: 6 }} wrap={false}>
+        <Text style={s.itemLabel}>{label}</Text>
+        {hint ? <Text style={s.itemHelp}>{hint}</Text> : null}
+        <OptionBoxes options={item.options} name={name} />
+      </View>
+    );
+  }
+
+  if (item.kind === "select") {
+    return (
+      <View style={{ marginTop: 6 }} wrap={false}>
+        <Text style={s.itemLabel}>{label}</Text>
+        {hint ? <Text style={s.itemHelp}>{hint}</Text> : null}
+        {/* A real dropdown. edit={false} keeps it to the listed answers, which
+            is what a select means; noSpell is required alongside it by the
+            component's own prop types. */}
+        <View style={{ ...s.box, height: SINGLE_LINE }}>
+          <Select
+            name={name}
+            select={item.options.map((o) => o.label)}
+            edit={false}
+            noSpell
+            style={{ ...s.input, height: SINGLE_LINE - 8 }}
+          />
+        </View>
+      </View>
+    );
+  }
+
   const boxH = itemBoxHeight(item, textareaLines);
   return (
-    // wrap={false} keeps the label with its box; minPresenceAhead is what
-    // actually saves the widget. A record may be taller than a page and has to
-    // be allowed to break, so items meet page boundaries constantly — and
-    // wrap={false} alone only moves the drawn box. The annotation rectangle is
-    // still written at the position the item had BEFORE the move, so the field
-    // arrives clipped to whatever was left at the bottom of the page: 2pt tall,
-    // invisible, impossible to click. Reserving the height up front means the
-    // break happens first and the item is laid out once, in its final place.
     <View style={{ marginTop: 6 }} wrap={false}>
       <Text style={s.itemLabel}>{label}</Text>
       {hint ? <Text style={s.itemHelp}>{hint}</Text> : null}
@@ -598,15 +755,32 @@ function Field({ field, sectionKey }: { field: FieldDef; sectionKey: string }) {
     return <Repeater field={field} sectionKey={sectionKey} />;
   }
   const boxH = boxHeight(field);
+  const label = FIELD_LABEL_OVERRIDES[`${sectionKey}.${field.id}`] ?? field.label;
+  const help = scrubHelp(field.help);
+  const example = scrubHelp(field.example);
   return (
     <View style={s.field} wrap={false}>
-      <Text style={s.label}>{FIELD_LABEL_OVERRIDES[`${sectionKey}.${field.id}`] ?? field.label}</Text>
-      {scrubHelp(field.help) ? <Text style={s.help}>{scrubHelp(field.help)}</Text> : null}
+      <Text style={s.label}>{withoutNameToken(label)}</Text>
+      {help ? <Text style={s.help}>{withoutNameToken(help)}</Text> : null}
       <Box
         name={widgetName([sectionKey, field.id])}
         height={boxH}
         multiline={field.kind === "textarea"}
       />
+      {/* The example, which the builder keeps behind a "See an example"
+          disclosure. There is nothing to disclose on paper and no second
+          click to spend, and the example is most of what makes a hard
+          question answerable — it is the difference between "Behavior: what
+          helps" and knowing that the answer wanted is "sit down, stop
+          talking, wait". It goes under the box so it never crowds the
+          question, and it is set quietly so nobody mistakes it for their own
+          words. */}
+      {example ? (
+        <Text style={s.example}>
+          <Text style={s.exampleTag}>For example: </Text>
+          {withoutNameToken(example)}
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -624,13 +798,16 @@ function Cover({
   eyebrow,
   title,
   lead,
+  logo,
 }: {
   eyebrow: string;
   title: string;
   lead: string;
+  logo?: LoadedImage;
 }) {
   return (
     <>
+      <Masthead logo={logo} />
       <View style={s.coverRule} />
       <Text style={s.eyebrow}>{eyebrow}</Text>
       <Text style={s.coverTitle}>{title}</Text>
@@ -656,6 +833,7 @@ function Cover({
 
 export interface BlankFormProps {
   projection: LetterProjection;
+  logo?: LoadedImage;
   eyebrow: string;
   title: string;
   lead: string;
@@ -679,6 +857,7 @@ function projectedSections(projection: LetterProjection): SectionDef[] {
 
 export function BlankLetterForm({
   projection,
+  logo,
   eyebrow,
   title,
   lead,
@@ -690,7 +869,7 @@ export function BlankLetterForm({
   return (
     <Document title={title} author="My Letter of Intent">
       <Page size="LETTER" style={s.page}>
-        <Cover eyebrow={eyebrow} title={title} lead={lead} />
+        <Cover eyebrow={eyebrow} title={title} lead={lead} logo={logo} />
         <Footer label={footer} />
       </Page>
 
@@ -726,10 +905,24 @@ export function BlankLetterForm({
         ];
         return groups.map((fields, g) => (
           <Page key={`${def.key}-${g}`} size="LETTER" style={s.page}>
+            {/* One field name, printed on every page. In PDF a name IS the
+                value, so filling this in anywhere fills it in everywhere —
+                the person is named once and their name then appears at the
+                head of all fifty pages. */}
+            <View style={s.nameBar}>
+              <Text style={s.nameLabel}>This letter is about</Text>
+              <View style={s.nameBox}>
+                <TextInput
+                  name={NAME_FIELD}
+                  fontSize={10}
+                  style={{ ...s.input, height: 14 }}
+                />
+              </View>
+            </View>
             <View style={s.sectionHead}>
-              <Text style={s.eyebrow}>{def.navTitle.replace(/\{name\}/g, "them")}</Text>
+              <Text style={s.eyebrow}>{withoutNameToken(def.navTitle)}</Text>
               <Text style={s.sectionTitle}>
-                {def.title.replace(/\{name\}/g, "them")}
+                {withoutNameToken(def.title)}
                 {g > 0 ? ", continued" : ""}
               </Text>
               <View style={s.sectionRule} />
@@ -813,12 +1006,19 @@ const EMERGENCY_BOXES: readonly EmergencyBox[] = [
   },
 ];
 
-export function BlankEmergencyForm({ footer }: { footer: string }) {
+export function BlankEmergencyForm({
+  footer,
+  logo,
+}: {
+  footer: string;
+  logo?: LoadedImage;
+}) {
   registerBrandFonts();
   return (
     <Document title="Emergency Information Sheet — blank form" author="My Letter of Intent">
       <Page size="LETTER" style={s.page}>
         <Cover
+          logo={logo}
           eyebrow="Blank fillable form"
           title="Emergency Information Sheet"
           lead={

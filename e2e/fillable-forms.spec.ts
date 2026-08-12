@@ -30,6 +30,8 @@ interface Widget {
   name: string;
   height: number;
   width: number;
+  /** PDF field type: Tx text, Btn checkbox, Ch dropdown. */
+  kind: string;
 }
 
 /**
@@ -53,6 +55,7 @@ function widgets(buf: Buffer): Widget[] {
     if (!rect || !name) continue;
     out.push({
       name: name[1],
+      kind: body.match(/\/FT\s*\/(\w+)/)?.[1] ?? "?",
       width: Math.abs(Number(rect[3]) - Number(rect[1])),
       height: Math.abs(Number(rect[4]) - Number(rect[2])),
     });
@@ -67,18 +70,28 @@ const FORMS = [
     // A field only this letter's projection reaches.
     proof: "moneyBenefits.",
     minWidgets: 40,
+    sharedName: true,
+    expectControls: true,
   },
   {
     card: "The Letter for the Caregiver",
     file: "Letter-for-the-Caregiver-Fillable-Form.pdf",
     proof: "behavior.",
     minWidgets: 40,
+    sharedName: true,
+    expectControls: true,
   },
   {
     card: "The Emergency Information Sheet",
     file: "Emergency-Information-Sheet-Fillable-Form.pdf",
     proof: "health.allergies",
     minWidgets: 10,
+    // One short document with its own identity block, not a run of section
+    // pages, so there is nothing for a repeated header field to solve.
+    sharedName: false,
+    // Free-text throughout by design: an emergency sheet is read in a hurry,
+    // and a tick box says less than a sentence to whoever is holding it.
+    expectControls: false,
   },
 ] as const;
 
@@ -120,22 +133,52 @@ for (const form of FORMS) {
       form.minWidgets
     );
 
-    // Every box must be big enough to click and to type a line into. This is
-    // the assertion that would have caught the shipped-broken version.
-    const tooSmall = found.filter((w) => w.height < 8 || w.width < 40);
+    // Every control must be big enough to hit and to hold its answer. This is
+    // the assertion that would have caught the shipped-broken version, where
+    // every field had a zero-high rectangle.
+    //
+    // The floor depends on the control: a checkbox is meant to be about 10pt
+    // square, so holding it to a text field's width would fail every one of
+    // them. Both still have to be big enough to click.
+    const tooSmall = found.filter((w) =>
+      w.kind === "Btn" ? w.height < 7 || w.width < 7 : w.height < 8 || w.width < 40
+    );
     expect(
-      tooSmall.map((w) => `${w.name} ${w.width}x${w.height}`),
+      tooSmall.map((w) => `${w.kind} ${w.name} ${w.width}x${w.height}`),
       "form fields with no usable area — invisible and unfillable in Acrobat"
     ).toEqual([]);
+
+    // The forms are meant to be answerable, not just typed into: a closed set
+    // of answers gets checkboxes or a dropdown, never a run of prose listing
+    // the options and no way to pick one.
+    if (form.expectControls) {
+      expect(
+        found.filter((w) => w.kind === "Btn").length,
+        "no checkboxes — multi-answer questions have nothing to tick"
+      ).toBeGreaterThan(10);
+    }
 
     // Two widgets sharing a name share one value in PDF, so a collision makes
     // a whole section echo itself. Names are built from section and field ids
     // precisely to make that impossible; this checks the construction held.
-    const names = found.map((w) => w.name);
+    //
+    // One name is shared on purpose: the person's name in every page header.
+    // Sharing is exactly the point there — filling it in once names them on
+    // every page — so it is excluded rather than the rule being weakened.
+    const SHARED_ON_PURPOSE = "person.preferredName";
+    const names = found.map((w) => w.name).filter((n) => n !== SHARED_ON_PURPOSE);
     expect(
       names.filter((n, i) => names.indexOf(n) !== i),
       "duplicate field names — these boxes would mirror each other's text"
     ).toEqual([]);
+
+    // And it really is on every page, which is the whole reason to share it.
+    if (form.sharedName) {
+      expect(
+        found.filter((w) => w.name === SHARED_ON_PURPOSE).length,
+        "the shared name field is missing from some pages"
+      ).toBeGreaterThan(1);
+    }
   });
 }
 

@@ -71,7 +71,7 @@ const PROCESS = [
       "The Letter for the Caregiver goes to whoever has the day",
       "The emergency sheet goes on the fridge, to the school office, to the ER",
       "The cards go into your photos, then to the sitter or the family group chat",
-      "Update annually",
+      "Update annually, or as needed",
     ],
   },
 ];
@@ -89,14 +89,18 @@ const DELIVERABLES = [
     href: "/letter-of-intent",
     cta: "Learn more",
     art: "letter" as const,
-    // The second letter is easy to miss: this tile reads as THE letter, and a
-    // family writing for someone who provides daily care would never guess a
-    // separate document exists. A line in the blurb rather than a fourth tile,
-    // because the section's promise is three things — and plain text rather
-    // than its own link, because the tile is already one, and an anchor inside
-    // an anchor is invalid and unreachable by keyboard. The page this tile
-    // opens carries the link.
-    also: "A separate Letter for the Caregiver covers the day-to-day care.",
+  },
+  {
+    // Was a footnote on the tile above, because the section promised three
+    // things and a fourth tile would have broken the count. The section now
+    // promises many, so the second letter gets what the footnote could never
+    // give it: its own art, its own name, and its own link.
+    title: "The Letter for the Caregiver",
+    blurb:
+      "The day-to-day letter: routines, communication, behavior, and health as it is actually lived. For the aide, the sitter, or the relative who steps in.",
+    href: "/letter-for-the-caregiver",
+    cta: "Learn more",
+    art: "caregiver" as const,
   },
   {
     title: "The Emergency Information Sheet",
@@ -257,26 +261,29 @@ export default function HomePage() {
               What you get
             </Eyebrow>
           </div>
-          <SectionHeading align="center" title="Fill out one form. Get three things back." />
+          {/* "Three" undercounted. The tiles below are three kinds of document,
+              not three files: the first is up to two letters, and the cards are
+              always a pack of eight. The subheading carries the real numbers so
+              "many" is a promise the page keeps. */}
+          <SectionHeading align="center" title="Fill out one form. Get many things back." />
           <p className="mx-auto mt-4 max-w-[860px] text-center text-lg leading-[1.7] text-muted">
-            Every answer you write feeds all three: the deep document, a one-page
-            emergency sheet, and a set of care cards for your phone. All of it is made
-            on your device.
+            Every answer you write feeds all of them: the deep letter for the trustee,
+            the day-to-day letter for the caregiver, a one-page emergency sheet, and
+            eight care cards for your phone. All of it is made on your device.
           </p>
 
-          <ul
-            className="mt-10 grid list-none gap-6 p-0"
-            style={{
-              gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-            }}
-          >
+          {/* Explicit column counts, not auto-fit. With four tiles, auto-fit
+              passes through a three-across band on the way down and strands
+              the fourth alone on its own row — at any track size, because the
+              count only ever falls one at a time. 1 → 2 → 4 skips that band,
+              so the grid is always full. */}
+          <ul className="mt-10 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 xl:grid-cols-4">
             {DELIVERABLES.map((d) => (
               <li key={d.title} className="flex">
-                {/* One Link for the whole tile again: with the caregiver note
-                    now plain text inside the body, there is no second
-                    destination to keep out of it. That also puts every tile
-                    back on the grid's own stretch, so the three end level
-                    whatever their copy does. */}
+                {/* One Link for the whole tile: every tile has exactly one
+                    destination, so there is no anchor-inside-an-anchor to
+                    avoid, and every tile sits on the grid's own stretch — the
+                    four end level whatever their copy does. */}
                 <Link
                   href={d.href}
                   className="group flex flex-1 flex-col overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface transition-[transform,box-shadow,border-color] duration-[var(--dur-base)] hover:-translate-y-[3px] hover:border-gold400 focus-visible:outline-offset-4 motion-reduce:transform-none motion-reduce:transition-none"
@@ -295,12 +302,6 @@ export default function HomePage() {
                     <span className="mt-2 text-[0.9375rem] leading-[1.7] text-body">
                       {d.blurb}
                     </span>
-                    {d.also ? (
-                      <span className="mt-3 flex gap-2.5 text-[0.875rem] leading-[1.55] text-muted">
-                        <span className="tw-diamond mt-[7px] flex-none" aria-hidden="true" />
-                        <span className="flex-1">{d.also}</span>
-                      </span>
-                    ) : null}
                     <span className="mt-auto flex items-center gap-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
                       {d.cta}
                       <svg

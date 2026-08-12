@@ -1,11 +1,18 @@
 /**
- * Calm, brand-drawn stands-ins for the three deliverables: shapes and the
- * house palette only, nothing legible. Decorative — the surrounding heading
- * and copy carry the meaning, so the art is hidden from assistive tech.
- * Shared by the home page's what-you-get tiles and the chooser's sample
- * cards.
+ * Calm, brand-drawn stands-ins for the deliverables: shapes and the house
+ * palette only, nothing legible. Decorative — the surrounding heading and
+ * copy carry the meaning, so the art is hidden from assistive tech. Shared
+ * by the home page's what-you-get tiles and the chooser's sample cards.
+ *
+ * "letter" and "caregiver" are deliberately different drawings. They sit
+ * side by side on the home page, and two identical panels would read as a
+ * rendering bug rather than as two documents.
  */
-export function DeliverableArt({ kind }: { kind: "letter" | "sheet" | "cards" }) {
+export function DeliverableArt({
+  kind,
+}: {
+  kind: "letter" | "caregiver" | "sheet" | "cards";
+}) {
   if (kind === "letter") {
     return (
       <div aria-hidden="true" className="flex h-full items-center justify-center bg-white">
@@ -24,6 +31,36 @@ export function DeliverableArt({ kind }: { kind: "letter" | "sheet" | "cards" })
       </div>
     );
   }
+  if (kind === "caregiver") {
+    return (
+      <div aria-hidden="true" className="flex h-full items-center justify-center bg-white">
+        {/* A page of ordered steps rather than a letterhead: the gold rule at
+            the head, then a run of timed lines. What this letter looks like
+            from across a kitchen is a list of the day in order. */}
+        {/* 34%, not the sheet tile's 52%: this page is portrait, so its height
+            is driven by its width times 11/8.5. At 46% it stood nearly panel-
+            high and read as heavier than its three neighbours; at 34% it takes
+            about 70% of the panel, matching their breathing room. */}
+        <div
+          className="w-[34%] overflow-hidden rounded-[6px] border border-line bg-white"
+          style={{ boxShadow: "var(--shadow-md)", aspectRatio: "8.5 / 11" }}
+        >
+          <div className="h-[7%]" style={{ background: "var(--gradient-gold)" }} />
+          <div className="px-[12%] pt-[11%]">
+            {[82, 68, 76, 60, 71].map((width, i) => (
+              <div key={width} className={i === 0 ? "flex items-center gap-[7%]" : "mt-[11%] flex items-center gap-[7%]"}>
+                <span className="tw-diamond tw-diamond--sm flex-none" />
+                <span
+                  className="h-[5px] rounded-full bg-line"
+                  style={{ width: `${width}%` }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (kind === "sheet") {
     return (
       <div aria-hidden="true" className="flex h-full items-center justify-center bg-white">
@@ -31,25 +68,39 @@ export function DeliverableArt({ kind }: { kind: "letter" | "sheet" | "cards" })
           className="w-[52%] overflow-hidden rounded-[6px] border border-line bg-white"
           style={{ boxShadow: "var(--shadow-md)", aspectRatio: "11 / 8.5" }}
         >
-          <div className="h-[22%] bg-navy800" />
-          <div className="grid grid-cols-2 gap-[6%] p-[7%]">
-            <div>
-              <div className="h-[5px] w-[85%] rounded-full bg-line" />
-              <div className="mt-[9%] h-[5px] w-[70%] rounded-full bg-line" />
-            </div>
-            <div>
-              <div className="h-[5px] w-[80%] rounded-full bg-line" />
-              <div className="mt-[9%] h-[5px] w-[65%] rounded-full bg-line" />
-            </div>
-            <div
-              className="col-span-2 rounded-[4px] px-[4%] py-[3.5%]"
-              style={{ background: "var(--danger-bg, #f7e9e9)" }}
-            >
+          {/* Six boxes in two columns, which is what the real sheet is: a navy
+              identity band over bordered boxes, with allergies ruled in red,
+              the emergency protocol in gold, and contacts in navy. The old art
+              showed two bare line-pairs and one red block, so it read as a
+              memo rather than the dense one-pager it stands for. Order matches
+              the document column by column — the grid fills row-wise, so the
+              pairs below are [left, right] of each row. */}
+          <div className="h-[20%] bg-navy800" />
+          <div className="grid grid-cols-2 gap-x-[7%] gap-y-[5%] p-[6%]">
+            {(
+              [
+                ["var(--line)", 78, 58],
+                ["var(--line)", 70, 62],
+                ["var(--card-emergency)", 62, 48],
+                ["var(--line)", 74, 55],
+                ["var(--gold-500)", 66, 52],
+                ["var(--navy-800)", 72, 45],
+              ] as const
+            ).map(([accent, w1, w2], i) => (
               <div
-                className="h-[5px] w-[46%] rounded-full"
-                style={{ background: "var(--card-emergency)", opacity: 0.55 }}
-              />
-            </div>
+                key={i}
+                className="overflow-hidden rounded-[3px] border border-line px-[8%] py-[7%]"
+              >
+                <div
+                  className="h-[3px] rounded-full"
+                  style={{ width: `${w1}%`, background: accent, opacity: 0.7 }}
+                />
+                <div
+                  className="mt-[14%] h-[3px] rounded-full bg-line"
+                  style={{ width: `${w2}%` }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>

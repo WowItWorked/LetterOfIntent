@@ -7,7 +7,7 @@ import { expect, test } from "@playwright/test";
  * and axe covers "/" in a11y.spec.ts.
  */
 
-test("the what-you-get section shows all three deliverables with sample images", async ({
+test("the what-you-get section shows all four deliverables with sample images", async ({
   page,
 }) => {
   await page.goto("/");
@@ -17,13 +17,20 @@ test("the what-you-get section shows all three deliverables with sample images",
     section.getByRole("heading", { name: /fill out one form/i })
   ).toBeVisible();
 
-  // Three tiles with decorative brand-drawn vignettes (aria-hidden — the
+  // Four tiles with decorative brand-drawn vignettes (aria-hidden — the
   // headings carry the meaning, so there is nothing image-roled to assert).
 
-  // Each tile opens its document's page, not just a sample.
+  // Each tile opens its document's page, not just a sample. The whole tile is
+  // the link, so its accessible name is title + blurb + call to action — these
+  // match on a substring, and each phrase now appears in exactly one tile.
+  // (It did not always: the Letter of Intent tile used to carry a footnote
+  // naming the caregiver letter, which is why that tile now exists instead.)
   await expect(
     section.getByRole("link", { name: /the letter of intent/i })
   ).toHaveAttribute("href", "/letter-of-intent");
+  await expect(
+    section.getByRole("link", { name: /the letter for the caregiver/i })
+  ).toHaveAttribute("href", "/letter-for-the-caregiver");
   await expect(
     section.getByRole("link", { name: /the emergency information sheet/i })
   ).toHaveAttribute("href", "/emergency-sheet");
@@ -32,6 +39,8 @@ test("the what-you-get section shows all three deliverables with sample images",
     "/care-cards"
   );
 
+  // The count is the point of the section's promise: exactly four, no orphan.
+  await expect(section.getByRole("listitem")).toHaveCount(4);
 });
 
 test("the process section walks answer, write, download, hand over", async ({ page }) => {

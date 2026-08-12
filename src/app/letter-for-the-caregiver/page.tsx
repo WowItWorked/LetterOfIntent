@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   description:
     "The day-to-day letter: routines, communication, behavior, health as it is " +
     "actually lived, written for whoever is holding it in a kitchen at 7am. " +
-    "What it carries, who reads it, and how it differs from the trustee's " +
-    "letter. Free, written on your device.",
+    "What it contains, who reads it, and every question it asks. Free, written " +
+    "on your device.",
   alternates: { canonical: "/letter-for-the-caregiver" },
 };
 
@@ -92,9 +92,14 @@ export default function CaregiverLetterPage() {
             is actually lived. Written to be read in a kitchen at 7am by someone who
             has to get the morning right, not filed in a binder.
           </p>
+          {/* Says how this letter relates to the other one without comparing
+              the samples. The sample below is the Hale family, who are
+              caregiver-only and never produce a trustee letter at all, so a
+              line about "the trustee's letter" pointed at nothing a visitor
+              could open from this page. */}
           <p className="mt-5 border-t border-navy500 pt-[18px] text-[0.9375rem] text-oninkbody">
-            Same answers as the trustee&rsquo;s letter. Different reader, so a
-            different letter.
+            One of the two letters the form can write. This one goes to whoever is
+            doing the day.
           </p>
         </div>
       </div>
@@ -165,12 +170,14 @@ export default function CaregiverLetterPage() {
                   </svg>
                 </span>
               </span>
-              {/* Names the family before the click. The Letter of Intent page's
-                  sample is the Ruiz family; a visitor who opens both should
-                  know they are meeting two households, not one letter twice. */}
+              {/* Names the family before the click, and describes only what is
+                  in this sample. It used to read "the same form, a different
+                  life", which was written when both pages showed the Ruiz
+                  family — on this page alone that contrast has no second half
+                  a visitor can see, so it just reads as a claim about a letter
+                  that is not here. */}
               <span className="mt-2.5 block text-[0.9375rem] leading-[1.6] text-muted">
-                The Hale family: a daughter writing about her mother. The same form,
-                a different life &mdash;{" "}
+                The Hale family: a daughter writing about her mother &mdash;{" "}
                 <span className="text-body">
                   the week as it really runs, the unfinished conversations, and what
                   must never change.

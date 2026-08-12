@@ -16,6 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: url("/letter-for-the-caregiver"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
     ...allSectionSlugs().map((slug) => ({
       url: url(`/letter/${slug}`),
       lastModified,

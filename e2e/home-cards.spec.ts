@@ -34,18 +34,26 @@ test("the what-you-get section shows all three deliverables with sample images",
 
 });
 
-test("the process section walks pick, fill, download, share", async ({ page }) => {
+test("the process section walks answer, write, download, hand over", async ({ page }) => {
   await page.goto("/");
   const section = page.locator("#the-process");
-  await expect(section.getByRole("heading", { name: /pick\. fill\. download\. share\./i })).toBeVisible();
+  await expect(
+    section.getByRole("heading", { name: /answer\. write\. download\. hand over\./i })
+  ).toBeVisible();
   for (const step of [
-    /pick your letter/i,
+    // "Answer eight questions", not "Pick your letter": one adaptive form, and
+    // the count must match ONBOARDING_QUESTIONS.
+    /answer eight questions/i,
     /fill out the form/i,
-    /download all four/i,
+    /download the set/i,
     /hand them to the right people/i,
   ]) {
     await expect(section.getByRole("heading", { name: step })).toBeVisible();
   }
+  // Both letters named, not one — the audience answer decides which generate.
+  await expect(section.getByText(/the letter of intent, the letter for the caregiver/i)).toBeVisible();
+  // The cards leave as images in a zip, not as a print sheet.
+  await expect(section.getByText(/phone-ready images in a zip/i)).toBeVisible();
   // Step IV names real recipients — the point of the section.
   await expect(section.getByText(/family group chat/i)).toBeVisible();
 });
@@ -107,15 +115,25 @@ test("the Letter of Intent page explains the document and lists every question",
     "/samples/letter-of-intent-disabilities"
   );
 
-  // The two letters, and the tradeoff each one makes. Both halves must be
-  // present: "what it carries" alone would sell a letter without admitting
-  // what it drops, which is the thing a family finds out after printing.
+  // The two letters, each as a list of what it holds — no "what it drops"
+  // half, and no limit bullet: the panel beneath carries the reassurance that
+  // choosing one loses nothing, which is the fear the two cards create.
   await expect(
     page.getByRole("heading", { name: /two letters, narrowed for their readers/i })
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: /^the letter for the caregiver$/i })).toBeVisible();
-  await expect(page.getByText(/where it is thinner/i)).toHaveCount(2);
-  await expect(page.getByText(/nothing you write is discarded/i)).toBeVisible();
+  await expect(page.getByText(/^what it contains$/i)).toHaveCount(2);
+  await expect(page.getByText(/money, the benefits, and the trust/i)).toBeVisible();
+  await expect(page.getByText(/how they communicate, and how to talk with them/i)).toBeVisible();
+  // The panel under both cards makes one point: the choice is not really a
+  // choice, because one form writes both letters.
+  await expect(page.getByText(/one form can write both/i)).toBeVisible();
+  // The caregiver card is the one with somewhere to go; this page is the
+  // trustee letter's own, so only one of the pair carries a link.
+  await expect(
+    page.getByRole("link", { name: /more about the caregiver letter/i })
+  ).toHaveAttribute("href", "/letter-for-the-caregiver");
+  await expect(page.getByText(/never type anything twice/i)).toBeVisible();
 
   // The question catalogue: every section, ungated, with its prompts one tap
   // away — and it must not depend on a letter existing on this device.
@@ -126,6 +144,50 @@ test("the Letter of Intent page explains the document and lists every question",
   await expect(page.getByText(/be ready to write about/i)).toBeVisible();
 
   // Scoped to main: the footer offers its own "Start your letter" link.
+  await expect(
+    page.locator("main").getByRole("link", { name: /start your letter$/i })
+  ).toHaveAttribute("href", "/letter");
+});
+
+test("the Caregiver letter page explains the document and admits what it drops", async ({
+  page,
+}) => {
+  await page.goto("/letter-for-the-caregiver");
+  await expect(
+    page.getByRole("heading", { name: /^the letter for the caregiver\.$/i })
+  ).toBeVisible();
+
+  // What it contains, as a list.
+  await expect(page.getByRole("heading", { name: /^what it contains$/i })).toBeVisible();
+  await expect(page.getByText(/how they communicate, and how to talk with them/i)).toBeVisible();
+  await expect(page.getByText(/behavior: what sets it off/i)).toBeVisible();
+
+  // The Hale sample, deliberately not the Ruiz one the Letter of Intent page
+  // shows: two families across the two pages is what shows the form's range.
+  await expect(page.getByRole("link", { name: /open sample/i })).toHaveAttribute(
+    "href",
+    "/samples/letter-for-the-caregiver-aging-parent"
+  );
+  await expect(page.getByText(/a daughter writing about her mother/i)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /whoever arrives on monday/i })).toBeVisible();
+
+  // The same panel the Letter of Intent page carries, pointed the other way.
+  await expect(page.getByText(/one form can write both/i)).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /more about the letter of intent/i })
+  ).toHaveAttribute("href", "/letter-of-intent");
+
+  // Its own question catalogue, filtered to what THIS letter prints. Listing
+  // all twenty-one would promise a section the caregiver letter never
+  // contains — "For the trustee" belongs to the other document.
+  await expect(
+    page.getByRole("heading", { name: /every question, before you start/i })
+  ).toBeVisible();
+  const catalogue = page.locator("#questions");
+  await expect(catalogue.getByRole("button", { name: /for whoever steps in/i })).toBeVisible();
+  await expect(catalogue.getByRole("button", { name: /^\d+\s*for the trustee$/i })).toHaveCount(0);
+  await catalogue.getByRole("button", { name: /getting started/i }).click();
+  await expect(page.getByText(/be ready to write about/i)).toBeVisible();
   await expect(
     page.locator("main").getByRole("link", { name: /start your letter$/i })
   ).toHaveAttribute("href", "/letter");
@@ -151,9 +213,11 @@ test("the letter page is the builder, and sends the curious to the explainer", a
   await expect(
     page.getByText(/one letter is made: the letter for the caregiver/i)
   ).toBeVisible();
-  // What every option produces alike, said once under the grid.
+  // What every option produces alike, said once under the grid. Eight cards:
+  // the seven topic cards plus the index card, which is what the review page
+  // counts — a stale "seven" here is exactly what this pins.
   await expect(
-    page.getByText(/emergency information sheet and all seven care cards are created/i)
+    page.getByText(/emergency information sheet and all eight care cards are created/i)
   ).toBeVisible();
 
   await expect(
@@ -237,7 +301,7 @@ test("the care-cards page shows real sample cards and routes to the cards page",
   ).toBeVisible();
 
   // Real CareCard renders — role="img" labels come from the component itself,
-  // and they name Bonnie, the sample family the sample PDFs already use.
+  // and they name Danny, the Ruiz family the sample PDFs already use.
   // (Previews mount after hydration; the assertions wait for them.)
   // The gallery shows the whole set — all seven cards, by name.
   for (const name of [

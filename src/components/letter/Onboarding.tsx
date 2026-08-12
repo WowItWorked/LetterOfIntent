@@ -99,8 +99,12 @@ export const ONBOARDING_QUESTIONS: OnboardingQuestion[] = [
     // three times inside it: audience gates only the two guidance sections and
     // one money field, none of which feeds a card (content/cards.ts SOURCES).
     // card-reachability.test.ts holds that fact.
+    // "Eight", not seven: the pack is the seven topic cards plus the Which
+    // Cards To Send index card (content/cards.ts), and the review page counts
+    // it. Proper names for both documents, as everywhere else the tool names
+    // what it produces.
     sharedPoint:
-      "The emergency information sheet and all seven care cards are created with every option, from the same answers.",
+      "The Emergency Information Sheet and all eight care cards are created with every option, from the same answers.",
   },
   {
     id: "stage",

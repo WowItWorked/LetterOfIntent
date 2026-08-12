@@ -17,29 +17,50 @@ export const metadata: Metadata = {
 };
 
 /**
- * The two letters, and what each one gives up. Straight from
+ * What each letter contains, as a list rather than prose. Straight from
  * lib/pdf/projections.ts — TRUSTEE_PROJECTION drops the daily-care sections
  * outright and keeps `routine` to goodDay alone; CAREGIVER_PROJECTION cuts
  * moneyBenefits and legal to a handful of pointer fields. A family choosing
  * between them deserves to know that before they choose, not after they
  * print.
+ *
+ * Framed as what each one HOLDS, never as what it lacks. The earlier "where
+ * it is thinner" half said the same thing by subtraction, and subtraction
+ * reads as a defect in the document someone is about to spend an evening on.
+ * Where the boundary genuinely matters — a caregiver letter is no place to
+ * look for the trust — the panel beneath these cards carries it, and each
+ * letter's own page says it in full.
  */
-const LETTERS = [
+const LETTERS: {
+  title: string;
+  who: string;
+  contains: readonly string[];
+  /** Only the caregiver letter carries one: this page IS the other letter's. */
+  href?: string;
+  linkLabel?: string;
+}[] = [
   {
     title: "The Letter of Intent",
     who: "For the trustee",
-    carries:
-      "Money, benefits, and the trust. Legal authority and who decides what. Health, housing, school and work. And enough of the person that a trustee who never met them can exercise judgment.",
-    thinner:
-      "Daily life. Communication, behavior, allergies, the emergency plan, routines, food, and personal care are not printed here — of the day-to-day, it keeps only what a good day looks like.",
+    contains: [
+      "Money, the benefits, and the trust",
+      "Legal authority, and who decides what",
+      "Health, housing, school and work",
+      "Enough of the person that a trustee who never met them can judge well",
+    ],
   },
   {
     title: "The Letter for the Caregiver",
     who: "For whoever provides the care",
-    carries:
-      "Routines, communication, behavior, health as it is actually lived, the home, allergies, the emergency plan, food, and personal care — read in a kitchen at 7am, not filed in a binder.",
-    thinner:
-      "Money and legal. It keeps the pointers a caregiver needs — who pays the bills, where the papers are, who holds power of attorney — and leaves the benefits and trust machinery to the trustee letter.",
+    contains: [
+      "Routines, and the shape of a day",
+      "How they communicate, and how to talk with them",
+      "Behavior, allergies, and the emergency plan",
+      "Health as it is lived, food, and personal care",
+      "The home, school or work, and the people who matter",
+    ],
+    href: "/letter-for-the-caregiver",
+    linkLabel: "More about the Caregiver letter",
   },
 ];
 
@@ -89,7 +110,7 @@ const HOW_IT_WORKS = [
     body: (
       <>
         It saves after every answer, so you can stop mid-sentence tonight and pick it up
-        on Thursday. No account and no login, so it saves in <em>this</em> browser only:
+        on Thursday. No online account and no login, so it saves in <em>this</em> browser only:
         download a backup file to switch devices.
       </>
     ),
@@ -211,9 +232,9 @@ export default function LetterOfIntentPage() {
             </h2>
             <p className="mx-auto mt-4 max-w-[72ch] text-center text-lg leading-[1.7] text-muted">
               The first question you are asked is who this letter has to reach. It is the
-              one answer that decides which letters you get &mdash; and each one is
-              deliberately thinner in one place, because a trustee should not have to
-              read sixty pages to find the benefits, and nobody reads a binder at 7am.
+              one answer that decides which letters you get &mdash; and each is narrowed
+              for its reader, because a trustee should not have to read sixty pages to
+              find the benefits, and nobody reads a binder at 7am.
             </p>
 
             <div
@@ -236,26 +257,55 @@ export default function LetterOfIntentPage() {
                     <h3 className="mt-2 font-serif text-[1.375rem] font-semibold leading-snug text-ink">
                       {letter.title}
                     </h3>
-                    <p className="mt-3 text-[0.9375rem] leading-[1.7] text-body">
-                      <strong className="font-semibold text-ink">What it carries.</strong>{" "}
-                      {letter.carries}
+                    <p className="mt-3 text-[0.9375rem] font-semibold text-ink">
+                      What it contains
                     </p>
-                    <p className="mt-3.5 border-l-2 border-goldline pl-3.5 text-[0.9375rem] leading-[1.65] text-muted">
-                      <strong className="font-semibold text-ink">Where it is thinner.</strong>{" "}
-                      {letter.thinner}
-                    </p>
+                    <ul className="mt-2.5 list-none p-0">
+                      {letter.contains.map((line) => (
+                        <li
+                          key={line}
+                          className="mb-2 flex gap-2.5 text-[0.9375rem] leading-[1.6] text-body last:mb-0"
+                        >
+                          <span className="tw-diamond mt-[8px] flex-none" aria-hidden="true" />
+                          <span className="flex-1">{line}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {/* mt-auto pins it to the foot of the card, so the two
+                        cards still end on the same line however unevenly the
+                        lists wrap. Only the caregiver card has somewhere to
+                        go — this page is the other letter's own. */}
+                    {letter.href ? (
+                      <p className="mt-auto pt-5">
+                        <Link
+                          href={letter.href}
+                          className="inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold text-accent underline-offset-[3px] hover:underline"
+                        >
+                          {letter.linkLabel}
+                          <span aria-hidden="true">&rarr;</span>
+                        </Link>
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               ))}
             </div>
 
-            <p className="mx-auto mt-6 max-w-[76ch] text-center text-[0.9375rem] leading-[1.7] text-muted">
-              Choose both and nothing is thinned &mdash; you write one extra section, and
-              each reader still gets only what they need. Whichever you pick, nothing you
-              write is discarded: the answers a letter does not print still feed the
-              emergency sheet and the care cards, and you can add the second letter at any
-              time and have it fill itself in from what is already there.
-            </p>
+            {/* One point, full width, on the gold ground the site uses for
+                "read this one". Two cards side by side pose a choice, and the
+                honest answer is that it is not really one — so this says that
+                and stops. It ran four sentences and buried the lede in the
+                third. */}
+            <div className="mt-6 rounded-[var(--radius-md)] border border-goldline bg-goldtint px-[clamp(20px,3vw,34px)] py-6">
+              <p className="mx-auto max-w-[76ch] text-center text-lg leading-[1.7] text-body">
+                <strong className="font-semibold text-ink">
+                  One form can write both.
+                </strong>{" "}
+                You answer the questions once. Each letter is then written for its own
+                reader, so nobody is handed the other one&rsquo;s pages &mdash; and you
+                never type anything twice.
+              </p>
+            </div>
           </div>
 
           {/* ----------------------------------------------------- who reads it */}
@@ -391,7 +441,7 @@ export default function LetterOfIntentPage() {
           <div className="mx-auto mt-[30px] max-w-[640px]">
             <StartButtons />
             <p className="mt-[18px] text-center text-[0.9375rem] leading-[1.65] text-oninkbody">
-              No account and no email address. It saves on this device as you go, and
+              No online account and no email address. It saves on this device as you go, and
               you can{" "}
               <Link
                 href="/your-data"

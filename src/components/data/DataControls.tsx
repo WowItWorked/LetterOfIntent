@@ -211,7 +211,7 @@ export function DataControls() {
           you get everything back.
         </p>
         <div className="mt-4 rounded-[var(--radius-sm)] border border-gold400 bg-gold100 px-4 py-3.5 text-[0.9375rem] leading-[1.7]">
-          <strong className="font-semibold text-ink">There is no account</strong>, so
+          <strong className="font-semibold text-ink">There is no online account</strong>, so
           there is nothing for us to restore for you. This file is the only copy that
           outlives this browser.
         </div>

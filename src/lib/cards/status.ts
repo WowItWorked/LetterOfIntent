@@ -80,6 +80,38 @@ export function fieldMarkerText(section: SectionKey, fieldId: string): string | 
   return `Appears on the ${listJoin(cards.map(cardTitle))} ${word}.`;
 }
 
+/**
+ * The nudge under a card-bound answer that has outgrown what its card shows
+ * at a glance. Advisory, never blocking, and never an error: content/types.ts
+ * calls cardLengthHint a budget, not a limit, and the card renderer degrades
+ * rather than refusing.
+ *
+ * It has to say the reassuring half first. A family who reads "too long" while
+ * writing about their child's seizures will write less, and the letter is the
+ * document that matters most — the card is a bonus drawn from it. So: nothing
+ * is lost, and here is what shortening buys.
+ *
+ * The blunter warnings live on the cards page (components/cards/copy.ts),
+ * where a card has actually overflowed and the family is looking at it.
+ */
+export function cardLengthNotice(
+  section: SectionKey,
+  fieldId: string,
+  length: number,
+  budget: number
+): string | undefined {
+  if (length <= budget) return undefined;
+  const cards = cardsForField(section, fieldId);
+  if (cards.length === 0) return undefined;
+  const titles = listJoin(cards.map(cardTitle));
+  const [word, verb] = cards.length === 1 ? ["card", "shows"] : ["cards", "show"];
+  return (
+    `Longer than the ${titles} ${word} ${verb} at a glance. Nothing is lost — the ` +
+    `letter keeps every word — but a shorter answer here is what keeps the card ` +
+    `readable in someone's hand.`
+  );
+}
+
 /* ------------------------------------------------------------ requirement copy */
 
 /**

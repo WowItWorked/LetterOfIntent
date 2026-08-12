@@ -38,6 +38,7 @@ for (const path of [
   "/",
   "/letter",
   "/letter-of-intent",
+  "/letter-for-the-caregiver",
   "/privacy",
   "/your-data",
   "/letter/review",
@@ -138,7 +139,7 @@ test("axe clean: care cards with a bundle picked and previews showing", async ({
   await seedLetter(page, FULL_LETTER);
   await page.goto("/care-cards");
   await page.getByRole("button", { name: /quick trip/i }).click();
-  // "for Alex": the page's Bonnie gallery renders a same-titled card, so the
+  // "for Alex": the page's Danny gallery renders a same-titled card, so the
   // seeded preview must be pinned by person.
   await page
     .getByRole("img", { name: /emergency protocol care card for alex/i })

@@ -14,7 +14,15 @@
  * aging parent).
  */
 export interface SampleDoc {
-  /** URL segment — /samples/<slug>. Kept stable; old slugs keep working. */
+  /**
+   * URL segment — /samples/<slug>, in the form {document}-{family}.
+   *
+   * Renamed once, deliberately. Three slugs were inherited from the two-path
+   * era and had stopped telling the truth: "letter-of-intent-anyone" rendered
+   * the CAREGIVER letter, and "letter-for-the-caregiver" gave no hint which of
+   * the two families it belonged to. next.config.ts permanently redirects the
+   * old names, so anything already linked still lands.
+   */
   slug: string;
   /** Which fixture family renders this document. */
   family: "high-support" | "aging-parent";
@@ -57,7 +65,7 @@ export const SAMPLE_DOCS: SampleDoc[] = [
     downloadName: "SAMPLE-Letter-of-Intent.pdf",
   },
   {
-    slug: "letter-for-the-caregiver",
+    slug: "letter-for-the-caregiver-disabilities",
     family: "high-support",
     kind: "caregiver",
     label: "The Letter for the Caregiver",
@@ -82,7 +90,7 @@ export const SAMPLE_DOCS: SampleDoc[] = [
     downloadName: "SAMPLE-Emergency-Information-Sheet.pdf",
   },
   {
-    slug: "letter-of-intent-anyone",
+    slug: "letter-for-the-caregiver-aging-parent",
     family: "aging-parent",
     kind: "caregiver",
     label: "The Letter for the Caregiver",
@@ -95,7 +103,7 @@ export const SAMPLE_DOCS: SampleDoc[] = [
     downloadName: "SAMPLE-Letter-for-the-Caregiver-Aging-Parent.pdf",
   },
   {
-    slug: "emergency-sheet-anyone",
+    slug: "emergency-sheet-aging-parent",
     family: "aging-parent",
     kind: "emergency",
     label: "Emergency sheet",

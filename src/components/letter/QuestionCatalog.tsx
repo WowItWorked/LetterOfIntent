@@ -8,6 +8,7 @@ import { previewPrompts } from "@/lib/content/preview-prompts";
 import { resolveSectionWording } from "@/lib/content/types";
 import { fillName } from "@/lib/derive";
 import type { LetterMeta } from "@/lib/schema";
+import type { LetterProjection } from "@/lib/pdf/projections";
 
 /**
  * Every question the letter can ask, read by someone who has not started one.
@@ -26,9 +27,33 @@ const NO_META: LetterMeta = {};
 /** Content strings carry {name}; with no letter there is no name to fill. */
 const NEUTRAL_NAME = "your loved one";
 
-export function QuestionCatalog() {
+export function QuestionCatalog({
+  projection,
+  lead,
+}: {
+  /**
+   * Show only the sections THIS document prints. Omit for the whole roster.
+   * Each letter is a projection of the one schema (lib/pdf/projections.ts),
+   * so a page about one letter listing all twenty-one sections would promise
+   * questions that never reach the document it is describing.
+   */
+  projection?: LetterProjection;
+  /** Replaces the lead paragraph; {n} is filled with the section count. */
+  lead?: string;
+} = {}) {
   const [open, setOpen] = useState<string | null>(null);
-  const sections = allSections();
+  const sections = projection
+    ? allSections().filter((def) => projection[def.key] !== undefined)
+    : allSections();
+
+  const leadText = (
+    lead ??
+    "These are the {n} sections the letter can ask about. Open any one to read what " +
+      "it asks for. You will not see all of them: a few questions at the start shape " +
+      "the form around the person you care for, and the sections that do not fit are " +
+      "never asked. Nothing is required, and a section you skip simply will not appear " +
+      "in the letter."
+  ).replace("{n}", String(sections.length));
 
   return (
     <section id="questions" className="scroll-mt-[calc(clamp(64px,19vw,124px)+48px)]">
@@ -43,13 +68,7 @@ export function QuestionCatalog() {
       <h2 className="mt-3.5 font-serif text-[clamp(1.7rem,4vw,2.25rem)] font-semibold tracking-[-0.01em] text-ink">
         Every question, before you start.
       </h2>
-      <p className="mt-3 max-w-[76ch] text-lg leading-[1.7] text-muted">
-        These are the {sections.length} sections the letter can ask about. Open any one
-        to read what it asks for. You will not see all of them: a few questions at the
-        start shape the form around the person you care for, and the sections that do
-        not fit are never asked. Nothing is required, and a section you skip simply
-        will not appear in the letter.
-      </p>
+      <p className="mt-3 max-w-[76ch] text-lg leading-[1.7] text-muted">{leadText}</p>
 
       <ul
         className="mt-7 list-none overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface p-0"

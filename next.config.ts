@@ -112,11 +112,24 @@ const nextConfig: NextConfig = {
       "legal-and-advocacy": "legal-and-decisions",
       "faith-joy-and-community": "friends-joy-and-faith",
     };
+    // Sample slugs renamed to {document}-{family}. The old names were also
+    // two-path leftovers, and two of them had gone from vague to wrong:
+    // "letter-of-intent-anyone" served the caregiver letter.
+    const renamedSamples: Record<string, string> = {
+      "letter-for-the-caregiver": "letter-for-the-caregiver-disabilities",
+      "letter-of-intent-anyone": "letter-for-the-caregiver-aging-parent",
+      "emergency-sheet-anyone": "emergency-sheet-aging-parent",
+    };
     return [
       { source: "/letter/cards", destination: "/care-cards", permanent: true },
       ...Object.entries(retired).map(([from, to]) => ({
         source: `/letter/${from}`,
         destination: `/letter/${to}`,
+        permanent: true,
+      })),
+      ...Object.entries(renamedSamples).map(([from, to]) => ({
+        source: `/samples/${from}`,
+        destination: `/samples/${to}`,
         permanent: true,
       })),
     ];

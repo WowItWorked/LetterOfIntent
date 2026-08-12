@@ -14,22 +14,28 @@ import type { LetterData } from "@/lib/schema";
  * Deliberately obvious sample data: (555) phone numbers throughout, and the
  * section beside the previews says so in words.
  *
- * This fixture holds ONLY what the previewed cards draw from, and every card
- * must fit a single 1080×1920 frame: the /care-cards page renders these
- * WITHOUT the cards page's pagination measurement, and an e2e check fails if
- * any card's content runs under its footer. Two sizing decisions follow the
- * pattern the previous fixture proved out:
- * - Carmen carries only the legal_guardian role and Robert describes himself
- *   in the free-text role field ("backup"), so no contact holds an emergency
- *   role and the emergency card carries no "Then call" block.
- * - The emergency card carries ONE scenario (the missing-bus story). The
- *   peanut response lives in the Allergies, Rescue medication, and Call 911
- *   blocks already on the card; a second scenario block repeating it ran the
- *   rendered card under its footer (the e2e overflow check caught it).
- * - The behavior card fixture omits yesNo (its content is folded into how),
- *   keeping the card at six blocks with the first-responder block aboard.
- * sample-card-data.test.ts fails the build if any previewed card stops
- * deriving or outgrows its frame's block budget.
+ * Written to look like a letter someone FINISHED — both the trustee letter
+ * and the caregiver letter — because a visitor judging whether this is worth
+ * their evening should see a full card, not a stub. Every card now sits at or
+ * just under its ceiling: five or six blocks, four lines at most in any one.
+ *
+ * That ceiling is real. The /care-cards page renders these WITHOUT the cards
+ * page's pagination measurement, so every card must fit a single 1080×1920
+ * frame, and an e2e check fails if any card's content runs under its footer.
+ * Three sizing decisions the layout forced:
+ * - Carmen carries only the legal_guardian role, and every other contact
+ *   describes itself in the free-text role field ("backup", "day to day"), so
+ *   no contact holds an emergency role and the emergency card carries no
+ *   "Then call" block. It has no room for one.
+ * - The emergency card carries responseSteps and NOT a named scenario. Both
+ *   together measured ~80px past the footer; of the two, the unnamed
+ *   what-to-do-first block is the one a stranger actually reads.
+ * - The behavior card omits yesNo (its content is folded into how), keeping
+ *   the card at six blocks with the first-responder block aboard.
+ *
+ * sample-card-data.test.ts bounds blocks and lines, but it is only a proxy —
+ * it passed while the emergency card was overflowing by 80px. The e2e check
+ * is the gate that actually knows.
  */
 
 /** Every card, in display order — the gallery shows the whole set, care last. */
@@ -71,6 +77,23 @@ export const SAMPLE_CARD_LETTER: LetterData = {
         phone: "(555) 014-2287",
         role: "backup",
       },
+      // Free-text roles on purpose, like Robert's: a contact holding a
+      // primary or medical-decision role would add a "Then call" block to the
+      // emergency card, which has no room left (see the block budget below).
+      {
+        id: "sample-teresa",
+        name: "Teresa Ruiz",
+        relationship: "Mother",
+        phone: "(555) 014-2201",
+        role: "day to day",
+      },
+      {
+        id: "sample-marcy",
+        name: "Marcy Alvarado",
+        relationship: "Case manager",
+        phone: "(555) 014-9930",
+        role: "county services",
+      },
     ],
     firstCall: "Carmen — (555) 014-2280",
   },
@@ -83,17 +106,23 @@ export const SAMPLE_CARD_LETTER: LetterData = {
         reaction: "Hives and vomiting",
         treatment: "Benadryl, then 911 if breathing changes",
       },
+      {
+        id: "sample-latex",
+        allergen: "Latex",
+        severity: "mild",
+        reaction: "Red, itchy skin",
+        treatment: "Wash the area; hydrocortisone from the medicine box",
+      },
     ],
   },
   emergencyPlan: {
-    scenarios: [
-      {
-        id: "sample-missing",
-        trigger: "If Danny is missing",
-        steps:
-          "He is riding, not hiding — check the 2A bus first\nThen the bus museum\nCall Carmen while you check",
-      },
-    ],
+    responseSteps:
+      "Start timing the seizure\nOn his side, nothing in his mouth\nOver 3 minutes: rescue med from the red pouch\nCall 911, then Carmen",
+    // The "If Danny is missing" scenario used to live here. It gave way to
+    // responseSteps above: on a completed letter the unnamed what-to-do-first
+    // block is the one a stranger reads, and the card has room for one of the
+    // two, not both — the e2e overflow gate measured the pair at ~80px past
+    // the footer.
     call911When: "Trouble breathing, or a fall he does not get up from",
     ifNoOneAnswers: "Fairfax Northern has his records. And check the 2A.",
     otcPolicy: "Nothing beyond the list without calling Carmen first.",
@@ -137,6 +166,12 @@ export const SAMPLE_CARD_LETTER: LetterData = {
         time: "8:30",
         steps: "Shower — towel on the left hook\nLights out at 10, fan on",
       },
+      {
+        id: "sample-r4",
+        timeOfDay: "night",
+        time: "10:00",
+        steps: "Fan stays on all night — it is the sound, not the air\nIf he is up, the bus feed settles him faster than talking",
+      },
     ],
     transitions: "First-then words with a real time. Changes go on the whiteboard.",
   },
@@ -154,6 +189,24 @@ export const SAMPLE_CARD_LETTER: LetterData = {
         type: "always_works",
         reason: "No foods touching on the plate",
       },
+      {
+        id: "sample-f3",
+        item: "Nothing wet on top of anything crisp",
+        type: "texture",
+        reason: "Sauce goes in a separate bowl, always",
+      },
+      {
+        id: "sample-f4",
+        item: "Grapes, hot dogs, anything round",
+        type: "choking_risk",
+        reason: "Cut lengthwise. He eats fast when he is hungry",
+      },
+      {
+        id: "sample-f5",
+        item: "He clears his own plate; leave the counter to him",
+        type: "support",
+        reason: "Prompting the order of things undoes it",
+      },
     ],
   },
   careTasks: {
@@ -168,6 +221,21 @@ export const SAMPLE_CARD_LETTER: LetterData = {
         category: "equipment",
         steps: "Ear defenders in the backpack front pocket\nOffer, never install",
         equipment: "Ear defenders; the picture-card ring",
+      },
+      {
+        id: "sample-c3",
+        category: "dressing",
+        steps: "Clothes laid out the night before, in the order they go on\nTags out, no zips he has not used before",
+      },
+      {
+        id: "sample-c4",
+        category: "toileting",
+        steps: "Independent. He will not ask, so offer before you leave the house",
+      },
+      {
+        id: "sample-c5",
+        category: "mobility",
+        steps: "Walks everywhere. Stairs on the left rail\nCrowds: give him the outside of the pavement",
       },
     ],
   },
@@ -198,6 +266,14 @@ export const SAMPLE_CARD_LETTER: LetterData = {
         schedule: ["9:30 PM"],
         purpose: "only if he asks for the sleep one",
       },
+      {
+        id: "sample-levetiracetam",
+        name: "Levetiracetam",
+        dose: "500",
+        unit: "mg",
+        schedule: ["morning", "bedtime"],
+        purpose: "Seizure control. Never miss the evening one",
+      },
     ],
     providers: [
       {
@@ -205,6 +281,12 @@ export const SAMPLE_CARD_LETTER: LetterData = {
         name: "Dr. Priya Chandra",
         specialty: "Family medicine",
         phone: "(555) 014-6210",
+      },
+      {
+        id: "sample-okafor",
+        name: "Dr. James Okafor",
+        specialty: "Neurology",
+        phone: "(555) 014-0110",
       },
     ],
     preferredHospital: "Fairfax Northern. Records and behavior plan on file",

@@ -38,6 +38,12 @@ export const emergencyPlan: SectionDef = {
         "Turn her on her side, nothing in her mouth\n" +
         "Over 3 minutes: rescue med from the red pouch\n" +
         "Then call us, any hour",
+      // The tightest budget on the form, and deliberately so: this is the one
+      // block that can push the Emergency Protocol card past a single card,
+      // and that card never continues onto a second one — its download is
+      // blocked instead (components/cards/copy.ts). Better to nudge here,
+      // while someone is writing, than to refuse the card later.
+      cardLengthHint: 200,
       variants: [
         {
           when: { supportLevel: ["mostlyIndependent"] },
@@ -92,8 +98,13 @@ export const emergencyPlan: SectionDef = {
       help:
         "The signs a stranger could see. The card pairs this with " +
         "“Otherwise, call” below, so the small stuff comes to you instead.",
+      // No example disclosure here: the placeholder already models a
+      // card-sized answer, and repeating the same sentence behind a "See an
+      // example" toggle is furniture, not help. The length budget is what this
+      // field was actually missing.
       placeholder:
         "e.g., Trouble breathing, swelling of the face or throat, or no response to their name",
+      cardLengthHint: 180,
     },
     {
       id: "otherwiseCall",
@@ -114,6 +125,7 @@ export const emergencyPlan: SectionDef = {
       label: "The rule on over-the-counter medicine",
       help: "The Medications card ends with this rule: what a helper may give without calling you, if anything.",
       placeholder: "e.g., Nothing beyond the list without calling us first. No ibuprofen — it interacts.",
+      cardLengthHint: 160,
     },
   ],
 };

@@ -61,6 +61,10 @@ export const home: SectionDef = {
       rows: 4,
       label: "Personal care",
       help: "Bathing, dressing, hair, nails, teeth. What they manage, where help is needed, and how to offer it without a fight.",
+      example:
+        "Showers alone but will not start without the checklist on the mirror. Needs " +
+        "help with buttons and nails. Offer, never take over.",
+      cardLengthHint: 200,
       showWhen: [{ supportLevel: ["someDailyHelp", "substantial", "roundTheClock"] }],
     },
     {
@@ -84,6 +88,10 @@ export const home: SectionDef = {
       rows: 4,
       label: "Safety around the house",
       help: "Stairs, the stove, the bath, night-time wandering, falls that have already happened. Also what is already in place: grab bars, an alert pendant, a neighbor who checks.",
+      example:
+        "Stairs on the left rail only. The stove knobs come off at night. Grab bars " +
+        "in the bath; the neighbour checks at eight.",
+      cardLengthHint: 200,
     },
     {
       id: "waiverStatus",

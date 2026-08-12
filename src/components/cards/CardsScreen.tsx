@@ -12,19 +12,15 @@ import {
 import {
   BUNDLES,
   CARD_KEYS,
-  INDEX_CARD,
   type CardBundle,
   type CardKey,
 } from "@/lib/content/cards";
 import { deriveCard } from "@/lib/cards/derive";
-import { captureCardPng } from "@/lib/cards/capture";
-import { cardFilename } from "@/lib/cards/filenames";
 import { paginateCard, type CardPagination } from "@/lib/cards/paginate";
 import { cardStatus, cardTitle, type CardStatus } from "@/lib/cards/status";
 import type { CardData } from "@/lib/cards/types";
 import { cn } from "@/lib/cn";
-import { displayName, preferredName, readerName } from "@/lib/derive";
-import { triggerDownload } from "@/lib/download";
+import { displayName, readerName } from "@/lib/derive";
 import { useLetterStore } from "@/lib/store";
 import { CareCard } from "@/components/cards/CareCard";
 import {
@@ -38,13 +34,15 @@ import {
   splitByReady,
   type CardSelection,
 } from "@/components/cards/selection";
-import { Button, buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
 /**
- * The cards page: pick a bundle (or individual cards), preview every page,
- * download the PNGs. Everything renders and rasterizes on this device — the
- * page adds no network calls, keeping the privacy gate exactly as it was.
+ * The cards page: pick a bundle (or individual cards) and preview every page,
+ * so a family can see what a hand-off actually contains before they send it.
+ * Downloading happens on the review page, which hands over the whole pack as
+ * one zip. Everything renders on this device — the page adds no network
+ * calls, keeping the privacy gate exactly as it was.
  *
  * Pagination drives the preview: each selected card mounts ONCE at scale 1 in
  * an offscreen (absolutely positioned, aria-hidden, never display:none —
@@ -69,10 +67,6 @@ const OFFSCREEN: CSSProperties = {
   pointerEvents: "none",
 };
 
-interface CaptureJob {
-  filename: string;
-  card: CardData;
-}
 
 /**
  * A measurement remembers WHICH CardData it measured, so a letter edit — a new
@@ -90,12 +84,6 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
 
   const [selection, setSelection] = useState<CardSelection>({ kind: "none" });
   const [measured, setMeasured] = useState<Partial<Record<CardKey, Measured>>>({});
-  const [busy, setBusy] = useState(false);
-  const [progress, setProgress] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [capture, setCapture] = useState<CardData | null>(null);
-  const captureHostRef = useRef<HTMLDivElement>(null);
-  const captureReady = useRef<((node: HTMLElement) => void) | null>(null);
 
   /* ------------------------------------------------------------ derivation */
 
@@ -134,7 +122,6 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
   const readySet = useMemo(() => new Set(derived.keys()), [derived]);
   const { ready: readyChosen, waiting: waitingChosen } = splitByReady(chosen, readySet);
   const toMeasure = readyChosen.filter((k) => !paginationFor(k));
-  const allMeasured = readyChosen.length > 0 && toMeasure.length === 0;
 
   const enterIndividual = () =>
     setSelection((prev) =>
@@ -150,102 +137,6 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
       else keys.add(key);
       return { kind: "individual", keys };
     });
-
-  /* -------------------------------------------------------------- download */
-
-  const buildJobs = (): CaptureJob[] => {
-    const person = preferredName(data);
-    const jobs: CaptureJob[] = [];
-    for (const key of readyChosen) {
-      const card = derived.get(key);
-      const pag = paginationFor(key);
-      if (!card || !pag) continue;
-      // Deliberately blocked: an emergency protocol continuing on a card a
-      // responder does not have is worse than asking the family to trim it.
-      if (pag.overflow === "emergency-overflow") continue;
-      for (const page of pageCards(card, pag.pages)) {
-        jobs.push({
-          card: page,
-          filename: cardFilename(cardTitle(key), {
-            personName: person,
-            pageIndex: page.pageIndex,
-            pageCount: page.pageCount,
-          }),
-        });
-      }
-    }
-    return jobs;
-  };
-
-  const jobCount = allMeasured ? buildJobs().length : 0;
-  // Every download also carries the static Which Cards To Send index card, so
-  // the file count the button promises includes it.
-  const totalCount = jobCount > 0 ? jobCount + 1 : 0;
-
-  // Mount one page at scale 1, wait for layout, hand its frame to capture.
-  useEffect(() => {
-    if (!capture) return;
-    const host = captureHostRef.current;
-    if (!host) return;
-    let raf2 = 0;
-    const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        const frame = host.querySelector<HTMLElement>("[data-card-frame]");
-        const resolve = captureReady.current;
-        captureReady.current = null;
-        if (frame && resolve) resolve(frame);
-      });
-    });
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-    };
-  }, [capture]);
-
-  const renderForCapture = (card: CardData) =>
-    new Promise<HTMLElement>((resolve) => {
-      captureReady.current = resolve;
-      setCapture(card);
-    });
-
-  const download = async () => {
-    const jobs = buildJobs();
-    if (jobs.length === 0 || busy) return;
-    setBusy(true);
-    setError(null);
-    // The static index card rides along with every set, so the running count
-    // the family watches includes it.
-    const total = jobs.length + 1;
-    try {
-      // Sequential on purpose — the review page's multi-download pattern.
-      for (let i = 0; i < jobs.length; i++) {
-        setProgress(`Preparing card ${i + 1} of ${total}…`);
-        const frame = await renderForCapture(jobs[i].card);
-        const png = await captureCardPng(frame);
-        // PNG only, never JPEG — 39px type keeps its edges.
-        triggerDownload(jobs[i].filename, png, "image/png");
-      }
-      // The Which Cards To Send index card, last so the topic cards a family
-      // is waiting on land first. A fixed asset fetched from this site's own
-      // public folder: same-origin, no family data in the request.
-      setProgress(`Preparing card ${total} of ${total}…`);
-      const res = await fetch(INDEX_CARD.asset);
-      if (!res.ok) throw new Error(`index card fetch failed: ${res.status}`);
-      triggerDownload(cardFilename(INDEX_CARD.title), await res.blob(), "image/png");
-      setProgress(`All ${total} cards are in your downloads folder.`);
-    } catch (e) {
-      console.error(e);
-      setProgress("");
-      setError(
-        "The cards couldn't be drawn on this device. Nothing was uploaded and nothing " +
-          "was lost. Your letter is safe. Try again in a moment, or use the PDFs on " +
-          "the review page in the meantime."
-      );
-    } finally {
-      setCapture(null);
-      setBusy(false);
-    }
-  };
 
   /* --------------------------------------------------------------- render */
 
@@ -307,7 +198,7 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
             </Eyebrow>
           </div>
           <h2 className="text-center font-serif text-[clamp(1.75rem,4vw,2.5rem)] font-semibold tracking-[-0.015em] text-ink">
-            Pick a set, preview, download.
+            Pick a set and see what it holds.
           </h2>
         </div>
       ) : null}
@@ -407,8 +298,8 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
               className="mt-3 font-serif text-[1.75rem] font-semibold text-ink"
             >
               {readyChosen.length === 1
-                ? "Your card, exactly as it will download"
-                : "Your cards, exactly as they will download"}
+                ? "Your card, exactly as it will arrive"
+                : "Your cards, exactly as they will arrive"}
             </h2>
 
             {waitingChosen.length > 0 ? (
@@ -446,71 +337,29 @@ export function CardsScreen({ embedded = false }: { embedded?: boolean }) {
         </section>
       ) : null}
 
-      {/* --------------------------------------------------------- download */}
-      {chosen.length > 0 ? (
-        <section className={`tw-card ${CARD_GAP}`} aria-labelledby="cards-download-heading">
-          <div style={{ padding: "28px clamp(24px, 2.6vw, 36px) 30px" }}>
-            <Eyebrow>Take them with you</Eyebrow>
-            <h2
-              id="cards-download-heading"
-              className="mt-3 font-serif text-[1.75rem] font-semibold text-ink"
-            >
-              Download this set
-            </h2>
-            <p className="mt-3 max-w-[70ch] leading-[1.7]">
-              PNG images, one file per card. A card that runs long arrives as numbered
-              continuations, just like the preview. Every set also includes the Which
-              Cards To Send index card, the guide to which cards fit which hand-off.
-              They are drawn on this device and go straight to your downloads folder:
-              nothing is uploaded.
-            </p>
-            <div className="mt-5 flex flex-wrap items-center gap-4">
-              <Button
-                size="lg"
-                onClick={() => void download()}
-                disabled={busy || !allMeasured || jobCount === 0}
-              >
-                {busy
-                  ? "Preparing your cards…"
-                  : totalCount > 0
-                    ? `Download ${totalCount} cards`
-                    : "Download"}
-              </Button>
-              <span className="text-[0.9375rem] text-muted">
-                Sized for a phone screen. Nothing is uploaded.
-              </span>
-            </div>
-            <p aria-live="polite" className="mt-3 min-h-[1.5em] text-[0.9375rem] text-muted">
-              {progress}
-            </p>
-            <div aria-live="assertive">
-              {error ? (
-                <p className="mt-2 rounded-[var(--radius-sm)] border border-danger bg-dangerbg p-4 text-danger">
-                  {error}
-                </p>
-              ) : null}
-            </div>
-          </div>
-        </section>
-      ) : null}
-
+      {/* A "Download this set" section stood here, handing over one loose PNG
+          per card. The review page now delivers the whole pack as a single
+          zip — the same job done better — and two download mechanisms for one
+          deliverable is one too many, especially when the worse of them is the
+          one a family meets first. This page keeps the work only it does:
+          showing which cards a bundle holds, and what each will say. */}
       <p className={`${CARD_GAP} text-[0.9375rem] text-muted`}>
+        Your cards download as one zip from{" "}
         <Link
           href="/letter/review"
           className="font-semibold underline underline-offset-[3px]"
         >
-          Back to Review &amp; download
+          Review &amp; download
         </Link>
+        .
       </p>
 
-      {/* Offscreen: scale-1 mounts for measurement, one page at a time for capture. */}
+      {/* Offscreen scale-1 mounts, so pagination can be measured for the
+          previews above. No capture host: nothing on this page rasterizes. */}
       <div aria-hidden="true" style={OFFSCREEN}>
         {toMeasure.map((key) => (
           <MeasureMount key={key} card={derived.get(key)!} onMeasured={handleMeasured} />
         ))}
-      </div>
-      <div ref={captureHostRef} aria-hidden="true" style={OFFSCREEN}>
-        {capture ? <CareCard card={capture} scale={1} /> : null}
       </div>
     </Wrap>
   );

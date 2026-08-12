@@ -98,8 +98,8 @@ export default function CaregiverLetterPage() {
               line about "the trustee's letter" pointed at nothing a visitor
               could open from this page. */}
           <p className="mt-5 border-t border-navy500 pt-[18px] text-[0.9375rem] text-oninkbody">
-            One of the two letters the form can write. This one goes to whoever is
-            doing the day.
+            One of the two letters the form can write. This one is for whoever gives
+            the day-to-day care.
           </p>
         </div>
       </div>

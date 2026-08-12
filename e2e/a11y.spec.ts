@@ -37,6 +37,7 @@ const AGING_META: LetterMeta = {
 for (const path of [
   "/",
   "/letter",
+  "/letter-of-intent",
   "/privacy",
   "/your-data",
   "/letter/review",
@@ -50,16 +51,19 @@ for (const path of [
   });
 }
 
-test("axe clean: the onboarding mid-sequence, and the question preview open", async ({
-  page,
-}) => {
+test("axe clean: the onboarding mid-sequence", async ({ page }) => {
   await page.goto("/letter");
   // Answer the first question so the sequence is genuinely mid-flight.
   await page.getByRole("button", { name: /day-to-day care/i }).click();
   await page.getByText(/question 2 of/i).waitFor();
   await expectNoViolations(page);
+});
 
-  // The question-set preview below, with a row open.
+test("axe clean: the question catalogue with a row open", async ({ page }) => {
+  // The catalogue lives on the Letter of Intent page now, and reads the same
+  // for a first-time visitor as for a family mid-letter — it takes nothing
+  // from the store.
+  await page.goto("/letter-of-intent");
   await page.getByRole("button", { name: /getting started/i }).click();
   await page.getByText(/be ready to write about/i).waitFor();
   await expectNoViolations(page);

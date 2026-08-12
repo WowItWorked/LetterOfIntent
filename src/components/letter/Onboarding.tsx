@@ -1,12 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { sectionsForMeta } from "@/lib/content/config";
-import { previewPrompts } from "@/lib/content/preview-prompts";
-import { resolveSectionWording } from "@/lib/content/types";
 import { displayName, fillName } from "@/lib/derive";
 import type { LetterMeta } from "@/lib/schema";
 import { useLetterStore } from "@/lib/store";
@@ -24,6 +20,28 @@ interface OnboardingOption {
   value: string;
   label: string;
   hint?: string;
+  /**
+   * The document(s) this answer produces, shown as the option's title. Only
+   * the audience question sets it: it is the one answer that decides what
+   * comes out the other end, and a family choosing here is really choosing
+   * between letters. `label` stays the answer to the question, so the answers
+   * card below still summarises what was chosen rather than what it yields.
+   */
+  produces?: string;
+  /**
+   * Drop the label bullet. "Both" says nothing under a title that already
+   * names both readers — but `label` stays the answer the answers card
+   * summarises, so it cannot simply be deleted.
+   */
+  omitLabelPoint?: boolean;
+  /**
+   * The option, as bullets: who it reaches, what the letter carries, and where
+   * it is thinner. The "thinner" line is not editorial — it is
+   * lib/pdf/projections.ts read back in plain words, because which sections a
+   * letter drops is the one thing a family cannot discover until they print.
+   * Only `produces` is bold; these carry no emphasis of their own.
+   */
+  points?: readonly string[];
 }
 
 interface OnboardingQuestion {
@@ -32,6 +50,8 @@ interface OnboardingQuestion {
   question: string;
   help?: string;
   options: OnboardingOption[];
+  /** One bulleted line under the grid: what every option produces alike. */
+  sharedPoint?: string;
   /** Multi-select questions store a string[] (schoolWork). */
   multi?: boolean;
 }
@@ -41,20 +61,46 @@ export const ONBOARDING_QUESTIONS: OnboardingQuestion[] = [
     id: "audience",
     eyebrow: "The letter",
     question: "Who do you most need this letter to reach?",
-    help: "A trust is money set aside with someone appointed to manage it. This decides which documents you get; you can add the other at any time.",
+    help: "A trust is money set aside with someone appointed to manage it. This is the one answer that decides which letters you get; you can add the other at any time, and nothing you have written is lost when you do.",
     options: [
       {
         value: "trustee",
+        produces: "The Trustee",
         label: "Whoever will manage money for them",
-        hint: "A trustee, or the person who will one day take that role",
+        points: [
+          "A trustee, or the person who will one day take that role",
+          "One letter is made: the Letter of Intent",
+          "Focus area: the money, the benefits, the legal authority, and enough of the person that a trustee who never met them can judge well",
+        ],
       },
       {
         value: "caregiver",
+        produces: "The Caregiver",
         label: "Whoever will provide day-to-day care",
-        hint: "Family, or someone paid to help",
+        points: [
+          "Family, or someone paid to help",
+          "One letter is made: the Letter for the Caregiver",
+          "Focus area: the routines, the communication, the behavior, and health as it is actually lived — read in a kitchen at 7am",
+        ],
       },
-      { value: "both", label: "Both" },
+      {
+        value: "both",
+        produces: "Both the Trustee and Caregiver",
+        label: "Both",
+        omitLabelPoint: true,
+        points: [
+          "Two letters are made: the Letter of Intent and the Letter for the Caregiver",
+          "Each written for its reader, from the one set of answers",
+          "Focus area: everything, split so neither reader is handed what belongs to the other",
+        ],
+      },
     ],
+    // True of every option, so it is said once under the grid rather than
+    // three times inside it: audience gates only the two guidance sections and
+    // one money field, none of which feeds a card (content/cards.ts SOURCES).
+    // card-reachability.test.ts holds that fact.
+    sharedPoint:
+      "The emergency information sheet and all seven care cards are created with every option, from the same answers.",
   },
   {
     id: "stage",
@@ -114,18 +160,12 @@ export const ONBOARDING_QUESTIONS: OnboardingQuestion[] = [
       { value: "no", label: "No" },
     ],
   },
-  {
-    id: "hasTrust",
-    eyebrow: "Money",
-    question: "Is there a trust for {name}, or a plan to create one?",
-    help: "A trust is money set aside with someone appointed to manage it.",
-    options: [
-      { value: "yes", label: "Yes" },
-      { value: "planned", label: "We're planning one" },
-      { value: "no", label: "No" },
-      { value: "notSure", label: "I'm not sure" },
-    ],
-  },
+  // hasTrust was here. It gated exactly one optional field
+  // (moneyBenefits.trusts), and that field was OR-gated with
+  // audience ∈ {trustee, both} — so for two of the three audience answers the
+  // question was inert, and its help text repeated question 1's first sentence
+  // verbatim. The field is now asked of everyone; nobody loses access to it,
+  // and the sequence loses a step.
   {
     id: "hasBenefits",
     eyebrow: "Benefits",
@@ -149,17 +189,12 @@ export const ONBOARDING_QUESTIONS: OnboardingQuestion[] = [
       { value: "neither", label: "Neither right now" },
     ],
   },
-  {
-    id: "livesWith",
-    eyebrow: "Home",
-    question: "Where does {name} live?",
-    options: [
-      { value: "withWriter", label: "With me" },
-      { value: "ownHome", label: "In their own home" },
-      { value: "withOthers", label: "With family or a roommate" },
-      { value: "facility", label: "In a facility or supported residence" },
-    ],
-  },
+  // livesWith was here. Its four options collapsed to one binary
+  // (ownHome/withOthers) gating two fields, both in Home and daily living —
+  // and that section's first question, "Current living situation: where they
+  // live, with whom, and how it works day to day", already asks it in prose.
+  // The two fields are now always asked, so the answer is given once, in the
+  // section it belongs to, instead of twice.
 ];
 
 type Answers = Partial<Record<string, string | string[]>>;
@@ -230,8 +265,6 @@ function OnboardingInner() {
           }}
         />
       )}
-
-      <QuestionPreview />
     </section>
   );
 }
@@ -327,22 +360,70 @@ function QuestionSequence({
               aria-pressed={active}
               onClick={() => choose(o.value)}
               className={cn(
-                "min-h-[64px] rounded-[var(--radius-sm)] border p-4 text-left transition-colors",
+                // flex-col, not the default block: a button centres its content
+                // box vertically, so in a stretched grid row the shorter options
+                // floated to the middle while their neighbours filled the card.
+                "flex min-h-[64px] flex-col rounded-[var(--radius-sm)] border p-4 text-left transition-colors",
                 active
                   ? "border-navy600 bg-paper2"
                   : "border-line bg-surface hover:border-gold500"
               )}
             >
-              <span className="block font-semibold text-ink">{fillName(o.label, name)}</span>
-              {o.hint ? (
-                <span className="mt-1 block text-[0.9375rem] leading-[1.55] text-muted">
-                  {fillName(o.hint, name)}
-                </span>
-              ) : null}
+              {/* The title is the only bold thing in the box; everything below
+                  it is one weight, so the eye lands on the document produced
+                  and then reads the bullets as a level list. Spans, not a ul —
+                  a button's content model is phrasing content only. */}
+              {o.produces ? (
+                <>
+                  <span className="block font-serif text-[1.3125rem] font-semibold leading-snug text-ink">
+                    {fillName(o.produces, name)}
+                  </span>
+                  {[
+                    ...(o.omitLabelPoint ? [] : [o.label]),
+                    ...(o.points ?? []),
+                  ].map((point) => (
+                    <span
+                      key={point}
+                      className="mt-2 flex gap-2.5 text-[0.9375rem] leading-[1.55] text-muted"
+                    >
+                      <span className="tw-diamond mt-[7px] flex-none" aria-hidden="true" />
+                      <span className="flex-1">{fillName(point, name)}</span>
+                    </span>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <span className="block font-semibold text-ink">
+                    {fillName(o.label, name)}
+                  </span>
+                  {o.hint ? (
+                    <span className="mt-1 block text-[0.9375rem] leading-[1.55] text-muted">
+                      {fillName(o.hint, name)}
+                    </span>
+                  ) : null}
+                </>
+              )}
             </button>
           );
         })}
       </div>
+
+      {q.sharedPoint ? (
+        // The list is already flush with the options grid, but the diamond is a
+        // 7px square rotated 45° (globals.css), so what it PAINTS is 7√2 ≈ 9.9px
+        // wide and hangs ~1.45px past its layout box on each side — enough for
+        // the tip to sit outside the boxes' left border instead of on it.
+        // Nudging by exactly that bleed puts the two edges on one line.
+        <ul
+          className="mt-5 list-none p-0"
+          style={{ paddingLeft: "calc((7px * 1.4142136 - 7px) / 2)" }}
+        >
+          <li className="flex gap-2.5 text-[0.9375rem] leading-[1.6] text-body">
+            <span className="tw-diamond mt-[8px] flex-none" aria-hidden="true" />
+            <span className="flex-1">{fillName(q.sharedPoint, name)}</span>
+          </li>
+        </ul>
+      ) : null}
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
         <div className="flex items-center gap-4">
@@ -448,120 +529,3 @@ function AnswersCard({
   );
 }
 
-/* ------------------------------------------------------- question preview */
-
-/**
- * Every question this configuration will ask, before writing a word — the
- * question-set preview the old chooser carried, now driven by the live
- * answers. Sections show and hide as answers change, which doubles as the
- * plainest demonstration that the form adapts.
- */
-function QuestionPreview() {
-  const data = useLetterStore((s) => s.data);
-  const meta = useLetterStore((s) => s.meta);
-  const [open, setOpen] = useState<string | null>(null);
-  const name = displayName(data);
-
-  const sections = useMemo(() => sectionsForMeta(meta, data), [meta, data]);
-
-  return (
-    <section id="questions" className="mt-14 scroll-mt-[calc(clamp(64px,19vw,124px)+48px)]">
-      <p className="tw-engraved flex items-center gap-3.5 text-xs tracking-[0.16em] text-accent">
-        Prepare
-        <span
-          aria-hidden="true"
-          className="h-px flex-1 opacity-45"
-          style={{ background: "var(--gradient-gold)" }}
-        />
-      </p>
-      <h2 className="mt-3.5 font-serif text-[clamp(1.7rem,4vw,2.25rem)] font-semibold tracking-[-0.01em] text-ink">
-        Every question, before you start.
-      </h2>
-      <p className="mt-3 max-w-[76ch] text-lg leading-[1.7] text-muted">
-        These are the {sections.length} sections your answers put in play. Open any
-        one to read what it asks for. Nothing is required. A section you skip
-        simply will not appear in the letter.
-      </p>
-
-      <ul
-        className="mt-7 list-none overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface p-0"
-        style={{ boxShadow: "var(--shadow-sm)" }}
-      >
-        {sections.map((def, i) => {
-          const isOpen = open === def.slug;
-          const prompts = previewPrompts[def.slug];
-          const wording = resolveSectionWording(def, meta);
-          return (
-            <li key={def.slug} className={i === 0 ? undefined : "border-t border-line"}>
-              <button
-                type="button"
-                onClick={() => setOpen(isOpen ? null : def.slug)}
-                aria-expanded={isOpen}
-                className={cn(
-                  "flex min-h-[56px] w-full items-center gap-4 border-0 border-l-2 px-6 py-3.5 text-left transition-colors duration-[var(--dur-fast)] motion-reduce:transition-none",
-                  isOpen
-                    ? "border-l-gold500 bg-paper2"
-                    : "border-l-transparent bg-transparent hover:bg-paper"
-                )}
-              >
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "tw-engraved w-[2.4ch] flex-none text-xs",
-                    isOpen ? "text-accent" : "text-faint"
-                  )}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="flex-1 text-base text-ink">
-                  {fillName(wording.navTitle, name)}
-                  {def.optionalTag ? <span className="text-muted"> (optional)</span> : null}
-                </span>
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 16 16"
-                  className={cn(
-                    "size-3.5 flex-none transition-transform duration-[var(--dur-base)] motion-reduce:transition-none",
-                    isOpen ? "rotate-180 text-accent" : "text-faint"
-                  )}
-                >
-                  <path
-                    d="M4 6l4 4 4-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-
-              {isOpen && prompts ? (
-                <div className="bg-paper2 pb-[26px] pl-[62px] pr-[26px] pt-0.5">
-                  <p className="tw-engraved mb-3 text-xs tracking-[0.18em] text-accent">
-                    Be ready to write about
-                  </p>
-                  <ul className="list-none p-0">
-                    {prompts.map((p) => (
-                      <li key={p} className="mb-2.5 flex gap-3 last:mb-0">
-                        <span className="tw-diamond mt-2 flex-none" aria-hidden="true" />
-                        <span className="flex-1 text-[0.9375rem] leading-[1.65]">{p}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="mt-[18px]">
-                    <Link
-                      href={`/letter/${def.slug}`}
-                      className="text-[0.9375rem] font-semibold text-accent underline-offset-4 hover:underline"
-                    >
-                      Open this section &rarr;
-                    </Link>
-                  </p>
-                </div>
-              ) : null}
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}

@@ -1,5 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import {
+  Document,
+  Image,
+  Page,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "@react-pdf/renderer";
 import type { Style } from "@react-pdf/types";
 import type { ReactNode } from "react";
 import { firm } from "@/config/firm";
@@ -127,7 +135,18 @@ export const s = StyleSheet.create({
   noteBoxText: { fontSize: 11, lineHeight: 1.5, color: INK },
 
   notesArea: { marginTop: 14 },
-  notesLine: { borderBottomWidth: 0.75, borderBottomColor: RULE_ON_PAPER, height: 22 },
+  /** The frame is a View, not the widget's own border: a plain View is drawn
+   *  by the layout engine and always prints, whereas a form widget's
+   *  appearance is the viewer's business. This way the box is on the paper
+   *  whether or not anything can fill it. */
+  notesBox: {
+    height: 110,
+    borderWidth: 0.75,
+    borderColor: RULE_ON_PAPER,
+    borderStyle: "solid",
+    padding: 5,
+  },
+  notesField: { flexGrow: 1, color: INK, fontFamily: SERIF },
 
   tocRow: { flexDirection: "row", alignItems: "flex-end", marginBottom: 9 },
   tocNumber: { fontFamily: SANS, fontSize: 9, color: FAINT, width: 22 },
@@ -572,11 +591,30 @@ export function SectionPage({
         <PdfField key={field.id} field={field} values={values} name={name} />
       ))}
 
+      {/* A real PDF form field, so this box can be typed into in Acrobat,
+          Preview, or any PDF editor and saved with the file — and it still
+          prints as an empty box for anyone adding to it by hand.
+          Deliberately the ONLY editable region: the prose above it is a
+          projection of the letter on the family's device, and it repaginates
+          as it grows. A form widget cannot reflow or repaginate, so making
+          the body editable would let text overflow a fixed box, scroll out of
+          sight, and print missing — while the contents page silently kept the
+          old numbers. This box is fixed-size by design, so it has no such
+          failure mode.
+          The name must be unique per document: two widgets sharing a name in
+          PDF share one value, so every section's notes would mirror the rest.
+          def.key is unique across the roster, and wrap={false} keeps each
+          section's box on a single page, so one section is one widget. */}
       <View style={s.notesArea} wrap={false}>
-        <Text style={s.fieldLabel}>NOTES — FOR HANDWRITTEN ADDITIONS</Text>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <View key={i} style={s.notesLine} />
-        ))}
+        <Text style={s.fieldLabel}>NOTES — TYPE HERE, OR PRINT AND WRITE BY HAND</Text>
+        <View style={s.notesBox}>
+          <TextInput
+            name={`notes-${def.key}`}
+            multiline
+            fontSize={10}
+            style={s.notesField}
+          />
+        </View>
       </View>
     </Page>
   );

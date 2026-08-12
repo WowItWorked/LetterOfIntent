@@ -7,7 +7,9 @@ never invent a mapping that is not here, and after the re-architecture
 
 **Outputs.** T = Letter of Intent (for the trustee) · C = Letter for the
 Caregiver (new) · E = Emergency Information Sheet · K = Care Cards (one
-derivation, two formats: phone PNG and print-at-home PDF).
+derivation, one format: phone-screen PNGs, delivered as a zip. The
+print-at-home PDF that once shared this derivation has been removed — a card
+belongs in a camera roll, and a PDF cannot be favourited or texted).
 
 **Marks.** P = primary (the output is built around it) · i = included ·
 — = not used. Every canonical field appears in at least one output.

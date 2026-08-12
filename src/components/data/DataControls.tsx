@@ -5,6 +5,8 @@ import { useState, type ReactNode } from "react";
 import { firm } from "@/config/firm";
 import { serializeBackup } from "@/lib/backup";
 import { sectionsForMeta, startedCount } from "@/lib/content/config";
+import { requirementsMet } from "@/lib/cards/derive";
+import { CARD_KEYS } from "@/lib/content/cards";
 import { documentFilename } from "@/lib/filenames";
 import { triggerDownload } from "@/lib/download";
 import { deleteAllPhotos, photosForBackup } from "@/lib/photos";
@@ -13,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { RestoreFlow } from "@/components/data/RestoreFlow";
+import { useCardPack } from "@/components/cards/card-pack";
 
 type Notice = { tone: "success" | "danger"; text: string } | null;
 
@@ -65,7 +68,12 @@ export function DataControls() {
 
   const [notice, setNotice] = useState<Notice>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [busy, setBusy] = useState<"letter" | "emergency" | null>(null);
+  const [busy, setBusy] = useState<"letter" | "emergency" | "cards" | null>(null);
+  const [cardProgress, setCardProgress] = useState("");
+  // The card pack needs its cards mounted to rasterize them; `pack.host` at
+  // the foot of this component is where that happens.
+  const pack = useCardPack();
+  const cardsReady = hydrated && CARD_KEYS.some((k) => requirementsMet(data, k));
 
   const total = sectionsForMeta(meta, data).length;
   const count = hydrated ? startedCount(data, meta) : 0;
@@ -108,6 +116,39 @@ export function DataControls() {
         text: "That document couldn't be prepared on this device. The reading view on the review page still prints.",
       });
     } finally {
+      setBusy(null);
+    }
+  };
+
+  /** The eight card images as one archive — see ReviewScreen for the why. */
+  const handleCards = async () => {
+    setBusy("cards");
+    setNotice(null);
+    try {
+      const entries = await pack.buildEntries((done, all) =>
+        setCardProgress(done < all ? `${Math.min(done + 1, all)} of ${all}…` : "")
+      );
+      const { createZipBlob } = await import("@/lib/zip");
+      triggerDownload(
+        documentFilename("cards"),
+        createZipBlob(entries, new Date()),
+        "application/zip"
+      );
+      setNotice({
+        tone: "success",
+        text:
+          `${entries.length} card images downloaded as a zip. Unzip it and save the ` +
+          "images to your photos, so you can send one from your phone without opening " +
+          "this site.",
+      });
+    } catch (e) {
+      console.error(e);
+      setNotice({
+        tone: "danger",
+        text: "The cards couldn't be drawn on this device. The Care cards page can still send them one at a time.",
+      });
+    } finally {
+      setCardProgress("");
       setBusy(null);
     }
   };
@@ -196,13 +237,31 @@ export function DataControls() {
             >
               {busy === "emergency" ? "Preparing…" : "Emergency sheet (PDF)"}
             </Button>
+            {cardsReady ? (
+              <Button
+                variant="outline"
+                onClick={() => void handleCards()}
+                disabled={!hydrated || busy !== null || !pack.ready}
+              >
+                {busy === "cards"
+                  ? `Preparing… ${cardProgress}`
+                  : pack.ready
+                    ? `Care cards (${pack.fileCount} PNGs, zip)`
+                    : "Preparing…"}
+              </Button>
+            ) : null}
           </>
         }
       >
         <p>
-          The same two documents the review page produces: the full Letter of Intent, and
-          the one-page emergency sheet. Both are built here on this device, from whatever
-          you have written so far.
+          The same documents the review page produces: the full Letter of Intent, the
+          one-page emergency sheet, and your care cards. All of them are built here on
+          this device, from whatever you have written so far.
+        </p>
+        <p className="mt-3">
+          The cards come as PNG images in a zip rather than a document, because that is
+          what makes them useful: unzip them into your photos and you can send one from
+          your phone without opening this site.
         </p>
         <p className="mt-3 text-[0.9375rem] text-muted">
           Prefer to see it all first?{" "}
@@ -221,7 +280,9 @@ export function DataControls() {
       >
         <p>
           Continue on this device from a backup file you downloaded earlier, here or on
-          another device. Loading a backup file replaces whatever is on this device, so
+          another device. That is the <code className="font-sans">.json</code> file this
+          tool gave you &mdash; not one of the PDFs, which are for reading rather than
+          reloading. Loading a backup file replaces whatever is on this device, so
           download a copy of that first if you want to keep it.
         </p>
         <p className="mt-3 text-[0.9375rem] text-muted">
@@ -290,6 +351,9 @@ export function DataControls() {
           </Button>
         </div>
       </Dialog>
+
+      {/* The card pipeline's offscreen host — machinery, not content. */}
+      {pack.host}
     </div>
   );
 }

@@ -86,7 +86,7 @@ const DELIVERABLES = [
     title: "The Letter of Intent",
     blurb:
       "The deep document: every routine, warning, and hard-won lesson, laid out for the trustee, guardian, or sibling who takes over.",
-    href: "/letter",
+    href: "/letter-of-intent",
     cta: "Learn more",
     art: "letter" as const,
   },

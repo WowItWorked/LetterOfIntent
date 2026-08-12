@@ -271,7 +271,11 @@ test("downloaded files are named by document and date, never by person or questi
       `Letter-of-Intent-${iso}.pdf`,
       `Letter-for-the-Caregiver-${iso}.pdf`,
       `Emergency-Information-Sheet-${iso}.pdf`,
-      `Care-Cards-Print-${iso}.pdf`,
+      // The archive's own name follows the no-names rule like every document.
+      // The PNGs INSIDE it are named for the person on purpose — a camera roll
+      // has to be searchable — which is why the loop below checks names, not
+      // the archive's contents.
+      `Care-Cards-${iso}.zip`,
       `Letter-of-Intent-Backup-${iso}.json`,
     ])
   );

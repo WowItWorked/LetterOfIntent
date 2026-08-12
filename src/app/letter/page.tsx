@@ -1,44 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Onboarding } from "@/components/letter/Onboarding";
-import { StartButtons } from "@/components/letter/StartButtons";
 import { ResumeCard } from "@/components/home/ResumeCard";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export const metadata: Metadata = {
   title: "Create your letter",
   description:
     "One set of questions that fits itself to the person you care for. A few " +
-    "answers up front shape the form; read every question before you write a word.",
+    "answers up front shape the form, and it saves on your device as you go.",
   alternates: { canonical: "/letter" },
 };
 
-/** The three-step "how it works" trio — moved here from the home page. */
-const HOW_IT_WORKS = [
-  {
-    numeral: "A.",
-    title: "Answer what you can",
-    body: "Short sections, every question optional. Jump around. A ten-minute sitting is a real contribution.",
-  },
-  {
-    numeral: "B.",
-    title: "It saves only on your device",
-    body: (
-      <>
-        It saves after every answer, so you can stop mid-sentence tonight and pick it up
-        on Thursday. No account and no login, so it saves in <em>this</em> browser only:
-        download a backup file to switch devices.
-      </>
-    ),
-  },
-  {
-    numeral: "C.",
-    title: "Download the documents and your backup file",
-    body: "The polished, printable letters, the one-page emergency sheet, and your care cards, plus the backup file that lets you pick the letter up again later, or on another device.",
-  },
-];
-
-export default function LetterLandingPage() {
+/**
+ * The builder, and only the builder.
+ *
+ * What a Letter of Intent is, who reads it, how the tool works, and the
+ * full question catalogue all live on /letter-of-intent now. Somebody who
+ * arrives here has already decided; this page's whole job is to take the ten
+ * onboarding answers and open the form. The one link back out is for the
+ * reader who landed here without the explanation.
+ */
+export default function LetterBuilderPage() {
   return (
     <>
       {/* Full-bleed header band, flush under the privacy strip — the same
@@ -63,7 +45,14 @@ export default function LetterLandingPage() {
             every answer can change later without losing a word.
           </p>
           <p className="mt-5 border-t border-navy500 pt-[18px] text-[0.9375rem] text-oninkbody">
-            It saves as you go, on this device only.
+            It saves as you go, on this device only. New to this?{" "}
+            <Link
+              href="/letter-of-intent"
+              className="font-semibold text-gold400 underline underline-offset-[3px] hover:text-gold300"
+            >
+              Read what a Letter of Intent is
+            </Link>{" "}
+            and every question it asks.
           </p>
         </div>
       </div>
@@ -79,77 +68,9 @@ export default function LetterLandingPage() {
             letter already on this device has to be reachable in one click. */}
         <ResumeCard />
 
-        {/* The onboarding sequence (or, once answered, the answers card),
-            plus the live question-set preview beneath it. */}
+        {/* The onboarding sequence, or — once answered — the answers card. */}
         <Onboarding />
       </div>
-
-      {/* ------------------------------------- how it works, closing the page. */}
-      <section
-        style={{
-          background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
-          padding: "clamp(56px, 7.5vw, 96px) var(--gutter)",
-        }}
-      >
-        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
-          <div className="mx-auto max-w-[760px] text-center">
-            <Eyebrow tone="light" align="center" flanked>
-              How it works
-            </Eyebrow>
-            <h2 className="mt-5 font-serif text-[clamp(1.75rem,5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
-              Start with ten minutes.
-            </h2>
-            <p className="mx-auto mt-5 max-w-[58ch] text-lg leading-[1.7] text-oninkbody">
-              You don&rsquo;t have to do this all at once, and you don&rsquo;t have to do
-              it perfectly. A letter with three sections filled in is already worth more
-              to a future caregiver than the perfect letter that never got written.
-            </p>
-          </div>
-
-          <ol
-            className="mx-auto mt-11 grid max-w-[1080px] list-none gap-5 p-0 text-left"
-            style={{
-              gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
-            }}
-          >
-            {HOW_IT_WORKS.map((step) => (
-              <li
-                key={step.numeral}
-                className="rounded-[var(--radius-md)] border border-navy500 px-7 pb-7 pt-6"
-                style={{ background: "rgba(255,255,255,0.045)" }}
-              >
-                <span
-                  aria-hidden="true"
-                  className="tw-engraved block text-[28px] tracking-[0.06em] text-gold400"
-                >
-                  {step.numeral}
-                </span>
-                <h3 className="mt-2 font-serif text-[1.25rem] font-semibold text-onink">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-[0.9375rem] leading-[1.7] text-oninkbody">
-                  {step.body}
-                </p>
-              </li>
-            ))}
-          </ol>
-
-          <div className="mx-auto mt-[30px] max-w-[640px]">
-            <StartButtons />
-            <p className="mt-[18px] text-center text-[0.9375rem] leading-[1.65] text-oninkbody">
-              No account and no email address. It saves on this device as you go, and
-              you can{" "}
-              <Link
-                href="/your-data"
-                className="font-semibold text-gold400 underline underline-offset-[3px] hover:text-gold300"
-              >
-                download a backup file
-              </Link>{" "}
-              at any time.
-            </p>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

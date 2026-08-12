@@ -197,8 +197,8 @@ export function SampleViewer({ sample }: { sample: SampleDoc }) {
 
       {status === "ready" ? (
         <p className="mt-2 text-[0.9375rem] text-muted">
-          {pageCount} page{pageCount === 1 ? "" : "s"}, generated on your device just
-          now. This is what the builder produces.
+          {pageCount} page{pageCount === 1 ? "" : "s"}, generated on your device. This is
+          what the builder produces.
         </p>
       ) : null}
     </div>

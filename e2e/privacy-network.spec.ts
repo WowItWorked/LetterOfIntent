@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Download, type Page } from "@playwright/test";
 import fs from "node:fs";
 import { FULL_LETTER, seedLetter } from "./fixture";
 
@@ -85,18 +85,19 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
     .click();
   await expect(page).toHaveURL(/\/letter$/);
   // Through the onboarding — every tap is local state, nothing may leave.
-  // "Both" keeps the trustee letter in the set this journey downloads.
-  await page.getByRole("button", { name: /^Both$/ }).click();
+  // "Both" keeps the trustee letter in the set this journey downloads. Matched
+  // on the option's title rather than /^Both$/: the audience options carry the
+  // document they produce, what it leaves out, and the cards, so the exact
+  // accessible name is a paragraph.
+  await page.getByRole("button", { name: /^both the trustee and caregiver/i }).click();
   await page.getByRole("button", { name: /^A child$/ }).click();
   await page.getByRole("button", { name: /around the clock/i }).click();
   await page.getByRole("button", { name: /^Yes$/ }).click();
   await page.getByRole("button", { name: /^Yes$/ }).click();
   await page.getByRole("button", { name: /^No$/ }).click();
-  await page.getByRole("button", { name: /not sure/i }).click();
   await page.getByRole("button", { name: /^Yes$/ }).click();
   await page.getByRole("button", { name: /school or a day program/i }).click();
-  await page.getByRole("button", { name: /continue/i }).click();
-  await page.getByRole("button", { name: /^With me$/ }).click();
+  await page.getByRole("button", { name: /finish and begin/i }).click();
   await expect(page).toHaveURL(/getting-started/);
 
   await page.getByLabel("Your name").fill("Maria Alvarez");
@@ -123,6 +124,19 @@ test("typing, saving, and generating a PDF makes zero non-local requests", async
   expect(download.suggestedFilename()).toMatch(
     /^Letter-of-Intent-\d{4}-\d{2}-\d{2}\.pdf$/
   );
+
+  // Each section's notes box is a real AcroForm widget, so the letter can be
+  // annotated in Acrobat and saved. Worth a test precisely because losing it
+  // is silent: the box still prints, and nobody notices it stopped accepting
+  // typing until they are sitting in front of it.
+  expect(
+    buf.includes(Buffer.from("/AcroForm")),
+    "the letter carries no AcroForm dictionary"
+  ).toBe(true);
+  expect(
+    buf.includes(Buffer.from("notes-gettingStarted")),
+    "the Getting started notes field is missing or misnamed"
+  ).toBe(true);
 
   expect(traffic.leaks, "letter content found in a request").toEqual([]);
   expect(
@@ -246,7 +260,15 @@ test("downloading the full set produces all four PDFs and a backup — with zero
   await page.goto("/letter/review");
 
   const downloads: string[] = [];
-  page.on("download", (d) => downloads.push(d.suggestedFilename()));
+  // Keep the Download objects, not just their names: saveAs() must be awaited
+  // to know the bytes are all on disk. Firing it from the handler and polling
+  // existsSync races — the file appears the moment it is created, so a reader
+  // can beat the writer to it and see a truncated PDF.
+  const received: Download[] = [];
+  page.on("download", (d) => {
+    downloads.push(d.suggestedFilename());
+    received.push(d);
+  });
 
   await page.getByRole("button", { name: /download the full set/i }).click();
   await expect
@@ -256,8 +278,27 @@ test("downloading the full set produces all four PDFs and a backup — with zero
   expect(downloads.some((f) => /^Letter-of-Intent-\d.*\.pdf$/.test(f))).toBe(true);
   expect(downloads.some((f) => /^Letter-for-the-Caregiver.*\.pdf$/.test(f))).toBe(true);
   expect(downloads.some((f) => /^Emergency-Information-Sheet.*\.pdf$/.test(f))).toBe(true);
-  expect(downloads.some((f) => /^Care-Cards-Print.*\.pdf$/.test(f))).toBe(true);
+  expect(downloads.some((f) => /^Care-Cards-\d.*\.zip$/.test(f))).toBe(true);
   expect(downloads.some((f) => /\.json$/.test(f))).toBe(true);
+
+  // Both letters carry their fillable notes boxes, not just the trustee one —
+  // they share SectionPage, and this is what keeps that true. The field name
+  // checked here belongs to a section only the caregiver letter prints, so it
+  // cannot pass by accidentally reading the other document.
+  const caregiver = received.find((d) =>
+    /^Letter-for-the-Caregiver/.test(d.suggestedFilename())
+  )!;
+  const caregiverPath = testInfo.outputPath(caregiver.suggestedFilename());
+  await caregiver.saveAs(caregiverPath);
+  const caregiverPdf = fs.readFileSync(caregiverPath);
+  expect(
+    caregiverPdf.includes(Buffer.from("/AcroForm")),
+    "the caregiver letter carries no AcroForm dictionary"
+  ).toBe(true);
+  expect(
+    caregiverPdf.includes(Buffer.from("notes-communication")),
+    "the caregiver letter's Communication notes field is missing"
+  ).toBe(true);
 
   // The two NEW outputs generate under the same privacy gate as everything
   // else: no request may leave localhost, and none may carry letter content.

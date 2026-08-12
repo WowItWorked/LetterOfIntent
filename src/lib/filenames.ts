@@ -33,11 +33,13 @@ export function documentFilename(kind: DocumentKind, now: Date = new Date()): st
       return `Letter-for-the-Caregiver-${date}.pdf`;
     case "emergency":
       return `Emergency-Information-Sheet-${date}.pdf`;
-    // The print-at-home sheet of the same cards the phone PNGs carry. Unlike
-    // the PNGs (whose faces show the name in 70px type), the print file's
-    // name stays non-identifying like every other document.
+    // The pack of card PNGs. The archive's own name follows rule 2 like every
+    // other document — the PNGs inside are named for the person on purpose
+    // (lib/cards/filenames.ts), because a camera roll has to be searchable and
+    // the card's face already shows the name in 70px type. The zip is what
+    // lands in a downloads folder; the PNGs are what land in Photos.
     case "cards":
-      return `Care-Cards-Print-${date}.pdf`;
+      return `Care-Cards-${date}.zip`;
     case "backup":
       return `Letter-of-Intent-Backup-${date}.json`;
   }

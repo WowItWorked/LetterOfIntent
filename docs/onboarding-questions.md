@@ -8,13 +8,27 @@ a word of written work — gating only hides *unanswered* questions; a gated-off
 field that holds content stays visible with its content.
 
 The brief guessed "six or so" follow-ups. The set that actually carries the
-range is **the audience question plus nine follow-ups** (hybrid model,
-approved): one ordinal gates bulk depth, three topical questions gate the
-sharp content, five short facts gate whole topics. Each is one tap; the whole
-sequence is under a minute. If ten feels like one axis collapsed too far, the
+range is **the audience question plus seven follow-ups**: one ordinal gates
+bulk depth, three topical questions gate the sharp content, three short facts
+gate whole topics. Each is one tap; the whole sequence is under a minute. The
 three topical questions are the ones I would defend to the last — they are
 what keeps the granddaughter out of the law-enforcement section and the parent
 of an escalating adult in it.
+
+**Two questions were cut**, after auditing what each one actually gates:
+
+- `hasTrust` gated a single optional field, `moneyBenefits.trusts`, which was
+  OR-gated with `audience ∈ {trustee, both}` — so for two of the three audience
+  answers the question changed nothing, and its help text repeated the audience
+  question's first sentence verbatim.
+- `livesWith` offered four options that collapsed to one binary
+  (`ownHome`/`withOthers`) gating two fields, both in Home and daily living —
+  a section whose first question, "Current living situation", already asks
+  where the person lives.
+
+Those three fields are now ungated, asked of everyone. The cost is a little
+more scrolling inside two sections; the saving is two taps before anyone has
+written a word. Both keys remain in the schema so old backups still parse.
 
 Format below: **id** · question · options `(stored token)` · what it gates.
 
@@ -82,16 +96,7 @@ Gates (yes/early): `communication.hearingVisionMemory`, `wontAdmit`,
 stage=adult — either opens it), heavier interstitial pacing on
 decline-adjacent questions.
 
-**7. hasTrust** — "Is there a trust for {name} — money set aside with
-someone appointed to manage it — or a plan to create one?"
-- "Yes" `(yes)` · "We're planning one" `(planned)` · "No" `(no)` ·
-  "I'm not sure" `(notSure)`
-
-Gates: `moneyBenefits.trusts` (yes/planned/notSure) and strengthens the
-trustee-letter recommendation when audience is caregiver-only (the "way back"
-to add the trustee output).
-
-**8. hasBenefits** — "Does {name} receive public benefits — SSI, SSDI,
+**7. hasBenefits** — "Does {name} receive public benefits — SSI, SSDI,
 Medicaid, Medicare, or a waiver — or might they apply?"
 - "Yes" `(yes)` · "Maybe / applying" `(maybe)` · "No" `(no)`
 
@@ -99,7 +104,7 @@ Gates (yes/maybe): `moneyBenefits.programs`, `repPayee`, `ableAccount`,
 `pending`, `home.waiverStatus`, `legal.advocates`, `advocacyHistory`. Each
 program name is defined inline where it first appears.
 
-**9. schoolWork** — "Is school, a day program, work, or volunteering part of
+**8. schoolWork** — "Is school, a day program, work, or volunteering part of
 {name}'s life?" *(multi-select)*
 - "School or a day program" `(school)` · "Work or volunteering" `(work)` ·
   "Neither right now" `(neither)`
@@ -107,15 +112,6 @@ program name is defined inline where it first appears.
 Gates: school → `currentProgram`, `iepHistory`, `whatWorksLearning`;
 work → `currentWork`, `jobSupports`, `commitments`, `keyContacts`,
 `windDown`, `workHistory`. `hopes` shows for all.
-
-**10. livesWith** — "Where does {name} live?"
-- "With me" `(withWriter)` · "In their own home" `(ownHome)` ·
-  "With family or a roommate" `(withOthers)` ·
-  "In a facility or supported residence" `(facility)`
-
-Gates: `home.theHome`, `deferred` (ownHome/withOthers — the operating-manual
-questions), `home.safety` framing, `currentLiving` label adapts. A facility
-answer trims the household questions entirely.
 
 ---
 
@@ -125,7 +121,9 @@ answer trims the household questions entirely.
 sleep, food, fixedPoints, goodDay, hardDay · communication's howToSpeak,
 pain, whatHelps, whatToAvoid · health (minus therapies, gated lightly on
 supportLevel/benefits) · communityFaith · finalWishes · personalMessage ·
-the five card-data sections (all optional-tagged, as today).
+the five card-data sections (all optional-tagged, as today) ·
+`moneyBenefits.trusts`, `home.theHome`, and `home.deferred` (formerly gated on
+the two cut questions).
 
 ## The variance proof (§1's requirement)
 

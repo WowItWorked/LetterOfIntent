@@ -7,7 +7,7 @@ it as a set of polished documents. Built as a public-service tool for
 [myletterofintent.com](https://myletterofintent.com).
 
 **One adaptive form, four outputs.** A short onboarding at `/letter` (who the
-letter is for, and nine follow-ups about the person's life) shapes a single
+letter is for, and seven follow-ups about the person's life) shapes a single
 canonical question set — there are no parallel "paths" or duplicate question
 sets. From one filled letter the tool produces:
 
@@ -16,7 +16,7 @@ sets. From one filled letter the tool produces:
 | **Letter of Intent** (PDF) | The trustee: money, benefits, legal authority, and the person behind them | `lib/pdf/loi-document.tsx` |
 | **Letter for the Caregiver** (PDF) | Daily life, routines, communication, behavior — read in a kitchen at 7am | `lib/pdf/caregiver-document.tsx` |
 | **Emergency Information Sheet** (PDF) | One page for the fridge, the sitter, the ER | `lib/pdf/emergency-document.tsx` |
-| **Care Cards** | Phone-screen PNGs to message a sitter, plus a print-at-home PDF with cut marks | `lib/cards/`, `lib/pdf/cards-print-document.tsx` |
+| **Care Cards** | Eight phone-screen PNGs, downloaded as one zip, to save into Photos and message to a sitter | `lib/cards/`, `components/cards/card-pack.tsx`, `lib/zip.ts` |
 
 Which letters generate follows the audience answer; the sheet, the cards, and
 the backup file are always in the set. Every output is a **projection of one
@@ -85,10 +85,11 @@ src/
     pdf/loi-document.tsx      ← the trustee letter (two-pass render for TOC)
     pdf/caregiver-document.tsx← the caregiver letter (key points up front)
     pdf/emergency-document.tsx← one-page emergency sheet
-    pdf/cards-print-document.tsx ← the cards as a print-at-home sheet
+  zip.ts                        ← store-only zip writer (the card pack)
   components/
     chrome/                   ← masthead, privacy strip, footer
-    letter/                   ← the onboarding sequence and start button
+    letter/                   ← the onboarding sequence, start button, and the
+                                question catalogue on /letter-of-intent
     home/                     ← the explainer video player, resume card
     share/                    ← the share card and copy-link behaviour
     wizard/                   ← rail nav, generic SectionForm renderer, photos

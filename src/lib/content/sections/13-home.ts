@@ -31,8 +31,10 @@ export const home: SectionDef = {
       rows: 4,
       label: "The home itself",
       help: "Owned or rented, who the landlord or the mortgage is with, and what a newcomer needs to know to keep it running.",
+      // Ungated. Was livesWith ∈ {ownHome, withOthers} — but "Current living
+      // situation" directly above already asks where they live, so the
+      // onboarding question was asking it a second time to hide this one.
       placeholder: "Where the water shut-off is, which key is which, the alarm code holder, the quirks",
-      showWhen: [{ livesWith: ["ownHome", "withOthers"] }],
     },
     {
       id: "supportLevel",
@@ -73,8 +75,8 @@ export const home: SectionDef = {
       kind: "textarea",
       rows: 3,
       label: "What is deferred, and what is urgent",
+      // Ungated, with theHome above — same reasoning.
       help: "The repairs that have been put off, and the one or two that really cannot be.",
-      showWhen: [{ livesWith: ["ownHome", "withOthers"] }],
     },
     {
       id: "safety",

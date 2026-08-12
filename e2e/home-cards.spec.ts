@@ -23,7 +23,7 @@ test("the what-you-get section shows all three deliverables with sample images",
   // Each tile opens its document's page, not just a sample.
   await expect(
     section.getByRole("link", { name: /the letter of intent/i })
-  ).toHaveAttribute("href", "/letter");
+  ).toHaveAttribute("href", "/letter-of-intent");
   await expect(
     section.getByRole("link", { name: /the emergency information sheet/i })
   ).toHaveAttribute("href", "/emergency-sheet");
@@ -87,6 +87,86 @@ test("the emergency-sheet page explains the sheet and links the sample", async (
   ).toHaveAttribute("href", "/letter");
 });
 
+test("the Letter of Intent page explains the document and lists every question", async ({
+  page,
+}) => {
+  await page.goto("/letter-of-intent");
+  await expect(
+    page.getByRole("heading", { name: /^the letter of intent\.$/i })
+  ).toBeVisible();
+
+  // What it is, and who ends up reading it.
+  await expect(
+    page.getByRole("heading", { name: /everything a stranger could never guess/i })
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^the trustee$/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /the sibling who steps in/i })).toBeVisible();
+
+  await expect(page.getByRole("link", { name: /open sample/i })).toHaveAttribute(
+    "href",
+    "/samples/letter-of-intent-disabilities"
+  );
+
+  // The two letters, and the tradeoff each one makes. Both halves must be
+  // present: "what it carries" alone would sell a letter without admitting
+  // what it drops, which is the thing a family finds out after printing.
+  await expect(
+    page.getByRole("heading", { name: /two letters, narrowed for their readers/i })
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^the letter for the caregiver$/i })).toBeVisible();
+  await expect(page.getByText(/where it is thinner/i)).toHaveCount(2);
+  await expect(page.getByText(/nothing you write is discarded/i)).toBeVisible();
+
+  // The question catalogue: every section, ungated, with its prompts one tap
+  // away — and it must not depend on a letter existing on this device.
+  await expect(
+    page.getByRole("heading", { name: /every question, before you start/i })
+  ).toBeVisible();
+  await page.getByRole("button", { name: /getting started/i }).click();
+  await expect(page.getByText(/be ready to write about/i)).toBeVisible();
+
+  // Scoped to main: the footer offers its own "Start your letter" link.
+  await expect(
+    page.locator("main").getByRole("link", { name: /start your letter$/i })
+  ).toHaveAttribute("href", "/letter");
+});
+
+test("the letter page is the builder, and sends the curious to the explainer", async ({
+  page,
+}) => {
+  await page.goto("/letter");
+  // The onboarding, and nothing that belongs on the content page.
+  await expect(page.getByText(/question 1 of/i)).toBeVisible();
+
+  // The audience question names the reader each answer reaches, above bullets
+  // describing it — the title is the only bold thing in the box. Anchored to
+  // the start of the accessible name: the whole box is one long string, and
+  // "the Letter of Intent" appears inside two of the three.
+  await expect(page.getByRole("button", { name: /^the trustee\b/i })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /^both the trustee and caregiver/i })
+  ).toBeVisible();
+  // A single-reader choice has to say so: one letter, not two.
+  await expect(page.getByText(/one letter is made: the letter of intent$/i)).toBeVisible();
+  await expect(
+    page.getByText(/one letter is made: the letter for the caregiver/i)
+  ).toBeVisible();
+  // What every option produces alike, said once under the grid.
+  await expect(
+    page.getByText(/emergency information sheet and all seven care cards are created/i)
+  ).toBeVisible();
+
+  await expect(
+    page.getByRole("heading", { name: /every question, before you start/i })
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: /start with ten minutes/i })
+  ).toHaveCount(0);
+  await expect(
+    page.locator("main").getByRole("link", { name: /read what a letter of intent is/i })
+  ).toHaveAttribute("href", "/letter-of-intent");
+});
+
 test("the header menu reaches the letter, the cards, and the emergency sheet", async ({
   page,
   isMobile,
@@ -97,7 +177,7 @@ test("the header menu reaches the letter, the cards, and the emergency sheet", a
     const nav = page.getByRole("navigation", { name: "Main" });
     await expect(
       nav.getByRole("link", { name: /^letter of intent$/i })
-    ).toHaveAttribute("href", "/letter");
+    ).toHaveAttribute("href", "/letter-of-intent");
     await expect(nav.getByRole("link", { name: /^care cards$/i })).toHaveAttribute(
       "href",
       "/care-cards"
@@ -112,7 +192,7 @@ test("the header menu reaches the letter, the cards, and the emergency sheet", a
     await nav.getByRole("button", { name: /resources/i }).click();
     await expect(
       nav.getByRole("link", { name: /^letter of intent$/i })
-    ).toHaveAttribute("href", "/letter");
+    ).toHaveAttribute("href", "/letter-of-intent");
     await expect(nav.getByRole("link", { name: /emergency sheet/i })).toHaveAttribute(
       "href",
       "/emergency-sheet"
@@ -128,8 +208,8 @@ test("the header menu reaches the letter, the cards, and the emergency sheet", a
   }
 });
 
-test("how it works closes the letter chooser page", async ({ page }) => {
-  await page.goto("/letter");
+test("how it works closes the Letter of Intent page", async ({ page }) => {
+  await page.goto("/letter-of-intent");
   const heading = page.getByRole("heading", { name: /start with ten minutes/i });
   await expect(heading).toBeVisible();
   const section = page.locator("section", { has: heading });

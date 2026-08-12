@@ -176,7 +176,17 @@ export function RestoreFlow({
           e.target.value = "";
         }}
       />
-      <Button variant="outline" onClick={() => fileRef.current?.click()}>
+      {/* w-full: ActionCard stacks its actions in a flex column, so the other
+          cards' buttons stretch to the column. This one sits inside
+          RestoreFlow's own wrapper, so without it the button shrinks to its
+          text and breaks the line the buttons make down the page.
+          Which file to look for is the card's narrative to carry, not the
+          button's — the label stays the action. */}
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={() => fileRef.current?.click()}
+      >
         Choose a backup file…
       </Button>
 

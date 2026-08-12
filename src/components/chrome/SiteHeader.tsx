@@ -29,7 +29,7 @@ const COMPACT_BELOW = 1200;
  */
 /** The three document pages, shared by the dropdown and the mobile menu. */
 const DOCUMENT_LINKS = [
-  ["Letter of Intent", "/letter"],
+  ["Letter of Intent", "/letter-of-intent"],
   ["Emergency Sheet", "/emergency-sheet"],
   ["Care Cards", "/care-cards"],
 ] as const;
@@ -208,7 +208,7 @@ export function SiteHeader() {
               Start your letter &middot; it&rsquo;s free
             </Link>
             <Link
-              href="/letter"
+              href="/letter-of-intent"
               onClick={closeMenu}
               className="flex min-h-[52px] items-center border-b border-line px-1 text-[0.9375rem] font-semibold uppercase tracking-[0.09em] text-navy700 hover:text-gold700"
             >

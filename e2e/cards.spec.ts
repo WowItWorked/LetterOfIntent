@@ -8,6 +8,71 @@ import { FULL_LETTER, seedLetter } from "./fixture";
  * keeps holding because this page adds no network calls.
  */
 
+/**
+ * Reads a stored-entry ZIP's central directory. Written here rather than
+ * imported from lib/zip.ts on purpose: an archive checked only by the code
+ * that wrote it proves nothing about whether a phone can open it.
+ */
+function readZipEntries(zip: Buffer): { name: string; bytes: Buffer }[] {
+  const eocd = zip.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+  expect(eocd, "no End of Central Directory record").toBeGreaterThan(-1);
+  const count = zip.readUInt16LE(eocd + 10);
+  let at = zip.readUInt32LE(eocd + 16);
+
+  const out: { name: string; bytes: Buffer }[] = [];
+  for (let i = 0; i < count; i++) {
+    expect(zip.readUInt32LE(at)).toBe(0x02014b50);
+    const size = zip.readUInt32LE(at + 24);
+    const nameLen = zip.readUInt16LE(at + 28);
+    const extraLen = zip.readUInt16LE(at + 30);
+    const commentLen = zip.readUInt16LE(at + 32);
+    const localAt = zip.readUInt32LE(at + 42);
+    const name = zip.subarray(at + 46, at + 46 + nameLen).toString("utf8");
+
+    const dataAt =
+      localAt + 30 + zip.readUInt16LE(localAt + 26) + zip.readUInt16LE(localAt + 28);
+    out.push({ name, bytes: zip.subarray(dataAt, dataAt + size) });
+    at += 46 + nameLen + extraLen + commentLen;
+  }
+  return out;
+}
+
+test("the review page hands over the whole card pack as PNGs in one zip", async ({
+  page,
+}, testInfo) => {
+  await seedLetter(page, FULL_LETTER);
+  await page.goto("/letter/review");
+
+  // The gallery shows the cards themselves, not a description of a file.
+  const download = page.waitForEvent("download");
+  await page
+    .getByRole("button", { name: /download all \d+ cards \(zip\)/i })
+    .click({ timeout: 60_000 });
+  const file = testInfo.outputPath("care-cards.zip");
+  await (await download).saveAs(file);
+
+  const entries = readZipEntries(fs.readFileSync(file));
+
+  // Seven topic cards plus the static index card. More is fine — a card that
+  // runs long pages onto a second image — but never fewer.
+  expect(entries.length).toBeGreaterThanOrEqual(8);
+  for (const e of entries) {
+    expect(e.name, "every member is a PNG").toMatch(/\.png$/);
+    // The magic bytes: proof these are real images, not empty or truncated
+    // members that only look right in a file listing.
+    expect(
+      e.bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])),
+      `${e.name} is not a PNG`
+    ).toBe(true);
+    expect(e.bytes.length, `${e.name} is suspiciously small`).toBeGreaterThan(2_000);
+  }
+
+  // The cards are named for the person on purpose — this is what makes a
+  // camera roll searchable — and the eighth card is the bundle guide.
+  expect(entries.filter((e) => e.name.startsWith("Alex — "))).not.toHaveLength(0);
+  expect(entries.some((e) => /Which Cards To Send/.test(e.name))).toBe(true);
+});
+
 test("the five bundles render, and picking one shows every card as a preview", async ({
   page,
 }) => {

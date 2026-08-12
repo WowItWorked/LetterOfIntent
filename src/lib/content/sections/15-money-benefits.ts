@@ -95,10 +95,11 @@ export const moneyBenefits: SectionDef = {
       example:
         "A special needs trust created in 2022. His aunt Dana Alvarez is trustee; " +
         "Claire Kelly at Trusts & Wealth drafted it and has the original.",
-      // The OR gate lets a caregiver-audience writer who answered yes to the
-      // trust question land here too, and for an aging parent that trust is
-      // usually a living trust, not a special needs trust. The help and the
-      // example switch together.
+      // Ungated. This was `hasTrust ∈ {yes, planned, notSure} OR audience ∈
+      // {trustee, both}` — an onboarding question spent on one optional field
+      // that two of the three audiences already saw. Asked of everyone now:
+      // for an aging parent the trust is usually a living trust rather than a
+      // special needs trust, so the help and the example switch together.
       variants: [
         {
           when: { supportLevel: ["mostlyIndependent"] },
@@ -108,10 +109,6 @@ export const moneyBenefits: SectionDef = {
             "is her own trustee; I am successor trustee. The attorney who " +
             "drafted it has the original and my number.",
         },
-      ],
-      showWhen: [
-        { hasTrust: ["yes", "planned", "notSure"] },
-        { audience: ["trustee", "both"] },
       ],
     },
     {

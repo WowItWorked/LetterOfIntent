@@ -10,6 +10,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: url("/"), lastModified, changeFrequency: "monthly", priority: 1 },
     { url: url("/letter"), lastModified, changeFrequency: "monthly", priority: 0.9 },
+    {
+      url: url("/letter-of-intent"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
     ...allSectionSlugs().map((slug) => ({
       url: url(`/letter/${slug}`),
       lastModified,

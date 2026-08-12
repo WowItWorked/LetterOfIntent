@@ -18,6 +18,8 @@ import { Button, buttonClasses } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { LetterReading } from "@/components/letter/LetterReading";
 import { ReminderPanel } from "@/components/review/ReminderPanel";
+import { useCardPack } from "@/components/cards/card-pack";
+import { CardGallery } from "@/components/review/CardGallery";
 
 type FileKind = "letter" | "caregiver" | "emergency" | "cards" | "backup";
 
@@ -30,6 +32,10 @@ export function ReviewScreen() {
 
   const [busy, setBusy] = useState<FileKind | "all" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [cardProgress, setCardProgress] = useState("");
+  // Rasterizing eight cards needs them mounted and laid out; the hook owns the
+  // offscreen host, and `pack.host` below is where it renders.
+  const pack = useCardPack();
 
   const sections = sectionsForMeta(meta, data);
   const total = sections.length;
@@ -48,7 +54,7 @@ export function ReviewScreen() {
     );
   };
 
-  const downloadPdf = async (kind: "letter" | "caregiver" | "emergency" | "cards") => {
+  const downloadPdf = async (kind: "letter" | "caregiver" | "emergency") => {
     const mod = await import("@/lib/pdf/generate");
     if (kind === "letter") {
       const blob = await mod.generateLetterPdfBlob(data, meta);
@@ -56,13 +62,30 @@ export function ReviewScreen() {
     } else if (kind === "caregiver") {
       const blob = await mod.generateCaregiverPdfBlob(data, meta);
       triggerDownload(mod.caregiverPdfFilename(), blob, "application/pdf");
-    } else if (kind === "cards") {
-      const blob = await mod.generateCardsPrintPdfBlob(data);
-      triggerDownload(mod.cardsPrintPdfFilename(), blob, "application/pdf");
     } else {
       const blob = await mod.generateEmergencyPdfBlob(data);
       triggerDownload(mod.emergencyPdfFilename(), blob, "application/pdf");
     }
+  };
+
+  /**
+   * The cards leave as PNGs in a zip, not as a print sheet. The point of a
+   * care card is to sit in a camera roll and be sent to whoever is arriving
+   * tonight; a PDF cannot be favourited, attached to a text, or opened in
+   * Photos. The archive is built here on the device from the same rendered
+   * cards the gallery shows.
+   */
+  const downloadCards = async () => {
+    const entries = await pack.buildEntries((done, all) =>
+      setCardProgress(done < all ? `Rendering card ${Math.min(done + 1, all)} of ${all}…` : "")
+    );
+    const { createZipBlob } = await import("@/lib/zip");
+    triggerDownload(
+      documentFilename("cards"),
+      createZipBlob(entries, new Date()),
+      "application/zip"
+    );
+    setCardProgress("");
   };
 
   // Which documents THIS letter produces: the audience decides the letters,
@@ -86,12 +109,14 @@ export function ReviewScreen() {
     setError(null);
     try {
       if (kind === "backup") await downloadBackup();
+      else if (kind === "cards") await downloadCards();
       else if (kind === "all") {
         for (const k of pdfKinds) {
-          await downloadPdf(k as "letter" | "caregiver" | "emergency" | "cards");
+          if (k === "cards") await downloadCards();
+          else await downloadPdf(k as "letter" | "caregiver" | "emergency");
         }
         await downloadBackup();
-      } else await downloadPdf(kind);
+      } else await downloadPdf(kind as "letter" | "caregiver" | "emergency");
     } catch (e) {
       console.error(e);
       setError(
@@ -188,10 +213,16 @@ export function ReviewScreen() {
             {cardsReady ? (
               <FileRow
                 onClick={() => void run("cards")}
-                disabled={!hydrated || busy !== null}
-                label={busy === "cards" ? busyLabel : "Download"}
-                title="Care cards, print at home (PDF)"
-                blurb="the same cards as the phone set, sized for a wallet and the fridge, with cut marks."
+                disabled={!hydrated || busy !== null || !pack.ready}
+                label={
+                  busy === "cards"
+                    ? cardProgress || busyLabel
+                    : pack.ready
+                      ? "Download"
+                      : "Preparing…"
+                }
+                title={`Your care cards (${pack.fileCount || 8} PNGs, one zip file)`}
+                blurb="image files, not a document — unzip them into your photos so you can favourite one and text it to whoever is arriving tonight."
               />
             ) : null}
             <FileRow
@@ -215,7 +246,9 @@ export function ReviewScreen() {
                 : `Download the full set (${setCount} files)`}
             </Button>
             <span className="text-[0.9375rem] text-muted">
-              {pdfKinds.length} PDFs and one backup file. Nothing is uploaded.
+              {pdfKinds.length - (cardsReady ? 1 : 0)} PDFs
+              {cardsReady ? ", the card images as a zip," : ""} and one backup file.
+              Nothing is uploaded.
             </span>
           </div>
           <p aria-live="polite" className="sr-only">
@@ -235,13 +268,29 @@ export function ReviewScreen() {
           </h2>
           <p className="mt-3 max-w-[70ch] leading-[1.7]">
             Pocket-size picture cards drawn from what you have already written about{" "}
-            {name}: one topic each, sized for a phone screen, easy to text to a sitter
-            or keep in a camera roll. Pick the set that fits the moment, preview it, and
-            download the images. They are drawn on your device too: nothing is uploaded.
+            {name}: one topic each, sized for a phone screen. They download as PNG
+            images in a zip, so you can drop them into your photos, favourite the ones
+            you reach for, and text one to whoever is arriving tonight. They are drawn
+            on your device too: nothing is uploaded.
           </p>
-          <div className="mt-5">
+
+          {cardsReady ? <CardGallery pack={pack} /> : null}
+
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            {cardsReady ? (
+              <Button
+                onClick={() => void run("cards")}
+                disabled={!hydrated || busy !== null || !pack.ready}
+              >
+                {busy === "cards"
+                  ? cardProgress || busyLabel
+                  : pack.ready
+                    ? `Download all ${pack.fileCount} cards (zip)`
+                    : "Preparing…"}
+              </Button>
+            ) : null}
             <Link href="/care-cards#make-yours" className={buttonClasses("outline")}>
-              Choose your cards
+              Send a single card
             </Link>
           </div>
         </div>
@@ -368,6 +417,11 @@ export function ReviewScreen() {
 
       {/* ---------------------------------------------------- reading view */}
       {hydrated ? <LetterReading data={data} meta={meta} className={CARD_GAP} /> : null}
+
+      {/* The card pipeline's offscreen host: measurement and rasterization
+          both need real geometry, so this is positioned away rather than
+          hidden. Last in the tree — it is machinery, not content. */}
+      {pack.host}
     </Shell>
   );
 }

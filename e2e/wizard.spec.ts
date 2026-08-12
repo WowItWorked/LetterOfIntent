@@ -67,18 +67,17 @@ test("the onboarding answers shape the form — an aging configuration drops the
 }) => {
   await page.goto("/letter");
 
-  // The ten questions, one tap each (multi-select advances via Continue).
+  // The eight questions, one tap each. schoolWork is the multi-select, and it
+  // is now last, so its button finishes the sequence rather than continuing.
   await page.getByRole("button", { name: /day-to-day care/i }).click();
   await page.getByRole("button", { name: /^An adult$/ }).click();
   await page.getByRole("button", { name: /they mostly manage/i }).click();
   await page.getByRole("button", { name: /^No$/ }).click(); // communicates differently
   await page.getByRole("button", { name: /^No$/ }).click(); // escalates
   await page.getByRole("button", { name: /early signs/i }).click();
-  await page.getByRole("button", { name: /^No$/ }).click(); // trust
   await page.getByRole("button", { name: /^No$/ }).click(); // benefits
   await page.getByRole("button", { name: /neither right now/i }).click();
-  await page.getByRole("button", { name: /continue/i }).click();
-  await page.getByRole("button", { name: /in their own home/i }).click();
+  await page.getByRole("button", { name: /finish and begin/i }).click();
 
   await expect(page).toHaveURL(/getting-started/);
 
@@ -118,11 +117,9 @@ test("changing an answer later re-gates the form without losing work", async ({ 
   await page.getByRole("button", { name: /^Yes$/ }).click(); // communicates differently
   await page.getByRole("button", { name: /^Yes$/ }).click(); // escalates
   await page.getByRole("button", { name: /^No$/ }).click(); // cognition
-  await page.getByRole("button", { name: /not sure/i }).click(); // trust
   await page.getByRole("button", { name: /^Yes$/ }).click(); // benefits
   await page.getByRole("button", { name: /school or a day program/i }).click();
-  await page.getByRole("button", { name: /continue/i }).click();
-  await page.getByRole("button", { name: /^With me$/ }).click();
+  await page.getByRole("button", { name: /finish and begin/i }).click();
 
   await expect(page).toHaveURL(/getting-started/);
   // The earlier work survived the re-gating.

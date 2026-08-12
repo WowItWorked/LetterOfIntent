@@ -85,7 +85,7 @@ const DELIVERABLES = [
   {
     title: "The Letter of Intent",
     blurb:
-      "The deep document: every routine, warning, and hard-won lesson, laid out for the trustee, guardian, or sibling who takes over.",
+      "The deep document, written for the trustee: the person, the money, the benefits, the legal picture, and the judgment calls nobody else can make for you.",
     href: "/letter-of-intent",
     cta: "Learn more",
     art: "letter" as const,
@@ -105,11 +105,6 @@ const DELIVERABLES = [
     // same phrase three times with no way to tell them apart.
     cta: "See what it covers",
     art: "caregiver" as const,
-    // Two letter tiles side by side invite exactly one wrong conclusion: that
-    // this is a second form to fill out. It is the same form — the answers
-    // are written twice, for two readers. Only this tile carries the note,
-    // because only this tile creates the doubt.
-    note: "Same form, different audience.",
   },
   {
     title: "The Emergency Information Sheet",
@@ -311,12 +306,6 @@ export default function HomePage() {
                     <span className="mt-2 text-[0.9375rem] leading-[1.7] text-body">
                       {d.blurb}
                     </span>
-                    {d.note ? (
-                      <span className="mt-3 flex gap-2.5 text-[0.875rem] leading-[1.55] text-muted">
-                        <span className="tw-diamond mt-[7px] flex-none" aria-hidden="true" />
-                        <span className="flex-1">{d.note}</span>
-                      </span>
-                    ) : null}
                     <span className="mt-auto flex items-center gap-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
                       {d.cta}
                       <svg

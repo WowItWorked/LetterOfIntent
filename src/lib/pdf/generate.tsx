@@ -7,6 +7,8 @@ import type { LetterData, LetterMeta } from "@/lib/schema";
 import { LoiDocument } from "./loi-document";
 import { CaregiverDocument } from "./caregiver-document";
 import { EmergencyDocument } from "./emergency-document";
+import { BlankEmergencyForm, BlankLetterForm } from "./blank-form-document";
+import { CAREGIVER_PROJECTION, TRUSTEE_PROJECTION } from "./projections";
 
 /**
  * Everything in this module runs in the browser, on demand (the review screen
@@ -193,6 +195,57 @@ export async function generateSamplePdfBlob(
  * PNGs in a zip (components/cards/card-pack.tsx + lib/zip.ts), which is the
  * form the family actually needs.
  */
+
+/* ------------------------------------------------------------ blank forms */
+
+export type BlankFormKind = "letter" | "caregiver" | "emergency";
+
+/**
+ * The fillable, empty version of a document, for a family that would rather
+ * work in Acrobat than in a browser.
+ *
+ * Generated from the same projections the letters print, on demand and on the
+ * device, rather than checked in as three static PDFs in /public. A static
+ * file is a copy, and a copy goes stale: add a question to the content
+ * catalogue and the checked-in form would keep asking yesterday's set with
+ * nothing to catch it. This route cannot drift — the form is built from the
+ * catalogue every time it is downloaded.
+ *
+ * No watermark: unlike the samples, this document is meant to be used.
+ */
+export async function generateBlankFormPdfBlob(kind: BlankFormKind): Promise<Blob> {
+  if (kind === "emergency") {
+    return pdf(
+      <BlankEmergencyForm footer="Emergency Information Sheet · blank form" />
+    ).toBlob();
+  }
+  if (kind === "caregiver") {
+    return pdf(
+      <BlankLetterForm
+        projection={CAREGIVER_PROJECTION}
+        eyebrow="Blank fillable form"
+        title="The Letter for the Caregiver"
+        lead={
+          "The day-to-day letter: routines, communication, behavior, and health as " +
+          "it is actually lived — written for whoever gives the day-to-day care."
+        }
+        footer="Letter for the Caregiver · blank form"
+      />
+    ).toBlob();
+  }
+  return pdf(
+    <BlankLetterForm
+      projection={TRUSTEE_PROJECTION}
+      eyebrow="Blank fillable form"
+      title="The Letter of Intent"
+      lead={
+        "The deep document, written for the trustee: the person, the money, the " +
+        "benefits, the legal picture, and the judgment calls nobody else can make."
+      }
+      footer="Letter of Intent · blank form"
+    />
+  ).toBlob();
+}
 
 /**
  * Filenames carry the document type and the date, never the person's name —

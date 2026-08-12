@@ -50,6 +50,7 @@ const DOCUMENT_LINKS = [
  * one name for one destination, rather than a second wording to reconcile.
  */
 const DATA_LINKS = [
+  ["Fillable PDF Forms", "/fillable-forms"],
   ["Back up or delete", "/your-data"],
   ["Review & Download", "/letter/review"],
 ] as const;

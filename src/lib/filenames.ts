@@ -44,3 +44,19 @@ export function documentFilename(kind: DocumentKind, now: Date = new Date()): st
       return `Letter-of-Intent-Backup-${date}.json`;
   }
 }
+
+/**
+ * The empty, fillable forms. No date here, unlike everything above: a date on
+ * a blank template would read as the day it was filled in, which is exactly
+ * what it is not. Rule 2 still holds — no name, because there is not one yet.
+ */
+export function blankFormFilename(kind: "letter" | "caregiver" | "emergency"): string {
+  switch (kind) {
+    case "letter":
+      return "Letter-of-Intent-Fillable-Form.pdf";
+    case "caregiver":
+      return "Letter-for-the-Caregiver-Fillable-Form.pdf";
+    case "emergency":
+      return "Emergency-Information-Sheet-Fillable-Form.pdf";
+  }
+}

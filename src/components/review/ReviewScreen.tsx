@@ -290,7 +290,7 @@ export function ReviewScreen() {
               </Button>
             ) : null}
             <Link href="/care-cards#make-yours" className={buttonClasses("outline")}>
-              Send a single card
+              See the bundles
             </Link>
           </div>
         </div>

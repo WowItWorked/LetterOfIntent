@@ -67,10 +67,25 @@ test("the review page hands over the whole card pack as PNGs in one zip", async 
     expect(e.bytes.length, `${e.name} is suspiciously small`).toBeGreaterThan(2_000);
   }
 
-  // The cards are named for the person on purpose — this is what makes a
-  // camera roll searchable — and the eighth card is the bundle guide.
-  expect(entries.filter((e) => e.name.startsWith("Alex — "))).not.toHaveLength(0);
-  expect(entries.some((e) => /Which Cards To Send/.test(e.name))).toBe(true);
+  /**
+   * OWNER DECISION — the exact inverse of restore.spec.ts's PDF assertion:
+   * document filenames never carry the person's name, but a care card's face
+   * carries it in 70px type either way, so its filename says who it is for.
+   * FULL_LETTER is about "Alex", and the names SHOULD contain Alex.
+   */
+  expect(entries.map((e) => e.name)).toContain("Alex — Identity & Contacts.png");
+
+  // The static index card rides along name-free: its face carries no name, so
+  // by the same rule neither does its filename.
+  expect(entries.map((e) => e.name)).toContain("Which Cards To Send.png");
+
+  // "{Preferred name} — {Card title}.png", continuations "… 2 of 3.png" —
+  // except the index card, whose nameless face keeps its filename nameless.
+  for (const e of entries) {
+    expect(e.name).toMatch(
+      /^(Alex — [A-Za-z&' ]+( \d+ of \d+)?|Which Cards To Send)\.png$/
+    );
+  }
 });
 
 test("the five bundles render, and picking one shows every card as a preview", async ({
@@ -109,76 +124,13 @@ test("the five bundles render, and picking one shows every card as a preview", a
   ).toBeVisible();
 });
 
-test("a downloaded card is a real PNG named for the person — the deliberate inverse of the PDF rule", async ({
-  page,
-}, testInfo) => {
-  await seedLetter(page, FULL_LETTER);
-  await page.goto("/care-cards");
-
-  // One small card (identity) keeps capture time sane under CI browsers.
-  await page.getByRole("button", { name: /individual cards/i }).click();
-  await page.getByRole("checkbox", { name: /identity & contacts/i }).check();
-
-  const names: string[] = [];
-  page.on("download", (d) => names.push(d.suggestedFilename()));
-  const downloadPromise = page.waitForEvent("download");
-  // One picked card + the always-included Which Cards To Send index = 2 files.
-  await page.getByRole("button", { name: /download 2 cards/i }).click();
-  const download = await downloadPromise;
-
-  /**
-   * OWNER DECISION — the exact inverse of restore.spec.ts's PDF assertion:
-   * document filenames never carry the person's name, but a care card's face
-   * carries it in 70px type either way, so its filename says who it is for.
-   * FULL_LETTER is about "Alex", and the filename SHOULD contain Alex.
-   */
-  expect(download.suggestedFilename()).toBe("Alex — Identity & Contacts.png");
-
-  // The static index card rides along, name-free: its face carries no name,
-  // so (by the same rule) neither does its filename.
-  await expect.poll(() => names.length, { timeout: 90_000 }).toBeGreaterThanOrEqual(2);
-  expect(names).toContain("Which Cards To Send.png");
-
-  // PNG only, never JPEG: check the actual bytes, not just the extension.
-  const file = testInfo.outputPath("identity-card.png");
-  await download.saveAs(file);
-  const buf = fs.readFileSync(file);
-  expect(buf.subarray(0, 8)).toEqual(
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
-  );
-  expect(buf.length).toBeGreaterThan(10_000);
-});
-
-test("a bundle downloads one PNG per card, every filename patterned the same way", async ({
-  page,
-}) => {
-  await seedLetter(page, FULL_LETTER);
-  await page.goto("/care-cards");
-
-  await page.getByRole("button", { name: /quick trip/i }).click();
-
-  const names: string[] = [];
-  page.on("download", (d) => names.push(d.suggestedFilename()));
-  // Quick trip = identity + emergency + behavior, all single-page with
-  // FULL_LETTER, plus the always-included index card: exactly four files.
-  await page.getByRole("button", { name: /download 4 cards/i }).click();
-  await expect.poll(() => names.length, { timeout: 90_000 }).toBeGreaterThanOrEqual(4);
-
-  expect(names).toEqual(
-    expect.arrayContaining([
-      "Alex — Identity & Contacts.png",
-      "Alex — Emergency Protocol.png",
-      "Alex — Behavior & Communication.png",
-      "Which Cards To Send.png",
-    ])
-  );
-  // "{Preferred name} — {Card title}.png", continuations "… 2 of 3.png" —
-  // except the static index card, whose nameless face keeps its filename
-  // nameless too.
-  for (const n of names) {
-    expect(n).toMatch(/^(Alex — [A-Za-z&' ]+( \d+ of \d+)?|Which Cards To Send)\.png$/);
-  }
-});
+/*
+ * Two tests stood here: one downloading a single card, one downloading a
+ * bundle. Both drove the /care-cards "Download this set" section, which is
+ * gone — the pack now leaves as one zip from the review page. Their coverage
+ * moved into the zip test above (PNG bytes, the person-named filenames, the
+ * name-free index card, the continuation pattern) rather than being dropped.
+ */
 
 test("cards that are not ready are named gently and cannot be picked", async ({ page }) => {
   // A letter with just enough for the identity card and nothing else.

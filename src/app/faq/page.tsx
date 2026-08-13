@@ -31,11 +31,16 @@ export const metadata: Metadata = {
  * the page it describes is worse than none: it is the version assistants
  * quote, and nobody proof-reads it because nobody sees it.
  *
- * Answers are in the markup rather than behind a disclosure. A <details> body
- * is technically in the DOM, but this page exists to be read by people
- * scanning for one fact, by crawlers, and by assistants pulling a single
- * answer out of context — and all three are better served by text that is
- * simply there.
+ * Answers open on demand, using native <details>. Twenty-five answers laid
+ * out flat is a page you scroll past rather than navigate; collapsed, the
+ * questions themselves become the index.
+ *
+ * The disclosure costs nothing that matters here. A <details> body is in the
+ * DOM whether or not it is open, so crawlers read it, and the structured data
+ * above carries every answer in full regardless of what the page is showing.
+ * Native rather than React state, so it works before hydration and on a
+ * printed page, and the keyboard and screen-reader behaviour is the
+ * platform's rather than something reimplemented here.
  */
 export default function FaqPage() {
   const faqJsonLd = {
@@ -129,16 +134,35 @@ export default function FaqPage() {
               <p className="mt-2.5 max-w-[68ch] leading-[1.7] text-muted">{group.lead}</p>
               <div className="mt-7 grid gap-5">
                 {group.items.map((item) => (
-                  <article
+                  <details
                     key={item.q}
-                    className="tw-card px-[clamp(20px,3vw,32px)] pb-7 pt-6"
+                    className="tw-card group overflow-hidden"
                     style={{ boxShadow: "var(--shadow-sm)" }}
                   >
-                    <h3 className="font-serif text-[1.3rem] font-semibold leading-snug text-ink">
-                      {item.q}
-                    </h3>
-                    <p className="mt-3 max-w-[76ch] leading-[1.75] text-body">{item.a}</p>
-                  </article>
+                    {/* The heading lives inside the summary so the question is
+                        still an h3 in the document outline — it is what a
+                        search result links to and what a screen-reader user
+                        navigates by. list-none kills Safari's default
+                        triangle; the chevron below is the affordance. */}
+                    <summary className="flex cursor-pointer list-none items-start gap-4 px-[clamp(20px,3vw,32px)] py-5 hover:text-gold700 [&::-webkit-details-marker]:hidden">
+                      <h3 className="flex-1 font-serif text-[1.3rem] font-semibold leading-snug text-ink group-open:text-gold700">
+                        {item.q}
+                      </h3>
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 20 20"
+                        className="mt-1.5 size-4 flex-none fill-none stroke-accent transition-transform duration-[var(--dur-fast)] group-open:rotate-180 motion-reduce:transition-none"
+                        strokeWidth={1.8}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="m5 8 5 5 5-5" />
+                      </svg>
+                    </summary>
+                    <p className="max-w-[76ch] px-[clamp(20px,3vw,32px)] pb-7 leading-[1.75] text-body">
+                      {item.a}
+                    </p>
+                  </details>
                 ))}
               </div>
             </section>

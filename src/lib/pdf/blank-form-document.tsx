@@ -387,7 +387,6 @@ const s = StyleSheet.create({
     lineHeight: 1.5,
     maxWidth: 420,
   },
-  coverCredit: { fontFamily: SANS, fontSize: 7.5, color: FAINT, marginTop: 8 },
 
   coverRule: { height: 2, backgroundColor: GOLD, marginBottom: 18 },
   eyebrow: {
@@ -549,15 +548,6 @@ const s = StyleSheet.create({
 
 /* ------------------------------------------------------------------ parts */
 
-/**
- * The site address on every page, because these pages travel.
- *
- * A blank form gets printed, photocopied, and handed to a sibling who was not
- * in the conversation where it came up. Whoever ends up holding page 31 should
- * be able to find where it came from — and, if the fixed boxes are not working
- * for them, the builder that has no such limit.
- */
-const SITE = "www.myletterofintent.com";
 
 function Footer({ label }: { label: string }) {
   return (
@@ -964,9 +954,11 @@ function Cover({
           <Text style={s.coverFirmName}>{firm.name.toUpperCase()}</Text>
         </View>
         <Text style={s.coverDisclaimer}>{firm.disclaimerShort}</Text>
-        <Text style={s.coverCredit}>
-          A blank form from the free Letter of Intent Builder &middot; {SITE}
-        </Text>
+        {/* The same credit as the letters' covers and every page foot. This
+            used to say "A blank form from…", which was true but made the
+            forms sound like a lesser thing than what the builder produces.
+            They are the same document with the answers left out. */}
+        <PdfCredit center />
       </View>
     </>
   );

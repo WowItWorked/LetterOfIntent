@@ -248,6 +248,9 @@ test("the header menu reaches the letter, the cards, and the emergency sheet", a
   if (isMobile) {
     await page.getByRole("button", { name: "Menu" }).click();
     const nav = page.getByRole("navigation", { name: "Main" });
+    // The document links live under Resources here too — the menu opens as
+    // five choices rather than eleven, and expands.
+    await nav.getByRole("button", { name: /^resources$/i }).click();
     await expect(
       nav.getByRole("link", { name: /^letter of intent$/i })
     ).toHaveAttribute("href", "/letter-of-intent");
@@ -260,9 +263,11 @@ test("the header menu reaches the letter, the cards, and the emergency sheet", a
       "/emergency-sheet"
     );
   } else {
-    // Desktop: the pages live behind one Menu dropdown.
+    // Desktop: the four things the site makes live behind Resources. The
+    // second dropdown, Downloads, holds what to do with a letter you have
+    // already written, and FAQ and About sit inline beside them.
     const nav = page.getByRole("navigation", { name: "Main" });
-    await nav.getByRole("button", { name: /^menu$/i }).click();
+    await nav.getByRole("button", { name: /^resources$/i }).click();
     await expect(
       nav.getByRole("link", { name: /^letter of intent$/i })
     ).toHaveAttribute("href", "/letter-of-intent");

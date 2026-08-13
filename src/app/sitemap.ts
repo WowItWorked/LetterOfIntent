@@ -32,6 +32,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/care-cards"), lastModified, changeFrequency: "monthly", priority: 0.6 },
     { url: url("/emergency-sheet"), lastModified, changeFrequency: "monthly", priority: 0.6 },
     { url: url("/fillable-forms"), lastModified, changeFrequency: "monthly", priority: 0.6 },
+    // High priority and a monthly cadence: the FAQ is the page most likely to
+    // be a family's first arrival from a search, and its answers are the ones
+    // that get revised as the guidance around them does.
+    { url: url("/faq"), lastModified, changeFrequency: "monthly", priority: 0.8 },
+    { url: url("/about"), lastModified, changeFrequency: "yearly", priority: 0.5 },
     { url: url("/privacy"), lastModified, changeFrequency: "yearly", priority: 0.5 },
     { url: url("/your-data"), lastModified, changeFrequency: "yearly", priority: 0.3 },
   ];

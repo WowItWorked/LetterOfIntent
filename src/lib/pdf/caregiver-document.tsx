@@ -16,12 +16,13 @@ import { CAREGIVER_PROJECTION, projects } from "./projections";
 import {
   s,
   MultilineValue,
+  PdfCredit,
   PdfFooter,
   SampleWatermark,
   SectionPage,
   type LoadedImage,
 } from "./loi-document";
-import { ENGRAVED, FAINT, GOLD, GOLD_DEEP, GRAY, INK, NAVY, SANS, SERIF } from "./theme";
+import { ENGRAVED, GOLD, GOLD_DEEP, GRAY, INK, NAVY, SANS, SERIF } from "./theme";
 
 /**
  * The Letter for the Caregiver: the companion document to the Letter of
@@ -195,9 +196,8 @@ export function CaregiverDocument({
           >
             {firm.disclaimerShort}
           </Text>
-          <Text style={{ fontFamily: SANS, fontSize: 7.5, color: FAINT, marginTop: 8 }}>
-            Created with the free Letter of Intent Builder · {firm.appUrlLabel}
-          </Text>
+          {/* Same credit as the page feet and the other covers. */}
+          <PdfCredit center />
         </View>
       </Page>
 

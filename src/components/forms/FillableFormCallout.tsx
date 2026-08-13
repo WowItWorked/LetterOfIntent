@@ -16,7 +16,7 @@ export function FillableFormCallout({ document }: { document: string }) {
         <div className="min-w-0 flex-[3_1_360px]">
           <p className="text-lg leading-[1.7] text-body">
             <strong className="font-semibold text-ink">
-              Would rather not use the web form?
+              Rather not use the web form?
             </strong>{" "}
             {document} is also available as a blank, fillable PDF. Type into it in
             Acrobat or Preview, or print it and write by hand.

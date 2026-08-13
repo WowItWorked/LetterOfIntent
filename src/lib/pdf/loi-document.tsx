@@ -83,6 +83,14 @@ export const s = StyleSheet.create({
     color: FAINT,
     marginTop: 4,
   },
+  /** The same line on a cover: centred, and a touch larger with room above. */
+  coverCredit: {
+    fontFamily: SANS,
+    fontSize: 7.5,
+    color: FAINT,
+    marginTop: 8,
+    textAlign: "center",
+  },
   footerLink: { color: GOLD_DEEP, textDecoration: "none" },
   footerText: {
     fontFamily: SANS,
@@ -402,9 +410,10 @@ export function LoiDocument({
           >
             {firm.disclaimerShort}
           </Text>
-          <Text style={{ fontFamily: SANS, fontSize: 7.5, color: FAINT, marginTop: 8 }}>
-            Created with the free Letter of Intent Builder · {firm.appUrlLabel}
-          </Text>
+          {/* The same line the pages foot with, rather than a cover-only
+              variant of it. Three near-identical wordings were in play across
+              the covers alone; one is easier to trust and easier to change. */}
+          <PdfCredit center />
         </View>
       </Page>
 
@@ -529,14 +538,14 @@ export function SampleWatermark() {
  * document came from and who provides it. The addresses are real links —
  * clickable on screen, readable on paper.
  */
-export function PdfCredit() {
+export function PdfCredit({ center }: { center?: boolean } = {}) {
   return (
-    <Text style={s.footerCredit}>
-      Created with My Letter of Intent (
+    <Text style={center ? s.coverCredit : s.footerCredit}>
+      Made with the free My Letter of Intent builder (
       <Link src={firm.appUrl} style={s.footerLink}>
         www.{firm.appUrlLabel}
       </Link>
-      ) provided by {firm.name} (
+      ) from {firm.name} (
       <Link src={firm.website} style={s.footerLink}>
         www.{firm.websiteLabel}
       </Link>

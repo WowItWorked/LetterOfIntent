@@ -1,0 +1,8 @@
+# pdf.js's worker is vendored, minified, and re-copied out of node_modules by
+# scripts/sync-pdf-worker.mjs on every prebuild. That copy carries the LF
+# endings pdfjs-dist ships with, while core.autocrlf=true on Windows expects
+# CRLF in the working tree — so the file showed as modified after every build,
+# with no content change, every time. Treating it as binary stops git
+# converting or comparing its line endings at all, which is the right
+# treatment for a generated third-party bundle nobody edits by hand.
+public/pdf.worker.min.mjs -text

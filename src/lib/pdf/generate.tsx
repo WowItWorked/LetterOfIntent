@@ -216,11 +216,15 @@ export type BlankFormKind = "letter" | "caregiver" | "emergency";
 export async function generateBlankFormPdfBlob(kind: BlankFormKind): Promise<Blob> {
   // Loaded here rather than inside the document: the PDF layout engine cannot
   // await a fetch mid-render, so the image has to arrive as data already.
-  const logo = await loadLogo(firm.appLogoPath);
+  const [logo, firmLogo] = await Promise.all([
+    loadLogo(firm.appLogoPath),
+    loadLogo(firm.logoPath),
+  ]);
   if (kind === "emergency") {
     return pdf(
       <BlankEmergencyForm
         logo={logo}
+        firmLogo={firmLogo}
         footer="Emergency Information Sheet · blank form"
       />
     ).toBlob();
@@ -229,13 +233,9 @@ export async function generateBlankFormPdfBlob(kind: BlankFormKind): Promise<Blo
     return pdf(
       <BlankLetterForm
         logo={logo}
+        firmLogo={firmLogo}
         projection={CAREGIVER_PROJECTION}
-        eyebrow="Blank fillable form"
-        title="The Letter for the Caregiver"
-        lead={
-          "The day-to-day letter: routines, communication, behavior, and health as " +
-          "it is actually lived — written for whoever gives the day-to-day care."
-        }
+        eyebrow="A LETTER FOR THE CAREGIVER OF"
         footer="Letter for the Caregiver · blank form"
       />
     ).toBlob();
@@ -243,13 +243,9 @@ export async function generateBlankFormPdfBlob(kind: BlankFormKind): Promise<Blo
   return pdf(
     <BlankLetterForm
       logo={logo}
+      firmLogo={firmLogo}
       projection={TRUSTEE_PROJECTION}
-      eyebrow="Blank fillable form"
-      title="The Letter of Intent"
-      lead={
-        "The deep document, written for the trustee: the person, the money, the " +
-        "benefits, the legal picture, and the judgment calls nobody else can make."
-      }
+      eyebrow="A LETTER OF INTENT FOR"
       footer="Letter of Intent · blank form"
     />
   ).toBlob();

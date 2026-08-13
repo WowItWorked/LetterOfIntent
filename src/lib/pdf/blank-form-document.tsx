@@ -2,6 +2,7 @@ import {
   Checkbox,
   Document,
   Image,
+  Link,
   Page,
   Select,
   StyleSheet,
@@ -10,11 +11,13 @@ import {
   View,
 } from "@react-pdf/renderer";
 import type { LoadedImage } from "./generate";
+import { firm } from "@/config/firm";
 import { allSections } from "@/lib/content/config";
 import type { FieldDef, RepeaterItemField, SectionDef } from "@/lib/content/types";
 import type { LetterProjection } from "./projections";
 import { projects } from "./projections";
 import {
+  ENGRAVED,
   FAINT,
   GOLD,
   GOLD_DEEP,
@@ -315,7 +318,77 @@ const s = StyleSheet.create({
     lineHeight: 1.45,
   },
 
-  /* cover */
+  /* cover — mirrors loi-document.tsx's cover, with fields for the answers */
+  coverPage: {
+    padding: 64,
+    paddingBottom: 58,
+    fontFamily: SANS,
+    fontSize: 9.5,
+    color: INK,
+    display: "flex",
+    flexDirection: "column",
+  },
+  coverLockup: {
+    fontFamily: ENGRAVED,
+    fontWeight: 600,
+    fontSize: 11,
+    letterSpacing: 3.2,
+    color: GOLD_DEEP,
+    textAlign: "center",
+  },
+  coverNameBox: {
+    marginTop: 16,
+    width: 380,
+    height: 42,
+    borderBottomWidth: 1,
+    borderBottomColor: RULE_ON_PAPER,
+  },
+  coverNameField: { flexGrow: 1, fontFamily: SERIF, color: NAVY, height: 36 },
+  coverFieldNote: { marginTop: 4, fontSize: 7.5, color: FAINT },
+  coverByline: { flexDirection: "row", alignItems: "flex-end", gap: 6, marginTop: 22 },
+  coverBylineLead: { fontFamily: SERIF, fontStyle: "italic", fontSize: 12, color: INK },
+  coverBylineBox: {
+    width: 150,
+    height: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: RULE_ON_PAPER,
+  },
+  coverBylineField: { flexGrow: 1, fontFamily: SERIF, color: INK, height: 15 },
+  coverDateBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    borderWidth: 1,
+    borderColor: GOLD,
+    paddingVertical: 8,
+    paddingHorizontal: 22,
+    marginTop: 28,
+  },
+  coverDateLabel: {
+    fontFamily: SANS,
+    fontWeight: 700,
+    fontSize: 9.5,
+    letterSpacing: 1.4,
+    color: INK,
+  },
+  coverDateField: {
+    width: 130,
+    height: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: RULE_ON_PAPER,
+  },
+  coverFirmRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
+  coverFirmName: { fontFamily: SANS, fontSize: 8.5, letterSpacing: 1.8, color: GRAY },
+  coverDisclaimer: {
+    fontFamily: SANS,
+    fontSize: 7.5,
+    color: GRAY,
+    textAlign: "center",
+    lineHeight: 1.5,
+    maxWidth: 420,
+  },
+  coverCredit: { fontFamily: SANS, fontSize: 7.5, color: FAINT, marginTop: 8 },
+
   coverRule: { height: 2, backgroundColor: GOLD, marginBottom: 18 },
   eyebrow: {
     fontFamily: SANS,
@@ -443,9 +516,6 @@ const s = StyleSheet.create({
     paddingHorizontal: 4,
   },
 
-  /* branding */
-  masthead: { alignItems: "center", marginBottom: 20 },
-
   /* footer */
   footer: {
     position: "absolute",
@@ -457,7 +527,11 @@ const s = StyleSheet.create({
     fontSize: 7.5,
     color: FAINT,
   },
-  footerSite: { color: GOLD_DEEP },
+  footerLeft: { flexDirection: "row", gap: 6 },
+  footerFirm: { color: GRAY },
+  footerLinks: { flexDirection: "row", alignItems: "center", gap: 4 },
+  footerSite: { color: GOLD_DEEP, textDecoration: "none" },
+  footerDot: { color: FAINT },
 });
 
 /* ------------------------------------------------------------------ parts */
@@ -475,27 +549,25 @@ const SITE = "www.myletterofintent.com";
 function Footer({ label }: { label: string }) {
   return (
     <View style={s.footer} fixed>
-      <Text>{label}</Text>
-      <Text style={s.footerSite}>{SITE}</Text>
+      <View style={s.footerLeft}>
+        <Text>{label}</Text>
+        <Text style={s.footerFirm}>{firm.name}</Text>
+      </View>
+      {/* Real links, not printed strings. On paper they read as addresses; on
+          screen they are clickable, which is where most of these will be
+          opened. */}
+      <View style={s.footerLinks}>
+        <Link src={firm.website} style={s.footerSite}>
+          www.{firm.websiteLabel}
+        </Link>
+        <Text style={s.footerDot}>&middot;</Text>
+        <Link src={firm.appUrl} style={s.footerSite}>
+          {SITE}
+        </Link>
+      </View>
       <Text
         render={({ pageNumber, totalPages }) => `${pageNumber} of ${totalPages}`}
       />
-    </View>
-  );
-}
-
-/**
- * The masthead, on the cover only. The logo is passed in rather than fetched
- * here: this component renders inside the PDF layout engine, which has no way
- * to await a network round trip mid-render, so generate.tsx loads it first —
- * the same arrangement the letters use.
- */
-function Masthead({ logo }: { logo?: LoadedImage }) {
-  if (!logo) return null;
-  return (
-    <View style={s.masthead}>
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image src={logo.dataUrl} style={{ width: 150 }} />
     </View>
   );
 }
@@ -794,26 +866,112 @@ const HOW_TO_USE: readonly string[] = [
   "Save your filled-in copy somewhere you will find it again. This file is yours; nothing is sent anywhere.",
 ];
 
+/**
+ * The same cover the builder prints, with the answers left blank.
+ *
+ * Deliberately a mirror rather than a design of its own. A family who fills
+ * this in by hand should end up holding the document the builder would have
+ * given them — same lockup, same engraved line, same name in the same serif at
+ * the same size, same gold rule, same firm plate at the foot. The earlier
+ * cover was a form's cover: a title, a paragraph, and a box of instructions.
+ * It read as paperwork about a letter rather than as the letter.
+ *
+ * Where the builder has data, this has a field. The name box carries the same
+ * field name as the header on every section page, so writing it once on the
+ * cover writes it through the whole document.
+ */
 function Cover({
   eyebrow,
-  title,
-  lead,
   logo,
+  firmLogo,
 }: {
   eyebrow: string;
-  title: string;
-  lead: string;
   logo?: LoadedImage;
+  firmLogo?: LoadedImage;
 }) {
   return (
     <>
-      <Masthead logo={logo} />
-      <View style={s.coverRule} />
-      <Text style={s.eyebrow}>{eyebrow}</Text>
-      <Text style={s.coverTitle}>{title}</Text>
-      <Text style={s.coverLead}>{lead}</Text>
+      <View style={{ alignItems: "center" }}>
+        {logo ? (
+          /* eslint-disable-next-line jsx-a11y/alt-text */
+          <Image src={logo.dataUrl} style={{ width: 230, height: 230 / logo.aspect }} />
+        ) : (
+          <Text style={s.coverLockup}>MY LETTER OF INTENT</Text>
+        )}
+      </View>
+
+      <View style={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={s.coverLockup}>{eyebrow}</Text>
+
+        <View style={s.coverNameBox}>
+          <TextInput
+            name={NAME_FIELD}
+            align="center"
+            fontSize={26}
+            style={s.coverNameField}
+          />
+        </View>
+        <Text style={s.coverFieldNote}>Their name</Text>
+
+        <View style={{ width: 72, height: 2.5, backgroundColor: GOLD, marginTop: 18 }} />
+
+        <View style={s.coverByline}>
+          <Text style={s.coverBylineLead}>Written by</Text>
+          <View style={s.coverBylineBox}>
+            <TextInput name="cover.author" fontSize={12} style={s.coverBylineField} />
+          </View>
+          <Text style={s.coverBylineLead}>&mdash;</Text>
+          <View style={s.coverBylineBox}>
+            <TextInput
+              name="cover.relationship"
+              fontSize={12}
+              style={s.coverBylineField}
+            />
+          </View>
+        </View>
+        <Text style={s.coverFieldNote}>Your name, and who you are to them</Text>
+
+        <View style={s.coverDateBox}>
+          <Text style={s.coverDateLabel}>LAST UPDATED</Text>
+          <View style={s.coverDateField}>
+            <TextInput
+              name="cover.updated"
+              align="center"
+              fontSize={9.5}
+              style={{ ...s.input, height: 12 }}
+            />
+          </View>
+        </View>
+      </View>
+
+      <View style={{ alignItems: "center" }}>
+        <View style={s.coverFirmRow}>
+          {firmLogo ? (
+            /* eslint-disable-next-line jsx-a11y/alt-text */
+            <Image
+              src={firmLogo.dataUrl}
+              style={{ height: 22, width: 22 * firmLogo.aspect, marginRight: 7 }}
+            />
+          ) : null}
+          <Text style={s.coverFirmName}>{firm.name.toUpperCase()}</Text>
+        </View>
+        <Text style={s.coverDisclaimer}>{firm.disclaimerShort}</Text>
+        <Text style={s.coverCredit}>
+          A blank form from the free Letter of Intent Builder &middot; {SITE}
+        </Text>
+      </View>
+    </>
+  );
+}
+
+/** The instructions, on their own page — the builder's cover carries none. */
+function HowToUse() {
+  return (
+    <>
+      <Text style={s.eyebrow}>Before you start</Text>
+      <Text style={s.coverTitle}>How to use this form</Text>
+      <View style={s.sectionRule} />
       <View style={s.howBox}>
-        <Text style={s.howTitle}>HOW TO USE THIS FORM</Text>
         {HOW_TO_USE.map((line) => (
           <View key={line} style={s.howItem}>
             <View style={s.howDot} />
@@ -833,10 +991,12 @@ function Cover({
 
 export interface BlankFormProps {
   projection: LetterProjection;
+  /** The app lockup, for the cover. */
   logo?: LoadedImage;
+  /** The firm monogram, for the plate at the foot of the cover. */
+  firmLogo?: LoadedImage;
+  /** The engraved line above the name, e.g. "A LETTER OF INTENT FOR". */
   eyebrow: string;
-  title: string;
-  lead: string;
   footer: string;
 }
 
@@ -858,18 +1018,21 @@ function projectedSections(projection: LetterProjection): SectionDef[] {
 export function BlankLetterForm({
   projection,
   logo,
+  firmLogo,
   eyebrow,
-  title,
-  lead,
   footer,
 }: BlankFormProps) {
   registerBrandFonts();
   const sections = projectedSections(projection);
 
   return (
-    <Document title={title} author="My Letter of Intent">
+    <Document title={eyebrow} author="My Letter of Intent">
+      <Page size="LETTER" style={s.coverPage}>
+        <Cover eyebrow={eyebrow} logo={logo} firmLogo={firmLogo} />
+      </Page>
+
       <Page size="LETTER" style={s.page}>
-        <Cover eyebrow={eyebrow} title={title} lead={lead} logo={logo} />
+        <HowToUse />
         <Footer label={footer} />
       </Page>
 
@@ -1009,23 +1172,25 @@ const EMERGENCY_BOXES: readonly EmergencyBox[] = [
 export function BlankEmergencyForm({
   footer,
   logo,
+  firmLogo,
 }: {
   footer: string;
   logo?: LoadedImage;
+  firmLogo?: LoadedImage;
 }) {
   registerBrandFonts();
   return (
     <Document title="Emergency Information Sheet — blank form" author="My Letter of Intent">
-      <Page size="LETTER" style={s.page}>
+      <Page size="LETTER" style={s.coverPage}>
         <Cover
           logo={logo}
-          eyebrow="Blank fillable form"
-          title="Emergency Information Sheet"
-          lead={
-            "One page for the fridge, the school office, the sitter, and the ER. Fill " +
-            "it in, print it, and put it where someone would look for it in a hurry."
-          }
+          firmLogo={firmLogo}
+          eyebrow="AN EMERGENCY INFORMATION SHEET FOR"
         />
+      </Page>
+
+      <Page size="LETTER" style={s.page}>
+        <HowToUse />
         <Footer label={footer} />
       </Page>
 

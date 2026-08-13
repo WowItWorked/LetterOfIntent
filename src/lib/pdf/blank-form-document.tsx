@@ -493,8 +493,27 @@ const s = StyleSheet.create({
   row: { flexDirection: "row", gap: 8 },
   half: { flex: 1 },
   checkRow: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 6 },
+  /**
+   * The square is a View; the widget inside it draws nothing.
+   *
+   * A checkbox asked to draw its own border came out with three sides. The
+   * border is part of the widget's appearance stream, which sits exactly on
+   * the annotation rectangle, and the bottom stroke falls on the boundary
+   * where viewers clip it — so every box on every page was missing its
+   * underside. Framing it the way loi-document.tsx frames the notes box puts
+   * the square in the page content, where the layout engine draws it and it
+   * always prints, and leaves the widget to do the one thing only it can:
+   * be clicked.
+   */
+  checkFrame: {
+    width: 11,
+    height: 11,
+    borderWidth: 0.75,
+    borderColor: NAVY,
+    borderStyle: "solid",
+  },
+  checkWidget: { flexGrow: 1 },
   optionRow: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 3 },
-  optionBox: { width: 10, height: 10 },
   optionLabel: { fontSize: 8.5, color: INK, flex: 1 },
   example: { marginTop: 3, fontSize: 8, color: FAINT, lineHeight: 1.5 },
   exampleTag: { fontFamily: SANS, fontWeight: 600, color: GOLD_DEEP },
@@ -626,6 +645,15 @@ function itemHint(item: RepeaterItemField): string | undefined {
  * "roles" field could only ever hold one answer, and several of these
  * questions are genuinely multiple-answer.
  */
+/** A drawn square with a clickable checkbox inside it. See s.checkFrame. */
+function CheckSquare({ name }: { name: string }) {
+  return (
+    <View style={s.checkFrame}>
+      <Checkbox name={name} style={s.checkWidget} xMark />
+    </View>
+  );
+}
+
 function OptionBoxes({
   options,
   name,
@@ -637,12 +665,7 @@ function OptionBoxes({
     <View style={{ marginTop: 3 }}>
       {options.map((o) => (
         <View key={o.value} style={s.optionRow}>
-          <Checkbox
-            name={`${name}.${o.value}`}
-            style={s.optionBox}
-            borderColor={NAVY}
-            xMark
-          />
+          <CheckSquare name={`${name}.${o.value}`} />
           <Text style={s.optionLabel}>{o.label}</Text>
         </View>
       ))}
@@ -666,7 +689,7 @@ function ItemField({
   if (item.kind === "checkbox") {
     return (
       <View style={s.checkRow} wrap={false}>
-        <Checkbox name={name} style={s.optionBox} borderColor={NAVY} xMark />
+        <CheckSquare name={name} />
         <Text style={s.itemLabel}>{label}</Text>
       </View>
     );

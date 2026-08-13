@@ -2,6 +2,7 @@
 import {
   Document,
   Image,
+  Link,
   Page,
   StyleSheet,
   Text,
@@ -70,10 +71,19 @@ export const s = StyleSheet.create({
     borderTopWidth: 0.75,
     borderTopColor: LINE,
     paddingTop: 6,
+  },
+  footerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
   },
+  footerCredit: {
+    fontFamily: SANS,
+    fontSize: 7,
+    color: FAINT,
+    marginTop: 4,
+  },
+  footerLink: { color: GOLD_DEEP, textDecoration: "none" },
   footerText: {
     fontFamily: SANS,
     fontSize: 7.5,
@@ -508,14 +518,44 @@ export function SampleWatermark() {
   );
 }
 
+/**
+ * The credit line, on every page of every document this tool produces — both
+ * letters, the emergency sheet, and the blank fillable forms.
+ *
+ * One definition rather than four, and built from the firm config rather than
+ * typed out, because these pages outlive the conversation that produced them:
+ * they get printed, photocopied, and handed to someone who was not there.
+ * Whoever ends up holding a single page should be able to find both where the
+ * document came from and who provides it. The addresses are real links —
+ * clickable on screen, readable on paper.
+ */
+export function PdfCredit() {
+  return (
+    <Text style={s.footerCredit}>
+      Created with My Letter of Intent (
+      <Link src={firm.appUrl} style={s.footerLink}>
+        www.{firm.appUrlLabel}
+      </Link>
+      ) provided by {firm.name} (
+      <Link src={firm.website} style={s.footerLink}>
+        www.{firm.websiteLabel}
+      </Link>
+      )
+    </Text>
+  );
+}
+
 export function PdfFooter({ line }: { line: string }) {
   return (
     <View style={s.footer} fixed>
-      <Text style={s.footerText}>{line}</Text>
-      <Text
-        style={s.footerPage}
-        render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
-      />
+      <View style={s.footerRow}>
+        <Text style={s.footerText}>{line}</Text>
+        <Text
+          style={s.footerPage}
+          render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
+        />
+      </View>
+      <PdfCredit />
     </View>
   );
 }

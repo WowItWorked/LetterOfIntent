@@ -3,7 +3,7 @@ import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/render
 import type { ReactNode } from "react";
 import { firm } from "@/config/firm";
 import { formatDateLong, type EmergencyInfo } from "@/lib/derive";
-import { SampleWatermark } from "./loi-document";
+import { PdfCredit, SampleWatermark } from "./loi-document";
 import {
   ENGRAVED,
   GOLD_DEEP,
@@ -348,9 +348,14 @@ export function EmergencyDocument({
 
         <Text style={s.footNote}>
           Long entries may be shortened here — full detail lives in the complete Letter
-          of Intent. Prepared with the free Letter of Intent Builder from {firm.name}.
-          Not a medical or legal document.
+          of Intent. Not a medical or legal document.
         </Text>
+        {/* The same credit every other page in the set carries. The sentence
+            it replaces said much the same thing in its own words; one wording
+            across all four documents beats four near-misses. This sheet is the
+            one most likely to be photocopied onto a fridge, so it is also the
+            one most likely to be the only page someone is holding. */}
+        <PdfCredit />
       </Page>
     </Document>
   );

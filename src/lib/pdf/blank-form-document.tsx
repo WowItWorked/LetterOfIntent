@@ -2,7 +2,6 @@ import {
   Checkbox,
   Document,
   Image,
-  Link,
   Page,
   Select,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   View,
 } from "@react-pdf/renderer";
 import type { LoadedImage } from "./generate";
+import { PdfCredit } from "./loi-document";
 import { firm } from "@/config/firm";
 import { allSections } from "@/lib/content/config";
 import type { FieldDef, RepeaterItemField, SectionDef } from "@/lib/content/types";
@@ -538,19 +538,13 @@ const s = StyleSheet.create({
   /* footer */
   footer: {
     position: "absolute",
-    bottom: 30,
+    bottom: 26,
     left: 54,
     right: 54,
-    flexDirection: "row",
-    justifyContent: "space-between",
     fontSize: 7.5,
     color: FAINT,
   },
-  footerLeft: { flexDirection: "row", gap: 6 },
-  footerFirm: { color: GRAY },
-  footerLinks: { flexDirection: "row", alignItems: "center", gap: 4 },
-  footerSite: { color: GOLD_DEEP, textDecoration: "none" },
-  footerDot: { color: FAINT },
+  footerRow: { flexDirection: "row", justifyContent: "space-between" },
 });
 
 /* ------------------------------------------------------------------ parts */
@@ -568,25 +562,16 @@ const SITE = "www.myletterofintent.com";
 function Footer({ label }: { label: string }) {
   return (
     <View style={s.footer} fixed>
-      <View style={s.footerLeft}>
+      <View style={s.footerRow}>
         <Text>{label}</Text>
-        <Text style={s.footerFirm}>{firm.name}</Text>
+        <Text
+          render={({ pageNumber, totalPages }) => `${pageNumber} of ${totalPages}`}
+        />
       </View>
-      {/* Real links, not printed strings. On paper they read as addresses; on
-          screen they are clickable, which is where most of these will be
-          opened. */}
-      <View style={s.footerLinks}>
-        <Link src={firm.website} style={s.footerSite}>
-          www.{firm.websiteLabel}
-        </Link>
-        <Text style={s.footerDot}>&middot;</Text>
-        <Link src={firm.appUrl} style={s.footerSite}>
-          {SITE}
-        </Link>
-      </View>
-      <Text
-        render={({ pageNumber, totalPages }) => `${pageNumber} of ${totalPages}`}
-      />
+      {/* The same credit the letters and the emergency sheet carry, from the
+          same component — a family who fills this in by hand should end up
+          with pages that foot exactly like the ones the builder produces. */}
+      <PdfCredit />
     </View>
   );
 }

@@ -79,6 +79,13 @@ const CONTACT: { label: string; value: string; href: string; external?: boolean 
   { label: "Website", value: firm.websiteLabel, href: firm.website, external: true },
 ];
 
+/**
+ * The gap between the page's stacked blocks. One constant because it drifted:
+ * the facts card sat at mt-10 while everything below it was mt-14, so the
+ * column of boxes stepped 40px, 56px, 56px down the page.
+ */
+const SECTION_GAP = "mt-14";
+
 export default function AboutPage() {
   return (
     <>
@@ -168,7 +175,7 @@ export default function AboutPage() {
           </div>
 
           {/* The facts, as one card across the width. */}
-          <div className="mt-10">
+          <div className={SECTION_GAP}>
               <div className="tw-card" style={{ boxShadow: "var(--shadow-sm)" }}>
               <div className="px-[clamp(20px,3vw,34px)] pb-7 pt-6">
                 <span className="tw-engraved block text-[0.6875rem] tracking-[0.16em] text-accent">
@@ -231,17 +238,19 @@ export default function AboutPage() {
               </div>
           </div>
 
-        </div>
-      </div>
-
-      {/* ---------------------------------- talk to the firm, closing the page */}
-      <section
-        style={{
-          background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
-          padding: "clamp(56px, 7.5vw, 96px) var(--gutter)",
-        }}
-      >
-        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
+          {/* ------------------------------------------- talk to the firm */}
+          {/* A box inside the page rather than a full-bleed band. Edge to
+              edge, it read as the end of the page — the visual language this
+              site uses for "you have reached the bottom" — which is wrong for
+              a section that now sits in the middle with more to follow. */}
+          <section
+            className={`${SECTION_GAP} overflow-hidden rounded-[var(--radius-md)]`}
+            style={{
+              background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
+              padding: "clamp(36px, 5vw, 60px) clamp(20px, 3vw, 44px)",
+              boxShadow: "var(--shadow-sm)",
+            }}
+          >
           <div className="mx-auto max-w-[760px] text-center">
             <Eyebrow tone="light" align="center" flanked>
               When you are ready
@@ -278,13 +287,10 @@ export default function AboutPage() {
               Contact {firm.shortName}
             </a>
           </div>
-        </div>
-      </section>
+          </section>
 
-      <div style={{ padding: "clamp(10px, 2vw, 24px) var(--gutter) clamp(48px, 6vw, 84px)" }}>
-        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
           {/* -------------------------------------------- the tool and the firm */}
-          <div className="mt-14">
+          <div className={SECTION_GAP}>
             <div className="mb-3.5 flex justify-center">
               <Eyebrow align="center" flanked>
                 Where this tool stands
@@ -345,7 +351,7 @@ export default function AboutPage() {
           </div>
 
           {/* --------------------------------------------------- the fine print */}
-          <div className="mt-14">
+          <div className={SECTION_GAP}>
             <Eyebrow>The fine print</Eyebrow>
             <h2 className="mt-3.5 font-serif text-[1.75rem] font-semibold tracking-[-0.01em] text-ink">
               Said once more, in full.

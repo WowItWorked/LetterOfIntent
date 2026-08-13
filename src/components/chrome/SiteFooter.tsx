@@ -17,9 +17,14 @@ export function SiteFooter() {
       style={{ padding: "clamp(48px, 6vw, 72px) var(--gutter) 56px" }}
     >
       <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
-        <div className="flex flex-wrap items-start gap-x-14 gap-y-11">
+        {/* Four columns on one row. They used to want 280+170+200+220 with three
+            56px gaps — 1038px into a 1020px container, so "Pass it along" fell
+            to a line of its own by eighteen pixels. Narrower gaps and slimmer
+            bases give it about ninety pixels of headroom; below that it still
+            wraps, which is what should happen on a phone. */}
+        <div className="flex flex-wrap items-start gap-x-10 gap-y-11">
           {/* ------------------------------------------------------- firm */}
-          <div className="min-w-0 max-w-[400px] flex-[1_1_280px]">
+          <div className="min-w-0 max-w-[360px] flex-[1_1_260px]">
             <div className="flex items-center gap-4">
               {firm.logoPath ? (
                 <Image
@@ -46,7 +51,7 @@ export function SiteFooter() {
           </div>
 
           {/* --------------------------------------------------- the tool */}
-          <nav className="flex min-w-0 flex-[1_1_170px] flex-col gap-3">
+          <nav className="flex min-w-0 flex-[1_1_160px] flex-col gap-3">
             <p className={`${engraved} mb-0.5`} style={{ letterSpacing: "0.2em" }}>
               The tool
             </p>
@@ -62,7 +67,7 @@ export function SiteFooter() {
           </nav>
 
           {/* ---------------------------------------------------- contact */}
-          <div className="flex min-w-0 flex-[1_1_200px] flex-col gap-3">
+          <div className="flex min-w-0 flex-[1_1_190px] flex-col gap-3">
             <p className={`${engraved} mb-0.5`} style={{ letterSpacing: "0.2em" }}>
               Contact
             </p>
@@ -83,7 +88,7 @@ export function SiteFooter() {
           </div>
 
           {/* ---------------------------------------------- pass it along */}
-          <div className="min-w-0 flex-[1_1_220px]">
+          <div className="min-w-0 flex-[1_1_200px]">
             <p className={`${engraved} mb-3.5`} style={{ letterSpacing: "0.2em" }}>
               Pass it along
             </p>

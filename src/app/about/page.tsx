@@ -231,6 +231,58 @@ export default function AboutPage() {
               </div>
           </div>
 
+        </div>
+      </div>
+
+      {/* ---------------------------------- talk to the firm, closing the page */}
+      <section
+        style={{
+          background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
+          padding: "clamp(56px, 7.5vw, 96px) var(--gutter)",
+        }}
+      >
+        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
+          <div className="mx-auto max-w-[760px] text-center">
+            <Eyebrow tone="light" align="center" flanked>
+              When you are ready
+            </Eyebrow>
+            <h2 className="mt-5 font-serif text-[clamp(1.75rem,5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
+              Talk it through with someone.
+            </h2>
+            <p className="mx-auto mt-5 max-w-[58ch] text-lg leading-[1.7] text-oninkbody">
+              The letter says how your loved one should be cared for. A trust and an
+              estate plan are what make it possible. If you would like to talk through how
+              the two fit together, {firm.attorneyName} works with families across{" "}
+              {firm.licensedStates.join(" and ")}.
+            </p>
+          </div>
+
+          {/* A grid rather than a flex row so the two calls to action are the
+              same width whatever their labels say, and both wrap alike. */}
+          <div className="mx-auto mt-9 grid max-w-[620px] gap-4 sm:grid-cols-2">
+            <a
+              href={firm.consultUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClasses("accent", "w-full", "lg")}
+              style={buttonStyle("accent")}
+            >
+              Book a consultation
+            </a>
+            <a
+              href={firm.contactUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClasses("outlineOnInk", "w-full", "lg")}
+            >
+              Contact {firm.shortName}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div style={{ padding: "clamp(10px, 2vw, 24px) var(--gutter) clamp(48px, 6vw, 84px)" }}>
+        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
           {/* -------------------------------------------- the tool and the firm */}
           <div className="mt-14">
             <div className="mb-3.5 flex justify-center">
@@ -311,79 +363,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ---------------------------------- talk to the firm, closing the page */}
-      <section
-        style={{
-          background: "linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 82%)",
-          padding: "clamp(56px, 7.5vw, 96px) var(--gutter)",
-        }}
-      >
-        <div className="mx-auto" style={{ maxWidth: "var(--container)" }}>
-          <div className="mx-auto max-w-[760px] text-center">
-            <Eyebrow tone="light" align="center" flanked>
-              When you are ready
-            </Eyebrow>
-            <h2 className="mt-5 font-serif text-[clamp(1.75rem,5vw,3rem)] font-semibold tracking-[-0.015em] text-onink">
-              Talk it through with someone.
-            </h2>
-            <p className="mx-auto mt-5 max-w-[58ch] text-lg leading-[1.7] text-oninkbody">
-              The letter says how your loved one should be cared for. A trust and an
-              estate plan are what make it possible. If you would like to talk through how
-              the two fit together, {firm.attorneyName} works with families across{" "}
-              {firm.licensedStates.join(" and ")}.
-            </p>
-          </div>
-
-          {/* A grid rather than a flex row so the two calls to action are the
-              same width whatever their labels say, and both wrap alike. */}
-          <div className="mx-auto mt-9 grid max-w-[620px] gap-4 sm:grid-cols-2">
-            <a
-              href={firm.consultUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonClasses("accent", "w-full", "lg")}
-              style={buttonStyle("accent")}
-            >
-              Book a consultation
-            </a>
-            <a
-              href={firm.contactUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonClasses("outlineOnInk", "w-full", "lg")}
-            >
-              Contact {firm.shortName}
-            </a>
-          </div>
-
-          <p className="mx-auto mt-[22px] max-w-[640px] text-center text-[0.9375rem] leading-[1.7] text-oninkbody">
-            Or call{" "}
-            <a
-              href={firm.phoneHref}
-              className="font-semibold text-gold400 underline underline-offset-[3px] hover:text-gold300"
-            >
-              {firm.phone}
-            </a>
-            , write to{" "}
-            <a
-              href={`mailto:${firm.email}`}
-              className="font-semibold text-gold400 underline underline-offset-[3px] hover:text-gold300"
-            >
-              {firm.email}
-            </a>
-            , or visit{" "}
-            <a
-              href={firm.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-gold400 underline underline-offset-[3px] hover:text-gold300"
-            >
-              {firm.websiteLabel}
-            </a>
-            . No pressure, ever.
-          </p>
-        </div>
-      </section>
     </>
   );
 }

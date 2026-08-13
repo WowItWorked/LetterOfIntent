@@ -152,7 +152,7 @@ export function SiteHeader() {
                   aria-controls="docs-menu"
                   className="inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-[var(--radius-sm)] pl-3 pr-1.5 text-xs font-semibold uppercase tracking-[0.09em] text-muted transition-colors duration-[var(--dur-fast)] hover:text-gold700 motion-reduce:transition-none"
                 >
-                  Resources
+                  Menu
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 20 20"

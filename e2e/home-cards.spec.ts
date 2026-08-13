@@ -260,9 +260,9 @@ test("the header menu reaches the letter, the cards, and the emergency sheet", a
       "/emergency-sheet"
     );
   } else {
-    // Desktop: the pages live behind one Resources dropdown.
+    // Desktop: the pages live behind one Menu dropdown.
     const nav = page.getByRole("navigation", { name: "Main" });
-    await nav.getByRole("button", { name: /resources/i }).click();
+    await nav.getByRole("button", { name: /^menu$/i }).click();
     await expect(
       nav.getByRole("link", { name: /^letter of intent$/i })
     ).toHaveAttribute("href", "/letter-of-intent");
